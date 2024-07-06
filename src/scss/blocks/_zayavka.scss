@@ -1,0 +1,46 @@
+.zayavka {
+    display: flex;
+    width: 100%;
+    background-color: $light;
+    justify-content: center;
+    padding: 230px 50px 60px 50px;
+    flex-direction: column;
+    justify-content: center;
+
+    h1 {
+        font-size: 38px;
+        font-family: PLAY-BOLD;
+        padding-bottom: 20px;
+        text-align: center;
+    }
+
+    ol {
+
+        h1 {
+            font-size: 24px;
+            font-family: PLAY-BOLD;
+            padding-bottom: 15px;
+            text-align: left;
+            padding-top: 15px;
+        }
+
+        li {
+            font-family: PLAY-REGULAR;
+            padding-bottom: 10px;
+            font-size: 18px;
+            padding-left: 25px;
+        }
+
+        strong {
+            padding-left: 5px;
+            font-size: 18px;
+            font-family: PLAY-BOLD;
+        }
+
+        ul {
+            padding-top: 15px;
+        }
+    }
+}
+
+@import "media/_ustav.scss";

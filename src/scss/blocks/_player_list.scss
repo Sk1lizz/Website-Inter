@@ -1,0 +1,62 @@
+.player_list {
+    display: flex;
+    width: 100%;
+    background-color: $dark;
+    justify-content: center;
+    padding: 230px 0 60px 0;
+
+    .players_block_list {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        flex-direction: column;
+
+        .title_block {
+            display: flex;
+            width: 100%;
+            padding-left: 10px;
+            padding-right: 10px;
+            font-size: 16px;
+            font-family: PLAY-BOLD;
+            color: $light;
+
+            .title {
+                width: 5.8%;
+                text-align: center;
+            }
+
+            :nth-child(odd) {
+                background: #0077ff;
+            }
+        }
+
+        .player {
+            display: flex;
+            width: 100%;
+            padding-left: 10px;
+            padding-right: 10px;
+            font-size: 16px;
+            font-family: PLAY-REGULAR;
+            color: $light;
+            margin-top: 10px;
+            align-items: center;
+
+            .info {
+                width: 5.8%;
+                text-align: center;
+                height: 30px;
+            }
+
+            :nth-child(odd) {
+                background: #0077ff;
+            }
+        }
+    }
+}
+
+.save_info {
+    background-color: $dark;
+    text-align: center;
+}
+
+@import "media/_contacts.scss";

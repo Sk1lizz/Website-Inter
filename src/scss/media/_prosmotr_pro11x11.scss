@@ -1,0 +1,232 @@
+@media (max-width: 1366px) {
+
+    .wrapper_prosmotrpro {
+        padding-top: 170px;
+
+        .training_place {
+            flex-direction: column;
+            display: flex;
+            width: 100%;
+            padding: 20px 60px 20px 60px;
+            justify-content: center;
+
+            .block_place {
+                width: 100%;
+                padding: 20px 10px 20px 10px;
+            }
+        }
+
+        .prices {
+            width: 100%;
+            padding: 20px 20px 20px 20px;
+
+            .block {
+                margin-left: 10px;
+                margin-right: 10px;
+            }
+        }
+    }
+}
+
+@media (max-width: 1024px) {
+
+    .wrapper_prosmotrpro {
+        padding-top: 150px;
+
+        .advantages {
+            padding: 20px 20px 20px 20px;
+
+            .block {
+                margin-left: 5px;
+                margin-right: 5px;
+                width: 25%;
+            }
+        }
+
+        .training_place {
+            flex-direction: column;
+            padding: 20px 10px 20px 10px;
+
+            .block_place {
+                width: 100%;
+                padding: 20px 0px 20px 0px;
+                flex-direction: column;
+
+                .photo {
+                    width: 100%;
+                }
+
+                .info_block {
+                    width: 100%;
+
+                    .text_box {
+                        text-align: center;
+
+                        .title {
+                            text-align: center;
+                            justify-content: center;
+                        }
+
+                        .text {
+                            text-align: center;
+                            justify-content: center;
+                        }
+                    }
+                }
+            }
+        }
+
+        .prices {
+            width: 100%;
+            padding: 20px 0px 20px 0px;
+
+            .block {
+                margin-left: 5px;
+                margin-right: 5px;
+                height: 650px;
+
+                .title {
+                    margin: 5px;
+                    padding: 5px;
+                    font-size: 13px;
+                }
+
+                .value {
+                    align-items: center;
+                    height: 15%;
+                }
+
+                .list {
+                    text-align: center;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 768px) {
+
+    .wrapper_prosmotrpro {
+        padding-top: 60px;
+
+        .about_team {
+            margin: 20px 0px 0 0px;
+            flex-direction: column;
+
+
+            .text_block {
+                width: 100%;
+                margin: 40px 0px 40px 0px;
+                padding-left: 10px;
+                padding-right: 10px;
+                text-align: center;
+
+                .icon_block {
+                    width: 100%;
+                    justify-content: center;
+                    text-align: center;
+                }
+            }
+
+            .icon_tactics {
+                width: 250px;
+                align-items: center;
+                justify-content: center;
+                padding-bottom: 0px;
+
+                img {
+                    height: 0px;
+                    width: 0px;
+                }
+            }
+        }
+
+        .advantages {
+            padding: 20px 20px 20px 20px;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            .block {
+                margin-right: 0px;
+                margin-left: 0px;
+                width: 100%;
+                margin-bottom: 10px;
+                max-width: 400px;
+                justify-content: center;
+            }
+        }
+
+        .training_place {
+            flex-direction: column;
+
+            .block_place {
+                width: 100%;
+                padding: 10px 10px 10px 10px;
+                flex-direction: column;
+                align-items: center;
+
+                .photo {
+                    width: 100%;
+                }
+
+                .info_block {
+                    width: 100%;
+
+                    .text_box {
+                        text-align: center;
+
+                        .title {
+                            text-align: center;
+                            justify-content: center;
+                        }
+
+                        .text {
+                            text-align: center;
+                            justify-content: center;
+                        }
+                    }
+                }
+            }
+        }
+
+        .prices {
+            width: 100%;
+            padding: 10px 10px 10px 10px;
+            flex-direction: column;
+            align-items: center;
+
+            .block {
+                margin-bottom: 5px;
+                height: 450px;
+                width: 100%;
+                margin-right: 0px;
+                margin-left: 0px;
+                max-width: 400px;
+
+                .title {
+                    margin: 5px;
+                    padding: 5px;
+                    font-size: 15px;
+                }
+
+                .value {
+                    align-items: center;
+                    height: 15%;
+                }
+
+                .list {
+                    text-align: center;
+                }
+            }
+        }
+
+        .questionnaire {
+            padding: 20px 20px 20px 20px;
+
+            .text {
+                text-align: center;
+            }
+        }
+    }
+}

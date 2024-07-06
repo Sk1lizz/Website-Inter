@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Создание заявки на матч</title>
+    <link rel="stylesheet" href="./css/main.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/4.5.0/fabric.min.js"></script>
+    <style>
+        @font-face {
+            font-family: 'RageItalic';
+            src: url('https://fonts.gstatic.com/s/rageitalic/v11/ijwOs9SX98AGkFvG5tSYgzr6cs02.ttf') format('truetype');
+        }
+
+        @font-face {
+            font-family: 'DINProBold';
+            src: url('https://fonts.gstatic.com/s/dinpro/v10/9BDeDslRStuSl0jlzUe1lBXCjkA.ttf') format('truetype');
+        }
+
+        @font-face {
+            font-family: 'DINProRegular';
+            src: url('https://fonts.gstatic.com/s/dinpro/v10/9BDr3K--m7jIDdRhXrK-MfABM0DiVrdE.ttf') format('truetype');
+        }
+    </style>
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+</head>
+
+<body>
+    @@include('blocks/header.html')
+    <div class="zayavka">
+        <h1>Создание заявки на матч</h1>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/4.5.0/fabric.min.js"></script>
+        </head>
+
+        <body>
+            <img id="myImage" src="img\Zayavka.png" alt="Изображение">
+            <canvas id="myCanvas" width="500" height="500"></canvas>
+            <form id="textForm">
+                <input type="text" id="playerInfo" placeholder="Номер и Фамилия">
+                <input type="button" value="Добавить игрока" onclick="addPlayer()">
+
+
+                <input type="text" id="matchDate" placeholder="Дата матча">
+                <input type="button" value="Добавить дату" onclick="addDate()">
+
+
+                <input type="text" id="stadiumName" placeholder="Название стадиона">
+                <input type="button" value="Добавить стадион" onclick="addStadium()">
+
+
+                <input type="text" id="leagueName" placeholder="Название лиги">
+                <input type="button" value="Добавить лигу" onclick="addLeague()">
+
+
+                <input type="text" id="opponentTeam" placeholder="Команда соперника">
+                <input type="button" value="Добавить команду" onclick="addOpponent()">
+            </form>
+            <button onclick="saveImage()">Сохранить изображение</button>
+
+            <script>
+                var canvas = new fabric.Canvas('myCanvas', { selection: false });
+
+                function addText(textValue, leftPos, topPos, fontFamily, fontSize, fill) {
+                    var text = new fabric.Text(textValue, {
+                        left: leftPos,
+                        top: topPos,
+                        fontFamily: fontFamily,
+                        fontSize: fontSize,
+                        fill: fill
+                    });
+
+                    canvas.add(text);
+                }
+
+                function addPlayer() {
+                    var playerInfo = document.getElementById('playerInfo').value;
+                    addText(playerInfo, 50, 50, 'RageItalic', 30, 'white');
+                }
+
+                function addDate() {
+                    var matchDate = document.getElementById('matchDate').value;
+                    addText("Дата: " + matchDate, 50, 100, 'DINProBold', 20, 'white');
+                }
+
+                function addStadium() {
+                    var stadiumName = document.getElementById('stadiumName').value;
+                    addText("Стадион: " + stadiumName, 50, 150, 'DINProBold', 20, 'white');
+                }
+
+                function addLeague() {
+                    var leagueName = document.getElementById('leagueName').value;
+                    addText("Лига: " + leagueName, 50, 200, 'DINProRegular', 20, 'white');
+                }
+
+                function addOpponent() {
+                    var opponentTeam = document.getElementById('opponentTeam').value;
+                    addText("Соперник: " + opponentTeam, 50, 250, 'DINProRegular', 20, 'white');
+                }
+
+                function saveImage() {
+                    var dataURL = canvas.toDataURL({ format: 'png' });
+                    // Здесь можно отправить данные на сервер или сделать что-то еще с полученным изображением
+                    console.log(dataURL);
+                }
+            </script>
+    </div>
+
+    @@include('blocks/footer.html')
+</body>
+
+</html>

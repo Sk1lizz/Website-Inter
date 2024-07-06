@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Исаев Матвей</title>
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+</head>
+
+<body>
+
+    @@include('blocks/header.html')
+    <script src="https://code.jquery.com/jquery-2.1.0.js"></script>
+
+    <div class="page_player">
+
+        <div class="player">
+            <div class="photoblock">
+                <div class="card_photo">
+                    <img src="img/player/no_photo.png" alt="">
+                </div>
+            </div>
+            <div class="aboutme">
+                <div class="name">
+                    <h3>Исаев</h3>
+                    <h4>Матвей Степанович</h4>
+                    <div class="position_number">
+                        <div class="number">1</div>
+                        <div class="position">Вратарь</div>
+                    </div>
+                </div>
+                <div class="information">
+                    <ul class="information_me">
+                        <li>
+                            <div class="title_information">Возраст</div>
+                            <div class="text" id="age"></div>
+                        </li>
+                        <li>
+                            <div class="title_information">Дата рождения</div>
+                            <div class="text" id="birthday">28.09.2006</div>
+                        </li>
+                        <li>
+                            <div class="title_information">Команда</div>
+                            <div class="text">Pro (11х11)</div>
+                        </li>
+                        <li>
+                            <div class="title_information">Присоединился</div>
+                            <div class="text">Май, 2021</div>
+                        </li>
+                        <li>
+                            <div class="title_information" id="teamTime">Время в команде</div>
+                            <div class="text" id="datateamTime">04.05.2021</div>
+                        </li>
+                        <li>
+                            <div class="title_information">Рост</div>
+                            <div class="text">179</div>
+                        </li>
+                        <li>
+                            <div class="title_information">Вес</div>
+                            <div class="text">80</div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="wrapper_achieved">
+            <div class="achieved">
+                <div class="experience">
+                    <div class="title">Достижения</div>
+                    <div class="block">
+                        <div class="text">
+                            <div class="year">2023</div>
+                            <div class="company">Лучший вратарь FC Inter Moscow</div>
+                        </div>
+                    </div>
+
+                    <div class="block">
+                        <div class="text">
+                            <div class="year">2022</div>
+                            <div class="company"> Лучший вратарь FC Inter Moscow</div>
+                        </div>
+                    </div>
+
+                    <div class="block">
+                        <div class="text">
+                            <div class="year">2021</div>
+                            <div class="company">Лучший вратарь FC Inter Moscow</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="photo">
+            <div class="title_gallerey">Галерея</title>
+                <div class="block">
+                    <div class="img-container">
+                        <div class="img">
+                            <img src="img/player/photo_player/1-1.JPG" alt="">
+                        </div>
+
+                        <div class="img">
+                            <img src="img/player/photo_player/1-2.JPG" alt="">
+                        </div>
+
+                        <div class="img">
+                            <img src="img/player/photo_player/1-3.JPG" alt="">
+                        </div>
+
+                        <div class="img">
+                            <img src="img/player/photo_player/1-4.JPG" alt="">
+                        </div>
+
+                    </div>
+                    <div class="pop-up">
+                        <span>&times;</span>
+                        <img src="img/prosmotr/1.JPG" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    @@include('blocks/footer.html')
+
+    <script src="./js/index.bundle.js"></script>
+
+    <script>
+        document.querySelectorAll('.img-container img').forEach(img => {
+            img.onclick = () => {
+                document.querySelector('.pop-up').style.display = 'block';
+                document.querySelector('.pop-up img').src = img.getAttribute('src'); // Исправление: заменили дефис на знак равенства
+            }
+        });
+
+        document.querySelector('.pop-up span').onclick = () => {
+            document.querySelector('.pop-up').style.display = 'none';
+        }
+    </script>
+
+    <script src="js/playerpage.bundle.js"></script>
+
+
+
+</body>
+
+</html>

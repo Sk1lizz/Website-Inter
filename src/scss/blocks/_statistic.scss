@@ -1,0 +1,740 @@
+.wrapper_archive_statistics {
+    display: flex;
+    width: 100%;
+    background-color: $gray_black;
+    justify-content: center;
+    padding: 210px 0 30px 0;
+    flex-direction: column;
+    padding-left: 5%;
+    padding-right: 5%;
+
+    .title {
+        display: flex;
+        font-size: 30px;
+        color: $light;
+        margin-bottom: 10px;
+        font-family: PLAY-BOLD;
+        justify-content: center;
+    }
+
+    .blocks_matches {
+        display: flex;
+        height: 220px;
+        margin-bottom: 10px;
+        width: 100%;
+        justify-content: center;
+
+        .block {
+            display: flex;
+            height: 100%;
+            width: 15%;
+            margin: 10px;
+            background-color: rgba(0, 0, 0, 0.4);
+            border-radius: 6px;
+            justify-content: start;
+            flex-direction: column;
+            align-items: center;
+
+
+            .title_block_matches {
+                display: flex;
+                background-color: $dark_light;
+                border-radius: 6px;
+                font-family: PLAY-BOLD;
+                margin: 20px;
+                font-family: PLAY-BOLD;
+                justify-content: center;
+                width: 60%;
+                height: 25px;
+                color: $light;
+                align-items: center;
+                font-size: 16px;
+            }
+
+            .title_block_wins {
+                display: flex;
+                background-color: $green;
+                border-radius: 6px;
+                font-family: PLAY-BOLD;
+                margin: 20px;
+                font-family: PLAY-BOLD;
+                justify-content: center;
+                width: 60%;
+                height: 25px;
+                color: $black;
+                align-items: center;
+                font-size: 16px;
+            }
+
+            .title_block_draw {
+                display: flex;
+                background-color: $gray;
+                border-radius: 6px;
+                font-family: PLAY-BOLD;
+                margin: 20px;
+                font-family: PLAY-BOLD;
+                justify-content: center;
+                width: 60%;
+                height: 25px;
+                color: $light;
+                align-items: center;
+                font-size: 16px;
+            }
+
+            .title_block_lose {
+                display: flex;
+                background-color: $pink;
+                border-radius: 6px;
+                font-family: PLAY-BOLD;
+                margin: 20px;
+                font-family: PLAY-BOLD;
+                justify-content: center;
+                width: 60%;
+                height: 25px;
+                color: $light;
+                align-items: center;
+                font-size: 16px;
+            }
+
+            .value {
+                display: flex;
+                font-family: PLAY-BOLD;
+                margin: 20px;
+                justify-content: center;
+                align-items: center;
+                color: $light;
+                font-size: 50px;
+                padding-top: 10px;
+            }
+
+            .value2 {
+                display: flex;
+                font-family: PLAY-BOLD;
+                margin: 20px;
+                justify-content: center;
+                align-items: center;
+                color: $green;
+                font-size: 50px;
+                padding-top: 10px;
+            }
+
+            .value3 {
+                display: flex;
+                font-family: PLAY-BOLD;
+                margin: 20px;
+                justify-content: center;
+                align-items: center;
+                color: $gray;
+                font-size: 50px;
+                padding-top: 10px;
+            }
+
+            .value4 {
+                display: flex;
+                font-family: PLAY-BOLD;
+                margin: 20px;
+                justify-content: center;
+                align-items: center;
+                color: $pink;
+                font-size: 50px;
+                padding-top: 10px;
+            }
+        }
+
+        .big_block {
+            display: flex;
+            height: 100%;
+            width: 40%;
+            margin: 10px;
+            background-color: rgba(0, 0, 0, 0.4);
+            border-radius: 6px;
+            justify-content: start;
+            flex-direction: column;
+            align-items: center;
+
+            .title_block_big_block {
+                display: flex;
+                background-color: $dark_light;
+                border-radius: 6px;
+                font-family: PLAY-BOLD;
+                margin: 20px;
+                font-family: PLAY-BOLD;
+                justify-content: center;
+                width: 70%;
+                height: 25px;
+                color: $light;
+                align-items: center;
+            }
+
+            .text {
+                display: flex;
+                height: 16px;
+                color: $light;
+                justify-content: center;
+                font-family: PLAY-REGULAR;
+            }
+
+        }
+    }
+
+    .container {
+        display: flex;
+        width: 100%;
+        height: 100%;
+        padding-left: 10px;
+        padding-right: 10px;
+        background-color: $gray_black;
+        justify-content: center;
+        align-items: center;
+
+        .slider {
+            width: 50%;
+            height: 400px;
+            min-height: 400px;
+            padding-right: 10px;
+            padding-top: 10px;
+
+            .container_slider_css {
+                width: 100%;
+                height: 400px;
+                min-height: 400px;
+                overflow: hidden;
+                position: relative;
+                border-radius: 6px;
+            }
+
+            .photo_slider_css {
+                position: absolute;
+                animation: round 16s infinite;
+                opacity: 0;
+                width: 100%;
+                min-height: 400px;
+            }
+
+            @keyframes round {
+                25% {
+                    opacity: 1
+                }
+
+                40% {
+                    opacity: 0
+                }
+            }
+
+            img:nth-child(1) {
+                animation-delay: 12s;
+            }
+
+            img:nth-child(2) {
+                animation-delay: 8s;
+            }
+
+            img:nth-child(3) {
+                animation-delay: 4s;
+            }
+
+            img:nth-child(4) {
+                animation-delay: 0;
+
+            }
+
+            @media(min-width:0px) and (max-width:320px) {
+                .container_slider_css {
+                    width: 80%;
+                    height: 190px
+                }
+            }
+
+            @media(min-width:321px) and (max-width:480px) {
+                .container_slider_css {
+                    width: 80%;
+                    height: 190px
+                }
+            }
+        }
+
+        .blocks {
+            display: flex;
+            width: 50%;
+            flex-direction: column;
+            height: 400px;
+
+            .blocks_row:first-child {
+                padding-bottom: 10px;
+            }
+
+            .blocks_row {
+                display: flex;
+                width: 100%;
+                height: 50%;
+
+                .block {
+                    display: flex;
+                    height: 100%;
+                    width: 50%;
+                    margin: 10px 0px 10px 10px;
+                    background-color: rgba(0, 0, 0, 0.4);
+                    border-radius: 6px;
+                    justify-content: start;
+                    flex-direction: column;
+                    align-items: center;
+
+                    .title {
+                        display: flex;
+                        background-color: $dark_light;
+                        border-radius: 6px;
+                        font-family: PLAY-BOLD;
+                        margin: 20px 20px 10px 20px;
+                        font-family: PLAY-BOLD;
+                        justify-content: center;
+                        font-size: 16px;
+                        width: 70%;
+                        height: 25px;
+                        color: $light;
+                        align-items: center;
+                    }
+
+                    .text {
+                        justify-content: center;
+                        font-size: 16px;
+                        color: $light;
+                        font-family: PLAY-REGULAR;
+                        padding-top: 15px;
+                    }
+
+                    ul {
+                        font-family: PLAY-REGULAR;
+                        height: 90%;
+                        padding-top: 15px;
+                        color: $light;
+                        font-size: 16px;
+                        width: 70%;
+
+                        li {
+                            display: flex;
+                            padding: 5px;
+                            justify-content: space-between;
+
+                            .number {
+                                display: flex;
+                                justify-content: flex-start;
+                                width: 20px;
+                            }
+
+                            .player {
+                                display: flex;
+                            }
+
+                            .counter {
+                                display: flex;
+                                justify-content: flex-end;
+                                width: 30px;
+                            }
+                        }
+                    }
+
+                }
+            }
+        }
+    }
+
+    .blocks_goals {
+        display: flex;
+        height: 100%;
+        width: 100%;
+        justify-content: center;
+
+        .block {
+            display: flex;
+            height: 220px;
+            width: 33%;
+            margin: 10px 0px 0px 10px;
+            background-color: rgba(0, 0, 0, 0.4);
+            border-radius: 6px;
+            justify-content: start;
+            flex-direction: column;
+            align-items: center;
+
+
+            .title_goals {
+                display: flex;
+                background-color: $green;
+                border-radius: 6px;
+                font-family: PLAY-BOLD;
+                margin: 20px;
+                font-family: PLAY-BOLD;
+                justify-content: center;
+                width: 60%;
+                height: 25px;
+                color: $black;
+                align-items: center;
+                font-size: 16px;
+            }
+
+            .title_goals_lose {
+                display: flex;
+                background-color: $pink;
+                border-radius: 6px;
+                font-family: PLAY-BOLD;
+                margin: 20px;
+                font-family: PLAY-BOLD;
+                justify-content: center;
+                width: 60%;
+                height: 25px;
+                color: $light;
+                align-items: center;
+                font-size: 16px;
+            }
+
+            .title_goals_difference {
+                display: flex;
+                background-color: $gray;
+                border-radius: 6px;
+                font-family: PLAY-BOLD;
+                margin: 20px;
+                font-family: PLAY-BOLD;
+                justify-content: center;
+                width: 60%;
+                height: 25px;
+                color: $light;
+                align-items: center;
+                font-size: 16px;
+            }
+
+
+            .container_goal {
+                display: flex;
+                width: 100%;
+                height: 100%;
+
+                .value {
+                    display: flex;
+                    font-family: PLAY-BOLD;
+                    justify-content: left;
+                    align-items: center;
+                    color: $green;
+                    font-size: 72px;
+                    padding-top: 10px;
+                    width: 40%;
+                    height: 150px;
+                }
+
+                .value2 {
+                    display: flex;
+                    font-family: PLAY-BOLD;
+                    justify-content: left;
+                    align-items: center;
+                    color: $pink;
+                    font-size: 72px;
+                    padding-top: 10px;
+                    width: 40%;
+                    height: 150px;
+                }
+
+                .value3 {
+                    display: flex;
+                    font-family: PLAY-BOLD;
+                    justify-content: left;
+                    align-items: center;
+                    color: $gray;
+                    font-size: 72px;
+                    padding-top: 10px;
+                    width: 40%;
+                    height: 150px;
+                    align-items: center;
+                }
+
+                .img {
+                    display: flex;
+                    width: 60%;
+                    height: 150px;
+                    justify-content: center;
+                    align-items: center;
+
+                    img {
+                        width: 150px;
+                        padding-left: 20px;
+
+                    }
+                }
+            }
+        }
+    }
+
+    .best_players {
+        display: flex;
+        height: 100%;
+        width: 100%;
+        justify-content: center;
+        flex-direction: column;
+
+        .block_row {
+            display: flex;
+            height: 220px;
+            width: 100%;
+            justify-content: center;
+            margin-bottom: 10px;
+
+            .block {
+                display: flex;
+                height: 220px;
+                width: 25%;
+                margin: 10px 0px 10px 10px;
+                background-color: rgba(0, 0, 0, 0.4);
+                border-radius: 6px;
+                justify-content: start;
+                flex-direction: column;
+                align-items: center;
+                background: linear-gradient(45deg, $dark_light, $gray_black);
+                transition: 1s;
+
+                .title {
+                    display: flex;
+                    color: $gold;
+                    font-size: 20px;
+                    text-align: center;
+                    width: 100%;
+                    height: 40px;
+                    padding-top: 70px;
+                    font-family: PLAY-BOLD;
+                }
+
+
+                .text {
+                    display: flex;
+                    color: $light;
+                    font-size: 24px;
+                    text-align: center;
+                    justify-content: center;
+                    width: 100%;
+                    height: 40px;
+                    padding-top: 40px;
+                    font-family: PLAY-REGULAR;
+                }
+            }
+
+            .block:hover {
+                transform: scale(1.05);
+            }
+        }
+
+        .block_row2 {
+            display: flex;
+            height: 220px;
+            width: 100%;
+            justify-content: center;
+            margin-bottom: 10px;
+
+            .block {
+                display: flex;
+                height: 220px;
+                width: 33%;
+                margin: 10px 0px 10px 10px;
+                background-color: rgba(0, 0, 0, 0.4);
+                border-radius: 6px;
+                justify-content: start;
+                flex-direction: column;
+                align-items: center;
+                background: linear-gradient(45deg, $dark_light, $gray_black);
+                background-size: cover;
+                transition: 1s;
+
+                .title {
+                    display: flex;
+                    color: $gold;
+                    font-size: 20px;
+                    text-align: center;
+                    width: 100%;
+                    height: 40px;
+                    padding-top: 70px;
+                    font-family: PLAY-BOLD;
+                }
+
+                .text {
+                    display: flex;
+                    color: $light;
+                    font-size: 24px;
+                    text-align: center;
+                    justify-content: center;
+                    width: 100%;
+                    height: 40px;
+                    padding-top: 40px;
+                    font-family: PLAY-REGULAR;
+                }
+            }
+
+            .block:hover {
+                transform: scale(1.05);
+            }
+        }
+
+    }
+
+    .all_goals {
+        display: flex;
+        height: 100%;
+
+        .block {
+            display: flex;
+            height: 100%;
+            width: 25%;
+            margin: 10px 0px 0px 10px;
+            background-color: rgba(0, 0, 0, 0.4);
+            border-radius: 6px;
+            justify-content: start;
+            flex-direction: column;
+            align-items: center;
+            min-height: 250px;
+
+            .title {
+                display: flex;
+                background-color: $dark_light;
+                border-radius: 6px;
+                font-family: PLAY-BOLD;
+                margin: 20px 20px 10px 20px;
+                font-family: PLAY-BOLD;
+                justify-content: center;
+                font-size: 16px;
+                width: 70%;
+                height: 25px;
+                color: $light;
+                align-items: center;
+            }
+
+            .text {
+                justify-content: center;
+                font-size: 16px;
+                color: $light;
+                font-family: PLAY-REGULAR;
+                padding-top: 15px;
+            }
+
+            ul {
+                font-family: PLAY-REGULAR;
+                height: 90%;
+                padding-top: 15px;
+                color: $light;
+                font-size: 16px;
+                width: 70%;
+
+                li {
+                    display: flex;
+                    padding: 5px;
+                    justify-content: space-between;
+
+                    .number {
+                        display: flex;
+                        justify-content: flex-start;
+                        width: 20px;
+                    }
+
+                    .player {
+                        display: flex;
+                    }
+
+                    .counter {
+                        display: flex;
+                        justify-content: flex-end;
+                        width: 30px;
+                    }
+                }
+            }
+
+            details {
+                height: 90%;
+                padding-top: 15px;
+                color: $light;
+                font-size: 16px;
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding-bottom: 15px;
+
+
+                summary {
+                    text-align: right;
+
+                    ul {
+                        font-family: PLAY-REGULAR;
+                        height: 90%;
+                        padding-top: 15px;
+                        color: $light;
+                        font-size: 16px;
+                        width: 100%;
+                        margin-right: 0;
+                        padding-left: 15%;
+                        padding-right: 15%;
+
+                        li {
+                            display: flex;
+                            padding: 5px;
+                            justify-content: space-between;
+
+                            .number {
+                                display: flex;
+                                justify-content: flex-start;
+                                width: 20px;
+                            }
+
+                            .player {
+                                display: flex;
+                            }
+
+                            .counter {
+                                display: flex;
+                                justify-content: flex-end;
+                                width: 30px;
+                            }
+                        }
+                    }
+                }
+
+                summary::marker {
+                    content: '+';
+                    color: $light;
+                    background: $light;
+                    padding-right: 10px;
+                }
+
+                ul {
+                    font-family: PLAY-REGULAR;
+                    height: 90%;
+                    padding-top: 0px;
+                    color: $light;
+                    font-size: 16px;
+                    width: 100%;
+                    margin-right: 0;
+                    padding-left: 15%;
+                    padding-right: 15%;
+
+                    li {
+                        display: flex;
+                        padding: 5px;
+                        justify-content: space-between;
+
+                        .number {
+                            display: flex;
+                            justify-content: flex-start;
+                            width: 20px;
+                        }
+
+                        .player {
+                            display: flex;
+                        }
+
+                        .counter {
+                            display: flex;
+                            justify-content: flex-end;
+                            width: 30px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+
+@import "media/_statistic.scss";

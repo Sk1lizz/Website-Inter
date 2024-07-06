@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Галерея</title>
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+</head>
+
+<body>
+    @@include('blocks/header.html')
+
+    <div class="gallery">
+        <div class="content">
+            <div class="container">
+
+
+                <input type="radio" id="i1" name="images" checked />
+                <input type="radio" id="i2" name="images" />
+                <input type="radio" id="i3" name="images" />
+                <input type="radio" id="i4" name="images" />
+
+                <div class="slide_img" id="one">
+
+                    <img
+                        src="https://sun9-64.userapi.com/impg/OH7fOm0ZckyQPgKsM8qsqckYa3e_zS8fDVP13Q/2Kerx7KH4e8.jpg?size=2560x1707&quality=95&sign=9917348b2cfe77949b22305983bb6de4&type=album">
+
+                    <label class="prev" for="i4"><span></span></label>
+                    <label class="next" for="i2"><span></span></label>
+
+                </div>
+
+                <div class="slide_img" id="two">
+
+                    <img
+                        src="https://sun9-76.userapi.com/impg/UOkCs2Duii1BwFfcNZaH-9YaRFME1kiGIzPubQ/bRDkhCrwc7U.jpg?size=2560x1707&quality=95&sign=0a4bb492f45b34baf6db06738bb9843e&type=album">
+
+                    <label class="prev" for="i1"><span></span></label>
+                    <label class="next" for="i3"><span></span></label>
+
+                </div>
+
+                <div class="slide_img" id="three">
+                    <img
+                        src="https://sun9-48.userapi.com/impg/NXnyxyinlOLO7jwuy-IeLmbL2ztbC-Da6h6LQg/nkmP-Q95QPY.jpg?size=2560x1707&quality=95&sign=dbed7835bbaa18e560e88c90f41fa82d&type=album">
+
+                    <label class="prev" for="i2"><span></span></label>
+                    <label class="next" for="i4"><span></span></label>
+                </div>
+
+
+                <div class="slide_img" id="four">
+                    <img
+                        src="https://sun9-35.userapi.com/impg/ETclwZ4XNqvdM_bYxpWIxQZlyXfQOvsGVVzBWg/CyRT1vb0Zo0.jpg?size=1920x1280&quality=95&sign=009ad50e95c862d45b98875775aa9035&type=album">
+
+                    <label class="prev" for="i3"><span></span></label>
+                    <label class="next" for="i1"><span></span></label>
+
+                </div>
+
+                <div id="nav_slide">
+                    <label for="i1" class="dots" id="dot1"></label>
+                    <label for="i2" class="dots" id="dot2"></label>
+                    <label for="i3" class="dots" id="dot3"></label>
+                    <label for="i4" class="dots" id="dot4"></label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @@include('blocks/footer.html')
+</body>
+<script src="./js/index.bundle.js"></script>
+
+</html>

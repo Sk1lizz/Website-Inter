@@ -1,0 +1,874 @@
+@media (max-width: 1366px) {
+
+    .page_peshekhonov {
+
+        .peshekhonov {
+            padding: 230px 0 60px 0;
+
+            .photoblock {
+
+                .card_photo {
+
+                    img {}
+
+                    h3 {}
+                }
+            }
+
+            .aboutme {
+
+                .name {
+
+                    h3 {}
+
+                    p {
+                        width: 75%;
+                    }
+                }
+
+                .information {
+                    .information_me {
+                        li {
+
+
+                            .title_information {
+                                width: 30%;
+                            }
+
+                            .text {
+
+                                a {}
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        .wrapper_amoutme {
+
+            .experience_education {
+
+                .experience {
+                    display: flex;
+                    width: 50%;
+                    flex-direction: column;
+                    padding-left: 5%;
+
+                    .title {
+                        font-size: 40px;
+                        color: $gold;
+                        font-family: PLAY-BOLD;
+                        margin-bottom: 40px;
+                        padding-top: 20px;
+                    }
+                }
+
+                .education {
+                    display: flex;
+                    width: 50%;
+                    flex-direction: column;
+                    padding-left: 100px;
+                    padding-right: 5%;
+
+                    .title {
+                        padding-top: 20px;
+                        font-size: 40px;
+                        color: $gold;
+                        font-family: PLAY-BOLD;
+                        margin-bottom: 40px;
+                    }
+                }
+
+                .block {
+                    display: flex;
+                    width: 100%;
+                    padding-bottom: 40px;
+                    height: 100%;
+
+                    .year {
+                        display: flex;
+                        font-family: PLAY-BOLD;
+                        color: $light;
+                        width: 25%;
+                        font-size: 25px;
+                        padding-right: 20px;
+                    }
+
+                    .text {
+                        flex-direction: column;
+                        display: flex;
+                        padding-left: 20px;
+                        width: 75%;
+
+                        .company {
+                            font-family: PLAY-BOLD;
+                            color: $light;
+                            font-size: 25px;
+                        }
+
+                        .post {
+                            font-size: 22px;
+                            font-family: PLAY-BOLD;
+                            color: $black;
+                            margin-top: 10px;
+
+                            p {
+                                display: inline-block;
+                                padding: 10px;
+                                background: $gold;
+                            }
+                        }
+
+                        .description {
+                            font-family: PLAY-REGULAR;
+                            color: $gray_light;
+                            display: flex;
+                            margin-top: 10px;
+                            font-size: 14px;
+                            width: 100%;
+                        }
+                    }
+                }
+            }
+        }
+
+        .photo {
+            height: 100%;
+            display: flex;
+            width: 100%;
+            justify-content: center;
+            align-content: flex-start;
+            flex-wrap: wrap;
+
+            .title_gallerey {
+                font-size: 40px;
+                color: $gray_black;
+                font-family: PLAY-BOLD;
+                padding-top: 40px;
+                justify-content: center;
+                text-align: center;
+                padding-top: 30px;
+            }
+
+            .block {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+                height: 100%;
+                padding: 0px 0px 20px 0px;
+                border-radius: 6px;
+                background: $light;
+                justify-content: center;
+                align-items: center;
+
+                .img-container {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    flex-wrap: wrap;
+                    gap: 10px;
+                    margin: 10px;
+
+                    img {
+                        will-change: 350px;
+                        margin: 20px;
+                        height: 250px;
+                        border-radius: 5px;
+                        overflow: hidden;
+                        transition: .5s;
+                        z-index: 0;
+                    }
+
+                    img:hover {
+                        transform: scale(1.1);
+                        z-index: 0;
+                    }
+                }
+
+                .pop-up {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgb(0, 0, 0, 0.8);
+                    display: none;
+                    z-index: 1;
+
+                    img {
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                        border-radius: 3px;
+                        width: 80%;
+                        z-index: 1;
+                    }
+
+                    span {
+                        position: fixed;
+                        top: 190px;
+                        right: 20px;
+                        width: 40px;
+                        height: 40px;
+                        color: $light;
+                        font-size: 50px;
+                        font-weight: 900;
+                        text-align: center;
+                        cursor: pointer;
+                    }
+                }
+            }
+        }
+
+        .wrapper_internships_courses {
+            display: flex;
+            font-size: 14px;
+            background-color: $gray_black;
+
+            .internships_courses {
+                display: flex;
+                padding: 20px 20px 0px 20px;
+                justify-content: center;
+                text-align: left;
+                width: 100%;
+
+                .internships {
+                    display: flex;
+                    width: 50%;
+                    flex-direction: column;
+                    padding-left: 5%;
+
+                    .title {
+                        font-size: 40px;
+                        color: $gold;
+                        font-family: PLAY-BOLD;
+                        margin-bottom: 40px;
+                        padding-top: 60px;
+                        padding-bottom: 20px;
+                    }
+                }
+
+                .courses {
+                    display: flex;
+                    width: 50%;
+                    flex-direction: column;
+                    padding-left: 100px;
+                    padding-right: 5%;
+
+                    .title {
+                        padding-top: 60px;
+                        font-size: 40px;
+                        color: $gold;
+                        font-family: PLAY-BOLD;
+                        margin-bottom: 40px;
+                        padding-bottom: 20px;
+                    }
+                }
+
+                .block {
+                    display: flex;
+                    width: 100%;
+                    padding-bottom: 20px;
+                    height: 250px;
+
+                    .year {
+                        display: flex;
+                        font-family: PLAY-BOLD;
+                        color: $light;
+                        width: 25%;
+                        font-size: 25px;
+                        padding-right: 20px;
+                    }
+
+                    .text {
+                        flex-direction: column;
+                        display: flex;
+                        padding-left: 20px;
+                        width: 75%;
+
+                        .company {
+                            font-family: PLAY-BOLD;
+                            color: $light;
+                            font-size: 25px;
+                        }
+
+                        .post {
+                            font-size: 22px;
+                            font-family: PLAY-BOLD;
+                            color: $black;
+                            margin-top: 10px;
+
+                            p {
+                                display: inline-block;
+                                padding: 10px;
+                                background: $gold;
+                            }
+                        }
+
+                        .description {
+                            font-family: PLAY-REGULAR;
+                            color: $gray_light;
+                            display: flex;
+                            margin-top: 10px;
+                            font-size: 14px;
+                            width: 100%;
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+}
+
+@media (max-width: 1024px) {
+
+    .page_peshekhonov {
+
+        .peshekhonov {
+            padding: 160px 0 60px 0;
+            flex-direction: column;
+            justify-content: center;
+
+            .photoblock {
+                width: 100%;
+
+                .card_photo {
+
+                    img {}
+
+                    h3 {}
+                }
+            }
+
+            .aboutme {
+                width: 100%;
+                text-align: center;
+
+                .name {
+
+                    h3 {
+                        padding-top: 30px;
+                    }
+
+                    p {
+                        width: 100%;
+                        padding-left: 10px;
+                        padding-right: 10px;
+                    }
+                }
+
+                .information {
+                    .information_me {
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+
+                        li {
+                            display: flex;
+                            justify-content: center;
+
+                            .title_information {
+                                width: 150px;
+                                text-align: left;
+                            }
+
+                            .text {
+                                width: 150px;
+                                text-align: right;
+
+                                a {}
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        .wrapper_amoutme {
+
+            .experience_education {
+                flex-direction: column;
+
+                .experience {
+                    display: flex;
+                    width: 100%;
+                    flex-direction: column;
+                    padding-left: 5%;
+
+                    .title {
+                        font-size: 40px;
+                        color: $gold;
+                        font-family: PLAY-BOLD;
+                        margin-bottom: 40px;
+                        padding-top: 20px;
+                    }
+                }
+
+                .education {
+                    display: flex;
+                    width: 100%;
+                    flex-direction: column;
+                    padding-left: 5%;
+
+                    .title {
+                        padding-top: 20px;
+                        font-size: 40px;
+                        color: $gold;
+                        font-family: PLAY-BOLD;
+                        margin-bottom: 40px;
+                    }
+                }
+
+                .block {
+                    display: flex;
+                    width: 100%;
+                    padding-bottom: 40px;
+                    height: 100%;
+
+                    .year {
+                        display: flex;
+                        font-family: PLAY-BOLD;
+                        color: $light;
+                        width: 25%;
+                        font-size: 25px;
+                        padding-right: 20px;
+                    }
+
+                    .text {
+                        flex-direction: column;
+                        display: flex;
+                        padding-left: 20px;
+                        width: 75%;
+
+                        .company {
+                            font-family: PLAY-BOLD;
+                            color: $light;
+                            font-size: 25px;
+                        }
+
+                        .post {
+                            font-size: 22px;
+                            font-family: PLAY-BOLD;
+                            color: $black;
+                            margin-top: 10px;
+
+                            p {
+                                display: inline-block;
+                                padding: 10px;
+                                background: $gold;
+                            }
+                        }
+
+                        .description {
+                            font-family: PLAY-REGULAR;
+                            color: $gray_light;
+                            display: flex;
+                            margin-top: 10px;
+                            font-size: 14px;
+                            width: 100%;
+                        }
+                    }
+                }
+            }
+        }
+
+        .photo {
+            .block {
+                .img-container {
+                    gap: 3px;
+
+                    img {
+                        height: 400px;
+                        margin: 5px;
+                    }
+                }
+
+                .pop-up {
+                    img {
+                        width: 80%;
+                    }
+                }
+            }
+        }
+
+        .wrapper_internships_courses {
+            display: flex;
+            font-size: 14px;
+            background-color: $gray_black;
+
+            .internships_courses {
+                display: flex;
+                padding: 20px 20px 0px 20px;
+                justify-content: center;
+                text-align: left;
+                width: 100%;
+                flex-direction: column;
+
+                .internships {
+                    display: flex;
+                    width: 100%;
+                    flex-direction: column;
+                    padding-left: 5%;
+
+                    .title {
+                        font-size: 40px;
+                        color: $gold;
+                        font-family: PLAY-BOLD;
+                        margin-bottom: 40px;
+                        padding-top: 60px;
+                        padding-bottom: 20px;
+                    }
+                }
+
+                .courses {
+                    display: flex;
+                    width: 100%;
+                    flex-direction: column;
+                    padding-left: 5%;
+
+                    .title {
+                        padding-top: 10px;
+                        font-size: 40px;
+                        color: $gold;
+                        font-family: PLAY-BOLD;
+                        margin-bottom: 40px;
+                        padding-bottom: 20px;
+                    }
+                }
+
+                .block {
+                    display: flex;
+                    width: 100%;
+                    padding-bottom: 20px;
+                    height: 200px;
+
+                    .year {
+                        display: flex;
+                        font-family: PLAY-BOLD;
+                        color: $light;
+                        width: 25%;
+                        font-size: 25px;
+                        padding-right: 20px;
+                    }
+
+                    .text {
+                        flex-direction: column;
+                        display: flex;
+                        padding-left: 20px;
+                        width: 75%;
+
+                        .company {
+                            font-family: PLAY-BOLD;
+                            color: $light;
+                            font-size: 25px;
+                        }
+
+                        .post {
+                            font-size: 22px;
+                            font-family: PLAY-BOLD;
+                            color: $black;
+                            margin-top: 10px;
+
+                            p {
+                                display: inline-block;
+                                padding: 10px;
+                                background: $gold;
+                            }
+                        }
+
+                        .description {
+                            font-family: PLAY-REGULAR;
+                            color: $gray_light;
+                            display: flex;
+                            margin-top: 10px;
+                            font-size: 14px;
+                            width: 100%;
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+}
+
+@media (max-width: 768px) {
+
+    .page_peshekhonov {
+
+        .peshekhonov {
+            padding: 90px 0 60px 0;
+            flex-direction: column;
+            justify-content: center;
+
+            .photoblock {
+                width: 100%;
+
+                .card_photo {
+                    width: 300px;
+                    height: 300px;
+                    justify-content: center;
+                    align-items: center;
+                    padding: 20px;
+
+                    img {
+                        width: 200px;
+                        height: 200px;
+                    }
+
+                    h3 {}
+                }
+            }
+
+            .aboutme {
+                width: 100%;
+                text-align: center;
+
+                .name {
+
+                    h3 {
+                        padding-top: 30px;
+                    }
+
+                    p {
+                        width: 100%;
+                        padding-left: 10px;
+                        padding-right: 10px;
+                    }
+                }
+
+                .information {
+                    .information_me {
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+
+                        li {
+                            display: flex;
+                            justify-content: center;
+
+                            .title_information {
+                                width: 150px;
+                                text-align: left;
+                            }
+
+                            .text {
+                                width: 150px;
+                                text-align: right;
+
+                                a {}
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        .wrapper_amoutme {
+
+            .experience_education {
+                flex-direction: column;
+
+                .experience {
+                    display: flex;
+                    width: 100%;
+                    flex-direction: column;
+                    padding-left: 5%;
+
+                    .title {
+                        font-size: 40px;
+                        color: $gold;
+                        font-family: PLAY-BOLD;
+                        margin-bottom: 40px;
+                        padding-top: 20px;
+                    }
+                }
+
+                .education {
+                    display: flex;
+                    width: 100%;
+                    flex-direction: column;
+                    padding-left: 5%;
+
+                    .title {
+                        padding-top: 20px;
+                        font-size: 40px;
+                        color: $gold;
+                        font-family: PLAY-BOLD;
+                        margin-bottom: 40px;
+                    }
+                }
+
+                .block {
+                    display: flex;
+                    width: 100%;
+                    padding-bottom: 40px;
+                    height: 100%;
+
+                    .year {
+                        display: flex;
+                        font-family: PLAY-BOLD;
+                        color: $light;
+                        width: 25%;
+                        font-size: 25px;
+                        padding-right: 20px;
+                    }
+
+                    .text {
+                        flex-direction: column;
+                        display: flex;
+                        padding-left: 20px;
+                        width: 75%;
+
+                        .company {
+                            font-family: PLAY-BOLD;
+                            color: $light;
+                            font-size: 25px;
+                        }
+
+                        .post {
+                            font-size: 22px;
+                            font-family: PLAY-BOLD;
+                            color: $black;
+                            margin-top: 10px;
+
+                            p {
+                                display: inline-block;
+                                padding: 10px;
+                                background: $gold;
+                            }
+                        }
+
+                        .description {
+                            font-family: PLAY-REGULAR;
+                            color: $gray_light;
+                            display: flex;
+                            margin-top: 10px;
+                            font-size: 14px;
+                            width: 100%;
+                        }
+                    }
+                }
+            }
+        }
+
+        .photo {
+            .block {
+                .img-container {
+                    img {
+                        height: 200px;
+                        margin: 5px;
+                    }
+                }
+
+                .pop-up {
+                    img {
+                        width: 80%;
+                    }
+                }
+            }
+        }
+
+        .wrapper_internships_courses {
+            display: flex;
+            font-size: 14px;
+            background-color: $gray_black;
+
+            .internships_courses {
+                display: flex;
+                padding: 20px 20px 0px 20px;
+                justify-content: center;
+                text-align: left;
+                width: 100%;
+                flex-direction: column;
+
+                .internships {
+                    display: flex;
+                    width: 100%;
+                    flex-direction: column;
+                    padding-left: 5%;
+
+                    .title {
+                        font-size: 40px;
+                        color: $gold;
+                        font-family: PLAY-BOLD;
+                        margin-bottom: 40px;
+                        padding-top: 10px;
+                        padding-bottom: 20px;
+                        text-align: center;
+                    }
+                }
+
+                .courses {
+                    display: flex;
+                    width: 100%;
+                    flex-direction: column;
+                    padding-left: 5%;
+
+                    .title {
+                        padding-top: 10px;
+                        font-size: 40px;
+                        color: $gold;
+                        font-family: PLAY-BOLD;
+                        text-align: center;
+                    }
+                }
+
+                .block {
+                    display: flex;
+                    width: 100%;
+                    padding-bottom: 20px;
+                    height: 100%;
+
+                    .year {
+                        display: flex;
+                        font-family: PLAY-BOLD;
+                        color: $light;
+                        width: 25%;
+                        font-size: 25px;
+                        padding-right: 20px;
+                    }
+
+                    .text {
+                        flex-direction: column;
+                        display: flex;
+                        padding-left: 20px;
+                        width: 75%;
+
+                        .company {
+                            font-family: PLAY-BOLD;
+                            color: $light;
+                            font-size: 25px;
+                        }
+
+                        .post {
+                            font-size: 22px;
+                            font-family: PLAY-BOLD;
+                            color: $black;
+                            margin-top: 10px;
+
+                            p {
+                                display: inline-block;
+                                padding: 10px;
+                                background: $gold;
+                            }
+                        }
+
+                        .description {
+                            font-family: PLAY-REGULAR;
+                            color: $gray_light;
+                            display: flex;
+                            margin-top: 10px;
+                            font-size: 14px;
+                            width: 100%;
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+}

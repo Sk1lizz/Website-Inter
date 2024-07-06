@@ -1,0 +1,41 @@
+@mixin button($colorMain, $colorAdditional, $fontSize, $padding) {
+    font-size: $fontSize;
+    padding: $padding;
+    background: $colorMain;
+    color: $colorAdditional;
+    font-family: PLAY-BOLD;
+    border-radius: 10px;
+    border: 1px solid $colorAdditional;
+    transition: .3s;
+
+    &:hover {
+        background: $colorAdditional;
+        color: $colorMain;
+        border: 1px solid $colorMain;
+    }
+}
+
+.button {
+    @include button($light, $gray_black, 1.6svh, 1svh 20px)
+}
+
+.button_large {
+    @include button($light, $gray_black, 2.5svh, 1.5svh 30px)
+}
+
+
+@media (max-width: 1024px) {
+    .button {
+        @include button($light, $gray_black, 14px, 8px 18px)
+    }
+
+    .button_large {
+        @include button($light, $gray_black, 22px, 13px 28px)
+    }
+}
+
+@media (max-width: 768px) {
+    .button_large {
+        @include button($light, $gray_black, 20px, 12px 26px)
+    }
+}

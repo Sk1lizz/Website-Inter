@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Создание заявки на матч</title>
+    <link rel="stylesheet" href="./css/main.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/4.5.0/fabric.min.js"></script>
+    <style>
+        @font-face {
+            font-family: 'RageItalic';
+            src: url('https://fonts.gstatic.com/s/rageitalic/v11/ijwOs9SX98AGkFvG5tSYgzr6cs02.ttf') format('truetype');
+        }
+
+        @font-face {
+            font-family: 'DINProBold';
+            src: url('https://fonts.gstatic.com/s/dinpro/v10/9BDeDslRStuSl0jlzUe1lBXCjkA.ttf') format('truetype');
+        }
+
+        @font-face {
+            font-family: 'DINProRegular';
+            src: url('https://fonts.gstatic.com/s/dinpro/v10/9BDr3K--m7jIDdRhXrK-MfABM0DiVrdE.ttf') format('truetype');
+        }
+    </style>
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+</head>
+
+<body>
+    <header>
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+
+    <div class="header_wrapper">
+        <div class="top_parth">
+            <a class="logo_wrapper" href="index.html">
+                <div class="logo_image"><img src="img/logo.png" href="index.html"></div>
+                <div class="logo_text">
+                    <div>INTER MOSCOW</div>
+                    <div>Offical Site</div>
+                </div>
+            </a>
+
+            <div class="social_view_wrapper">
+                <a href="prosmotr.html" class="view button">Записаться на просмотр</a>
+                <div class="social">
+                    <a href="https://vk.com/fcintermoscow"><img src="img/VK_Logo.png" href="intex.html"></a>
+                    <a href="https://www.youtube.com/@fcintermoscow7572"><img src="img/youtube_logo.png"></a>
+                </div>
+            </div>
+
+            <div class="menu_toggle">
+                <div class="icon" id="icon">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="bottom_parth">
+            <ul class="menu">
+                <li><a href="index.html">Главная</a></li>
+                <li>
+                    <a href="club.html">Клуб</a>
+                    <div id="icon">
+                        <p>></p>
+                    </div>
+                    <ul class="submenu">
+                        <li><a href="hystory.html">История</a></li>
+                        <li><a href="ustav.html">Устав</a></li>
+                        <li><a href="records.html">Достижения</a></li>
+                        <li><a href="alumnus.html">Воспитанники</a></li>
+                        <li><a href="hall_of_fame.html">Зал Славы</a></li>
+                        <li><a href="club100.html">Клуб 100</a></li>
+                        <li><a href="archive.html">Архив</a></li>
+                    </ul>
+                </li>
+                <li><a href="gallery.html">Галерея</a></li>
+                <li><a href="pro11x11.html">Pro(11x11)</a></li>
+                <li><a href="8x8.html">Команда(8x8)</a></li>
+                <li><a href="prosmotr.html">Просмотр</a></li>
+                <li><a href="contacts.html">Контакты</a></li>
+                <li><a href="literature.html">Литература</a></li>
+            </ul>
+        </div>
+    </div>
+</header>
+    <div class="zayavka">
+        <h1>Создание заявки на матч</h1>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/4.5.0/fabric.min.js"></script>
+        </head>
+
+        <body>
+            <img id="myImage" src="img\Zayavka.png" alt="Изображение">
+            <canvas id="myCanvas" width="500" height="500"></canvas>
+            <form id="textForm">
+                <input type="text" id="playerInfo" placeholder="Номер и Фамилия">
+                <input type="button" value="Добавить игрока" onclick="addPlayer()">
+
+
+                <input type="text" id="matchDate" placeholder="Дата матча">
+                <input type="button" value="Добавить дату" onclick="addDate()">
+
+
+                <input type="text" id="stadiumName" placeholder="Название стадиона">
+                <input type="button" value="Добавить стадион" onclick="addStadium()">
+
+
+                <input type="text" id="leagueName" placeholder="Название лиги">
+                <input type="button" value="Добавить лигу" onclick="addLeague()">
+
+
+                <input type="text" id="opponentTeam" placeholder="Команда соперника">
+                <input type="button" value="Добавить команду" onclick="addOpponent()">
+            </form>
+            <button onclick="saveImage()">Сохранить изображение</button>
+
+            <script>
+                var canvas = new fabric.Canvas('myCanvas', { selection: false });
+
+                function addText(textValue, leftPos, topPos, fontFamily, fontSize, fill) {
+                    var text = new fabric.Text(textValue, {
+                        left: leftPos,
+                        top: topPos,
+                        fontFamily: fontFamily,
+                        fontSize: fontSize,
+                        fill: fill
+                    });
+
+                    canvas.add(text);
+                }
+
+                function addPlayer() {
+                    var playerInfo = document.getElementById('playerInfo').value;
+                    addText(playerInfo, 50, 50, 'RageItalic', 30, 'white');
+                }
+
+                function addDate() {
+                    var matchDate = document.getElementById('matchDate').value;
+                    addText("Дата: " + matchDate, 50, 100, 'DINProBold', 20, 'white');
+                }
+
+                function addStadium() {
+                    var stadiumName = document.getElementById('stadiumName').value;
+                    addText("Стадион: " + stadiumName, 50, 150, 'DINProBold', 20, 'white');
+                }
+
+                function addLeague() {
+                    var leagueName = document.getElementById('leagueName').value;
+                    addText("Лига: " + leagueName, 50, 200, 'DINProRegular', 20, 'white');
+                }
+
+                function addOpponent() {
+                    var opponentTeam = document.getElementById('opponentTeam').value;
+                    addText("Соперник: " + opponentTeam, 50, 250, 'DINProRegular', 20, 'white');
+                }
+
+                function saveImage() {
+                    var dataURL = canvas.toDataURL({ format: 'png' });
+                    // Здесь можно отправить данные на сервер или сделать что-то еще с полученным изображением
+                    console.log(dataURL);
+                }
+            </script>
+    </div>
+
+    <footer>
+    <div class="footer_wrapper">
+
+        <div class="footer_left">
+            <a class="logo_wrapper" href="index.html">
+                <div class="logo_image"><img src="img/logo.png" href="index.html"></div>
+                <div class="logo_text">
+                    <div>INTER MOSCOW</div>
+                    <div>Offical Site</div>
+                </div>
+            </a>
+
+            <div class="info">
+                <div class="title">Email:</div>
+                <div class="text">info@fcintermoscow.com</div>
+            </div>
+
+            <div class="info">
+                <div class="title">Юридическая информация:</div>
+                <div class="text">Самозанятый Пешехонов Д.М.</div>
+                <div class="text">ИНН 503810091397</div>
+            </div>
+
+            <div class="view">
+                <a href="prosmotr.html" class="view button">Записаться на просмотр</a>
+            </div>
+
+            <div class="info">
+                <div class="title">Сreated by V. Vlasov and D. Peshekhonov</div>
+            </div>
+        </div>
+
+        <div class="footer_right">
+            <div class="menu">
+                <ul>
+                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="contacts.html">Контакты</a></li>
+                    <li><a href="gallery.html">Галерея</a></li>
+                    <li><a href="literature.html">Литература</a></li>
+                </ul>
+                <ul>
+                    <li><a href="club.html">Клуб</a></li>
+                    <li><a href="ustav.html">Устав</a></li>
+                    <li><a href="testirovanie.html">Тестирование</a></li>
+                    <li><a href="alumnus.html">Воспитанники</a></li>
+                    <li><a href="hall_of_fame.html">Зал славы</a></li>
+                    <li><a href="club100.html">Клуб 100</a></li>
+                </ul>
+                <ul>
+                    <li><a href="club.html">О команде</a></li>
+                    <li><a href="hystory.html">История</a></li>
+                    <li><a href="records.html">Достижения</a></li>
+                    <li><a href="pro11x11.html">Команда (11x11)</a></li>
+                    <li><a href="8x8.html">Команда (8x8)</a></li>
+                    <li><a href="archive.html">Архив</a></li>
+                </ul>
+                <ul>
+                    <li><a href="prosmotr.html">Просмотр</a></li>
+                    <li><a href="prosmotr_pro11x11.html">Просмотр 11x11</a></li>
+                    <li><a href="prosmotr_8x8.html">Просмотр 8x8</a></li>
+                </ul>
+            </div>
+
+            <div class="social">
+                <a href="https://vk.com/fcintermoscow"><img src="img/VK_Logo.png" href="intex.html"></a>
+                <a href="https://www.youtube.com/@fcintermoscow7572"><img src="img/youtube_logo.png"></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top.Mail.Ru counter -->
+    <script type="text/javascript">
+        var _tmr = window._tmr || (window._tmr = []);
+        _tmr.push({ id: "3274127", type: "pageView", start: (new Date()).getTime() });
+        (function (d, w, id) {
+            if (d.getElementById(id)) return;
+            var ts = d.createElement("script"); ts.type = "text/javascript"; ts.async = true; ts.id = id;
+            ts.src = "https://top-fwz1.mail.ru/js/code.js";
+            var f = function () { var s = d.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ts, s); };
+            if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); }
+        })(document, window, "tmr-code");
+    </script>
+    <noscript>
+        <div><img src="https://top-fwz1.mail.ru/counter?id=3274127;js=na" style="position:absolute;left:-9999px;"
+                alt="Top.Mail.Ru" /></div>
+    </noscript>
+    <!-- /Top.Mail.Ru counter -->
+
+
+    <script>function checkCookieConsent() {
+            const consentCookie = "cookieConsentAccepted";
+            const oneDayMilliseconds = 48 * 60 * 60 * 8000; // 1 день в миллисекундах
+
+            if (!document.cookie.includes(consentCookie)) {
+                // Если согласие на куки еще не было предоставлено, показываем окно
+                const consent = confirm("Мы используем файлы cookie. Продолжить использование сайта означает согласие с этим.");
+
+                if (consent) {
+                    // Если пользователь согласился, устанавливаем куки и устанавливаем срок действия на 1 день
+                    const expiryDate = new Date(Date.now() + oneDayMilliseconds).toUTCString();
+                    document.cookie = `${consentCookie}=true; expires=${expiryDate}; path=/;`;
+                }
+            }
+        }
+
+        // Вызываем функцию при загрузке страницы
+        window.onload = checkCookieConsent;</script>
+
+</footer>
+</body>
+
+</html>

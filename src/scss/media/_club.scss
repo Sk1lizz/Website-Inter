@@ -1,0 +1,43 @@
+@media (max-width: 768px) {
+    .club {
+        padding: 100px 20px 60px 20px;
+
+        .club_wrapper {
+            flex-direction: column;
+            width: 100%;
+
+            .logo {
+                margin-right: 0px;
+                width: 200px;
+                margin: 0 auto;
+                padding-bottom: 30px;
+
+                img {
+                    display: flex;
+                    width: 100%;
+                }
+            }
+
+            .contact {
+                display: flex;
+                max-width: 400px;
+                width: 100%;
+                justify-content: center;
+                flex-direction: column;
+                margin: 0 auto;
+
+                .info {
+                    padding-left: 0px;
+
+                    .index_text {
+                        text-align: center;
+                    }
+
+                    .text {
+                        text-align: center;
+                    }
+                }
+            }
+        }
+    }
+}

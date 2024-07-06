@@ -1,0 +1,330 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.banner_hall {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    height: 100svh;
+    width: 100%;
+    position: relative;
+
+
+    .fill {
+        position: absolute;
+        top: 0;
+        left: 0;
+        background: black;
+        opacity: .5;
+        width: 100%;
+        height: 100%;
+    }
+
+    .background_banner {
+        background-image: url(../img/halloffeme/background.jpg);
+        height: 100%;
+        width: 100%;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+    }
+
+    .content_banner {
+        position: absolute;
+        left: 40%;
+        top: 45%;
+        transform: translate(-50%, -50%);
+        font-family: PLAY-BOLD;
+        display: flex;
+        flex-direction: column;
+        justify-content: left;
+
+        .title_banner {
+            font-size: 95px;
+            text-align: left;
+            color: $gold;
+            text-shadow: 1px 1px 1px $black;
+        }
+
+        .title_2_banner {
+            font-size: 40px;
+            text-align: left;
+            color: $light;
+            margin-top: 15px;
+        }
+
+        .text_banner {
+            font-size: 16px;
+            text-align: left;
+            font-family: PLAY-REGULAR;
+            color: $light;
+            margin-top: 25px;
+            width: 40%;
+        }
+
+        @import "elements/_buttons.scss";
+    }
+
+    .photo_block {
+        position: absolute;
+        top: 80%;
+        left: 50%;
+        right: 50%;
+        transform: translate(-50%, -50%);
+        font-family: PLAY-BOLD;
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        height: 200px;
+        flex-wrap: wrap;
+
+        .player {
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            width: 10%;
+            margin-left: 100px;
+            align-items: center;
+
+            .image {
+                display: flex;
+                content: "";
+                width: 100%;
+                margin-bottom: 20px;
+                background-color: $black;
+                border-radius: 50%;
+
+
+                img {
+                    display: flex;
+                    content: "";
+                    height: 100%;
+                    width: 100%;
+                    border-radius: 50%;
+                    opacity: 1.0;
+                }
+
+                img:hover {
+                    transition: 0.6s;
+                    opacity: 1;
+                    font: bold 3em/2em Arial, sans-serif;
+                    color: $gold;
+                    box-shadow: 0 0 20px $gold;
+                }
+
+                .fotegroung {
+                    z-index: 1;
+                    box-shadow: inset 0 0 0 200vw rgba(0, 0, 0, 0.6);
+                }
+            }
+
+            .name {
+                text-align: center;
+                font-family: PLAY-BOLD;
+                color: $light;
+                font-size: 20px;
+            }
+        }
+
+        @import "elements/_buttons.scss";
+    }
+}
+
+.player_block {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    height: 100%;
+    background-color: $black;
+    align-items: center;
+
+    .title_player_block {
+        display: flex;
+        margin: 20px 0 20px 0;
+        width: 95%;
+        border-bottom: 10px solid $gold;
+
+        .title_team_name {
+            font-family: PLAY-REGULAR;
+            font-size: 18px;
+            width: 50%;
+            color: $gold;
+            text-align: left;
+            padding-left: 25px;
+            padding-bottom: 10px;
+        }
+
+        .title_page_name {
+            font-family: PLAY-BOLD;
+            width: 50%;
+            font-size: 20px;
+            color: $gold;
+            text-align: right;
+            padding-right: 25px;
+            padding-bottom: 10px;
+        }
+    }
+
+    .player {
+        width: 95%;
+        display: flex;
+        font-family: PLAY-REGULAR;
+        height: 100%;
+
+        .photo_player {
+            width: 30%;
+            height: 60%;
+            justify-content: center;
+            text-align: center;
+
+            img {
+                height: 700px;
+            }
+        }
+
+        .information_player {
+            width: 30%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            margin-left: 10px;
+            margin-right: 10px;
+
+            .title_information {
+                font-size: 35px;
+                color: $light;
+                font-family: PLAY-BOLD;
+                padding-bottom: 15px;
+                text-align: left;
+                border-bottom: 2px solid $gold;
+
+            }
+
+            .history_player {
+                display: flex;
+                border-bottom: 2px solid $gold;
+
+                .point {
+                    display: flex;
+                    flex-direction: column;
+
+                    :last-child {
+                        padding-bottom: 15px;
+                    }
+
+                    .text_point {
+                        font-size: 16px;
+                        font-family: PLAY-BOLD;
+                        color: $light;
+                        padding-top: 10px;
+                    }
+                }
+
+                .block_text {
+                    display: flex;
+                    flex-direction: column;
+                    margin-left: 15px;
+
+                    :last-child {
+                        padding-bottom: 15px;
+                    }
+
+                    .text {
+                        font-size: 16px;
+                        font-family: PLAY-REGULAR;
+                        color: $light;
+                        padding-top: 10px;
+                    }
+                }
+            }
+
+            .biography {
+                width: 100%;
+                padding-top: 25px;
+
+                .text {
+                    font-size: 16px;
+                    font-family: PLAY-REGULAR;
+                    color: $light;
+                    padding-top: 10px;
+                    padding-bottom: 20px;
+                    padding-right: 20px;
+
+                    li {
+                        padding-top: 10px;
+                    }
+                }
+            }
+        }
+
+        .slider {
+            width: 30%;
+            height: 100%;
+            margin-left: 50px;
+
+            .container_slider_css {
+                margin: 40px auto;
+                width: 100%;
+                height: 300px;
+                overflow: hidden;
+                position: relative
+            }
+
+            .photo_slider_css {
+                position: absolute;
+                animation: round 16s infinite;
+                opacity: 0;
+                width: 100%
+            }
+
+            @keyframes round {
+                25% {
+                    opacity: 1
+                }
+
+                40% {
+                    opacity: 0
+                }
+            }
+
+            img:nth-child(1) {
+                animation-delay: 12s
+            }
+
+            img:nth-child(2) {
+                animation-delay: 8s
+            }
+
+            img:nth-child(3) {
+                animation-delay: 4s
+            }
+
+            img:nth-child(4) {
+                animation-delay: 0
+            }
+
+            @media(min-width:0px) and (max-width:320px) {
+                .container_slider_css {
+                    width: 80%;
+                    height: 190px
+                }
+            }
+
+            @media(min-width:321px) and (max-width:480px) {
+                .container_slider_css {
+                    width: 80%;
+                    height: 190px
+                }
+            }
+
+        }
+    }
+}
+
+@import "media/_hall_of_fame.scss";

@@ -1,0 +1,269 @@
+@media (max-width: 1366px) {
+    .alumnus {
+        display: flex;
+        width: 100%;
+        background-color: $black;
+        justify-content: center;
+        padding: 170px 0 60px 0;
+
+        .about_alumnus {
+            display: flex;
+
+            .about_alumnus_wrapper {
+                text-align: center;
+                width: 100%;
+                margin: 50px 20px;
+                line-height: 22px;
+                display: flex;
+
+                .index_text_block {
+                    width: 50%;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: start;
+                    margin-left: 50px;
+                    padding-right: 40px;
+
+
+                    .title {
+                        font-size: 40px;
+                        font-family: PLAY-BOLD;
+                        margin-bottom: 35px;
+                        text-align: left;
+                        color: $dark_light;
+                    }
+
+                    .text {
+                        font-size: 18px;
+                        font-family: PLAY-REGULAR;
+                        text-align: start;
+                        color: $light;
+                        padding-bottom: 40px;
+                    }
+
+                    .text_background {
+                        background-color: #00509D;
+                        color: $light;
+                        text-align: center;
+                        font-family: PLAY-REGULAR;
+                        font-size: 22px;
+                        align-items: center;
+                        height: 100px;
+                        justify-content: center;
+                    }
+                }
+
+                .index_photo_block {
+                    display: flex;
+                    flex-direction: column;
+                    width: 50%;
+
+                    .big_photo {
+                        height: 100%;
+                        padding: 0px 20px 0px 20px;
+
+                        img {
+                            width: 100%;
+                            border-radius: 3px;
+                        }
+                    }
+
+                    .smalll_photo {
+                        height: 100%;
+                        display: flex;
+                        padding: 5px 20px 0px 20px;
+                        border-radius: 3px;
+                        flex-direction: column;
+
+                        img {
+                            width: 100%;
+                            border-radius: 3px;
+                            padding-bottom: 5px;
+                        }
+
+                        :last-child {
+                            padding-left: 0px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 1024px) {
+    .alumnus {
+        display: flex;
+        width: 100%;
+        background-color: $black;
+        justify-content: center;
+        padding: 150px 0 60px 0;
+
+        .about_alumnus {
+            display: flex;
+
+            .about_alumnus_wrapper {
+                text-align: center;
+                width: 100%;
+                margin: 50px 20px;
+                line-height: 22px;
+                display: flex;
+
+                .index_text_block {
+                    width: 40%;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: start;
+                    margin-left: 10px;
+                    padding-right: 5px;
+
+
+                    .title {
+                        font-size: 35px;
+                        font-family: PLAY-BOLD;
+                        margin-bottom: 35px;
+                        text-align: left;
+                        color: $dark_light;
+                    }
+
+                    .text {
+                        font-size: 16px;
+                        font-family: PLAY-REGULAR;
+                        text-align: start;
+                        color: $light;
+                        padding-bottom: 40px;
+                    }
+                }
+
+                .index_photo_block {
+                    display: flex;
+                    flex-direction: column;
+                    width: 60%;
+
+                    .big_photo {
+                        height: 50%;
+                        display: flex;
+                        padding: 5px 5px 0px 5px;
+                        border-radius: 3px;
+                        flex-direction: column;
+                        justify-content: center;
+
+                        img {
+                            width: 100%;
+                            height: 100%;
+                            border-radius: 3px;
+                        }
+                    }
+
+                    .smalll_photo {
+                        height: 100%;
+                        display: flex;
+                        padding: 5px 5px 0px 5px;
+                        border-radius: 3px;
+                        flex-direction: column;
+                        justify-content: center;
+
+                        img {
+                            width: 100%;
+                            height: 100%;
+                            border-radius: 3px;
+                            padding-bottom: 5px;
+                        }
+
+                        :last-child {
+                            padding-left: 0px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .alumnus {
+        display: flex;
+        width: 100%;
+        background-color: $black;
+        justify-content: center;
+        padding: 50px 0 60px 0;
+
+        .about_alumnus {
+            display: flex;
+
+            .about_alumnus_wrapper {
+                text-align: center;
+                width: 100%;
+                margin: 50px 20px;
+                line-height: 22px;
+                display: flex;
+                flex-direction: column;
+
+                .index_text_block {
+                    width: 100%;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: start;
+                    margin-left: 10px;
+                    padding-right: 10px;
+
+
+                    .title {
+                        font-size: 35px;
+                        font-family: PLAY-BOLD;
+                        margin-bottom: 35px;
+                        text-align: left;
+                        color: $dark_light;
+                    }
+
+                    .text {
+                        font-size: 16px;
+                        font-family: PLAY-REGULAR;
+                        text-align: start;
+                        color: $light;
+                        padding-bottom: 40px;
+                    }
+                }
+
+                .index_photo_block {
+                    display: flex;
+                    flex-direction: column;
+                    width: 100%;
+
+                    .big_photo {
+                        height: 50%;
+                        display: flex;
+                        padding: 5px 0px 0px 0px;
+                        border-radius: 3px;
+                        flex-direction: column;
+
+                        img {
+                            width: 100%;
+                            height: 100%;
+                            border-radius: 3px;
+                        }
+                    }
+
+                    .smalll_photo {
+                        height: 100%;
+                        display: flex;
+                        padding: 5px 0px 0px 0px;
+                        border-radius: 3px;
+                        flex-direction: column;
+
+                        img {
+                            width: 100%;
+                            height: 100%;
+                            border-radius: 3px;
+                            padding-bottom: 5px;
+                        }
+
+                        :last-child {
+                            padding-left: 0px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

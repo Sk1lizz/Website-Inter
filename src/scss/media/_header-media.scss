@@ -1,0 +1,179 @@
+@media (max-width: 1366px){
+    header{
+        height: 170px;
+
+        .header_wrapper{
+            width: 820px;
+        }
+    }
+}
+
+@media (max-width: 1024px){
+    header{
+        height: 160px;
+
+        .header_wrapper{
+            width: 670px;
+
+            .top_parth{
+                .logo_wrapper{
+                    .logo_image{
+                        img{
+                            height: 60px;
+                            width: 60px;
+                        }
+                    }
+        
+                    .logo_text{
+                        div:first-child {
+                            font-size: 30px;
+                        }
+                        div:last-child {
+                            font-size: 14px;
+                        }
+                    }
+                }
+    
+                .social_view_wrapper{
+                    .social{
+                        a{
+                            height: 26px;
+                        }
+                    }
+                }
+            }
+    
+            .bottom_parth{
+                padding-top: 16px;
+
+                .menu{
+                    a{
+                        font-size: 14px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 768px){
+    header{
+        background: $gray_black;
+        height: auto;
+
+        &.hide{
+            transform: none;
+        }
+
+        .header_wrapper{
+            width: 100%;
+            padding: 10px 20px;
+
+            .top_parth{
+                .logo_wrapper{
+                    .logo_image{
+                        img{
+                            height: 40px;
+                            width: 40px;
+                        }
+                    }
+        
+                    .logo_text{
+                        div{
+                            &:first-child{
+                                font-size: 20px;
+                            }
+                            &:last-child{
+                                font-size: 10px;
+                            }
+                        }
+                    }
+                }
+    
+                .social_view_wrapper{
+                    display: none;
+                }
+
+                .menu_toggle{
+                    display: flex;
+
+                    .icon{
+                        span{
+                            &:nth-child(1){
+                                &.open{
+                                    top: 50%;
+                                    transform: rotate(45deg);
+                                }
+                            }
+                            &:nth-child(2){
+                                &.open{
+                                    display: none;
+                                }
+                            }
+                            &:nth-child(3){
+                                &.open{
+                                    top: 50%;
+                                    transform: rotate(-45deg);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            .bottom_parth{
+                position: fixed;
+                right: -102%;
+                top: 0;
+                height: 100%;
+                width: 100%;
+                padding: 0;
+                margin: 0;
+                background: $gray_black;
+                transition: .6s;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                &.open{
+                    right: 0; 
+                }
+
+                .menu{
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    width: auto;
+
+                    li{
+                        display: flex;
+                        justify-content: center;
+
+                        #icon{
+                            position: absolute;
+                            top: 50%;
+                            left: 80%;
+                            transform:translate(-50%, -50%);
+                            height: 0;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                        }
+
+                        .submenu{
+                            top: 60px;
+                        }
+                    
+                        a{
+                            font-size: 18px;
+                            padding: 25px 25px;
+                            width: 100%;
+                            text-align: center;
+                            position: relative;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

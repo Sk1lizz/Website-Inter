@@ -1,0 +1,59 @@
+.club {
+    display: flex;
+    width: 100%;
+    background-color: $dark;
+    justify-content: center;
+    padding: 230px 0 60px 0;
+
+    .club_wrapper {
+        display: flex;
+        justify-content: center;
+        width: 80%;
+
+        .logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 30px;
+            width: 400px;
+
+            img {
+                display: flex;
+                width: 100%;
+            }
+        }
+
+        .contact {
+            display: flex;
+            width: 400px;
+            justify-content: center;
+            flex-direction: column;
+
+            .info {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                padding-left: 20px;
+                font-family: PLAY-REGULAR;
+                text-align: center;
+
+                .title {
+                    color: $light;
+                    padding-bottom: 50px;
+                    font-size: 40px;
+                    text-align: left;
+                }
+
+                div {
+                    color: $light;
+                    font-size: 16px;
+                    padding-top: 10px;
+                    text-align: left;
+                }
+            }
+        }
+    }
+}
+
+
+@import "media/_club.scss";

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Контакты</title>
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+</head>
+
+<body>
+    @@include('blocks/header.html')
+
+    <div class="player_list">
+        <h2>Statistics</h2>
+        <div class="player_list">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>ID</th>
+                        <th>Matches</th>
+                        <th>Goals</th>
+                        <th>Assist</th>
+                        <th>Goal Lose</th>
+                        <th>Without Missing</th>
+                        <th>Matches Goalkeeper</th>
+                        <th>Matches Goalkeeper Zero</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Здесь вставьте JavaScript-код для вывода значений из statistic -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Вывод значений из Allstatistics -->
+        <h2>All Statistics</h2>
+        <div class="player_list">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>ID</th>
+                        <th>Matches</th>
+                        <th>Goals</th>
+                        <th>Assist</th>
+                        <th>Goal Lose</th>
+                        <th>Without Missing</th>
+                        <th>Matches Goalkeeper</th>
+                        <th>Matches Goalkeeper Zero</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Здесь вставьте JavaScript-код для вывода значений из Allstatistics -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+
+    @@include('blocks/footer.html')
+    <script src="./js/index.bundle.js"></script>
+
+    <script>
+
+        let statistic2024 = [
+            { name: 'Абянов Руфат Алиевич', id: 72, matches: 0, goals: 0, assist: 0, goal_lose: 0, without_missing: 0 },
+            { name: 'Агатов Александр Андреевич', id: 19, matches: 0, goals: 0, assist: 0, goal_lose: 0, without_missing: 0 },
+            { name: 'Алексий Нестор Михайлович', id: 55, matches: 0, goals: 0, assist: 0, goal_lose: 0, without_missing: 0 },
+            { name: 'Белоножкин Артём Игоревич', id: 9, matches: 1, goals: 0, assist: 0, goal_lose: 0, without_missing: 0 },
+            { name: 'Беров Иван Александрович', id: 64, matches: 0, goals: 0, assist: 0, goal_lose: 0, without_missing: 0 },
+            { name: 'Бетин Артем Алексеевич', id: 21, matches: 0, goals: 0, assist: 0, goal_lose: 0, without_missing: 0 },
+            { name: 'Власов Владлен Николаевич', id: 20, matches: 0, goals: 0, assist: 0, goal_lose: 0, without_missing: 0 },
+            { name: 'Волконский Максим Андреевич', id: 32, matches: 0, goals: 0, assist: 0, goal_lose: 0, without_missing: 0 },
+            { name: 'Волокитин Тимур Олегович', id: 5, matches: 1, goals: 0, assist: 0, goal_lose: 0, without_missing: 0 },
+            { name: 'Голованов Денис Александрович', id: 26, matches: 0, goals: 0, assist: 0, goal_lose: 0, without_missing: 0 },
+            { name: 'Голуб Василий Васильевич', id: 14, matches: 0, goals: 0, assist: 0, goal_lose: 0, without_missing: 0 },
+            { name: 'Грумынский Александр Александрович', id: 25, matches: 0, goals: 0, assist: 0, goal_lose: 0, without_missing: 0 },
+            { name: 'Губский Никита Сергеевич', id: 18, matches: 0, goals: 0, assist: 0, goal_lose: 0, without_missing: 0 },
+            { name: 'Гусев Даниил Викторович', id: 86, matches: 0, goals: 0, assist: 0, goal_lose: 0, without_missing: 0 },
+            { name: 'Долгов Данила Владимирович', id: 69, matches: 0, goals: 0, assist: 0, goal_lose: 0, without_missing: 0 },
+            { name: 'Извеков Иван Александрович', id: 16, matches: 0, goals: 0, assist: 0, goal_lose: 0, without_missing: 0 },
+            { name: 'Исаев Матвей Степанович', id: 1, matches: 0, goals: 0, assist: 0, goal_lose: 0, without_missing: 0 },
+            { name: 'Королев Дмитрий Сергеевич', id: 66, matches: 0, goals: 0, assist: 0, goal_lose: 0, without_missing: 0 },
+            { name: 'Костич Илья', id: 10, matches: 1, goals: 1, assist: 0, goal_lose: 0, without_missing: 0 },
+            { name: 'Ларин Дмитрий Юрьевич', id: 28, matches: 0, goals: 0, assist: 0, goal_lose: 0, without_missing: 0 },
+            { name: 'Лешанков Дмитрий Павлович', id: 24, matches: 0, goals: 0, assist: 0, goal_lose: 0, without_missing: 0 },
+            { name: 'Макарчев Дмитрий Андреевич', id: 22, matches: 1, goals: 1, assist: 0, goal_lose: 1, without_missing: 0 },
+            { name: 'Малышев Данила Алексеевич', id: 4, matches: 0, goals: 0, assist: 0, goal_lose: 0, without_missing: 0 },
+            { name: 'Мытько Владислав Михайлович', id: 81, matches: 0, goals: 0, assist: 0, goal_lose: 0, without_missing: 0 },
+            { name: 'Нишанов Дауд Салимович', id: 27, matches: 0, goals: 0, assist: 0, goal_lose: 0, without_missing: 0 },
+            { name: 'Пашаев Исмаил Мубариз Оглы', id: 33, matches: 0, goals: 0, assist: 0, goal_lose: 0, without_missing: 0 },
+            { name: 'Петрищев Андрей Александрович', id: 17, matches: 0, goals: 0, assist: 0, goal_lose: 0, without_missing: 0 },
+            { name: 'Пешехонов Дмитрий Михайлович', id: 13, matches: 0, goals: 0, assist: 0, goal_lose: 0, without_missing: 0 },
+            { name: 'Салимгареев Руслан Ильдарович', id: 30, matches: 0, goals: 0, assist: 0, goal_lose: 0, without_missing: 0 },
+            { name: 'Синицын Александр Юрьевич', id: 41, matches: 0, goals: 0, assist: 0, goal_lose: 0, without_missing: 0 },
+            { name: 'Скворцов Александр Владимирович', id: 63, matches: 1, goals: 0, assist: 0, goal_lose: 0, without_missing: 0 },
+            { name: 'Тапчан Роман Рафикович', id: 7, matches: 1, goals: 1, assist: 0, goal_lose: 0, without_missing: 0 },
+            { name: 'Шаропов Фирдавс Иномович', id: 12, matches: 0, goals: 0, assist: 0, goal_lose: 0, without_missing: 0 },
+            { name: 'Шеин Сергей Александрович', id: 37, matches: 1, goals: 1, assist: 0, goal_lose: 0, without_missing: 0 },
+            { name: 'Юсуф Ясир Абубакар', id: 90, matches: 0, goals: 0, assist: 0, goal_lose: 0, without_missing: 0 },
+            { name: 'Языков Алексей Сергеевич', id: 47, matches: 0, goals: 0, assist: 0, goal_lose: 0, without_missing: 0 },
+            { name: 'Котов Кирилл Николаевич', id: 74, matches: 1, goals: 1, assist: 0, goal_lose: 0, without_missing: 0 },
+            { name: 'Савельев Максим', id: 52, matches: 0, goals: 0, assist: 0, goal_lose: 0, without_missing: 0 },
+            { name: 'Ахмат Дауд', id: 29, matches: 0, goals: 0, assist: 0, goal_lose: 0, without_missing: 0 }
+        ];
+
+        let Allstatistics = [
+            { name: 'Абянов Руфат Алиевич', id: 72, matches: 4, goals: 4, assist: 1, goal_lose: 5, without_missing: 0, matches_goalkeeper: 0, matches_goalkeeper_zero: 0 },
+            { name: 'Агатов Александр Андреевич', id: 19, matches: 14, goals: 1, assist: 8, goal_lose: 9, without_missing: 0, matches_goalkeeper: 0, matches_goalkeeper_zero: 0 },
+            { name: 'Алексий Нестор Михайлович', id: 55, matches: 37, goals: 0, assist: 3, goal_lose: 3, without_missing: 0, matches_goalkeeper: 0, matches_goalkeeper_zero: 0 },
+            { name: 'Белоножкин Артём Игоревич', id: 9, matches: 451, goals: 150, assist: 94, goal_lose: 244, without_missing: 0, matches_goalkeeper: 0, matches_goalkeeper_zero: 0 },
+            { name: 'Беров Иван Александрович', id: 64, matches: 39, goals: 39, assist: 32, goal_lose: 71, without_missing: 0, matches_goalkeeper: 0, matches_goalkeeper_zero: 0 },
+            { name: 'Бетин Артем Алексеевич', id: 21, matches: 1, goals: 0, assist: 0, goal_lose: 0, without_missing: 0, matches_goalkeeper: 0, matches_goalkeeper_zero: 0 },
+            { name: 'Власов Владлен Николаевич', id: 20, matches: 212, goals: 17, assist: 4, goal_lose: 21, without_missing: 0, matches_goalkeeper: 0, matches_goalkeeper_zero: 0 },
+            { name: 'Волконский Максим Андреевич', id: 32, matches: 19, goals: 2, assist: 1, goal_lose: 3, without_missing: 0, matches_goalkeeper: 0, matches_goalkeeper_zero: 0 },
+            { name: 'Волокитин Тимур Олегович', id: 5, matches: 58, goals: 24, assist: 13, goal_lose: 37, without_missing: 0, matches_goalkeeper: 0, matches_goalkeeper_zero: 0 },
+            { name: 'Голованов Денис Александрович', id: 26, matches: 32, goals: 0, assist: 3, goal_lose: 3, without_missing: 123, matches_goalkeeper: 2, matches_goalkeeper_zero: 0 },
+            { name: 'Голуб Василий Васильевич', id: 14, matches: 16, goals: 13, assist: 11, goal_lose: 24, without_missing: 0, matches_goalkeeper: 0, matches_goalkeeper_zero: 0 },
+            { name: 'Грумынский Александр Александрович', id: 25, matches: 8, goals: 0, assist: 0, goal_lose: 0, without_missing: 0, matches_goalkeeper: 0, matches_goalkeeper_zero: 0 },
+            { name: 'Губский Никита Сергеевич', id: 18, matches: 235, goals: 95, assist: 19, goal_lose: 114, without_missing: 0, matches_goalkeeper: 0, matches_goalkeeper_zero: 0 },
+            { name: 'Гусев Даниил Викторович', id: 86, matches: 10, goals: 0, assist: 1, goal_lose: 1, without_missing: 0, matches_goalkeeper: 0, matches_goalkeeper_zero: 0 },
+            { name: 'Долгов Данила Владимирович', id: 69, matches: 63, goals: 14, assist: 9, goal_lose: 23, without_missing: 0, matches_goalkeeper: 0, matches_goalkeeper_zero: 0 },
+            { name: 'Извеков Иван Александрович', id: 16, matches: 4, goals: 2, assist: 0, goal_lose: 2, without_missing: 0, matches_goalkeeper: 0, matches_goalkeeper_zero: 0 },
+            { name: 'Исаев Матвей Степанович', id: 1, matches: 79, goals: 0, assist: 1, goal_lose: 1, without_missing: 205, matches_goalkeeper: 9, matches_goalkeeper_zero: 0 },
+            { name: 'Королев Дмитрий Сергеевич', id: 66, matches: 0, goals: 0, assist: 0, goal_lose: 0, without_missing: 0, matches_goalkeeper: 0, matches_goalkeeper_zero: 0 },
+            { name: 'Костич Илья', id: 10, matches: 29, goals: 5, assist: 0, goal_lose: 5, without_missing: 0, matches_goalkeeper: 0, matches_goalkeeper_zero: 0 },
+            { name: 'Ларин Дмитрий Юрьевич', id: 28, matches: 25, goals: 0, assist: 0, goal_lose: 0, without_missing: 52, matches_goalkeeper: 4, matches_goalkeeper_zero: 0 },
+            { name: 'Лешанков Дмитрий Павлович', id: 24, matches: 90, goals: 8, assist: 9, goal_lose: 17, without_missing: 0, matches_goalkeeper: 0, matches_goalkeeper_zero: 0 },
+            { name: 'Макарчев Дмитрий Андреевич', id: 22, matches: 49, goals: 44, assist: 23, goal_lose: 67, without_missing: 0, matches_goalkeeper: 0, matches_goalkeeper_zero: 0 },
+            { name: 'Малышев Данила Алексеевич', id: 4, matches: 19, goals: 1, assist: 5, goal_lose: 6, without_missing: 0, matches_goalkeeper: 0, matches_goalkeeper_zero: 0 },
+            { name: 'Мытько Владислав Михайлович', id: 81, matches: 9, goals: 0, assist: 0, goal_lose: 0, without_missing: 42, matches_goalkeeper: 0, matches_goalkeeper_zero: 0 },
+            { name: 'Нишанов Дауд Салимович', id: 27, matches: 13, goals: 10, assist: 0, goal_lose: 10, without_missing: 0, matches_goalkeeper: 0, matches_goalkeeper_zero: 0 },
+            { name: 'Пашаев Исмаил Мубариз Оглы', id: 33, matches: 10, goals: 3, assist: 1, goal_lose: 4, without_missing: 0, matches_goalkeeper: 0, matches_goalkeeper_zero: 0 },
+            { name: 'Петрищев Андрей Александрович', id: 17, matches: 24, goals: 1, assist: 2, goal_lose: 3, without_missing: 0, matches_goalkeeper: 0, matches_goalkeeper_zero: 0 },
+            { name: 'Пешехонов Дмитрий Михайлович', id: 13, matches: 469, goals: 0, assist: 0, goal_lose: 0, without_missing: 0, matches_goalkeeper: 0, matches_goalkeeper_zero: 0 },
+            { name: 'Салимгареев Руслан Ильдарович', id: 30, matches: 20, goals: 0, assist: 2, goal_lose: 2, without_missing: 0, matches_goalkeeper: 0, matches_goalkeeper_zero: 0 },
+            { name: 'Синицын Александр Юрьевич', id: 41, matches: 17, goals: 0, assist: 0, goal_lose: 0, without_missing: 0, matches_goalkeeper: 0, matches_goalkeeper_zero: 0 },
+            { name: 'Скворцов Александр Владимирович', id: 63, matches: 83, goals: 2, assist: 9, goal_lose: 11, without_missing: 0, matches_goalkeeper: 0, matches_goalkeeper_zero: 0 },
+            { name: 'Тапчан Роман Рафикович', id: 7, matches: 285, goals: 164, assist: 42, goal_lose: 206, without_missing: 0, matches_goalkeeper: 0, matches_goalkeeper_zero: 0 },
+            { name: 'Шаропов Фирдавс Иномович', id: 12, matches: 8, goals: 1, assist: 0, goal_lose: 1, without_missing: 0, matches_goalkeeper: 0, matches_goalkeeper_zero: 0 },
+            { name: 'Шеин Сергей Александрович', id: 37, matches: 18, goals: 0, assist: 1, goal_lose: 1, without_missing: 0, matches_goalkeeper: 0, matches_goalkeeper_zero: 0 },
+            { name: 'Юсуф Ясир Абубакар', id: 90, matches: 0, goals: 0, assist: 0, goal_lose: 0, without_missing: 0, matches_goalkeeper: 0, matches_goalkeeper_zero: 0 },
+            { name: 'Языков Алексей Сергеевич', id: 47, matches: 6, goals: 0, assist: 0, goal_lose: 0, without_missing: 0, matches_goalkeeper: 0, matches_goalkeeper_zero: 0 },
+            { name: 'Котов Кирилл Николаевич', id: 74, matches: 135, goals: 28, assist: 32, goal_lose: 60, without_missing: 0, matches_goalkeeper: 0, matches_goalkeeper_zero: 0 },
+            { name: 'Савельев Максим', id: 52, matches: 0, goals: 0, assist: 0, goal_lose: 0, without_missing: 0, matches_goalkeeper: 0, matches_goalkeeper_zero: 0 },
+            { name: 'Ахмат Дауд', id: 29, matches: 0, goals: 0, assist: 0, goal_lose: 0, without_missing: 0, matches_goalkeeper: 0, matches_goalkeeper_zero: 0 }
+        ];
+
+        // Создаем statisticsAll как копию Allstatistics
+        let statisticsAll = Allstatistics.map(player => ({ ...player }));
+
+        // Сложим значения из statistic в statisticsAll
+        statisticsAll.forEach(player => {
+            let matchingPlayer = statistic.find(p => p.id === player.id);
+            if (matchingPlayer) {
+                player.matches += matchingPlayer.matches;
+                player.goals += matchingPlayer.goals;
+                player.assist += matchingPlayer.assist;
+                player.goal_lose += matchingPlayer.goal_lose;
+                player.without_missing += matchingPlayer.without_missing;
+                player.matches_goalkeeper += matchingPlayer.matches_goalkeeper;
+                player.matches_goalkeeper_zero += matchingPlayer.matches_goalkeeper_zero;
+            }
+        });
+
+        function fillTable(data, tableId) {
+            const tableBody = document.querySelector(`#${tableId} tbody`);
+
+            data.forEach(player => {
+                const row = document.createElement('tr');
+                for (const key in player) {
+                    const cell = document.createElement('td');
+                    cell.textContent = player[key];
+                    row.appendChild(cell);
+                }
+                tableBody.appendChild(row);
+            });
+        }
+
+        fillTable(statistic, 'statisticTable');
+        fillTable(Allstatistics, 'allStatisticsTable');
+    </script>
+
+</body>
+
+</html>

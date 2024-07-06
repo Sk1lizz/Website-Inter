@@ -1,0 +1,75 @@
+@media (max-width: 1366px) {
+
+    .club100 {
+        padding: 210px 0 60px 0;
+    }
+}
+
+@media (max-width: 1024px) {
+    .club100 {
+        padding: 190px 0 60px 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .club100 {
+        padding: 90px 0 60px 0;
+
+        .wrapper {
+            .wrapper_top-3 {
+                flex-direction: column;
+                display: flex;
+                height: 100%;
+                padding-left: 10px;
+                padding-right: 10px;
+
+                .gold_block {
+                    width: 100%;
+                }
+
+                .silver_block {
+                    width: 100%;
+                }
+
+                .bronza_block {
+                    width: 100%;
+                    margin-bottom: 0px;
+                }
+
+                .text {
+                    display: flex;
+                    height: 16px;
+                    color: $black;
+                    justify-content: center;
+                    font-family: PLAY-REGULAR;
+                    margin-top: 20px;
+                    margin-bottom: 20px;
+                }
+            }
+
+            .wrapper_block {
+                height: 100%;
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                align-items: center;
+                padding-left: 10px;
+                padding-right: 10px;
+
+                .block {
+                    display: flex;
+                    height: 220px;
+                    margin: 20px 0px 0px 0px;
+                    background-color: rgba(0, 0, 0, 0.4);
+                    border-radius: 6px;
+                    justify-content: center;
+                    flex-direction: column;
+                    align-items: center;
+                    min-width: none;
+                    width: 100%;
+                    max-width: 500px;
+                }
+            }
+        }
+    }
+}

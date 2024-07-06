@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Главная</title>
+    <link rel="stylesheet" href="./css/main.css" />
+</head>
+
+<body>
+    @@include('blocks/header.html')
+
+    <div class="banner">
+        <div class="fill"></div>
+        <div class="background"></div>
+        <div class="content">
+            <div class="text">FC Inter Moscow</div>
+            <div class="view"><a href="prosmotr.html" class="button_large">Стать игроком</a></div>
+        </div>
+    </div>
+
+    <div class="last_matches">
+        <div class="title">Последние матчи</div>
+
+        <div class="last_match_pro">
+            <div class="fill">
+                <div class="data">23.06.2024</div>
+                <div class="title_last_matches">Плюшевая лига, дивизион Б, 9-й тур</div>
+                <div class="text_block">
+                    <div class="team_name_1">FC Inter Moscow Pro</div>
+                    <div class="match_score">8:0</div>
+                    <div class="team_name_2">Москва-2</div>
+                </div>
+                <div class="goals">Голы: Волконский-4, Шаропов-2, Шеин, Петрищев</div>
+            </div>
+        </div>
+
+        <div class="last_match_8x8">
+            <div class="fill">
+                <div class="data">29.06.2024</div>
+                <div class="title_last_matches">Лига F, первый дивизион «Севера», 11-й тур</div>
+                <div class="text_block">
+                    <div class="team_name_1">FC Inter Moscow 8x8</div>
+                    <div class="match_score">1:3</div>
+                    <div class="team_name_2">Мика</div>
+                </div>
+                <div class="goals">Гол: Хакимов (Абянов) </div>
+            </div>
+        </div>
+
+        <div class="fill_blocks_last_matches"></div>
+        <div class="background_blocks_last_matches"></div>
+    </div>
+
+    <div class="about_the_team">
+        <div class="about_the_team_wrapper">
+            <div class="index_text_block">
+                <div class="title">О КОМАНДЕ</div>
+                <div class="text">
+                    Любительский футбольный клуб FC Inter Moscow существует уже более 11 лет и является примером
+                    организации в любительском футболе. Наши команды регулярно занимают призовые места в чемпионатах, а
+                    футболисты прогрессируют и успешно поднимаются по футбольной
+                    лестнице
+                </div>
+                <div class="about_button">
+                    <a href="prosmotr.html"><button>Подробнее</button></a>
+                </div>
+            </div>
+            <div class="index_photo_block">
+                <div class="big_photo">
+                    <img src="img/1.jpg" alt="">
+                </div>
+                <div class="smalll_photo">
+                    <img src="img/2.jpg" alt="">
+                    <img src="img/3.jpg" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="view_in_team">
+        <div class="team_88">
+            <div class="fill"></div>
+            <div class="background"></div>
+            <div class="content">
+                <div class="text">8X8</div>
+                <div class="view"><a href="prosmotr_8x8.html" target="_blank" class="button_large">Стать игроком</a>
+                </div>
+            </div>
+        </div>
+        <div class="team_pro">
+            <div class="fill"></div>
+            <div class="background"></div>
+            <div class="content">
+                <div class="text">11X11</div>
+                <div class="view"><a href="prosmotr_pro11x11.html" target="_blank" class="button_large">Стать
+                        игроком</a></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="birthday">
+        <div class="birthday_players">
+            <div class="title">День Рождения</div>
+            <div class="block_birthday_players">
+                <div class="name_player"></div>
+                <div class="data_title"></div>
+                <div class="timer"></div>
+            </div>
+            <div class="block_birthday_players">
+                <div class="name_player"></div>
+                <div class="data_title"></div>
+                <div class="timer"></div>
+            </div>
+            <div class="block_birthday_players">
+                <div class="name_player"></div>
+                <div class="data_title"></div>
+                <div class="timer"></div>
+            </div>
+        </div>
+        <div class="player_in_team">
+            <div class="icon">
+                <img src="../img/icon/cake.svg" alt="">
+            </div>
+        </div>
+    </div>
+
+    </div>
+
+
+    <div class="logo_block">
+        <div class="background">
+            <div class="text">Is not for everyone</div>
+        </div>
+    </div>
+
+    <div class="scrolling-wrapper">
+        <div class="card">
+            <img src="img/bestplayer/january.jpg" alt="">
+        </div>
+        <div class="card">
+            <img src="img/bestplayer/february.jpg" alt="">
+        </div>
+        <div class="card">
+            <img src="img/bestplayer/march.jpg" alt="">
+        </div>
+        <div class="card">
+            <img src="img/bestplayer/april.jpg" alt="">
+        </div>
+        <div class="card">
+            <img src="img/bestplayer/may.jpg" alt="">
+        </div>
+        <div class="card">
+            <img src="img/bestplayer/june.jpg" alt="">
+        </div>
+    </div>
+
+    @@include('blocks/footer.html')
+
+    <script src="./js/index.bundle.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+
+    <script>
+        moment.updateLocale('ru', {
+            months: [
+                "января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"
+            ],
+            monthsShort: [
+                "янв", "фев", "мар", "апр", "май", "июн", "июл", "авг", "сен", "окт", "ноя", "дек"
+            ],
+            weekdays: [
+                "воскресенье", "понедельник", "вторник", "среда", "четверг", "пятница", "суббота"
+            ],
+            weekdaysShort: [
+                "вс", "пн", "вт", "ср", "чт", "пт", "сб"
+            ],
+            weekdaysMin: [
+                "вс", "пн", "вт", "ср", "чт", "пт", "сб"
+            ]
+        });
+
+        const players = [{
+            name: 'Абянов Руфат',
+            birthday: '21.04.1997'
+        }, {
+            name: 'Агатов Александр',
+            birthday: '01.06.1991'
+        }, {
+            name: 'Алексий Нестор',
+            birthday: '22.05.1999'
+        }, {
+            name: 'Белоножкин Артём',
+            birthday: '09.02.1996'
+        }, {
+            name: 'Беров Иван',
+            birthday: '16.09.1997'
+        }, {
+            name: 'Власов Владлен',
+            birthday: '13.11.1999'
+        }, {
+            name: 'Волконский Максим',
+            birthday: '26.08.2003'
+        }, {
+            name: 'Волокитин Тимур',
+            birthday: '31.07.1993'
+        }, {
+            name: 'Голованов Денис',
+            birthday: '28.02.1997'
+        }, {
+            name: 'Голуб Василий',
+            birthday: '26.01.1988'
+        }, {
+            name: 'Грумынский Александр',
+            birthday: '10.04.1991'
+        }, {
+            name: 'Губский Никита',
+            birthday: '18.02.1995'
+        }, {
+            name: 'Гусев Даниил',
+            birthday: '23.12.1996'
+        }, {
+            name: 'Долгов Данила',
+            birthday: '12.10.2003'
+        }, {
+            name: 'Исаев Матвей',
+            birthday: '28.09.2006'
+        }, {
+            name: 'Кеменов Роман',
+            birthday: '15.09.1997'
+        }, {
+            name: 'Костич Илья',
+            birthday: '24.06.2002'
+        }, {
+            name: 'Ларин Дмитрий',
+            birthday: '19.02.2003'
+        }, {
+            name: 'Лешанков Дмитрий',
+            birthday: '02.07.2004'
+        }, {
+            name: 'Макарчев Дмитрий',
+            birthday: '20.12.1995'
+        }, {
+            name: 'Малышев Данила',
+            birthday: '17.03.2006'
+        }, {
+            name: 'Мытько Владислав',
+            birthday: '09.08.1994'
+        },  {
+            name: 'Пашаев Исмаил',
+            birthday: '18.09.2003'
+        }, {
+            name: 'Петрищев Андрей',
+            birthday: '13.02.2005'
+        }, {
+            name: 'Пешехонов Дмитрий',
+            birthday: '26.01.1995'
+        }, {
+            name: 'Салимгареев Руслан',
+            birthday: '18.05.2009'
+        }, {
+            name: 'Синицын Александр',
+            birthday: '14.12.1992'
+        }, {
+            name: 'Скворцов Александр',
+            birthday: '06.01.1998'
+        }, {
+            name: 'Тапчан Роман',
+            birthday: '29.12.1988'
+        }, {
+            name: 'Шаропов Фирдавс',
+            birthday: '17.02.2005'
+        }, {
+            name: 'Швамбергер Илья',
+            birthday: '05.01.2002'
+        }, {
+            name: 'Шеин Сергей',
+            birthday: '24.04.1999'
+        }, {
+            name: 'Юсуф Ясир',
+            birthday: '28.03.2004'
+        }, {
+            name: 'Языков Алексей',
+            birthday: '25.04.1997'
+        }, {
+            name: 'Королев Дмитрий',
+            birthday: '10.11.2005'
+        }, {
+            name: 'Савельев Максим',
+            birthday: '03.09.2001'
+        }, {
+            name: 'Матвеев Алексей',
+            birthday: '25.09.2005'
+        }, {
+            name: 'Батуев Никита',
+            birthday: '20.08.1999'
+        }, {
+            name: 'Амири Фирдавс',
+            birthday: '03.07.2005'
+        }, {
+            name: 'Королев Дмитрий',
+            birthday: '10.11.2005'
+        }, {
+            name: 'Пожидаев Дмитрий',
+            birthday: '26.06.2005'
+        }, {
+            name: 'Касулин Данил',
+            birthday: '22.01.2002'
+        }, {
+            name: 'Котов Кирилл',
+            birthday: '22.05.1998'
+        }, {
+            name: 'Сыпченко Александр',
+            birthday: '10.02.2006'
+        }, {
+            name: 'Штепа Максим',
+            birthday: '25.03.2002'
+        }, {
+            name: 'Полевой Тимофей',
+            birthday: '10.01.2004'
+        },
+        {
+            name: 'Саидов Малик',
+            birthday: '06.02.2003'
+        },
+        {
+            name: 'Хакимов Салават',
+            birthday: '20.08.2005'
+        },];
+
+        function displayUpcomingBirthdays(players) {
+            const sortedPlayers = players
+                .map((player) => {
+                    const birthday = moment(player.birthday, 'DD.MM.YYYY').set({
+                        year: moment().year()
+                    });
+                    const diff = birthday.diff(moment().startOf('day'), 'days');
+                    return {
+                        ...player,
+                        birthday,
+                        diff
+                    };
+                })
+                .filter((player) => player.diff >= 0)
+                .sort((a, b) => a.diff - b.diff)
+                .slice(0, 3);
+            const blocks = document.querySelectorAll('.block_birthday_players');
+
+            sortedPlayers.forEach((player, index) => {
+                const block = blocks[index];
+
+                const namePlayer = block.querySelector('.name_player');
+                const dataTitle = block.querySelector('.data_title');
+                const executedBlock = block.querySelector('.executed_block');
+                const timer = block.querySelector('.timer');
+
+                const birthdayFormatted = player.birthday.format('DD MMMM', 'ru');
+                const daysLeft = player.diff;
+
+                namePlayer.textContent = player.name;
+                dataTitle.textContent = birthdayFormatted;
+
+                if (daysLeft === 0) {
+                    timer.textContent = 'Сегодня';
+                } else {
+                    timer.textContent = formatDaysLeft(daysLeft);
+                }
+            });
+
+        }
+
+        function formatDaysLeft(daysLeft) {
+            if (daysLeft === 1) {
+                return 'Завтра';
+            } else if (daysLeft === 2) {
+                return 'Послезавтра';
+            } else {
+                const daysLeftString = daysLeft.toString();
+                const lastDigit = parseInt(daysLeftString.charAt(daysLeftString.length - 1));
+                const lastTwoDigits = parseInt(daysLeftString.slice(-2));
+
+                if (lastTwoDigits >= 11 && lastTwoDigits <= 14) {
+                    return `Через ${daysLeft} дней`;
+                } else if (lastDigit === 1) {
+                    return `Через ${daysLeft} день`;
+                } else if (lastDigit >= 2 && lastDigit <= 4) {
+                    return `Через ${daysLeft} дня`;
+                } else {
+                    return `Через ${daysLeft} дней`;
+                }
+            }
+        }
+
+        displayUpcomingBirthdays(players);
+    </script>
+
+    <script src="./js/scrollindex.bundle.js"></script>
+
+
+</body>
+
+</html>

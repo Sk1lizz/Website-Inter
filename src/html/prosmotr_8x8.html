@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Просмотр в команду 8x8</title>
+    <link rel="stylesheet" href="./css/main.css" />
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+</head>
+
+<body>
+    @@include('blocks/header.html')
+    <div class="wrapper_prosmotrpro">
+
+        <div class="about_team">
+            <div class="text_block">
+                <div class="title">FC Inter Moscow (8x8)</div>
+                <div class="title_2">Набор от 16 лет</div>
+                <div class="text">Стать футболистом команды FC Inter Moscow 8x8. Тренировки команды проходят без
+                    руководства тренера, а участие в них по желанию и оплачивается по факту. Участие в футбольной лиге и
+                    внутренних кубках, а также товарищеских матчах. Кол-во мест
+                    ограничено. Участие в матчах
+                    оплачивается отдельно.</div>
+                <div class="icon_block">
+                    <img src="img/prosmotr/prosmotr11x11/Russian_Football_Union_Logo.svg" alt="">
+                    <img src="img/prosmotr/prosmotr11x11/uefa.svg" alt="">
+                </div>
+            </div>
+            <div class="icon_tactics">
+                <img src="img/prosmotr/prosmotr11x11/tactics.svg" alt="">
+            </div>
+        </div>
+
+        <div class="advantages">
+            <div class="block">
+                <div class="icon">
+                    <img src="img/prosmotr/prosmotr11x11/training.svg" alt="">
+                </div>
+                <div class="text">Свободные тренировки</div>
+            </div>
+            <div class="block">
+                <div class="icon">
+                    <img src="img/prosmotr/prosmotr11x11/sorevnovaniya.svg" alt="">
+                </div>
+                <div class="text">Участие в соревнованиях</div>
+            </div>
+            <div class="block">
+                <div class="icon">
+                    <img src="img/prosmotr/prosmotr11x11/teoria.svg" alt="">
+                </div>
+                <div class="text">Грамотный футбол</div>
+            </div>
+            <div class="block">
+                <div class="icon">
+                    <img src="img/prosmotr/prosmotr11x11/nagrazhdeniy.svg" alt="">
+                </div>
+                <div class="text">Награждение лучших игроков</div>
+            </div>
+        </div>
+
+        <div class="training_place">
+            <div class="block_place">
+                <div class="photo">
+                    <img src="img/prosmotr/prosmotr11x11/Field.jpg" alt="">
+                </div>
+                <div class="info_block">
+                    <div class="text_box">
+                        <div class="title">Тренировочное поле</div>
+                        <div class="text">Стадион Москвич</div>
+                        <div class="text">Искусственный газон с подогревом последнего поколения</div>
+                        <div class="text">Адрес: Волгоградский просп., 46/15с7, Москва (м. Текстильщики)</div>
+                        <div class="text">По четвергам в 21:00</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="prices">
+            <div class="block">
+                <div class="title">Пробная тренировка</div>
+                <div class="value">400 ₽</div>
+                <div class="text">За тренировку</div>
+                <div class="list">
+                    <li>- Пробная тренировка;</li>
+                    <li>- Включим в месячную оплату, если решите остаться.</li>
+                </div>
+                <div class="button">
+                    <a href="#questionnaire"><button>Выбрать</button></a>
+                </div>
+            </div>
+            <div class="block">
+                <div class="title">Месячный взнос</div>
+                <div class="value">350 ₽</div>
+                <div class="text">Членский взнос</div>
+                <div class="list">
+                    <li>- Членство в команде;</li>
+                    <li>- Участие в матчах 8х8;</li>
+                    <li>- Взнос идет в бюджет команды.</li>
+                </div>
+                <div class="button">
+                    <a href="#questionnaire"><button>Выбрать</button></a>
+                </div>
+            </div>
+            <div class="block">
+                <div class="title">Взнос за 3 месяца</div>
+                <div class="value">900 ₽</div>
+                <div class="text">Членский взнос</div>
+                <div class="list">
+                    <li>- Членство в команде;</li>
+                    <li>- Участие в матчах 8х8;</li>
+                    <li>- Взнос идет в бюджет команды.</li>
+                </div>
+                <div class="button">
+                    <a href="#questionnaire"><button>Выбрать</button></a>
+                </div>
+            </div>
+            <div class="block">
+                <div class="title">Футболка</div>
+                <div class="value">1500 ₽</div>
+                <div class="text">Игровая футболка</div>
+                <div class="list">
+                    <li>- Футболка с нанесением номера и фамилии;</li>
+                    <li>- Требуется для участия в матчах;</li>
+                    <li>- Оплачивается при внесении первого взноса.</li>
+                </div>
+                <div class="button">
+                    <a href="#questionnaire"><button>Выбрать</button></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="questionnaire" id="questionnaire">
+            <div class=“text”>Заполняя анкету ниже, вы соглашаетесь на <a href=personal_data.html>
+                    обработку персональных данных. </a> Если по какой-то причине форма заполнения анкеты ниже не
+                работает, вы можете связаться с нами через раздел контакты</div>
+            <div class="text">В данный момент заполнение анкеты доступно только через Вконтакте</div>
+
+            <div class="text">* - обязательное поле</div>
+
+            <form action="#" method="POST">
+                <div class="input-box">
+                    <div class="input-field field">
+                        <input type="name" placeholder="Введите ваше ФИО*" id="name" class="item" autocomplete="off">
+                        <div class="error-txt">Некорректный ввод</div>
+                    </div>
+                    <div class="input-field field">
+                        <input type="text" placeholder="Введите ваш Email*" id="email" class="item" autocomplete="off">
+                        <div class="error-txt">Некорректный ввод</div>
+                    </div>
+                    <div class="input-field field">
+                        <input type="text" placeholder="Введите ссылку на вашу страницу vk" id="subject" class="item"
+                            autocomplete="off">
+                        <div class="error-txt">Некорректный ввод</div>
+                    </div>
+                    <div class="input-field field">
+                        <input type="text" placeholder="Введите ваш номер телефона*" id="number" class="item"
+                            autocomplete="off">
+                        <div class="error-txt">Некорректный ввод</div>
+                    </div>
+                    <div class="textarea-field field">
+                        <textarea type="message"
+                            placeholder="Информация о вас: позиция, игровой опыт, ведущая нога, дата рождения и тд*"
+                            id="message" cols="30" rows="10" class="item" autocomplete="off"></textarea>
+                        <div class="error-txt">Некорректный ввод</div>
+                    </div>
+                </div>
+                <div class="text">Проверьте, что у вас открыты личные сообщения в vk. Если вы указали ваш ник в вк
+                вместо ссылки, то связаться там с вами не сможем</div>                    
+                <button type="submit">Отправить</button>
+            </form>
+        </div>
+
+        @@include('blocks/footer.html')
+
+</body>
+<script src="./js/index.bundle.js"></script>
+<script src="https://smtpjs.com/v3/smtp.js"></script>
+
+<script>
+    const form = document.querySelector('form');
+    const fullName = document.querySelector('#name');
+    const email = document.querySelector('#email');
+    const subject = document.querySelector('#subject');
+    const number = document.querySelector('#number');
+    const mess = document.querySelector('#message');
+
+    function sendEmail() {
+        if (validateForm()) {
+            const bodyMessage = `В команду 8x8, Имя: ${fullName.value}<br> Email: ${email.value} <br>  Ссылка на страницу вк: ${subject.value}<br> Телефон: ${number.value}<br> Информация об игроке:${mess.value} `;
+
+            Email.send({
+                Host: "smtp.elasticemail.com",
+                Username: "skvanter@gmail.com",
+                Password: "74193B46F107BD12D9D5BD9059C32473A494",
+                To: 'skvanter@gmail.com',
+                From: "skvanter@gmail.com",
+                Subject: subject.value,
+                Body: bodyMessage
+            }).then(
+                message => {
+                    if (message === "OK") {
+                        Swal.fire({
+                            title: "Ваше сообщение отправлено!",
+                            text: "Мы свяжемся с вами в ближайшее время",
+                            icon: "success"
+                        });
+                    }
+                }
+            );
+        } else {
+            alert('Пожалуйста, заполните форму корректно.');
+        }
+    }
+
+    function isEmailValid(email) {
+        // Регулярное выражение для проверки email
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+
+    function isPhoneNumberValid(number) {
+        // Регулярное выражение для проверки номера телефона (только цифры)
+        const phoneRegex = /^\+?\d+$/;
+        return phoneRegex.test(number);
+    }
+
+    function validateInput(input, minLength) {
+        return input.length >= minLength;
+    }
+
+    function showError(input, message) {
+        const parent = input.parentElement;
+        const error = parent.querySelector('.error-txt');
+        error.innerText = message;
+        parent.classList.add('error');
+    }
+
+    function hideError(input) {
+        const parent = input.parentElement;
+        const error = parent.querySelector('.error-txt');
+        error.innerText = '';
+        parent.classList.remove('error');
+    }
+
+    function validateForm() {
+        let isValid = true;
+
+        if (!validateInput(fullName.value, 2)) {
+            showError(fullName, 'Имя должно быть не менее 2 символов');
+            isValid = false;
+        } else {
+            hideError(fullName);
+        }
+
+        if (!isEmailValid(email.value)) {
+            showError(email, 'Введите корректный email');
+            isValid = false;
+        } else {
+            hideError(email);
+        }
+
+        if (!validateInput(subject.value, 1)) {
+            showError(subject, 'Введите тему');
+            isValid = false;
+        } else {
+            hideError(subject);
+        }
+
+        if (!isPhoneNumberValid(number.value)) {
+            showError(number, 'Введите корректный номер телефона');
+            isValid = false;
+        } else {
+            hideError(number);
+        }
+
+        if (!validateInput(mess.value, 10)) {
+            showError(mess, 'Сообщение должно быть не короче 10 символов');
+            isValid = false;
+        } else {
+            hideError(mess);
+        }
+
+        return isValid;
+    }
+
+    form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        sendEmail();
+    });
+
+</script>
+
+</html>

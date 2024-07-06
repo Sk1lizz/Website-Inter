@@ -1,0 +1,218 @@
+header {
+    background-color: hsl(0, 0%, 14%, 0.6);
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 18svh;
+    z-index: 99;
+    border-bottom: 1px solid hsl(0, 0%, 40%, 0.33);
+    transition: transform 0.4s ease-out;
+
+    &.hide {
+        transform: translateY(-100%);
+    }
+
+    .header_wrapper {
+        width: 100svh;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+
+        .top_parth {
+            display: flex;
+            justify-content: space-between;
+
+            .logo_wrapper {
+                display: flex;
+                align-items: center;
+
+                .logo_image {
+                    position: relative;
+                    margin-right: 10px;
+
+                    img {
+                        height: 8svh;
+                        width: 8svh;
+                    }
+                }
+
+                .logo_image:before {
+                    position: absolute;
+                    content: '';
+                    width: 2px;
+                    height: 100%;
+                    background: white;
+                    bottom: 8px;
+                    right: -10px;
+                    top: 0;
+                }
+
+                .logo_text {
+                    margin-left: 10px;
+                    display: flex;
+                    flex-direction: column;
+
+                    div {
+                        display: flex;
+                        justify-content: flex-start;
+                        color: $light;
+                        font-family: PLAY-BOLD;
+
+                        &:first-child {
+                            font-size: 4svh;
+                        }
+
+                        &:last-child {
+                            font-size: 1.6svh;
+                        }
+
+                    }
+                }
+            }
+
+            .social_view_wrapper {
+                display: flex;
+                align-items: center;
+
+                @import "elements/_buttons.scss";
+
+                .social {
+                    display: flex;
+                    margin-left: 20px;
+
+                    a {
+                        height: 3.7svh;
+
+                        &:first-child {
+                            margin-right: 10px;
+                        }
+
+                        img {
+                            height: 100%;
+                            display: block;
+                        }
+                    }
+                }
+
+            }
+
+            .menu_toggle {
+                display: none;
+                z-index: 2;
+                height: 100%;
+                position: relative;
+                align-items: center;
+
+                .icon {
+                    height: 25px;
+                    width: 22px;
+                    cursor: pointer;
+
+                    span {
+                        content: '';
+                        position: absolute;
+                        background: $light;
+                        transition: .2s;
+
+                        &:nth-child(1) {
+                            top: 40%;
+                            left: 0%;
+                            transform: translateY(-50%);
+                            height: 2px;
+                            width: 22px;
+                        }
+
+                        &:nth-child(2) {
+                            top: 50%;
+                            left: 0%;
+                            transform: translateY(-50%);
+                            height: 2px;
+                            width: 22px;
+                        }
+
+                        &:nth-child(3) {
+                            top: 60%;
+                            left: 0%;
+                            transform: translateY(-50%);
+                            height: 2px;
+                            width: 22px;
+                        }
+                    }
+                }
+            }
+        }
+
+        .bottom_parth {
+            width: 100%;
+            padding-top: 2.5svh;
+            display: flex;
+            justify-content: center;
+
+            .menu {
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+                font-family: PLAY-REGULAR;
+                color: $light;
+                font-size: 1.6svh;
+
+                li {
+                    display: flex;
+                    align-items: center;
+                    position: relative;
+
+                    #icon {
+                        user-select: none;
+                        display: block;
+                        cursor: pointer;
+                        padding: 10px 10px 10px 0;
+                        height: 100%;
+
+                        p {
+                            transform: rotate(90deg);
+                        }
+
+                        &:hover {
+                            color: $dark_light;
+                        }
+                    }
+
+                    .submenu {
+                        z-index: 99;
+                        position: absolute;
+                        top: 40px;
+                        background-color: hsl(0, 0%, 14%, 1);
+                        display: none;
+                        flex-direction: column;
+
+                        &.open {
+                            display: flex;
+                        }
+
+                        li {
+                            display: block;
+
+                            a {
+                                display: block;
+                                padding: 10px 20px;
+                            }
+                        }
+                    }
+
+                    a {
+                        color: $light;
+                        transition: .3s;
+                        padding: 10px;
+
+                        &:hover {
+                            color: $dark_light;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@import "media/_header-media.scss";

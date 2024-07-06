@@ -1,0 +1,579 @@
+.prosmotr {
+    background: $black;
+    font-family: PLAY-REGULAR;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    .about_team {
+        height: 100%;
+        display: flex;
+        margin-top: 190px;
+        width: 100%;
+        justify-content: center;
+        align-content: flex-start;
+
+        .block {
+            display: flex;
+            flex-direction: column;
+            width: 33%;
+            height: 600px;
+            margin: 20px 20px 20px 20px;
+            border-radius: 6px;
+            background: $dark_medium;
+
+
+            .title {
+                display: flex;
+                font-family: PLAY-Bold;
+                font-size: 45px;
+                align-items: center;
+                height: 50%;
+                padding-left: 15px;
+                padding-right: 15px;
+                justify-content: left;
+                text-align: left;
+                color: $light;
+                padding-top: 230px;
+            }
+
+            .text {
+                display: flex;
+                height: 50%;
+                align-items: center;
+                padding-left: 15px;
+                padding-right: 15px;
+                color: $light;
+                font-size: 18px;
+
+            }
+        }
+
+        .block:nth-child(1) {
+            background: $dark;
+            transform: translateX(-150%);
+            animation: ani 1s forwards;
+
+            @keyframes ani {
+                0% {
+                    transform: translateX(-150%);
+                }
+
+                100% {
+                    transform: translateY(0);
+                }
+            }
+        }
+
+        .block:nth-child(2) {
+            transform: translateX(-150%);
+            animation: ani 1s forwards;
+
+            @keyframes ani {
+                0% {
+                    transform: translateX(-150%);
+                }
+
+                100% {
+                    transform: translateY(0);
+                }
+            }
+        }
+
+        .block:nth-child(3) {
+            background: $dark_light;
+            transform: translateX(-150%);
+            animation: ani 1s forwards;
+
+            transform: translateX(-150%);
+            animation: ani 1s forwards;
+
+            @keyframes ani {
+                0% {
+                    transform: translateX(-150%);
+                }
+
+                100% {
+                    transform: translateY(0);
+                }
+            }
+        }
+    }
+
+    .photo {
+        height: 100%;
+        display: flex;
+        width: 100%;
+        justify-content: center;
+        align-content: flex-start;
+        flex-wrap: wrap;
+
+        .block {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            height: 100%;
+            margin: 20px;
+            border-radius: 6px;
+            background: $light;
+            justify-content: center;
+            align-items: center;
+
+            .img-container {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-wrap: wrap;
+                gap: 10px;
+                margin: 10px;
+
+                img {
+                    will-change: 350px;
+                    margin: 20px;
+                    height: 250px;
+                    border-radius: 5px;
+                    overflow: hidden;
+                    transition: .5s;
+                    z-index: 0;
+                }
+
+                img:hover {
+                    transform: scale(1.1);
+                    z-index: 0;
+                }
+            }
+
+            .pop-up {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgb(0, 0, 0, 0.8);
+                display: none;
+                z-index: 1;
+
+                img {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    border-radius: 3px;
+                    width: 900px;
+                    z-index: 1;
+                }
+
+                span {
+                    position: fixed;
+                    top: 190px;
+                    right: 20px;
+                    width: 40px;
+                    height: 40px;
+                    color: $light;
+                    font-size: 50px;
+                    font-weight: 900;
+                    text-align: center;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+
+    .coach_prosmotr {
+        display: flex;
+        flex-direction: column;
+
+        .title {
+            text-align: center;
+            font-family: PLAY-Bold;
+            font-size: 40px;
+            color: $light;
+            padding-bottom: 20px;
+            padding-top: 20px;
+        }
+
+        .wrapper_blocks {
+            display: flex;
+            height: 600px;
+
+            .block_coach_prosmotr {
+                display: flex;
+                flex-direction: column;
+                width: 50%;
+                height: 550px;
+                margin: 20px 20px 20px 20px;
+                border-radius: 6px;
+                background: $dark_medium;
+                justify-content: center;
+                align-items: center;
+
+                .photoblock {
+                    display: flex;
+                    width: 50%;
+                    float: left;
+                    position: relative;
+                    min-height: 1px;
+                    padding-right: 15px;
+                    padding-left: 15px;
+                    box-sizing: border-box;
+
+                    .card_photo {
+                        border-radius: 6px;
+                        width: 500px;
+                        height: 500px;
+                        padding: 20px 0px 0px 0px;
+                        margin: 0 auto;
+                        text-align: center;
+                        box-sizing: border-box;
+                        display: block;
+
+                        img {
+                            width: 300px;
+                            height: 300px;
+                            border-radius: 50%;
+                            vertical-align: middle;
+                            border: 0;
+                            overflow-clip-margin: content-box;
+                            overflow: clip;
+                            text-align: center;
+                        }
+
+                        .text_box {
+                            display: flex;
+                            flex-direction: column;
+                            width: 100%;
+                            padding: 20px 10px 10px 10px;
+
+                            h4 {
+                                color: $light;
+                                font-size: 25px;
+                                font-family: PLAY-REGULAR;
+                                margin-bottom: 10px;
+                            }
+
+                            h5 {
+                                color: $light;
+                                font-size: 20px;
+                                font-family: PLAY-BOLD;
+                                margin-bottom: 10px;
+                            }
+
+                            p {
+                                color: $gold;
+                                font-size: 20px;
+                                font-family: PLAY-REGULAR;
+                                margin-bottom: 10px;
+                            }
+
+                            button {
+                                display: inline-block;
+                                text-decoration: none;
+                                background-color: #ffffff;
+                                color: #000000;
+                                border: 1px solid #000000;
+                                border-radius: 5px;
+                                font-size: 24px;
+                                padding: 10px 30px;
+                                transition: all 0.4s ease;
+                                font-family: PLAY-REGULAR;
+                                margin-top: 10px;
+                            }
+
+                            button:hover {
+                                text-decoration: none;
+                                background-color: #1c3a75;
+                                color: #ffffff;
+                                border-color: #000000;
+                                font-family: PLAY-REGULAR;
+                            }
+
+                        }
+                    }
+                }
+            }
+
+            .block_coach_prosmotr:nth-child(1) {
+                background: $dark;
+            }
+        }
+    }
+
+    .schedule {
+        display: flex;
+        flex-direction: column;
+
+        .schedule_title {
+            text-align: center;
+            font-family: PLAY-Bold;
+            font-size: 40px;
+            color: $light;
+            padding-bottom: 20px;
+            padding-top: 20px;
+
+        }
+
+        .week_wrapper {
+            display: flex;
+            flex-direction: column;
+            padding-left: 10px;
+            padding-right: 10px;
+
+            .group_1 {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                .schedule_block {
+                    display: flex;
+                    flex-direction: column;
+                    width: 15%;
+                    height: 200px;
+                    margin: 20px 10px 5px 10px;
+                    border-radius: 6px;
+                    background: $blue_light;
+                    justify-content: center;
+                    align-items: center;
+                    color: $light;
+
+                    h1 {
+                        font-size: 20px;
+                        text-align: center;
+                        font-family: PLAY-Bold;
+                        padding: 10px;
+                    }
+
+                    h2 {
+                        font-size: 20px;
+                        text-align: center;
+                        font-family: PLAY-Regular;
+                        padding: 10px;
+                    }
+
+                    h3 {
+                        font-size: 18px;
+                        text-align: center;
+                        font-family: PLAY-Bold;
+                        padding: 10px;
+                    }
+                }
+
+                .schedule_block:nth-child(1) {
+                    background-color: $dark_light;
+                }
+
+                .schedule_block:nth-child(4) {
+                    background-color: $blue_medium;
+                }
+            }
+
+            .group_2 {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding-bottom: 15px;
+
+                .schedule_block {
+                    display: flex;
+                    flex-direction: column;
+                    width: 15%;
+                    height: 200px;
+                    margin: 5px 10px 5px 10px;
+                    border-radius: 6px;
+                    background: $blue_light;
+                    justify-content: center;
+                    align-items: center;
+                    color: $light;
+
+                    h1 {
+                        font-size: 20px;
+                        text-align: center;
+                        font-family: PLAY-Bold;
+                        padding: 10px;
+                    }
+
+                    h2 {
+                        font-size: 20px;
+                        text-align: center;
+                        font-family: PLAY-Regular;
+                        padding: 10px;
+                    }
+
+                    h3 {
+                        font-size: 18px;
+                        text-align: center;
+                        font-family: PLAY-Bold;
+                        padding: 10px;
+                    }
+                }
+
+                .schedule_block:nth-child(1) {
+                    background-color: $dark_light;
+                }
+
+                .schedule_block:nth-child(2) {
+                    background-color: $dark;
+                }
+
+                .schedule_block:nth-child(3) {
+                    background-color: $dark;
+                }
+
+            }
+        }
+    }
+
+    .view_in_team {
+        width: 100%;
+        height: 650px;
+        display: flex;
+        z-index: 0;
+
+
+        .team_88 {
+            width: 50%;
+            height: 100%;
+            position: relative;
+            transition: .3s;
+
+            &:hover {
+                .fill {
+                    opacity: 0;
+                }
+
+                .background {
+                    filter: grayscale(0);
+                }
+
+                .text {
+                    text-shadow: $black 1px 0 10px;
+                }
+            }
+
+            .fill {
+                position: absolute;
+                top: 0;
+                left: 0;
+                background: $gray_black;
+                opacity: .8;
+                width: 100%;
+                height: 100%;
+                z-index: 2;
+                transition: .3s;
+            }
+
+            .background {
+                background-image: url(../img/team88.png);
+                height: 100%;
+                width: 100%;
+                background-repeat: no-repeat;
+                background-position: center;
+                background-size: cover;
+                filter: grayscale(1);
+                transition: .3s;
+            }
+
+            .content {
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                width: 95%;
+                color: white;
+                font-family: PLAY-BOLD;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                z-index: 3;
+
+                .text {
+                    display: flex;
+                    justify-content: center;
+                    font-size: 135px;
+                }
+
+                .view {
+                    display: flex;
+                    justify-content: center;
+                    width: 100%;
+                    margin-top: 20px;
+                }
+
+                @import "elements/_buttons.scss";
+            }
+        }
+
+        .team_pro {
+            width: 50%;
+            height: 100;
+            position: relative;
+
+            &:hover {
+                .fill {
+                    opacity: 0;
+                }
+
+                .background {
+                    filter: grayscale(0);
+                }
+
+                .text {
+                    text-shadow: $black 1px 0 10px;
+                }
+            }
+
+            .fill {
+                position: absolute;
+                top: 0;
+                left: 0;
+                background: $dark;
+                opacity: .8;
+                width: 100%;
+                height: 100%;
+                z-index: 2;
+                transition: .3s;
+            }
+
+            .background {
+                background-image: url(../img/teampro.png);
+                height: 100%;
+                width: 100%;
+                background-repeat: no-repeat;
+                background-position: center;
+                background-size: cover;
+                filter: grayscale(1);
+                transition: .3s;
+            }
+
+            .content {
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                width: 95%;
+                color: white;
+                font-family: PLAY-BOLD;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                z-index: 3;
+
+                .text {
+                    display: flex;
+                    justify-content: center;
+                    font-size: 135px;
+                }
+
+                .view {
+                    display: flex;
+                    justify-content: center;
+                    width: 100%;
+                    margin-top: 20px;
+                }
+
+                @import "elements/_buttons.scss";
+            }
+        }
+    }
+}
+
+@import "media/_prosmotr.scss";

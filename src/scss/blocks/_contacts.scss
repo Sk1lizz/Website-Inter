@@ -1,0 +1,154 @@
+.contacts {
+    display: flex;
+    width: 100%;
+    background-color: $dark;
+    justify-content: center;
+    padding: 230px 0 60px 0;
+
+    .contacts_wrapper {
+        display: flex;
+        justify-content: center;
+        width: 80%;
+
+        .logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 30px;
+            width: 400px;
+
+            img {
+                display: flex;
+                width: 100%;
+            }
+        }
+
+        .contact {
+            display: flex;
+            width: 400px;
+            justify-content: center;
+            flex-direction: column;
+
+            .info {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                padding-left: 20px;
+                font-family: PLAY-REGULAR;
+                text-align: center;
+
+                .info_messeng {
+                    color: $light;
+                    padding-bottom: 50px;
+                    font-size: 20px;
+                }
+
+                .title {
+                    color: $gray;
+                    font-size: 20px;
+                    padding-top: 5px;
+                }
+
+                .text {
+                    color: $light;
+                    font-size: 25px;
+                    padding-top: 5px;
+                }
+            }
+
+            .contact_form {
+                padding-top: 20px;
+                display: flex;
+                width: 100%;
+                justify-content: center;
+                font-family: PLAY-REGULAR;
+                color: $light;
+                padding-left: 20px;
+                flex-direction: column;
+
+                form {
+                    display: flex;
+                    flex-direction: column;
+                    text-align: left;
+                    font-family: PLAY-REGULAR;
+
+                    .field.error .item {
+                        border-color: $pink;
+                    }
+
+                    .field .error-txt {
+                        font-size: 12px;
+                        color: $pink;
+                        text-align: left;
+                        margin: -5px 0 10px;
+                        display: none;
+                    }
+
+                    .field.error .error-txt {
+                        display: block;
+                    }
+
+                    .form .textarea-field .error-txt {
+                        margin-top: -10px;
+                    }
+
+                    input,
+                    textarea {
+                        border-radius: 5px;
+                        font-family: PLAY-REGULAR;
+                        height: 30px;
+                        font-size: 15px;
+                        border: 0;
+                        width: 100%;
+                        margin-bottom: 10px;
+                    }
+
+                    textarea {
+                        height: 120px;
+                        resize: none;
+                    }
+
+                    input::placeholder {
+                        color: $dark;
+                        font-size: 15px;
+                    }
+
+                    textarea::placeholder {
+                        color: $dark;
+                        font-size: 15px;
+                    }
+
+                    label {
+                        padding: 15px 0 5px 0;
+                    }
+
+                    button {
+                        display: inline-block;
+                        text-decoration: none;
+                        background-color: #1c3a75;
+                        color: #ffffff;
+                        border: 1px solid #000000;
+                        border-radius: 5px;
+                        font-size: 24px;
+                        padding: 10px 30px;
+                        transition: all 0.4s ease;
+                        font-family: PLAY-REGULAR;
+                    }
+
+                    button:hover {
+                        text-decoration: none;
+                        background-color: #ffffff;
+                        color: #000000;
+                        border-color: #000000;
+                        font-family: PLAY-REGULAR;
+                    }
+
+                }
+
+                @import "elements/_buttons.scss";
+            }
+        }
+    }
+}
+
+@import "media/_contacts.scss";

@@ -1,0 +1,49 @@
+.result {
+    display: flex;
+    width: 100%;
+    background-color: $gray_black;
+    justify-content: center;
+    padding: 210px 0 0px 0;
+    flex-direction: column;
+
+    .title {
+        justify-content: center;
+        text-align: center;
+        color: $light;
+        height: 30px;
+        font-size: 25px;
+        font-family: PLAY-BOLD;
+    }
+
+    .matches_result {
+        display: flex;
+        padding: 10px 10px 10px 10px;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: start;
+
+        .match {
+            display: flex;
+            width: 19%;
+            margin: 5px 5px 5px 5px;
+            padding: 5px;
+            justify-content: center;
+            align-items: center;
+            border-radius: 6px;
+            background: linear-gradient(45deg, $gray_black, $dark_light, $gray_black);
+            color: $light;
+            text-align: center;
+            font-size: 16px;
+            height: 200px;
+            flex-direction: column;
+            font-family: PLAY-REGULAR;
+            transition: 1s;
+        }
+
+        .match:hover {
+            transform: scale(1.05);
+        }
+    }
+}
+
+@import "media/_result.scss";

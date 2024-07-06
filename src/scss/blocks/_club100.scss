@@ -1,0 +1,171 @@
+.club100 {
+    display: flex;
+    width: 100%;
+    background-color: $gray_black;
+    justify-content: center;
+    padding: 210px 0 60px 0;
+    flex-direction: column;
+    align-items: center;
+
+    .title {
+        font-size: 28px;
+        color: $gold;
+        font-family: PLAY-BOLD;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .title2 {
+        font-size: 28px;
+        color: $gold;
+        font-family: PLAY-BOLD;
+        justify-content: center;
+        text-align: center;
+        padding-top: 20px;
+    }
+
+    .wrapper {
+        display: flex;
+        height: 100%;
+        margin-bottom: 10px;
+        margin-top: 20px;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+
+        .wrapper_top-3 {
+            display: flex;
+            width: 100%;
+            justify-content: center;
+            align-items: center;
+            height: 250px;
+
+            .gold_block {
+                display: flex;
+                height: 100%;
+                width: 30%;
+                margin: 10px;
+                background: linear-gradient(-45deg, $gold, rgba(255, 254, 254, 0.7));
+                border-radius: 6px;
+                justify-content: start;
+                flex-direction: column;
+                align-items: center;
+                max-width: 500px;
+            }
+
+            .silver_block {
+                display: flex;
+                height: 100%;
+                width: 30%;
+                margin: 10px;
+                background: linear-gradient(-45deg, rgba(192, 192, 192, 0.7), rgba(255, 254, 254, 0.7));
+                border-radius: 6px;
+                justify-content: start;
+                flex-direction: column;
+                align-items: center;
+                max-width: 500px;
+            }
+
+            .bronza_block {
+                display: flex;
+                height: 100%;
+                width: 30%;
+                margin: 10px;
+                background: linear-gradient(-45deg, rgba(150, 116, 68, 0.7), rgba(255, 254, 254, 0.7));
+                border-radius: 6px;
+                justify-content: start;
+                flex-direction: column;
+                align-items: center;
+                max-width: 500px;
+            }
+
+            .title {
+                display: flex;
+                color: $black;
+                border-radius: 6px;
+                font-family: PLAY-BOLD;
+                margin: 20px;
+                font-family: PLAY-BOLD;
+                justify-content: center;
+                width: 60%;
+                height: 25px;
+                background: linear-gradient(-45deg, $light, rgba(255, 255, 255, 0.7));
+                align-items: center;
+                font-size: 16px;
+            }
+
+            .value {
+                display: flex;
+                font-family: PLAY-BOLD;
+                margin: 30px 20px;
+                justify-content: center;
+                align-items: center;
+                color: $black;
+                font-size: 50px;
+                padding-top: 10px;
+            }
+
+            .text {
+                display: flex;
+                height: 16px;
+                color: $black;
+                justify-content: center;
+                font-family: PLAY-REGULAR;
+                margin-top: 20px;
+            }
+        }
+
+
+        .wrapper_block {
+            height: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+
+            .block {
+                display: flex;
+                height: 220px;
+                width: 15%;
+                margin: 20px 20px 0px 20px;
+                background-color: rgba(0, 0, 0, 0.4);
+                border-radius: 6px;
+                justify-content: center;
+                flex-direction: column;
+                align-items: center;
+                min-width: 200px;
+
+                .value {
+                    display: flex;
+                    font-family: PLAY-BOLD;
+                    height: 50%;
+                    margin: 30px 20px 30px 20px;
+                    justify-content: center;
+                    align-items: center;
+                    color: $light;
+                    font-size: 50px;
+                    padding-top: 10px;
+                }
+
+                .text {
+                    display: flex;
+                    height: 16px;
+                    color: $light;
+                    justify-content: center;
+                    font-family: PLAY-REGULAR;
+                    margin-bottom: 20px;
+                    padding-left: 10px;
+                    padding-right: 10px;
+                    text-align: center;
+                }
+            }
+
+        }
+    }
+
+
+
+}
+
+
+@import "media/_club100.scss";

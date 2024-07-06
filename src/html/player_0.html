@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Батуев Никита</title>
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+</head>
+
+<body>
+    @@include('blocks/header.html')
+
+
+    <div class="page_player">
+        <div class="player">
+            <div class="photoblock">
+                <div class="card_photo">
+                    <img src="img/player/no_photo.png" alt="">
+                </div>
+            </div>
+
+            <div class="aboutme">
+                <div class="name">
+                    <h3>Этот футболист</h3>
+                    <h4>покинул команду</h4>
+                    <div class="position_number">
+                        <div class="number">¯ \ _ (ツ) _ / ¯</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    @@include('blocks/footer.html')
+
+    <script src="./js/index.bundle.js"></script>
+
+    <script>
+        document.querySelectorAll('.img-container img').forEach(img => {
+            img.onclick = () => {
+                document.querySelector('.pop-up').style.display = 'block';
+                document.querySelector('.pop-up img').src = img.getAttribute('src'); // Исправление: заменили дефис на знак равенства
+            }
+        });
+
+        document.querySelector('.pop-up span').onclick = () => {
+            document.querySelector('.pop-up').style.display = 'none';
+        }
+    </script>
+
+    <script src="js/playerpage.bundle.js"></script>
+    <script src="js/playerstatistics.bundle.js"></script>
+</body>
+
+</html>

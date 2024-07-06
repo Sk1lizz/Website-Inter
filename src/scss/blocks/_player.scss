@@ -1,0 +1,443 @@
+.page_player {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    .player {
+        display: flex;
+        width: 100%;
+        background-color: $gray_black;
+        justify-content: center;
+        padding: 220px 0 60px 0;
+        min-height: 800px;
+        background: url(../img/coach_background.jpg);
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+
+        .photoblock {
+            display: flex;
+            width: 60%;
+            float: left;
+            position: relative;
+            min-height: 1px;
+            padding-right: 15px;
+            padding-left: 15px;
+            box-sizing: border-box;
+            flex-direction: column;
+
+            .card_photo {
+                display: flex;
+                width: 500px;
+                height: 500px;
+                padding: 33px 33px 33px 33px;
+                margin: 0 auto;
+                text-align: center;
+                box-sizing: border-box;
+                display: block;
+
+                img {
+                    width: 400px;
+                    height: 400px;
+                    border-radius: 50%;
+                    vertical-align: middle;
+                    border: 0;
+                    overflow-clip-margin: content-box;
+                    overflow: clip;
+                    text-align: center;
+                }
+
+                h3 {
+                    color: $light;
+                    font-size: 2.3em;
+                    font-weight: 600;
+                    letter-spacing: 1px;
+                    font-family: PLAY-REGULAR;
+                    margin-top: 10px;
+                    margin-bottom: 10px;
+                    line-height: 1.1;
+                    box-sizing: border-box;
+                    display: block;
+                    margin-block-start: 0.3em;
+                    margin-block-end: 1em;
+                    margin-inline-start: 0px;
+                    margin-inline-end: 0px;
+                }
+            }
+        }
+
+
+        .aboutme {
+            width: 50%;
+            float: left;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+
+            .name {
+                display: flex;
+                box-sizing: border-box;
+                flex-direction: column;
+
+                h3 {
+                    font-size: 40px;
+                    color: #fff;
+                    letter-spacing: 2px;
+                    font-family: PLAY-BOLD;
+                }
+
+                h4 {
+                    color: $light;
+                    font-size: 30px;
+                    font-weight: 600;
+                    letter-spacing: 1px;
+                    font-family: PLAY-REGULAR;
+                    margin-top: 10px;
+                    margin-bottom: 10px;
+                    line-height: 1.1;
+                    box-sizing: border-box;
+                    display: block;
+                    margin-block-start: 0.3em;
+                    margin-block-end: 1em;
+                    margin-inline-start: 0px;
+                    margin-inline-end: 0px;
+                }
+
+                .position_number {
+                    display: flex;
+
+                    .number {
+                        color: $light;
+                        font-size: 30px;
+                        font-family: PLAY-REGULAR;
+                        padding-right: 20px;
+                    }
+
+                    .position {
+                        color: $gold;
+                        font-size: 30px;
+                        font-family: PLAY-REGULAR;
+                    }
+                }
+            }
+
+            .information {
+                box-sizing: border-box;
+                display: block;
+                line-height: 1.42857143;
+                font-size: 14px;
+
+                .information_me {
+                    margin-top: 1.5em;
+                    border-top: 2px dotted $dark_light;
+                    padding-top: 0.5em;
+                    margin-bottom: 10px;
+                    box-sizing: border-box;
+                    font-family: PLAY-REGULAR;
+
+                    li {
+                        list-style-type: none;
+                        box-sizing: border-box;
+                        display: list-item;
+                        font-family: PLAY-REGULAR;
+                        font-size: 14px;
+
+                        .title_information {
+                            width: 20%;
+                            display: inline-block;
+                            font-size: 1.1em;
+                            color: $light;
+                            margin-top: 1em;
+                            font-weight: 600;
+                            font-family: PLAY-BOLD;
+                        }
+
+                        .text {
+                            display: inline-block;
+                            font-size: 1.1em;
+                            color: #c5c2c2;
+                            margin-top: 1em;
+                            font-weight: 600;
+                            font-family: PLAY-REGULAR;
+
+                            a {
+                                color: $gray_light
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .statisticplayersall {
+        display: flex;
+        background-color: $gray_black;
+        justify-content: center;
+        width: 100%;
+        padding: 20px 20px 20px 20px;
+        flex-direction: column;
+
+        .title {
+            display: flex;
+            margin-bottom: 40px;
+            padding-top: 20px;
+            justify-content: center;
+            text-align: left;
+            width: 100%;
+            font-family: PLAY-BOLD;
+            color: $light;
+            font-size: 40px;
+        }
+
+        .wrapper_block {
+            display: flex;
+            justify-content: center;
+
+            .block {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                text-align: center;
+                font-size: 60px;
+                padding-left: 4%;
+                font-family: PLAY-BOLD;
+                color: $light;
+
+                .text {
+                    font-size: 18px;
+                    color: $light;
+                    font-family: PLAY-REGULAR;
+                    padding-top: 20px;
+                    padding-bottom: 20px;
+                }
+            }
+        }
+
+    }
+
+    .statisticthisyears {
+        display: flex;
+        background-color: $light;
+        justify-content: center;
+        width: 100%;
+        padding: 20px 20px 20px 20px;
+        flex-direction: column;
+
+        .title {
+            display: flex;
+            margin-bottom: 40px;
+            padding-top: 20px;
+            justify-content: center;
+            text-align: left;
+            width: 100%;
+            font-family: PLAY-BOLD;
+            color: $black;
+            font-size: 40px;
+        }
+
+        .wrapper_block {
+            display: flex;
+            justify-content: center;
+
+            .block {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                text-align: center;
+                font-size: 60px;
+                padding-left: 4%;
+                font-family: PLAY-BOLD;
+                color: $black;
+
+                .text {
+                    font-size: 18px;
+                    color: $black;
+                    font-family: PLAY-REGULAR;
+                    padding-top: 20px;
+                    padding-bottom: 20px;
+                }
+            }
+        }
+
+    }
+
+    .wrapper_achieved {
+        display: flex;
+        font-size: 14px;
+        background-color: $gray_black;
+
+        .achieved {
+            display: flex;
+            padding: 20px 20px 20px 20px;
+            justify-content: center;
+            text-align: left;
+            width: 100%;
+
+            .experience {
+                display: flex;
+                width: 100%;
+                flex-direction: column;
+                justify-content: center;
+
+                .title {
+                    display: flex;
+                    font-size: 40px;
+                    color: $gold;
+                    font-family: PLAY-BOLD;
+                    margin-bottom: 40px;
+                    padding-top: 20px;
+                    justify-content: center;
+                    width: 100%;
+                }
+            }
+
+            .block {
+                display: flex;
+                width: 100%;
+                padding-bottom: 20px;
+                height: 100%;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+
+                .text {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+
+                    .company {
+                        font-family: PLAY-BOLD;
+                        color: $light;
+                        font-size: 25px;
+                    }
+
+                    .post {
+                        font-size: 22px;
+                        font-family: PLAY-BOLD;
+                        color: $black;
+                        margin-top: 10px;
+
+                        p {
+                            display: inline-block;
+                            padding: 10px;
+                            background: $gold;
+                        }
+                    }
+
+                    .description {
+                        font-family: PLAY-REGULAR;
+                        color: $gray_light;
+                        display: flex;
+                        margin-top: 10px;
+                        font-size: 14px;
+                        width: 100%;
+                    }
+
+                    .year {
+                        display: flex;
+                        font-family: PLAY-BOLD;
+                        color: $light;
+                        font-size: 25px;
+                        padding-right: 20px;
+                        text-align: right;
+                        justify-content: center;
+                    }
+                }
+            }
+        }
+    }
+
+    .photo {
+        height: 100%;
+        display: flex;
+        width: 100%;
+        justify-content: center;
+        align-content: flex-start;
+        flex-wrap: wrap;
+        padding-bottom: 75px;
+
+        .title_gallerey {
+            font-size: 40px;
+            color: $gray_black;
+            font-family: PLAY-BOLD;
+            padding-top: 40px;
+            justify-content: center;
+            text-align: center;
+            padding-top: 30px;
+        }
+
+        .block {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            height: 100%;
+            padding: 0px 0px 20px 0px;
+            border-radius: 6px;
+            background: $light;
+            justify-content: center;
+            align-items: center;
+
+            .img-container {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-wrap: wrap;
+                gap: 10px;
+                margin: 10px;
+                padding-top: 20px;
+
+                img {
+                    will-change: 350px;
+                    margin: 20px;
+                    height: 250px;
+                    border-radius: 5px;
+                    overflow: hidden;
+                    transition: .5s;
+                    z-index: 0;
+                }
+
+                img:hover {
+                    transform: scale(1.1);
+                    z-index: 0;
+                }
+            }
+
+            .pop-up {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgb(0, 0, 0, 0.8);
+                display: none;
+                z-index: 1;
+
+                img {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    border-radius: 3px;
+                    width: 900px;
+                    z-index: 1;
+                }
+
+                span {
+                    position: fixed;
+                    top: 190px;
+                    right: 20px;
+                    width: 40px;
+                    height: 40px;
+                    color: $light;
+                    font-size: 50px;
+                    font-weight: 900;
+                    text-align: center;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+}
+
+@import "media/_player.scss";

@@ -1,0 +1,417 @@
+@media (max-width: 1366px) {
+    .testirovanie {
+
+        .banner_testirovanie {
+
+
+            .fill {}
+
+            .background_banner {}
+
+            .content_banner {
+                top: 55%;
+
+                .title_banner {}
+
+                .title_2_banner {}
+
+                .text_banner {}
+
+                @import "elements/_buttons.scss";
+            }
+        }
+
+        .block_testing {
+
+            .title {
+                display: flex;
+                padding-left: 15px;
+                padding-right: 15px;
+
+                .title_block_testing {
+
+                    .name_test {
+                        font-size: 25px;
+                    }
+
+                    .name_test:first-child {
+                        padding-top: 18px;
+                    }
+                }
+            }
+
+            .runing {
+
+
+                .block {
+                    display: flex;
+                    flex-direction: column;
+                    width: 33%;
+                    height: 550px;
+                    margin: 20px 15px 0px 15px;
+                    border-radius: 6px;
+                    background: $dark_medium;
+                    padding: 10px;
+
+
+                    .title {
+                        font-size: 30px;
+                        height: 15%;
+                        padding-top: 25px;
+                    }
+
+                    .top_block {
+                        height: 30%;
+
+                        .text_gold {
+                            font-size: 19px;
+                        }
+
+                        .text {
+                            font-size: 19px;
+                        }
+                    }
+
+                    .description {
+                        font-size: 16px;
+                        height: 55%;
+
+                    }
+                }
+
+                .block:nth-child(1) {
+                    background: $dark;
+                    transform: translateX(-150%);
+                    animation: ani 1s forwards;
+
+                    @keyframes ani {
+                        0% {
+                            transform: translateX(-150%);
+                        }
+
+                        100% {
+                            transform: translateY(0);
+                        }
+                    }
+                }
+
+                .block:nth-child(2) {
+                    transform: translateX(-150%);
+                    animation: ani 1s forwards;
+
+                    @keyframes ani {
+                        0% {
+                            transform: translateX(-150%);
+                        }
+
+                        100% {
+                            transform: translateY(0);
+                        }
+                    }
+                }
+
+                .block:nth-child(3) {
+                    background: $dark_light;
+                    transform: translateX(-150%);
+                    animation: ani 1s forwards;
+
+                    transform: translateX(-150%);
+                    animation: ani 1s forwards;
+
+                    @keyframes ani {
+                        0% {
+                            transform: translateX(-150%);
+                        }
+
+                        100% {
+                            transform: translateY(0);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 1024px) {
+
+    .testirovanie {
+
+        .banner_testirovanie {
+
+
+            .fill {}
+
+            .background_banner {}
+
+            .content_banner {
+                left: 50%;
+                top: 55%;
+
+                .title_banner {}
+
+                .title_2_banner {}
+
+                .text_banner {}
+
+                @import "elements/_buttons.scss";
+            }
+        }
+
+        .block_testing {
+
+            .title {
+                display: flex;
+                padding-left: 15px;
+                padding-right: 15px;
+
+                .title_block_testing {
+
+                    .name_test {
+                        font-size: 24px;
+                    }
+
+                    .name_team {
+                        justify-content: right;
+                    }
+                }
+            }
+
+            .runing {
+
+
+                .block {
+                    display: flex;
+                    flex-direction: column;
+                    width: 33%;
+                    height: 600px;
+                    margin: 20px 10px 0px 10px;
+                    border-radius: 6px;
+                    background: $dark_medium;
+
+
+                    .title {
+                        font-size: 25px;
+                        height: 15%;
+                    }
+
+                    .top_block {
+                        height: 25%;
+
+                        .text_gold {
+                            font-size: 15px;
+                        }
+
+                        .text {
+                            font-size: 15px;
+                        }
+                    }
+
+                    .description {
+                        font-size: 14px;
+                        height: 60%;
+                    }
+                }
+
+                .block:nth-child(1) {
+                    background: $dark;
+                    transform: translateX(-150%);
+                    animation: ani 1s forwards;
+
+                    @keyframes ani {
+                        0% {
+                            transform: translateX(-150%);
+                        }
+
+                        100% {
+                            transform: translateY(0);
+                        }
+                    }
+                }
+
+                .block:nth-child(2) {
+                    transform: translateX(-150%);
+                    animation: ani 1s forwards;
+
+                    @keyframes ani {
+                        0% {
+                            transform: translateX(-150%);
+                        }
+
+                        100% {
+                            transform: translateY(0);
+                        }
+                    }
+                }
+
+                .block:nth-child(3) {
+                    background: $dark_light;
+                    transform: translateX(-150%);
+                    animation: ani 1s forwards;
+
+                    transform: translateX(-150%);
+                    animation: ani 1s forwards;
+
+                    @keyframes ani {
+                        0% {
+                            transform: translateX(-150%);
+                        }
+
+                        100% {
+                            transform: translateY(0);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 768px) {
+
+    .testirovanie {
+
+        .banner_testirovanie {
+            height: 600px;
+
+            .fill {}
+
+            .background_banner {}
+
+            .content_banner {
+                left: 50%;
+                top: 50%;
+
+                .title_banner {
+                    font-size: 35px;
+                    justify-content: center;
+                    text-align: center;
+                }
+
+                .title_2_banner {
+                    font-size: 18px;
+                    justify-content: center;
+                    text-align: center;
+                }
+
+                .text_banner {
+                    font-size: 14px;
+                    justify-content: center;
+                    text-align: center;
+                    width: 100%;
+                }
+
+                @import "elements/_buttons.scss";
+            }
+        }
+
+        .block_testing {
+
+            .title {
+                display: flex;
+                padding-left: 5px;
+                padding-right: 5px;
+
+                .title_block_testing {
+
+                    .name_test {
+                        font-size: 20px;
+                        width: 100%;
+                        text-align: center;
+                        justify-content: center;
+                    }
+
+                }
+            }
+
+            .runing {
+                flex-direction: column;
+                padding-left: 10px;
+                padding-right: 10px;
+
+                .block {
+                    display: flex;
+                    flex-direction: column;
+                    width: 100%;
+                    height: 400px;
+                    margin: 20px 0px 0px 0px;
+                    border-radius: 6px;
+                    background: $dark_medium;
+
+
+                    .title {
+                        font-size: 25px;
+                        height: 20%;
+                    }
+
+                    .top_block {
+                        height: 30%;
+
+                        .text_gold {
+                            font-size: 15px;
+                        }
+
+                        .text {
+                            font-size: 15px;
+                        }
+                    }
+
+                    .description {
+                        font-size: 14px;
+                        height: 50%;
+                    }
+                }
+
+                .block:nth-child(1) {
+                    background: $dark;
+                    transform: translateX(-150%);
+                    animation: ani 1s forwards;
+
+                    @keyframes ani {
+                        0% {
+                            transform: translateX(-150%);
+                        }
+
+                        100% {
+                            transform: translateY(0);
+                        }
+                    }
+                }
+
+                .block:nth-child(2) {
+                    transform: translateX(-150%);
+                    animation: ani 1s forwards;
+
+                    @keyframes ani {
+                        0% {
+                            transform: translateX(-150%);
+                        }
+
+                        100% {
+                            transform: translateY(0);
+                        }
+                    }
+                }
+
+                .block:nth-child(3) {
+                    background: $dark_light;
+                    transform: translateX(-150%);
+                    animation: ani 1s forwards;
+
+                    transform: translateX(-150%);
+                    animation: ani 1s forwards;
+
+                    @keyframes ani {
+                        0% {
+                            transform: translateX(-150%);
+                        }
+
+                        100% {
+                            transform: translateY(0);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,1470 @@
+.archive {
+    display: flex;
+    width: 100%;
+    background-color: $gray_black;
+    justify-content: center;
+    padding: 190px 10px 10px 10px;
+    flex-direction: column;
+
+    .container_8 {
+        display: flex;
+        width: 100%;
+        height: 500px;
+        background-color: $gray_black;
+        justify-content: center;
+        margin: 0px 0px 10px 0px;
+
+        .big_block {
+            display: flex;
+            width: 50%;
+            border-radius: 6px;
+            background: linear-gradient(45deg, $dark_light_50, rgba(0, 0, 0, .7)), url(../img/archive/vz2023.jpg);
+            background-size: cover;
+            height: 510px;
+            flex-direction: column;
+            margin-left: 10px;
+
+            .text {
+                display: flex;
+                justify-content: left;
+                padding-top: 325px;
+                padding-left: 20px;
+                flex-direction: column;
+
+                .title {
+                    display: flex;
+                    font-size: 45px;
+                    font-family: PLAY-BOLD;
+                    color: $light;
+                }
+            }
+
+            .button {
+                display: flex;
+                justify-content: left;
+
+                button {
+                    display: inline-block;
+                    text-decoration: none;
+                    background-color: #ffffff;
+                    border: 1px solid #000000;
+                    border-radius: 5px;
+                    font-size: 24px;
+                    padding: 10px 30px;
+                    transition: all 0.4s ease;
+                    font-family: PLAY-REGULAR;
+                    margin: 20px 0px 0px 20px;
+                }
+
+                button:hover {
+                    text-decoration: none;
+                    background-color: #1c3a75;
+                    color: #ffffff;
+                    border-color: #000000;
+                    font-family: PLAY-REGULAR;
+                }
+            }
+        }
+
+        .big_block2 {
+            display: flex;
+            width: 50%;
+            border-radius: 6px;
+            background: linear-gradient(45deg, $dark_light_50, rgba(0, 0, 0, .7)), url(../img/archive/pro2023.jpg);
+            background-size: cover;
+            height: 510px;
+            flex-direction: column;
+            margin-left: 10px;
+
+            .text {
+                display: flex;
+                justify-content: left;
+                padding-top: 325px;
+                padding-left: 20px;
+                flex-direction: column;
+
+                .title {
+                    display: flex;
+                    font-size: 45px;
+                    font-family: PLAY-BOLD;
+                    color: $light;
+                }
+            }
+
+            .button {
+                display: flex;
+                justify-content: left;
+
+                button {
+                    display: inline-block;
+                    text-decoration: none;
+                    background-color: #ffffff;
+                    border: 1px solid #000000;
+                    border-radius: 5px;
+                    font-size: 24px;
+                    padding: 10px 30px;
+                    transition: all 0.4s ease;
+                    font-family: PLAY-REGULAR;
+                    margin: 20px 0px 0px 20px;
+                }
+
+                button:hover {
+                    text-decoration: none;
+                    background-color: #1c3a75;
+                    color: #ffffff;
+                    border-color: #000000;
+                    font-family: PLAY-REGULAR;
+                }
+            }
+        }
+    }
+
+    .container_1 {
+        display: flex;
+        width: 100%;
+        height: 500px;
+        background-color: $gray_black;
+        justify-content: center;
+        margin: 10px 0px 10px 0px;
+
+        .big_block {
+            display: flex;
+            width: 50%;
+            border-radius: 6px;
+            background: linear-gradient(45deg, $dark_light_50, rgba(0, 0, 0, .7)), url(../img/archive/vz2022.jpg);
+            background-size: cover;
+            height: 510px;
+            flex-direction: column;
+
+            .text {
+                display: flex;
+                justify-content: left;
+                padding-top: 325px;
+                padding-left: 20px;
+                flex-direction: column;
+
+                .title {
+                    display: flex;
+                    font-size: 45px;
+                    font-family: PLAY-BOLD;
+                    color: $light;
+                }
+            }
+
+            .button {
+                display: flex;
+                justify-content: left;
+
+                button {
+                    display: inline-block;
+                    text-decoration: none;
+                    background-color: #ffffff;
+                    border: 1px solid #000000;
+                    border-radius: 5px;
+                    font-size: 24px;
+                    padding: 10px 30px;
+                    transition: all 0.4s ease;
+                    font-family: PLAY-REGULAR;
+                    margin: 20px 0px 0px 20px;
+                }
+
+                button:hover {
+                    text-decoration: none;
+                    background-color: #1c3a75;
+                    color: #ffffff;
+                    border-color: #000000;
+                    font-family: PLAY-REGULAR;
+                }
+            }
+        }
+
+        .container_blocks {
+            display: flex;
+            width: 50%;
+            height: 500px;
+            flex-direction: column;
+            padding-left: 10px;
+
+            .medium_block {
+                display: flex;
+                width: 100%;
+                border-radius: 6px;
+                background: linear-gradient(45deg, $dark_light_50, rgba(0, 0, 0, .7)), url(../img/archive/u182022.jpg);
+                background-size: cover;
+                height: 50%;
+                flex-direction: column;
+                background-repeat: no-repeat;
+                background-size: cover;
+                min-width: 650px;
+
+                .text {
+                    display: flex;
+                    justify-content: left;
+                    padding-top: 90px;
+                    padding-left: 20px;
+                    flex-direction: column;
+
+                    .title {
+                        display: flex;
+                        font-size: 40px;
+                        font-family: PLAY-BOLD;
+                        color: $light;
+                    }
+                }
+
+                .button {
+                    display: flex;
+                    justify-content: left;
+
+                    button {
+                        display: inline-block;
+                        text-decoration: none;
+                        background-color: #ffffff;
+                        border: 1px solid #000000;
+                        border-radius: 5px;
+                        font-size: 24px;
+                        padding: 10px 30px;
+                        transition: all 0.4s ease;
+                        font-family: PLAY-REGULAR;
+                        margin: 20px 0px 0px 20px;
+                    }
+
+                    button:hover {
+                        text-decoration: none;
+                        background-color: #1c3a75;
+                        color: #ffffff;
+                        border-color: #000000;
+                        font-family: PLAY-REGULAR;
+                    }
+                }
+            }
+
+            .small_blocks {
+                display: flex;
+                width: 100%;
+                height: 50%;
+
+                .small_block1 {
+                    display: flex;
+                    width: 100%;
+                    border-radius: 6px;
+                    background: linear-gradient(45deg, $dark_light_50, rgba(0, 0, 0, .7)), url(../img/archive/vz2021.jpg);
+                    background-size: cover;
+                    margin: 10px 0px 10px 0px;
+                    height: 100%;
+                    flex-direction: column;
+
+                }
+
+                .small_block2 {
+                    display: flex;
+                    width: 100%;
+                    border-radius: 6px;
+                    background: linear-gradient(45deg, $dark_light_50, rgba(0, 0, 0, .7)), url(../img/archive/u182021.jpg);
+                    background-size: cover;
+                    margin: 10px 0px 10px 10px;
+                    height: 100%;
+                    flex-direction: column;
+                }
+
+                .text {
+                    display: flex;
+                    justify-content: left;
+                    padding-top: 100px;
+                    padding-left: 20px;
+                    flex-direction: column;
+
+                    .title {
+                        display: flex;
+                        font-size: 28px;
+                        font-family: PLAY-BOLD;
+                        color: $light;
+                    }
+                }
+
+                .button {
+                    display: flex;
+                    justify-content: left;
+
+                    button {
+                        display: inline-block;
+                        text-decoration: none;
+                        background-color: #ffffff;
+                        border: 1px solid #000000;
+                        border-radius: 5px;
+                        font-size: 20px;
+                        padding: 10px 15px;
+                        transition: all 0.4s ease;
+                        font-family: PLAY-REGULAR;
+                        margin: 15px 0px 0px 20px;
+                    }
+
+                    button:hover {
+                        text-decoration: none;
+                        background-color: #1c3a75;
+                        color: #ffffff;
+                        border-color: #000000;
+                        font-family: PLAY-REGULAR;
+                    }
+                }
+            }
+        }
+    }
+
+    .container_2 {
+        display: flex;
+        width: 100%;
+        height: 500px;
+        background-color: $gray_black;
+        justify-content: center;
+        margin: 10px 0px 10px 0px;
+
+        .big_block {
+            display: flex;
+            width: 50%;
+            border-radius: 6px;
+            background: linear-gradient(45deg, $dark_light_50, rgba(0, 0, 0, .7)), url(../img/archive/u212021.jpg);
+            background-size: cover;
+            height: 510px;
+            flex-direction: column;
+
+            .text {
+                display: flex;
+                justify-content: left;
+                padding-top: 325px;
+                padding-left: 20px;
+                flex-direction: column;
+
+                .title {
+                    display: flex;
+                    font-size: 45px;
+                    font-family: PLAY-BOLD;
+                    color: $light;
+                }
+            }
+
+            .button {
+                display: flex;
+                justify-content: left;
+
+                button {
+                    display: inline-block;
+                    text-decoration: none;
+                    background-color: #ffffff;
+                    border: 1px solid #000000;
+                    border-radius: 5px;
+                    font-size: 24px;
+                    padding: 10px 30px;
+                    transition: all 0.4s ease;
+                    font-family: PLAY-REGULAR;
+                    margin: 20px 0px 0px 20px;
+                }
+
+                button:hover {
+                    text-decoration: none;
+                    background-color: #1c3a75;
+                    color: #ffffff;
+                    border-color: #000000;
+                    font-family: PLAY-REGULAR;
+                }
+            }
+        }
+
+        .container_blocks {
+            display: flex;
+            width: 50%;
+            height: 500px;
+            flex-direction: column;
+            margin: 0px 0px 0px 10px;
+
+            .medium_block {
+                display: flex;
+                width: 100%;
+                border-radius: 6px;
+                background: linear-gradient(45deg, $dark_light_50, rgba(0, 0, 0, .7)), url(../img/archive/u212020.jpg);
+                background-size: cover;
+                height: 50%;
+                flex-direction: column;
+                background-repeat: no-repeat;
+                background-size: cover;
+                min-width: 650px;
+
+                .text {
+                    display: flex;
+                    justify-content: left;
+                    padding-top: 90px;
+                    padding-left: 20px;
+                    flex-direction: column;
+
+                    .title {
+                        display: flex;
+                        font-size: 40px;
+                        font-family: PLAY-BOLD;
+                        color: $light;
+                    }
+                }
+
+                .button {
+                    display: flex;
+                    justify-content: left;
+
+                    button {
+                        display: inline-block;
+                        text-decoration: none;
+                        background-color: #ffffff;
+                        border: 1px solid #000000;
+                        border-radius: 5px;
+                        font-size: 24px;
+                        padding: 10px 30px;
+                        transition: all 0.4s ease;
+                        font-family: PLAY-REGULAR;
+                        margin: 20px 0px 0px 20px;
+                    }
+
+                    button:hover {
+                        text-decoration: none;
+                        background-color: #1c3a75;
+                        color: #ffffff;
+                        border-color: #000000;
+                        font-family: PLAY-REGULAR;
+                    }
+                }
+            }
+
+            .small_blocks {
+                display: flex;
+                width: 100%;
+                height: 50%;
+
+                .small_block1 {
+                    display: flex;
+                    width: 100%;
+                    border-radius: 6px;
+                    background: linear-gradient(45deg, $dark_light_50, rgba(0, 0, 0, .7)), url(../img/archive/vz2021.jpg);
+                    background-size: cover;
+                    margin: 10px 0px 10px 0px;
+                    height: 100%;
+                    flex-direction: column;
+
+                }
+
+                .small_block2 {
+                    display: flex;
+                    width: 100%;
+                    border-radius: 6px;
+                    background: linear-gradient(45deg, $dark_light_50, rgba(0, 0, 0, .7)), url(../img/archive/u182020.jpg);
+                    background-size: cover;
+                    margin: 10px 0px 10px 10px;
+                    height: 100%;
+                    flex-direction: column;
+                }
+
+                .text {
+                    display: flex;
+                    justify-content: left;
+                    padding-top: 100px;
+                    padding-left: 20px;
+                    flex-direction: column;
+
+                    .title {
+                        display: flex;
+                        font-size: 28px;
+                        font-family: PLAY-BOLD;
+                        color: $light;
+                    }
+                }
+
+                .button {
+                    display: flex;
+                    justify-content: left;
+
+                    button {
+                        display: inline-block;
+                        text-decoration: none;
+                        background-color: #ffffff;
+                        border: 1px solid #000000;
+                        border-radius: 5px;
+                        font-size: 20px;
+                        padding: 10px 15px;
+                        transition: all 0.4s ease;
+                        font-family: PLAY-REGULAR;
+                        margin: 15px 0px 0px 20px;
+                    }
+
+                    button:hover {
+                        text-decoration: none;
+                        background-color: #1c3a75;
+                        color: #ffffff;
+                        border-color: #000000;
+                        font-family: PLAY-REGULAR;
+                    }
+                }
+            }
+        }
+    }
+
+    .container_3 {
+        display: flex;
+        width: 100%;
+        height: 500px;
+        background-color: $gray_black;
+        justify-content: center;
+        margin: 10px 0px 10px 0px;
+
+        .big_block {
+            display: flex;
+            width: 50%;
+            border-radius: 6px;
+            background: linear-gradient(45deg, $dark_light_50, rgba(0, 0, 0, .7)), url(../img/archive/vz2019.jpg);
+            background-size: cover;
+            height: 510px;
+            flex-direction: column;
+
+            .text {
+                display: flex;
+                justify-content: left;
+                padding-top: 325px;
+                padding-left: 20px;
+                flex-direction: column;
+
+                .title {
+                    display: flex;
+                    font-size: 45px;
+                    font-family: PLAY-BOLD;
+                    color: $light;
+                }
+            }
+
+            .button {
+                display: flex;
+                justify-content: left;
+
+                button {
+                    display: inline-block;
+                    text-decoration: none;
+                    background-color: #ffffff;
+                    border: 1px solid #000000;
+                    border-radius: 5px;
+                    font-size: 24px;
+                    padding: 10px 30px;
+                    transition: all 0.4s ease;
+                    font-family: PLAY-REGULAR;
+                    margin: 20px 0px 0px 20px;
+                }
+
+                button:hover {
+                    text-decoration: none;
+                    background-color: #1c3a75;
+                    color: #ffffff;
+                    border-color: #000000;
+                    font-family: PLAY-REGULAR;
+                }
+            }
+        }
+
+        .container_blocks {
+            display: flex;
+            width: 50%;
+            height: 500px;
+            flex-direction: column;
+            margin: 0px 0px 0px 10px;
+
+            .medium_block {
+                display: flex;
+                width: 100%;
+                border-radius: 6px;
+                background: linear-gradient(45deg, $dark_light_50, rgba(0, 0, 0, .7)), url(../img/archive/u182019.jpg);
+                background-size: cover;
+                height: 50%;
+                flex-direction: column;
+                background-repeat: no-repeat;
+                background-size: cover;
+                min-width: 650px;
+
+                .text {
+                    display: flex;
+                    justify-content: left;
+                    padding-top: 90px;
+                    padding-left: 20px;
+                    flex-direction: column;
+
+                    .title {
+                        display: flex;
+                        font-size: 40px;
+                        font-family: PLAY-BOLD;
+                        color: $light;
+                    }
+                }
+
+                .button {
+                    display: flex;
+                    justify-content: left;
+
+                    button {
+                        display: inline-block;
+                        text-decoration: none;
+                        background-color: #ffffff;
+                        border: 1px solid #000000;
+                        border-radius: 5px;
+                        font-size: 24px;
+                        padding: 10px 30px;
+                        transition: all 0.4s ease;
+                        font-family: PLAY-REGULAR;
+                        margin: 20px 0px 0px 20px;
+                    }
+
+                    button:hover {
+                        text-decoration: none;
+                        background-color: #1c3a75;
+                        color: #ffffff;
+                        border-color: #000000;
+                        font-family: PLAY-REGULAR;
+                    }
+                }
+            }
+
+            .small_blocks {
+                display: flex;
+                width: 100%;
+                height: 50%;
+
+                .small_block1 {
+                    display: flex;
+                    width: 100%;
+                    border-radius: 6px;
+                    background: linear-gradient(45deg, $dark_light_50, rgba(0, 0, 0, .7)), url(../img/archive/vz2018.jpg);
+                    background-size: cover;
+                    margin: 10px 0px 10px 0px;
+                    height: 100%;
+                    flex-direction: column;
+
+                }
+
+                .small_block2 {
+                    display: flex;
+                    width: 100%;
+                    border-radius: 6px;
+                    background: linear-gradient(45deg, $dark_light_50, rgba(0, 0, 0, .7)), url(../img/archive/u182018.jpg);
+                    background-size: cover;
+                    margin: 10px 0px 10px 10px;
+                    height: 100%;
+                    flex-direction: column;
+                }
+
+                .text {
+                    display: flex;
+                    justify-content: left;
+                    padding-top: 100px;
+                    padding-left: 20px;
+                    flex-direction: column;
+
+                    .title {
+                        display: flex;
+                        font-size: 28px;
+                        font-family: PLAY-BOLD;
+                        color: $light;
+                    }
+                }
+
+                .button {
+                    display: flex;
+                    justify-content: left;
+
+                    button {
+                        display: inline-block;
+                        text-decoration: none;
+                        background-color: #ffffff;
+                        border: 1px solid #000000;
+                        border-radius: 5px;
+                        font-size: 20px;
+                        padding: 10px 15px;
+                        transition: all 0.4s ease;
+                        font-family: PLAY-REGULAR;
+                        margin: 15px 0px 0px 20px;
+                    }
+
+                    button:hover {
+                        text-decoration: none;
+                        background-color: #1c3a75;
+                        color: #ffffff;
+                        border-color: #000000;
+                        font-family: PLAY-REGULAR;
+                    }
+                }
+            }
+        }
+    }
+
+    .container_4 {
+        display: flex;
+        width: 100%;
+        height: 500px;
+        background-color: $gray_black;
+        justify-content: center;
+        margin: 10px 0px 10px 0px;
+
+        .big_block {
+            display: flex;
+            width: 50%;
+            border-radius: 6px;
+            background: linear-gradient(45deg, $dark_light_50, rgba(0, 0, 0, .7)), url(../img/archive/mfc2017.jpg);
+            background-size: cover;
+            height: 510px;
+            flex-direction: column;
+
+            .text {
+                display: flex;
+                justify-content: left;
+                padding-top: 325px;
+                padding-left: 20px;
+                flex-direction: column;
+
+                .title {
+                    display: flex;
+                    font-size: 45px;
+                    font-family: PLAY-BOLD;
+                    color: $light;
+                }
+            }
+
+            .button {
+                display: flex;
+                justify-content: left;
+
+                button {
+                    display: inline-block;
+                    text-decoration: none;
+                    background-color: #ffffff;
+                    border: 1px solid #000000;
+                    border-radius: 5px;
+                    font-size: 24px;
+                    padding: 10px 30px;
+                    transition: all 0.4s ease;
+                    font-family: PLAY-REGULAR;
+                    margin: 20px 0px 0px 20px;
+                }
+
+                button:hover {
+                    text-decoration: none;
+                    background-color: #1c3a75;
+                    color: #ffffff;
+                    border-color: #000000;
+                    font-family: PLAY-REGULAR;
+                }
+            }
+        }
+
+        .container_blocks {
+            display: flex;
+            width: 50%;
+            height: 500px;
+            flex-direction: column;
+            margin: 0px 0px 0px 10px;
+
+            .medium_block {
+                display: flex;
+                width: 100%;
+                border-radius: 6px;
+                background: linear-gradient(45deg, $dark_light_50, rgba(0, 0, 0, .7)), url(../img/archive/vz2017.jpg);
+                background-size: cover;
+                height: 50%;
+                flex-direction: column;
+                background-repeat: no-repeat;
+                background-size: cover;
+                min-width: 650px;
+
+                .text {
+                    display: flex;
+                    justify-content: left;
+                    padding-top: 90px;
+                    padding-left: 20px;
+                    flex-direction: column;
+
+                    .title {
+                        display: flex;
+                        font-size: 40px;
+                        font-family: PLAY-BOLD;
+                        color: $light;
+                    }
+                }
+
+                .button {
+                    display: flex;
+                    justify-content: left;
+
+                    button {
+                        display: inline-block;
+                        text-decoration: none;
+                        background-color: #ffffff;
+                        border: 1px solid #000000;
+                        border-radius: 5px;
+                        font-size: 24px;
+                        padding: 10px 30px;
+                        transition: all 0.4s ease;
+                        font-family: PLAY-REGULAR;
+                        margin: 20px 0px 0px 20px;
+                    }
+
+                    button:hover {
+                        text-decoration: none;
+                        background-color: #1c3a75;
+                        color: #ffffff;
+                        border-color: #000000;
+                        font-family: PLAY-REGULAR;
+                    }
+                }
+            }
+
+            .small_blocks {
+                display: flex;
+                width: 100%;
+                height: 50%;
+
+                .small_block1 {
+                    display: flex;
+                    width: 100%;
+                    border-radius: 6px;
+                    background: linear-gradient(45deg, $dark_light_50, rgba(0, 0, 0, .7)), url(../img/archive/vz2017.jpg);
+                    background-size: cover;
+                    margin: 10px 0px 10px 0px;
+                    height: 100%;
+                    flex-direction: column;
+
+                }
+
+                .small_block2 {
+                    display: flex;
+                    width: 100%;
+                    border-radius: 6px;
+                    background: linear-gradient(45deg, $dark_light_50, rgba(0, 0, 0, .7)), url(../img/archive/mfc2016.jpg);
+                    background-size: cover;
+                    margin: 10px 0px 10px 10px;
+                    height: 100%;
+                    flex-direction: column;
+                }
+
+                .text {
+                    display: flex;
+                    justify-content: left;
+                    padding-top: 100px;
+                    padding-left: 20px;
+                    flex-direction: column;
+
+                    .title {
+                        display: flex;
+                        font-size: 28px;
+                        font-family: PLAY-BOLD;
+                        color: $light;
+                    }
+                }
+
+                .button {
+                    display: flex;
+                    justify-content: left;
+
+                    button {
+                        display: inline-block;
+                        text-decoration: none;
+                        background-color: #ffffff;
+                        border: 1px solid #000000;
+                        border-radius: 5px;
+                        font-size: 20px;
+                        padding: 10px 15px;
+                        transition: all 0.4s ease;
+                        font-family: PLAY-REGULAR;
+                        margin: 15px 0px 0px 20px;
+                    }
+
+                    button:hover {
+                        text-decoration: none;
+                        background-color: #1c3a75;
+                        color: #ffffff;
+                        border-color: #000000;
+                        font-family: PLAY-REGULAR;
+                    }
+                }
+            }
+        }
+    }
+
+    .container_5 {
+        display: flex;
+        width: 100%;
+        height: 500px;
+        background-color: $gray_black;
+        justify-content: center;
+        margin: 10px 0px 10px 0px;
+
+        .big_block {
+            display: flex;
+            width: 50%;
+            border-radius: 6px;
+            background: linear-gradient(45deg, $dark_light_50, rgba(0, 0, 0, .7)), url(../img/archive/98002016.jpg);
+            background-size: cover;
+            height: 510px;
+            flex-direction: column;
+
+            .text {
+                display: flex;
+                justify-content: left;
+                padding-top: 325px;
+                padding-left: 20px;
+                flex-direction: column;
+
+                .title {
+                    display: flex;
+                    font-size: 45px;
+                    font-family: PLAY-BOLD;
+                    color: $light;
+                }
+            }
+
+            .button {
+                display: flex;
+                justify-content: left;
+
+                button {
+                    display: inline-block;
+                    text-decoration: none;
+                    background-color: #ffffff;
+                    border: 1px solid #000000;
+                    border-radius: 5px;
+                    font-size: 24px;
+                    padding: 10px 30px;
+                    transition: all 0.4s ease;
+                    font-family: PLAY-REGULAR;
+                    margin: 20px 0px 0px 20px;
+                }
+
+                button:hover {
+                    text-decoration: none;
+                    background-color: #1c3a75;
+                    color: #ffffff;
+                    border-color: #000000;
+                    font-family: PLAY-REGULAR;
+                }
+            }
+        }
+
+        .container_blocks {
+            display: flex;
+            width: 50%;
+            height: 500px;
+            flex-direction: column;
+            margin: 0px 0px 0px 10px;
+
+            .medium_block {
+                display: flex;
+                width: 100%;
+                border-radius: 6px;
+                background: linear-gradient(45deg, $dark_light_50, rgba(0, 0, 0, .7)), url(../img/archive/vz2015.jpg);
+                background-size: cover;
+                height: 50%;
+                flex-direction: column;
+                background-repeat: no-repeat;
+                background-size: cover;
+                min-width: 650px;
+
+                .text {
+                    display: flex;
+                    justify-content: left;
+                    padding-top: 90px;
+                    padding-left: 20px;
+                    flex-direction: column;
+
+                    .title {
+                        display: flex;
+                        font-size: 40px;
+                        font-family: PLAY-BOLD;
+                        color: $light;
+                    }
+                }
+
+                .button {
+                    display: flex;
+                    justify-content: left;
+
+                    button {
+                        display: inline-block;
+                        text-decoration: none;
+                        background-color: #ffffff;
+                        border: 1px solid #000000;
+                        border-radius: 5px;
+                        font-size: 24px;
+                        padding: 10px 30px;
+                        transition: all 0.4s ease;
+                        font-family: PLAY-REGULAR;
+                        margin: 20px 0px 0px 20px;
+                    }
+
+                    button:hover {
+                        text-decoration: none;
+                        background-color: #1c3a75;
+                        color: #ffffff;
+                        border-color: #000000;
+                        font-family: PLAY-REGULAR;
+                    }
+                }
+            }
+
+            .small_blocks {
+                display: flex;
+                width: 100%;
+                height: 50%;
+
+                .small_block1 {
+                    display: flex;
+                    width: 100%;
+                    border-radius: 6px;
+                    background: linear-gradient(45deg, $dark_light_50, rgba(0, 0, 0, .7)), url(../img/archive/mfc2015.jpg);
+                    background-size: cover;
+                    margin: 10px 0px 10px 0px;
+                    height: 100%;
+                    flex-direction: column;
+
+                }
+
+                .small_block2 {
+                    display: flex;
+                    width: 100%;
+                    border-radius: 6px;
+                    background: linear-gradient(45deg, $dark_light_50, rgba(0, 0, 0, .7)), url(../img/archive/dubl2015.jpg);
+                    background-size: cover;
+                    margin: 10px 0px 10px 10px;
+                    height: 100%;
+                    flex-direction: column;
+                }
+
+                .text {
+                    display: flex;
+                    justify-content: left;
+                    padding-top: 100px;
+                    padding-left: 20px;
+                    flex-direction: column;
+
+                    .title {
+                        display: flex;
+                        font-size: 28px;
+                        font-family: PLAY-BOLD;
+                        color: $light;
+                    }
+                }
+
+                .button {
+                    display: flex;
+                    justify-content: left;
+
+                    button {
+                        display: inline-block;
+                        text-decoration: none;
+                        background-color: #ffffff;
+                        border: 1px solid #000000;
+                        border-radius: 5px;
+                        font-size: 20px;
+                        padding: 10px 15px;
+                        transition: all 0.4s ease;
+                        font-family: PLAY-REGULAR;
+                        margin: 15px 0px 0px 20px;
+                    }
+
+                    button:hover {
+                        text-decoration: none;
+                        background-color: #1c3a75;
+                        color: #ffffff;
+                        border-color: #000000;
+                        font-family: PLAY-REGULAR;
+                    }
+                }
+            }
+        }
+    }
+
+    .container_6 {
+        display: flex;
+        width: 100%;
+        height: 500px;
+        background-color: $gray_black;
+        justify-content: center;
+        margin: 10px 0px 10px 0px;
+
+        .big_block {
+            display: flex;
+            width: 50%;
+            border-radius: 6px;
+            background: linear-gradient(45deg, $dark_light_50, rgba(0, 0, 0, .7)), url(../img/archive/98002015.jpg);
+            background-size: cover;
+            height: 510px;
+            flex-direction: column;
+
+            .text {
+                display: flex;
+                justify-content: left;
+                padding-top: 325px;
+                padding-left: 20px;
+                flex-direction: column;
+
+                .title {
+                    display: flex;
+                    font-size: 45px;
+                    font-family: PLAY-BOLD;
+                    color: $light;
+                }
+            }
+
+            .button {
+                display: flex;
+                justify-content: left;
+
+                button {
+                    display: inline-block;
+                    text-decoration: none;
+                    background-color: #ffffff;
+                    border: 1px solid #000000;
+                    border-radius: 5px;
+                    font-size: 24px;
+                    padding: 10px 30px;
+                    transition: all 0.4s ease;
+                    font-family: PLAY-REGULAR;
+                    margin: 20px 0px 0px 20px;
+                }
+
+                button:hover {
+                    text-decoration: none;
+                    background-color: #1c3a75;
+                    color: #ffffff;
+                    border-color: #000000;
+                    font-family: PLAY-REGULAR;
+                }
+            }
+        }
+
+        .container_blocks {
+            display: flex;
+            width: 50%;
+            height: 500px;
+            flex-direction: column;
+            margin: 0px 0px 0px 10px;
+
+            .medium_block {
+                display: flex;
+                width: 100%;
+                border-radius: 6px;
+                background: linear-gradient(45deg, $dark_light_50, rgba(0, 0, 0, .7)), url(../img/archive/01022015.jpg);
+                background-size: cover;
+                height: 50%;
+                flex-direction: column;
+                background-repeat: no-repeat;
+                background-size: cover;
+                min-width: 650px;
+
+                .text {
+                    display: flex;
+                    justify-content: left;
+                    padding-top: 90px;
+                    padding-left: 20px;
+                    flex-direction: column;
+
+                    .title {
+                        display: flex;
+                        font-size: 40px;
+                        font-family: PLAY-BOLD;
+                        color: $light;
+                    }
+                }
+
+                .button {
+                    display: flex;
+                    justify-content: left;
+
+                    button {
+                        display: inline-block;
+                        text-decoration: none;
+                        background-color: #ffffff;
+                        border: 1px solid #000000;
+                        border-radius: 5px;
+                        font-size: 24px;
+                        padding: 10px 30px;
+                        transition: all 0.4s ease;
+                        font-family: PLAY-REGULAR;
+                        margin: 20px 0px 0px 20px;
+                    }
+
+                    button:hover {
+                        text-decoration: none;
+                        background-color: #1c3a75;
+                        color: #ffffff;
+                        border-color: #000000;
+                        font-family: PLAY-REGULAR;
+                    }
+                }
+            }
+
+            .small_blocks {
+                display: flex;
+                width: 100%;
+                height: 50%;
+
+                .small_block1 {
+                    display: flex;
+                    width: 100%;
+                    border-radius: 6px;
+                    background: linear-gradient(45deg, $dark_light_50, rgba(0, 0, 0, .7)), url(../img/archive/vz2014.jpg);
+                    background-size: cover;
+                    margin: 10px 0px 10px 0px;
+                    height: 100%;
+                    flex-direction: column;
+
+                }
+
+                .small_block2 {
+                    display: flex;
+                    width: 100%;
+                    border-radius: 6px;
+                    background: linear-gradient(45deg, $dark_light_50, rgba(0, 0, 0, .7)), url(../img/archive/dubl2014.jpg);
+                    background-size: cover;
+                    margin: 10px 0px 10px 10px;
+                    height: 100%;
+                    flex-direction: column;
+                }
+
+                .text {
+                    display: flex;
+                    justify-content: left;
+                    padding-top: 100px;
+                    padding-left: 20px;
+                    flex-direction: column;
+
+                    .title {
+                        display: flex;
+                        font-size: 28px;
+                        font-family: PLAY-BOLD;
+                        color: $light;
+                    }
+                }
+
+                .button {
+                    display: flex;
+                    justify-content: left;
+
+                    button {
+                        display: inline-block;
+                        text-decoration: none;
+                        background-color: #ffffff;
+                        border: 1px solid #000000;
+                        border-radius: 5px;
+                        font-size: 20px;
+                        padding: 10px 15px;
+                        transition: all 0.4s ease;
+                        font-family: PLAY-REGULAR;
+                        margin: 15px 0px 0px 20px;
+                    }
+
+                    button:hover {
+                        text-decoration: none;
+                        background-color: #1c3a75;
+                        color: #ffffff;
+                        border-color: #000000;
+                        font-family: PLAY-REGULAR;
+                    }
+                }
+            }
+        }
+    }
+
+    .container_7 {
+        display: flex;
+        width: 100%;
+        height: 500px;
+        background-color: $gray_black;
+        justify-content: center;
+        margin: 10px 0px 10px 0px;
+
+        .big_block {
+            display: flex;
+            width: 50%;
+            border-radius: 6px;
+            background: linear-gradient(45deg, $dark_light_50, rgba(0, 0, 0, .7)), url(../img/archive/01022014.jpg);
+            background-size: cover;
+            height: 510px;
+            flex-direction: column;
+
+            .text {
+                display: flex;
+                justify-content: left;
+                padding-top: 325px;
+                padding-left: 20px;
+                flex-direction: column;
+
+                .title {
+                    display: flex;
+                    font-size: 45px;
+                    font-family: PLAY-BOLD;
+                    color: $light;
+                }
+            }
+
+            .button {
+                display: flex;
+                justify-content: left;
+
+                button {
+                    display: inline-block;
+                    text-decoration: none;
+                    background-color: #ffffff;
+                    border: 1px solid #000000;
+                    border-radius: 5px;
+                    font-size: 24px;
+                    padding: 10px 30px;
+                    transition: all 0.4s ease;
+                    font-family: PLAY-REGULAR;
+                    margin: 20px 0px 0px 20px;
+                }
+
+                button:hover {
+                    text-decoration: none;
+                    background-color: #1c3a75;
+                    color: #ffffff;
+                    border-color: #000000;
+                    font-family: PLAY-REGULAR;
+                }
+            }
+        }
+
+        .container_blocks {
+            display: flex;
+            width: 50%;
+            height: 500px;
+            flex-direction: column;
+            margin: 0px 0px 0px 10px;
+
+            .medium_block {
+                display: flex;
+                width: 100%;
+                border-radius: 6px;
+                background: linear-gradient(45deg, $dark_light_50, rgba(0, 0, 0, .7)), url(../img/archive/vz2013.jpg);
+                background-size: cover;
+                height: 50%;
+                flex-direction: column;
+                background-repeat: no-repeat;
+                background-size: cover;
+                min-width: 650px;
+
+                .text {
+                    display: flex;
+                    justify-content: left;
+                    padding-top: 90px;
+                    padding-left: 20px;
+                    flex-direction: column;
+
+                    .title {
+                        display: flex;
+                        font-size: 40px;
+                        font-family: PLAY-BOLD;
+                        color: $light;
+                    }
+                }
+
+                .button {
+                    display: flex;
+                    justify-content: left;
+
+                    button {
+                        display: inline-block;
+                        text-decoration: none;
+                        background-color: #ffffff;
+                        border: 1px solid #000000;
+                        border-radius: 5px;
+                        font-size: 24px;
+                        padding: 10px 30px;
+                        transition: all 0.4s ease;
+                        font-family: PLAY-REGULAR;
+                        margin: 20px 0px 0px 20px;
+                    }
+
+                    button:hover {
+                        text-decoration: none;
+                        background-color: #1c3a75;
+                        color: #ffffff;
+                        border-color: #000000;
+                        font-family: PLAY-REGULAR;
+                    }
+                }
+            }
+
+            .small_blocks {
+                display: flex;
+                width: 100%;
+                height: 50%;
+
+                .small_block1 {
+                    display: flex;
+                    width: 100%;
+                    border-radius: 6px;
+                    background: linear-gradient(45deg, $dark_light_50, rgba(0, 0, 0, .7)), url(../img/archive/none.jpg);
+                    background-size: cover;
+                    margin: 10px 0px 10px 0px;
+                    height: 100%;
+                    flex-direction: column;
+
+                }
+
+                .small_block2 {
+                    display: flex;
+                    width: 100%;
+                    border-radius: 6px;
+                    background: linear-gradient(45deg, $dark_light_50, rgba(0, 0, 0, .7)), url(../img/archive/none.jpg);
+                    background-size: cover;
+                    margin: 10px 0px 10px 10px;
+                    height: 100%;
+                    flex-direction: column;
+                }
+
+                .text {
+                    display: flex;
+                    justify-content: left;
+                    padding-top: 100px;
+                    padding-left: 20px;
+                    flex-direction: column;
+
+                    .title {
+                        display: flex;
+                        font-size: 28px;
+                        font-family: PLAY-BOLD;
+                        color: $light;
+                    }
+                }
+
+                .button {
+                    display: flex;
+                    justify-content: left;
+
+                    button {
+                        display: inline-block;
+                        text-decoration: none;
+                        background-color: #ffffff;
+                        border: 1px solid #000000;
+                        border-radius: 5px;
+                        font-size: 20px;
+                        padding: 10px 15px;
+                        transition: all 0.4s ease;
+                        font-family: PLAY-REGULAR;
+                        margin: 15px 0px 0px 20px;
+                    }
+
+                    button:hover {
+                        text-decoration: none;
+                        background-color: #1c3a75;
+                        color: #ffffff;
+                        border-color: #000000;
+                        font-family: PLAY-REGULAR;
+                    }
+                }
+            }
+        }
+    }
+
+
+}
+
+
+@import "media/_archive-media.scss";

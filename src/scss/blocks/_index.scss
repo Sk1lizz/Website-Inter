@@ -1,0 +1,661 @@
+.banner {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80svh;
+    width: 100%;
+    position: relative;
+
+    .fill {
+        position: absolute;
+        top: 0;
+        left: 0;
+        background: $black;
+        opacity: .5;
+        width: 100%;
+        height: 100%;
+    }
+
+    .background {
+        background-image: url(../img/index.jpg);
+        height: 100%;
+        width: 100%;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+    }
+
+    .content {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 95%;
+        color: white;
+        font-family: PLAY-BOLD;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        .text {
+            font-size: 10svh;
+        }
+
+        .view {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        @import "elements/_buttons.scss";
+    }
+}
+
+.last_matches {
+    width: 100%;
+    padding-left: 15%;
+    padding-right: 15%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 30px;
+    flex-direction: column;
+
+    .title {
+        width: 100%;
+        justify-content: left;
+        text-align: left;
+        color: $black;
+        font-family: PLAY-BOLD;
+        font-size: 35px;
+        margin-bottom: 10px;
+    }
+
+    .last_match_pro {
+        width: 100%;
+        height: 200px;
+        background-image: url(../img/last_match.jpg);
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+        border-radius: 3px;
+
+        .fill {
+            background: $dark;
+            opacity: .9;
+            width: 100%;
+            height: 100%;
+            flex-direction: column;
+            z-index: 0;
+            border-radius: 6px;
+
+            .data {
+                text-align: center;
+                padding-top: 30px;
+                font-size: 16px;
+                color: $light;
+                font-family: play-regular;
+            }
+
+            .title_last_matches {
+                text-align: center;
+                padding-top: 10px;
+                font-size: 16px;
+                color: $light;
+                font-family: play-regular;
+            }
+
+            .text_block {
+                display: flex;
+                width: 100%;
+                justify-content: center;
+                padding: 20px;
+                font-family: play-regular;
+                z-index: 1;
+
+                .team_name_1 {
+                    justify-content: left;
+                    text-align: left;
+                    font-size: 18px;
+                    color: $light;
+                    width: 45%;
+                    padding: 10px;
+                }
+
+                .match_score {
+                    justify-content: center;
+                    text-align: center;
+                    font-size: 24px;
+                    color: $light;
+                    background: $black;
+                    border-radius: 3px;
+                    width: 80px;
+                    padding: 10px;
+                }
+
+                .team_name_2 {
+                    justify-content: right;
+                    text-align: right;
+                    font-size: 18px;
+                    color: $light;
+                    width: 45%;
+                    padding: 10px;
+                }
+            }
+
+            .goals {
+                text-align: center;
+                font-size: 16px;
+                padding: 10px;
+                color: $light;
+                font-family: play-regular;
+            }
+        }
+    }
+
+    .last_match_8x8 {
+        width: 100%;
+        height: 200px;
+        background-image: url(../img/last_match_2.jpg);
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+        margin-top: 20px;
+        border-radius: 3px;
+
+        .fill {
+            background: $black;
+            opacity: .9;
+            width: 100%;
+            height: 100%;
+            flex-direction: column;
+            z-index: 0;
+            border-radius: 6px;
+
+            .data {
+                text-align: center;
+                padding-top: 30px;
+                font-size: 16px;
+                color: $light;
+                font-family: play-regular;
+            }
+
+            .title_last_matches {
+                text-align: center;
+                padding-top: 10px;
+                font-size: 16px;
+                color: $light;
+                font-family: play-regular;
+            }
+
+            .text_block {
+                display: flex;
+                width: 100%;
+                justify-content: center;
+                padding: 20px;
+                font-family: play-regular;
+                z-index: 1;
+
+                .team_name_1 {
+                    justify-content: left;
+                    text-align: left;
+                    font-size: 18px;
+                    color: $light;
+                    width: 45%;
+                    padding: 10px;
+                }
+
+                .match_score {
+                    justify-content: center;
+                    text-align: center;
+                    font-size: 24px;
+                    color: $light;
+                    background: $dark;
+                    border-radius: 3px;
+                    width: 80px;
+                    padding: 10px;
+                }
+
+                .team_name_2 {
+                    justify-content: right;
+                    text-align: right;
+                    font-size: 18px;
+                    color: $light;
+                    width: 45%;
+                    padding: 10px;
+                }
+            }
+
+            .goals {
+                padding: 10px;
+                text-align: center;
+                font-size: 16px;
+                color: $light;
+                font-family: play-regular;
+            }
+        }
+    }
+}
+
+.about_the_team {
+    display: flex;
+    justify-content: center;
+
+    .about_the_team_wrapper {
+        text-align: center;
+        color: $black;
+        width: 100%;
+        margin: 50px 20px;
+        line-height: 22px;
+        display: flex;
+
+        .index_text_block {
+            width: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            margin-left: 50px;
+            padding-right: 40px;
+
+            .title {
+                font-size: 45px;
+                font-family: PLAY-BOLD;
+                margin-bottom: 30px;
+                text-align: left;
+            }
+
+            .text {
+                font-size: 22px;
+                font-family: PLAY-REGULAR;
+                text-align: start;
+            }
+
+            .about_button {
+                text-align: left;
+                padding-top: 30px;
+
+                button {
+                    display: inline-block;
+                    text-decoration: none;
+                    background-color: #1c3a75;
+                    color: #ffffff;
+                    border: 1px solid #000000;
+                    border-radius: 5px;
+                    font-size: 24px;
+                    padding: 10px 30px;
+                    transition: all 0.4s ease;
+                    font-family: PLAY-REGULAR;
+                }
+
+                button:hover {
+                    text-decoration: none;
+                    background-color: #ffffff;
+                    color: #000000;
+                    border-color: #000000;
+                    font-family: PLAY-REGULAR;
+                }
+            }
+        }
+
+        .index_photo_block {
+            display: flex;
+            flex-direction: column;
+            width: 50%;
+
+            .big_photo {
+                height: 100%;
+                width: 100%;
+                padding: 20px 20px 10px 20px;
+
+                img {
+                    height: 100%;
+                    width: 100%;
+                    border-radius: 3px;
+                    transition: 1s;
+                }
+
+                img:hover {
+                    transform: scale(1.05);
+                }
+            }
+
+            .smalll_photo {
+                height: 100%;
+                width: 100%;
+                display: flex;
+                padding: 10px 20px 20px 20px;
+                border-radius: 3px;
+
+                img {
+                    height: 100%;
+                    width: 50%;
+                    border-radius: 3px;
+                    transition: 1s;
+                }
+
+                img:hover {
+                    transform: scale(1.05);
+                }
+
+                :last-child {
+                    padding-left: 10px;
+                }
+            }
+        }
+    }
+}
+
+.view_in_team {
+    width: 100%;
+    height: 70svh;
+    display: flex;
+
+    .team_88 {
+        width: 50%;
+        height: 100%;
+        position: relative;
+        transition: .3s;
+
+        &:hover {
+            .fill {
+                opacity: 0;
+            }
+
+            .background {
+                filter: grayscale(0);
+            }
+
+            .text {
+                text-shadow: $black 1px 0 10px;
+            }
+        }
+
+        .fill {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: $gray_black;
+            opacity: .8;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            transition: .3s;
+        }
+
+        .background {
+            background-image: url(../img/team88.png);
+            height: 100%;
+            width: 100%;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+            filter: grayscale(1);
+            transition: .3s;
+        }
+
+        .content {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 95%;
+            color: white;
+            font-family: PLAY-BOLD;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            z-index: 2;
+
+            .text {
+                display: flex;
+                justify-content: center;
+                font-size: 15svh;
+            }
+
+            .view {
+                display: flex;
+                justify-content: center;
+                width: 100%;
+                margin-top: 20px;
+            }
+
+            @import "elements/_buttons.scss";
+        }
+    }
+
+    .team_pro {
+        width: 50%;
+        height: 100;
+        position: relative;
+
+        &:hover {
+            .fill {
+                opacity: 0;
+            }
+
+            .background {
+                filter: grayscale(0);
+            }
+
+            .text {
+                text-shadow: $black 1px 0 10px;
+            }
+        }
+
+        .fill {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: $dark;
+            opacity: .8;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            transition: .3s;
+        }
+
+        .background {
+            background-image: url(../img/teampro.png);
+            height: 100%;
+            width: 100%;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+            filter: grayscale(1);
+            transition: .3s;
+        }
+
+        .content {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 95%;
+            color: white;
+            font-family: PLAY-BOLD;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            z-index: 2;
+
+            .text {
+                display: flex;
+                justify-content: center;
+                font-size: 15svh;
+            }
+
+            .view {
+                display: flex;
+                justify-content: center;
+                width: 100%;
+                margin-top: 20px;
+            }
+
+            @import "elements/_buttons.scss";
+        }
+    }
+}
+
+.birthday {
+    display: flex;
+    height: 540px;
+    margin: 10px 10px 10px 10px;
+
+    .birthday_players {
+        display: flex;
+        flex-direction: column;
+        border-radius: 6px;
+        height: 100%;
+        width: 50%;
+        margin: 0px 5px 0px 0px;
+        align-items: center;
+
+        .title {
+            font-family: PLAY-BOLD;
+            color: $black;
+            padding: 30px;
+            font-size: 30px;
+        }
+
+        .block_birthday_players {
+            display: flex;
+            color: $light;
+            margin: 5px 30px 5px 30px;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            width: 90%;
+            background-color: $black;
+            border-radius: 6px;
+            -webkit-box-shadow: 0px 0px 16px 2px rgba(34, 60, 80, 0.2);
+            -moz-box-shadow: 0px 0px 16px 2px rgba(34, 60, 80, 0.2);
+            box-shadow: 0px 0px 16px 2px rgba(34, 60, 80, 0.2);
+
+            .name_player {
+                font-family: PLAY-BOLD;
+                padding-bottom: 10px;
+                padding-top: 20px;
+                font-size: 20px;
+                justify-content: center;
+            }
+
+            .data_title {
+                font-family: PLAY-REGULAR;
+                justify-content: center;
+                padding-bottom: 10px;
+                font-size: 20px;
+            }
+
+            .timer {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding-bottom: 10px;
+                font-family: PLAY-BOLD;
+                font-size: 20px;
+                padding-bottom: 20px;
+            }
+        }
+
+        .block_birthday_players:nth-child(3) {
+            background-color: $dark;
+        }
+    }
+
+    .player_in_team {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        width: 50%;
+        margin: 0px 0px 0px 5px;
+        justify-content: center;
+        overflow: hidden;
+
+        .icon {
+            display: flex;
+            height: 100%;
+            width: 100%;
+            justify-content: center;
+            padding: 40px;
+            align-items: center;
+
+            img {
+                height: 80%;
+                width: 80%;
+            }
+        }
+    }
+}
+
+.logo_block {
+    display: flex;
+    height: 70svh;
+    width: 100%;
+    justify-content: center;
+    position: relative;
+
+
+    .background {
+        background-image: url(/img/Interphoto.png);
+        height: 70svh;
+        width: 100%;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+    }
+
+    .text {
+        margin-top: 60svh;
+        color: $light;
+        font-size: 3svh;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        font-family: PLAY-BOLD;
+    }
+}
+
+.scrolling-wrapper {
+    overflow-x: auto;
+    /* используем auto вместо scroll */
+    overflow-y: hidden;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+    /* Добавляем фиксированную ширину */
+    -ms-overflow-style: none;
+    /* убираем стандартный скролл для IE */
+    scrollbar-width: none;
+    /* убираем стандартный скролл для Firefox */
+    scroll-behavior: smooth;
+}
+
+.scrolling-wrapper .card {
+    display: inline-block;
+    padding: 10px 20px;
+    overflow-x: hidden;
+    /* Добавляем скрытие по горизонтали для изображений */
+}
+
+.scrolling-wrapper .card img {
+    height: auto;
+    /* Установите высоту изображений в автоматический режим */
+    max-height: 70vh;
+    /* Установите максимальную высоту для изображений */
+    cursor: grab;
+    overflow-x: hidden;
+}
+
+/* меняем курсор на grabbing при перетаскивании изображения */
+.scrolling-wrapper .card img:active {
+    cursor: grabbing;
+    overflow-x: hidden;
+}
+
+.scrolling-wrapper::-webkit-scrollbar {
+    overflow-x: hidden;
+}
+
+@import "media/_index-media.scss";
