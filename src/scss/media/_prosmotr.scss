@@ -450,21 +450,8 @@
             }
         }
 
-        .photo {
-            .block {
-                .img-container {
-                    img {
-                        height: 200px;
-                        margin: 5px;
-                    }
-                }
-
-                .pop-up {
-                    img {
-                        width: 80%;
-                    }
-                }
-            }
+        .scrolling-wrapper {
+            padding-left: 0px;
         }
 
         .coach_prosmotr {
