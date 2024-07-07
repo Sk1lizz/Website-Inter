@@ -1,5 +1,3 @@
-const apper = 1;
-
 document.addEventListener('DOMContentLoaded', function () {
 
     // статистика текущего сезона
@@ -25,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function () {
         { number: "20", name: "Власов", matches: "24", goals: "3", assist: "8", zeromatch: "0", lostgoals: "0", team: "pro" },
         { number: "21", name: "Клейменов", matches: "0", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro" },
         { number: "22", name: "Макарчев", matches: "10", goals: "5", assist: "1", zeromatch: "0", lostgoals: "0", team: "pro" },
-        { number: "23", name: "Бубнов", matches: "4", goals: "3", assist: "3", zeromatch: "0", lostgoals: "0", team: "8x8" },
+        { number: "23", name: "Бубнов", matches: "7", goals: "3", assist: "3", zeromatch: "0", lostgoals: "0", team: "8x8" },
         { number: "24", name: "Лешанков", matches: "0", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro" },
         { number: "25", name: "Грумынский", matches: "0", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro" },
         { number: "26", name: "Голованов", matches: "0", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro" },
@@ -83,7 +81,7 @@ document.addEventListener('DOMContentLoaded', function () {
         { number: "20", name: "Власов", matches: "236", goals: "20", assist: "12", zeromatch: "0", lostgoals: "0", team: "pro" },
         { number: "21", name: "Клейменов", matches: "0", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro" },
         { number: "22", name: "Макарчев", matches: "59", goals: "49", assist: "24", zeromatch: "0", lostgoals: "0", team: "pro" },
-        { number: "23", name: "Бубнов", matches: "5", goals: "3", assist: "3", zeromatch: "0", lostgoals: "0", team: "8x8" },
+        { number: "23", name: "Бубнов", matches: "7", goals: "3", assist: "3", zeromatch: "0", lostgoals: "0", team: "8x8" },
         { number: "24", name: "Лешанков", matches: "90", goals: "8", assist: "9", zeromatch: "0", lostgoals: "0", team: "pro" },
         { number: "25", name: "Грумынский", matches: "8", goals: "0", assist: "3", zeromatch: "2", lostgoals: "0", team: "pro" },
         { number: "26", name: "Голованов", matches: "32", goals: "0", assist: "3", zeromatch: "2", lostgoals: "123", team: "pro" },
