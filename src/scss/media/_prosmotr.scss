@@ -251,16 +251,8 @@
             .schedule_title {}
 
             .week_wrapper {
-                .group_1 {
-                    .schedule_block {
-                        width: 25%;
-                    }
-                }
-
-                .group_2 {
-                    .schedule_block {
-                        width: 25%;
-                    }
+                .schedule_block {
+                    width: 30%;
                 }
             }
         }
@@ -450,21 +442,13 @@
             }
         }
 
-        .photo {
-            .block {
-                .img-container {
-                    img {
-                        height: 200px;
-                        margin: 5px;
-                    }
-                }
+        .scrolling-wrapper {
+            padding-left: 0px;
+        }
 
-                .pop-up {
-                    img {
-                        width: 80%;
-                    }
-                }
-            }
+
+        .scrolling-wrapper .card img {
+            max-height: 55vh;
         }
 
         .coach_prosmotr {
@@ -596,34 +580,39 @@
         .schedule {
             margin-top: 430px;
 
-            .schedule_title {}
-
             .week_wrapper {
-                .group_1 {
-                    flex-direction: column;
+                display: flex;
+                flex-direction: row;
+                /* горизонтальное расположение блоков */
+                overflow-x: auto;
+                /* горизонтальный скролл */
+                -webkit-overflow-scrolling: touch;
+                /* плавный скроллинг на мобильных устройствах */
+                padding-left: 0;
+                padding-right: 0;
+                justify-content: none;
+                flex-wrap: nowrap;
+                scrollbar-width: none;
+                /* для Firefox */
 
-                    .schedule_block {
-                        width: 100%;
-                        padding-left: 5px;
-                        padding-right: 5px;
-                        margin-bottom: 5px;
-                        margin-top: 5px;
-                    }
+                .schedule_block {
+                    flex: 0 0 auto;
+                    /* предотвращаем сжатие блоков */
+                    width: auto;
+                    /* для удобства скроллинга убираем фиксированную ширину */
+                    min-width: 25svh;
+                    /* минимальная ширина блока, чтобы они не становились слишком узкими */
+                    margin: 5px;
+                    /* добавляем отступы между блоками */
                 }
 
-                .group_2 {
-                    flex-direction: column;
-
-                    .schedule_block {
-                        width: 100%;
-                        padding-left: 5px;
-                        padding-right: 5px;
-                        margin-top: 5px;
-                        margin-bottom: 5px;
-                    }
+                .week_wrapper::-webkit-scrollbar {
+                    display: none;
+                    /* для Chrome, Safari и Opera */
                 }
             }
         }
+
 
         .view_in_team {
             height: auto;

@@ -300,46 +300,49 @@
                 </div>
 
                 <div class=" statistic assists">
-                    <div class="wrapper">
-                        <div class="title">Топ ассистенты</div>
-                            <ul class="assists-list">
-                                <!-- Сюда будут добавлены элементы списка ассистентов -->
-                            </ul>
-                        <div class="link"><a href="pro11x11allstat.html#2"">Полный список</a></div>
+                                <div class="wrapper">
+                                    <div class="title">Топ ассистенты</div>
+                                    <ul class="assists-list">
+                                        <!-- Сюда будут добавлены элементы списка ассистентов -->
+                                    </ul>
+                                    <div class="link"><a href="pro11x11allstat.html#2"">Полный список</a></div>
                     </div>
                 </div>
 
                 <div class=" statistic goals_assists">
-                    <div class="wrapper">
-                        <div class="title">Топ гол+пас</div>
-                        <ul class="goals-assists-list"></ul>
-                        <div class="link"><a href="pro11x11allstat.html#3"">Полный список</a></div>
+                                            <div class="wrapper">
+                                                <div class="title">Топ гол+пас</div>
+                                                <ul class="goals-assists-list"></ul>
+                                                <div class="link"><a href="pro11x11allstat.html#3"">Полный список</a></div>
                     </div>
                 </div>
             </div>
 
             <div class=block-wrapper>
                 <div class=" statistic goalkeepers">
-                    <div class="wrapper">
-                        <div class="title">Вратари</div>
-                        <ul class="goalkeepers-list"></ul>
-                        <div class="link"><a href="pro11x11allstat.html#4"">Полный список</a></div>
+                                                        <div class="wrapper">
+                                                            <div class="title">Вратари</div>
+                                                            <ul class="goalkeepers-list"></ul>
+                                                            <div class="link"><a href="pro11x11allstat.html#4"">Полный список</a></div>
                     </div>
                 </div>
 
                 <div class=" statistic goalkeepers_zero">
-                    <div class="wrapper">
-                        <div class="title">Матчей на ноль</div>
-                        <ul class="goalkeepers-list-zero"></ul>
-                        <div class="link"><a href="pro11x11allstat.html#5"">Полный список</a></div>
+                                                                    <div class="wrapper">
+                                                                        <div class="title">Матчей на ноль</div>
+                                                                        <ul class="goalkeepers-list-zero"></ul>
+                                                                        <div class="link"><a
+                                                                                href="pro11x11allstat.html#5"">Полный список</a></div>
                     </div>
                 </div>
 
                 <div class=" statistic zanetti_top">
-                    <div class="wrapper">
-                        <div class="title"> Топ-5 приз Дзанетти </div>
-                        <ul class="zanetti_top-list"></ul>
-                        <div class="link"><a href="pro11x11allstat.html#6"">Полный список</a></div>
+                                                                                <div class="wrapper">
+                                                                                    <div class="title"> Топ-5 приз
+                                                                                        Дзанетти </div>
+                                                                                    <ul class="zanetti_top-list"></ul>
+                                                                                    <div class="link"><a
+                                                                                            href="pro11x11allstat.html#6"">Полный список</a></div>
                     </div>
                 </div>
             </div>
@@ -351,27 +354,27 @@
     @@include('blocks/footer.html')
     </body>
 <script src=" ./js/index.bundle.js"> </script>
-    <script
-        src="js/statistics11x11.bundle.js"></script>
+                                                                                            <script
+                                                                                                src="js/statistics11x11.bundle.js"></script>
 
-    <script>
-        // Ограничение списков пятью элементами
-        const limitListItems = (listClass) => {
-            const list = document.querySelectorAll(`.${listClass} li`);
-            if (list.length > 5) {
-                for (let i = 5; i < list.length; i++) {
-                    list[i].style.display = 'none'; // Скрыть элементы списка, начиная с шестого
-                }
-        }
-        };
-        // Ограничение каждого списка пятью элементами
-        limitListItems('goals-list');
-        limitListItems('assists-list');
-        limitListItems('goals-assists-list');
-        limitListItems('goalkeepers-list');
-        limitListItems('goalkeepers-list-zero');
-        limitListItems('zanetti_top-list');
-    </script>
+                                                                                            <script>
+                                                                                                // Ограничение списков пятью элементами
+                                                                                                const limitListItems = (listClass) => {
+                                                                                                    const list = document.querySelectorAll(`.${listClass} li`);
+                                                                                                    if (list.length > 5) {
+                                                                                                        for (let i = 5; i < list.length; i++) {
+                                                                                                            list[i].style.display = 'none'; // Скрыть элементы списка, начиная с шестого
+                                                                                                        }
+                                                                                                    }
+                                                                                                };
+                                                                                                // Ограничение каждого списка пятью элементами
+                                                                                                limitListItems('goals-list');
+                                                                                                limitListItems('assists-list');
+                                                                                                limitListItems('goals-assists-list');
+                                                                                                limitListItems('goalkeepers-list');
+                                                                                                limitListItems('goalkeepers-list-zero');
+                                                                                                limitListItems('zanetti_top-list');
+                                                                                            </script>
 
 
 

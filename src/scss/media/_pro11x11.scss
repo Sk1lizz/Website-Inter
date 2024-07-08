@@ -970,20 +970,28 @@
                     align-items: center;
 
                     .slider {
-                        display: flex;
-                        width: 100%;
-                        flex-direction: column;
-                        justify-content: center;
-                        align-items: center;
+                        flex-direction: row;
+                        /* горизонтальное расположение блоков */
+                        overflow-x: auto;
+                        /* горизонтальный скролл */
+                        -webkit-overflow-scrolling: touch;
+                        /* плавный скроллинг на мобильных устройствах */
+                        padding-left: 0;
+                        padding-right: 0;
+                        justify-content: none;
+                        flex-wrap: nowrap;
+                        scrollbar-width: none;
+                        /* для Firefox */
 
                         .blocks {
-                            display: flex;
-                            width: 100%;
-                            height: 100%;
-                            justify-content: center;
-                            align-items: center;
-                            flex-direction: column;
-                            padding: 0 10px 10px 10px;
+                            flex: 0 0 auto;
+                            /* предотвращаем сжатие блоков */
+                            width: auto;
+                            /* для удобства скроллинга убираем фиксированную ширину */
+                            min-width: 25svh;
+                            /* минимальная ширина блока, чтобы они не становились слишком узкими */
+                            margin: 5px;
+                            /* добавляем отступы между блоками */
                             justify-content: center;
                         }
 
@@ -994,6 +1002,8 @@
                             margin-bottom: 10px;
                             justify-content: center;
                             padding: 10px;
+                            min-height: 100px;
+                            align-items: center;
                         }
 
                         .wins {
@@ -1003,6 +1013,8 @@
                             margin-bottom: 10px;
                             justify-content: center;
                             padding: 10px;
+                            min-height: 100px;
+                            align-items: center;
                         }
 
                         .draw {
@@ -1012,6 +1024,8 @@
                             margin-bottom: 10px;
                             justify-content: center;
                             padding: 10px;
+                            min-height: 100px;
+                            align-items: center;
                         }
 
                         .lose {
@@ -1021,6 +1035,8 @@
                             margin-bottom: 10px;
                             justify-content: center;
                             padding: 10px;
+                            min-height: 100px;
+                            align-items: center;
                         }
 
                         .goals {
@@ -1030,6 +1046,8 @@
                             margin-bottom: 10px;
                             justify-content: center;
                             padding: 10px;
+                            min-height: 100px;
+                            align-items: center;
                         }
 
                         .goals_conceded {
@@ -1039,6 +1057,8 @@
                             margin-bottom: 10px;
                             justify-content: center;
                             padding: 10px;
+                            min-height: 100px;
+                            align-items: center;
                         }
 
                         .difference {
@@ -1048,6 +1068,8 @@
                             margin-bottom: 10px;
                             justify-content: center;
                             padding: 10px;
+                            min-height: 100px;
+                            align-items: center;
                         }
 
                         .form {
@@ -1057,6 +1079,8 @@
                             margin-bottom: 10px;
                             justify-content: center;
                             padding: 10px;
+                            min-height: 100px;
+                            align-items: center;
                         }
 
                         .wins_series {
@@ -1064,8 +1088,13 @@
                             width: 100%;
                             height: 100%;
                             margin-bottom: 10px;
-                            justify-content: center;
                             padding: 10px;
+                            min-height: 100px;
+                            align-items: center;
+
+                            .icon {
+                                width: 25%;
+                            }
                         }
 
                         .wins_lose {
@@ -1073,8 +1102,13 @@
                             width: 100%;
                             height: 100%;
                             margin-bottom: 10px;
-                            justify-content: center;
                             padding: 10px;
+                            min-height: 100px;
+                            align-items: center;
+
+                            .icon {
+                                width: 25%;
+                            }
                         }
 
 
@@ -1083,8 +1117,13 @@
                             width: 100%;
                             height: 100%;
                             margin-bottom: 10px;
-                            justify-content: center;
                             padding: 10px;
+                            min-height: 100px;
+                            align-items: center;
+
+                            .icon {
+                                width: 25%;
+                            }
                         }
 
                         .the_best_lose {
@@ -1092,8 +1131,13 @@
                             width: 100%;
                             height: 100%;
                             margin-bottom: 10px;
-                            justify-content: center;
                             padding: 10px;
+                            min-height: 100px;
+                            align-items: center;
+
+                            .icon {
+                                width: 25%;
+                            }
                         }
 
 
@@ -1140,9 +1184,24 @@
             width: 100%;
             display: flex;
             font-size: 16px;
+            padding-bottom: 0px;
 
             .block-wrapper {
-                flex-direction: column;
+                display: flex;
+                flex-direction: row;
+                /* горизонтальное расположение блоков */
+                overflow-x: auto;
+                /* горизонтальный скролл */
+                -webkit-overflow-scrolling: touch;
+                /* плавный скроллинг на мобильных устройствах */
+                padding-left: 0;
+                padding-right: 0;
+                justify-content: start;
+                flex-wrap: nowrap;
+                scrollbar-width: none;
+                /* для Firefox */
+                font-size: 16px;
+                padding-left: 5px;
 
                 .statistic {
                     background: red;
@@ -1155,6 +1214,16 @@
                     width: 100%;
                     height: 100%;
                     min-height: 200px;
+                    flex: 0 0 auto;
+                    /* предотвращаем сжатие блоков */
+                    width: auto;
+                    /* для удобства скроллинга убираем фиксированную ширину */
+                    min-width: 25svh;
+                    /* минимальная ширина блока, чтобы они не становились слишком узкими */
+                    margin: 5px;
+                    /* добавляем отступы между блоками */
+                    min-height: 275px;
+                    min-width: 75%;
 
                     .wrapper {
                         width: 90%;
