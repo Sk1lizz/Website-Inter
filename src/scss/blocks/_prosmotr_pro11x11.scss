@@ -186,11 +186,11 @@
         background-color: $light;
 
 
-        .block {
+        .block11x11 {
             display: flex;
             flex-direction: column;
             height: 500px;
-            width: 25%;
+            width: 33%;
             border-radius: 6px;
             margin-left: 20px;
             margin-right: 20px;
@@ -209,6 +209,7 @@
                 padding: 5px;
                 font-size: 14px;
                 height: 6%;
+                border-radius: 6px;
             }
 
             .value {
@@ -396,6 +397,46 @@
             }
 
         }
+    }
+
+    .faq {
+        display: flex;
+        flex-direction: column;
+        justify-content: left;
+        align-items: left;
+        width: 100%;
+        margin-top: 30px;
+        background-color: $dark_medium;
+        color: $light;
+        padding-bottom: 10px;
+
+
+        .title {
+            padding-left: 4%;
+            padding-top: 10px;
+            font-size: 3svh;
+            padding-bottom: 15px;
+            text-align: left;
+            font-family: play-bold;
+
+        }
+    }
+
+    .faq summary {
+        padding-left: 4%;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        background-color: $dark_medium;
+        color: $light;
+        font-size: 2svh;
+    }
+
+    .faq p {
+        padding-top: 5px;
+        padding-bottom: 5px;
+        padding-left: 5%;
+        background-color: $blue_light;
+        color: $light;
     }
 }
 
