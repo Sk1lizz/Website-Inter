@@ -87,6 +87,7 @@
                     UEFA. Участие в футбольной лиге и внутренних кубках, а также товарищеских матчах. Кол-во мест
                     ограничено. Участие в матчах
                     оплачивается отдельно.</div>
+                <div class="text-2" id="times">Ближайший просмотр в команду - </div>
                 <div class="icon_block">
                     <img src="img/prosmotr/prosmotr11x11/Russian_Football_Union_Logo.svg" alt="">
                     <img src="img/prosmotr/prosmotr11x11/uefa.svg" alt="">
@@ -184,6 +185,7 @@
                 </div>
             </div>
         </div>
+
 
         <div class="questionnaire" id="questionnaire">
             <div class=“text”>Заполняя анкету ниже, вы соглашаетесь на <a href=personal_data.html>
@@ -516,5 +518,41 @@
 
 </script>
 
+<script>
+    function getNextViewingDate() {
+        const today = new Date();
+        const dayOfWeek = today.getDay();
+        let nextViewingDate;
+
+        if (dayOfWeek <= 1) {
+            // Если сегодня воскресенье или понедельник, следующий понедельник
+            nextViewingDate = new Date(today);
+            nextViewingDate.setDate(today.getDate() + (1 - dayOfWeek));
+        } else if (dayOfWeek <= 5) {
+            // Если сегодня между вторником и пятницей, ближайшая пятница
+            nextViewingDate = new Date(today);
+            nextViewingDate.setDate(today.getDate() + (5 - dayOfWeek));
+        } else {
+            // Если сегодня суббота, следующий понедельник
+            nextViewingDate = new Date(today);
+            nextViewingDate.setDate(today.getDate() + (8 - dayOfWeek));
+        }
+
+        return nextViewingDate;
+    }
+
+    function formatDate(date) {
+        const options = { day: 'numeric', month: 'long' };
+        return date.toLocaleDateString('ru-RU', options);
+    }
+
+    function updateViewingDate() {
+        const nextViewingDate = getNextViewingDate();
+        const formattedDate = formatDate(nextViewingDate);
+        document.getElementById('times').textContent = `Ближайший просмотр в команду - ${formattedDate}`;
+    }
+
+    updateViewingDate();
+</script>
 
 </html>
