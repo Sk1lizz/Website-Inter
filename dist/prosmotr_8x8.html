@@ -87,6 +87,7 @@
                     внутренних кубках, а также товарищеских матчах. Кол-во мест
                     ограничено. Участие в матчах
                     оплачивается отдельно.</div>
+                <div class="text-2" id="times">Ближайший просмотр в команду - </div>
                 <div class="icon_block">
                     <img src="img/prosmotr/prosmotr11x11/Russian_Football_Union_Logo.svg" alt="">
                     <img src="img/prosmotr/prosmotr11x11/uefa.svg" alt="">
@@ -198,7 +199,6 @@
             <div class=“text”>Заполняя анкету ниже, вы соглашаетесь на <a href=personal_data.html>
                     обработку персональных данных. </a> Если по какой-то причине форма заполнения анкеты ниже не
                 работает, вы можете связаться с нами через раздел контакты</div>
-            <div class="text">В данный момент заполнение анкеты доступно только через Вконтакте</div>
 
             <div class="text">* - обязательное поле</div>
 
@@ -230,7 +230,9 @@
                     </div>
                 </div>
                 <div class="text">Проверьте, что у вас открыты личные сообщения в vk. Если вы указали ваш ник в вк
-                вместо ссылки, то связаться там с вами не сможем</div>                    
+                    вместо ссылки, то связаться там с вами не сможем. Если вы предпочитаете другой способ связи,
+                    напишите об этом в
+                    информации про вас.</div>
                 <button type="submit">Отправить</button>
             </form>
         </div>
@@ -396,7 +398,7 @@
         }
 
         if (!validateInput(subject.value, 1)) {
-            showError(subject, 'Введите тему');
+            showError(subject, 'Введите ссылку');
             isValid = false;
         } else {
             hideError(subject);
@@ -424,6 +426,39 @@
         sendEmail();
     });
 
+</script>
+
+<script>
+    function getNextThursday() {
+        const today = new Date();
+        const dayOfWeek = today.getDay();
+        let nextThursday;
+
+        if (dayOfWeek <= 4) {
+            // Если сегодня в воскресенье, понедельник, вторник или среду, следующий четверг
+            nextThursday = new Date(today);
+            nextThursday.setDate(today.getDate() + (4 - dayOfWeek));
+        } else {
+            // Если сегодня четверг, пятница или суббота, следующий четверг
+            nextThursday = new Date(today);
+            nextThursday.setDate(today.getDate() + (11 - dayOfWeek));
+        }
+
+        return nextThursday;
+    }
+
+    function formatDate(date) {
+        const options = { day: 'numeric', month: 'long' };
+        return date.toLocaleDateString('ru-RU', options);
+    }
+
+    function updateNextThursday() {
+        const nextThursday = getNextThursday();
+        const formattedDate = formatDate(nextThursday);
+        document.getElementById('times').textContent = `Ближайший просмотр в команду - ${formattedDate}`;
+    }
+
+    updateNextThursday();
 </script>
 
 </html>
