@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const statisticsall = [
         // Номер, фамилия, матчей, голов забито, ассистов, матчей на 0, голов пропущено
 
-        { number: "1", name: "Исаев", matches: "87", goals: "0", assist: "1", zeromatch: "10", lostgoals: "237", team: "proand8x8" },
+        { number: "1", name: "Исаев", matches: "87", goals: "0", assist: "1", zeromatch: "10", lostgoals: "237", team: "proand8x8", },
         { number: "2", name: "Хакимов", matches: "13", goals: "10", assist: "4", zeromatch: "0", lostgoals: "0", team: "8x8" },
         { number: "3", name: "Фирдавс", matches: "13", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro" },
         { number: "4", name: "Малышев", matches: "21", goals: "1", assist: "6", zeromatch: "0", lostgoals: "0", team: "8x8" },
