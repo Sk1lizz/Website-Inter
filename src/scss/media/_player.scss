@@ -157,15 +157,14 @@
 
         }
 
-        .wrapper_amoutme {
+        .wrapper_achieved {
 
-            .experience_education {
+            .achieved {
 
                 .experience {
                     display: flex;
-                    width: 50%;
+                    width: 100%;
                     flex-direction: column;
-                    padding-left: 5%;
 
                     .title {
                         font-size: 40px;
@@ -174,12 +173,45 @@
                         margin-bottom: 40px;
                         padding-top: 20px;
                     }
+
+                    .wrapper_awards {
+                        justify-content: center;
+                        display: flex;
+                        margin-left: 10%;
+                        margin-right: 10%;
+                        padding-bottom: 60px;
+
+                        .block_awards {
+                            width: 20%;
+                            height: 100px;
+                            gap: 1rem;
+                            text-align: center;
+                            border-radius: 6px;
+                            justify-content: center;
+                            align-items: center;
+                            font-size: 5svh;
+                            font-family: PLAY-BOLD;
+                            color: $light;
+                            text-align: center;
+
+                            .text {
+                                font-family: PLAY-REGULAR;
+                                color: $light;
+                                padding-top: 20px;
+                                padding-bottom: 20px;
+                                text-align: center;
+                                justify-content: center;
+                                padding-left: 20%;
+                                padding-right: 20%;
+                                font-size: 18px;
+                            }
+                        }
+                    }
                 }
 
                 .education {
                     display: flex;
-                    width: 50%;
-                    flex-direction: column;
+                    width: 100%;
                     padding-left: 100px;
                     padding-right: 5%;
 
@@ -198,20 +230,21 @@
                     padding-bottom: 40px;
                     height: 100%;
 
-                    .year {
-                        display: flex;
-                        font-family: PLAY-BOLD;
-                        color: $light;
-                        width: 25%;
-                        font-size: 25px;
-                        padding-right: 20px;
-                    }
 
                     .text {
-                        flex-direction: column;
+                        display: flex;
                         display: flex;
                         padding-left: 20px;
                         width: 75%;
+
+                        .year {
+                            display: flex;
+                            font-family: PLAY-BOLD;
+                            color: $light;
+                            width: 25%;
+                            font-size: 25px;
+                            padding-right: 100px;
+                        }
 
                         .company {
                             font-family: PLAY-BOLD;
@@ -614,16 +647,16 @@
 
         }
 
-        .wrapper_amoutme {
+        .wrapper_achieved {
 
-            .experience_education {
+            .achieved {
                 flex-direction: column;
 
                 .experience {
                     display: flex;
                     width: 100%;
                     flex-direction: column;
-                    padding-left: 5%;
+                    padding-left: 0%;
 
                     .title {
                         font-size: 40px;
@@ -632,13 +665,47 @@
                         margin-bottom: 40px;
                         padding-top: 20px;
                     }
+
+                    .wrapper_awards {
+                        justify-content: center;
+                        display: flex;
+                        margin-left: 5%;
+                        margin-right: 5%;
+                        padding-bottom: 60px;
+
+                        .block_awards {
+                            width: 20%;
+                            height: 100px;
+                            gap: 1rem;
+                            text-align: center;
+                            border-radius: 6px;
+                            justify-content: center;
+                            align-items: center;
+                            font-size: 5svh;
+                            font-family: PLAY-BOLD;
+                            color: $light;
+                            text-align: center;
+
+                            .text {
+                                font-family: PLAY-REGULAR;
+                                color: $light;
+                                padding-top: 20px;
+                                padding-bottom: 20px;
+                                text-align: center;
+                                justify-content: center;
+                                padding-left: 15%;
+                                padding-right: 15%;
+                                font-size: 18px;
+                            }
+                        }
+                    }
                 }
 
                 .education {
                     display: flex;
                     width: 100%;
                     flex-direction: column;
-                    padding-left: 5%;
+                    padding-left: 0%;
 
                     .title {
                         padding-top: 20px;
@@ -655,20 +722,21 @@
                     padding-bottom: 40px;
                     height: 100%;
 
-                    .year {
-                        display: flex;
-                        font-family: PLAY-BOLD;
-                        color: $light;
-                        width: 25%;
-                        font-size: 25px;
-                        padding-right: 20px;
-                    }
 
                     .text {
-                        flex-direction: column;
+                        flex-direction: flex;
                         display: flex;
                         padding-left: 20px;
                         width: 75%;
+
+                        .year {
+                            display: flex;
+                            font-family: PLAY-BOLD;
+                            color: $light;
+                            width: 25%;
+                            font-size: 25px;
+                            padding-right: 100px;
+                        }
 
                         .company {
                             font-family: PLAY-BOLD;
@@ -995,16 +1063,18 @@
 
         }
 
-        .wrapper_amoutme {
+        .wrapper_achieved {
+            padding-bottom: 30px;
 
-            .experience_education {
+            .achieved {
                 flex-direction: column;
+                padding: 20px 10px 20px 10px;
 
                 .experience {
                     display: flex;
                     width: 100%;
                     flex-direction: column;
-                    padding-left: 5%;
+                    padding-left: 0%;
 
                     .title {
                         font-size: 40px;
@@ -1012,6 +1082,41 @@
                         font-family: PLAY-BOLD;
                         margin-bottom: 40px;
                         padding-top: 20px;
+                    }
+
+                    .wrapper_awards {
+                        justify-content: center;
+                        display: flex;
+                        margin-left: 0%;
+                        margin-right: 0%;
+                        padding-bottom: 30px;
+
+                        .block_awards {
+                            width: 20%;
+                            height: 100px;
+                            gap: 1rem;
+                            text-align: center;
+                            border-radius: 6px;
+                            justify-content: center;
+                            align-items: center;
+                            font-size: 4svh;
+                            font-family: PLAY-BOLD;
+                            color: $light;
+                            text-align: center;
+
+                            .text {
+                                font-family: PLAY-REGULAR;
+                                color: $light;
+                                padding-top: 20px;
+                                padding-bottom: 0px;
+                                text-align: center;
+                                justify-content: center;
+                                padding-left: 5%;
+                                padding-right: 5%;
+                                font-size: 12px;
+                                align-items: center;
+                            }
+                        }
                     }
                 }
 
@@ -1036,20 +1141,19 @@
                     padding-bottom: 40px;
                     height: 100%;
 
-                    .year {
-                        display: flex;
-                        font-family: PLAY-BOLD;
-                        color: $light;
-                        width: 25%;
-                        font-size: 25px;
-                        padding-right: 20px;
-                    }
-
                     .text {
-                        flex-direction: column;
                         display: flex;
                         padding-left: 20px;
                         width: 75%;
+
+                        .year {
+                            display: flex;
+                            font-family: PLAY-BOLD;
+                            color: $light;
+                            width: 25%;
+                            font-size: 25px;
+                            padding-right: 100px;
+                        }
 
                         .company {
                             font-family: PLAY-BOLD;

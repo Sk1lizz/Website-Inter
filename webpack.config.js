@@ -11,6 +11,7 @@ const config = {
 		levelplayer: './src/js/levelplayer.js',
 		matchlist11x11: './src/js/matchlist11x11.js',
 		matchlist8x8: './src/js/matchlist8x8.js',
+		Awards: './src/js/awardsplayer.js',
 
 	},
 	output: {

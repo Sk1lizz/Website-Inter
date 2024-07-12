@@ -290,6 +290,51 @@
                     justify-content: center;
                     width: 100%;
                 }
+
+                .wrapper_awards {
+                    justify-content: center;
+                    display: flex;
+                    margin-left: 20%;
+                    margin-right: 20%;
+                    padding-bottom: 60px;
+
+                    .block_awards {
+                        width: 20%;
+                        height: 100px;
+                        gap: 1rem;
+                        text-align: center;
+                        border-radius: 6px;
+                        justify-content: center;
+                        align-items: center;
+                        font-size: 6svh;
+                        font-family: PLAY-BOLD;
+                        color: $light;
+                        text-align: center;
+
+                        .text {
+                            font-family: PLAY-REGULAR;
+                            color: $light;
+                            padding-top: 20px;
+                            padding-bottom: 20px;
+                            text-align: center;
+                            justify-content: center;
+                            padding-left: 20%;
+                            padding-right: 20%;
+                            font-size: 18px;
+                        }
+                    }
+                }
+            }
+
+            .title {
+                display: flex;
+                font-size: 40px;
+                color: $gold;
+                font-family: PLAY-BOLD;
+                margin-bottom: 40px;
+                padding-top: 20px;
+                justify-content: center;
+                width: 100%;
             }
 
             .block {
