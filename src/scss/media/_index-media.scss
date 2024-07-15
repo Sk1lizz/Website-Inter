@@ -93,6 +93,8 @@
         height: 650px;
 
         .content {
+            height: 400px;
+
             .text {
                 font-size: 35px;
             }
@@ -100,7 +102,7 @@
             .button_wrapper {
                 display: flex;
                 flex-direction: column;
-                height: 75px;
+                height: 150px;
                 padding-top: 25px;
 
                 .white_button {
