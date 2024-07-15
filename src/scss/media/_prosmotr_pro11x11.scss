@@ -3,12 +3,36 @@
     .wrapper_prosmotrpro {
         padding-top: 170px;
 
+        .coach_prosmotr {
+            .title {}
+
+            .wrapper_blocks {
+                height: 100%;
+
+                .block_coach_prosmotr {
+                    height: 410px;
+
+                    .photoblock {
+                        .card_photo {
+                            height: 400px;
+
+                            img {
+                                width: 200px;
+                                height: 200px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         .training_place {
             flex-direction: column;
             display: flex;
             width: 100%;
-            padding: 20px 60px 20px 60px;
+            padding: 15px 60px 20px 60px;
             justify-content: center;
+            margin-top: 0px;
 
             .block_place {
                 width: 100%;
@@ -48,6 +72,31 @@
                 margin-left: 5px;
                 margin-right: 5px;
                 width: 25%;
+            }
+        }
+
+        .coach_prosmotr {
+            padding: 10px 20px 10px 20px;
+
+            .title {}
+
+            .wrapper_blocks {
+                height: 100%;
+
+                .block_coach_prosmotr {
+                    height: 410px;
+
+                    .photoblock {
+                        .card_photo {
+                            height: 400px;
+
+                            img {
+                                width: 200px;
+                                height: 200px;
+                            }
+                        }
+                    }
+                }
             }
         }
 
@@ -162,7 +211,38 @@
                 margin-bottom: 10px;
                 justify-content: center;
             }
+
         }
+
+        .coach_prosmotr {
+            padding: 10px 10px 10px 10px;
+
+            .title {}
+
+            .wrapper_blocks {
+                height: 100%;
+                flex-direction: column;
+
+                .block_coach_prosmotr {
+                    height: 410px;
+                    margin: 0px;
+
+                    .photoblock {
+                        padding: 0px;
+
+                        .card_photo {
+                            height: 400px;
+
+                            img {
+                                width: 200px;
+                                height: 200px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
 
         .training_place {
             flex-direction: column;

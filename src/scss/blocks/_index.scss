@@ -47,14 +47,62 @@
             clip-path: inset(0 0 100% 0);
         }
 
-        .view {
+        .button_wrapper {
             display: flex;
-            justify-content: center;
-            width: 100%;
-            margin-top: 20px;
-            animation: revealText 0.5s ease forwards;
-            animation-delay: 1s;
+            height: 75px;
+            padding-top: 25px;
+            animation: revealText 2s ease forwards;
             clip-path: inset(0 0 100% 0);
+
+            .white_button {
+                padding-right: 10px;
+
+                button {
+                    display: inline-block;
+                    text-decoration: none;
+                    background-color: $light;
+                    color: $dark;
+                    border: 1px solid #000000;
+                    border-radius: 5px;
+                    font-size: 24px;
+                    padding: 10px 30px;
+                    transition: all 0.4s ease;
+                    font-family: PLAY-REGULAR;
+                    max-width: 340px;
+                }
+
+                button:hover {
+                    text-decoration: none;
+                    background-color: $dark;
+                    color: $light;
+                    border-color: #000000;
+                    font-family: PLAY-REGULAR;
+                }
+            }
+
+            .dark_button {
+
+                button {
+                    display: inline-block;
+                    text-decoration: none;
+                    background-color: $dark;
+                    color: #ffffff;
+                    border: 1px solid #000000;
+                    border-radius: 5px;
+                    font-size: 24px;
+                    padding: 10px 30px;
+                    transition: all 0.4s ease;
+                    font-family: PLAY-REGULAR;
+                }
+
+                button:hover {
+                    text-decoration: none;
+                    background-color: $black;
+                    color: $light;
+                    border-color: #000000;
+                    font-family: PLAY-REGULAR;
+                }
+            }
         }
 
         @keyframes revealText {

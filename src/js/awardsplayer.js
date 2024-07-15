@@ -41,6 +41,7 @@ const awards = {
     "66": { name: "Королев", Number_Awards: "0", Number_Month_nomination: "0", Number_Year_nomination: "0", Number_Player_Month: "0", Number_Year_best: "0" },
     "69": { name: "Долгов", Number_Awards: "0", Number_Month_nomination: "0", Number_Year_nomination: "0", Number_Player_Month: "0", Number_Year_best: "0" },
     "72": { name: "Абянов", Number_Awards: "0", Number_Month_nomination: "1", Number_Year_nomination: "0", Number_Player_Month: "0", Number_Year_best: "0" },
+    "73": { name: "Белов", Number_Awards: "4", Number_Month_nomination: "1", Number_Year_nomination: "0", Number_Player_Month: "0", Number_Year_best: "0" },
     "74": { name: "Котов", Number_Awards: "0", Number_Month_nomination: "1", Number_Year_nomination: "0", Number_Player_Month: "0", Number_Year_best: "0" },
     "75": { name: "Матвеев", Number_Awards: "0", Number_Month_nomination: "3", Number_Year_nomination: "1", Number_Player_Month: "1", Number_Year_best: "0" },
     "77": { name: "Иванов", Number_Awards: "0", Number_Month_nomination: "0", Number_Year_nomination: "0", Number_Player_Month: "0", Number_Year_best: "0" },

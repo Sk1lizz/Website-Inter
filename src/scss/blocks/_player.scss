@@ -67,12 +67,25 @@
         }
 
 
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         .aboutme {
             width: 50%;
             float: left;
             display: flex;
             flex-direction: column;
             justify-content: center;
+            animation: slideDown 1.5s ease forwards;
 
             .name {
                 display: flex;

@@ -39,6 +39,7 @@
 
             .text {
                 font-size: 24px;
+                padding-top: 15px;
             }
 
             .text-2 {
@@ -106,6 +107,130 @@
                 height: 25%;
                 padding: 20px;
                 font-size: 16px;
+            }
+        }
+    }
+
+    .coach_prosmotr {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        padding: 10px 80px 10px 80px;
+
+        .title {
+            text-align: center;
+            font-family: PLAY-Bold;
+            font-size: 40px;
+            color: $black;
+            padding-bottom: 20px;
+            padding-top: 15px;
+        }
+
+        .wrapper_blocks {
+            display: flex;
+            height: 600px;
+
+
+            .block_coach_prosmotr {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+                height: 550px;
+                margin: 20px 10px 20px 10px;
+                border-radius: 6px;
+                color: $black;
+                justify-content: center;
+                align-items: center;
+                -webkit-box-shadow: 0px 0px 16px 2px rgba(34, 60, 80, 0.2);
+                -moz-box-shadow: 0px 0px 16px 2px rgba(34, 60, 80, 0.2);
+                box-shadow: 0px 0px 16px 2px rgba(34, 60, 80, 0.2);
+
+                .photoblock {
+                    display: flex;
+                    width: 100%;
+                    float: left;
+                    position: relative;
+                    min-height: 1px;
+                    padding-right: 15px;
+                    padding-left: 15px;
+                    box-sizing: border-box;
+
+                    .card_photo {
+                        border-radius: 6px;
+                        width: 100%;
+                        height: 500px;
+                        padding: 20px 0px 0px 0px;
+                        margin: 0 auto;
+                        text-align: center;
+                        box-sizing: border-box;
+                        display: block;
+
+                        img {
+                            width: 300px;
+                            height: 300px;
+                            border-radius: 50%;
+                            vertical-align: middle;
+                            border: 0;
+                            overflow-clip-margin: content-box;
+                            overflow: clip;
+                            text-align: center;
+                            -webkit-box-shadow: 0px 0px 16px 2px rgba(34, 60, 80, 0.2);
+                            -moz-box-shadow: 0px 0px 16px 2px rgba(34, 60, 80, 0.2);
+                            box-shadow: 0px 0px 16px 2px rgba(34, 60, 80, 0.2);
+                        }
+
+                        .text_box {
+                            display: flex;
+                            flex-direction: column;
+                            width: 100%;
+                            padding: 20px 10px 10px 10px;
+
+                            h4 {
+                                color: $black;
+                                font-size: 25px;
+                                font-family: PLAY-REGULAR;
+                                margin-bottom: 10px;
+                            }
+
+                            h5 {
+                                color: $black;
+                                font-size: 20px;
+                                font-family: PLAY-BOLD;
+                                margin-bottom: 10px;
+                            }
+
+                            p {
+                                color: $dark;
+                                font-size: 20px;
+                                font-family: PLAY-bold;
+                                margin-bottom: 10px;
+                            }
+
+                            button {
+                                display: inline-block;
+                                text-decoration: none;
+                                background-color: #1c3a75;
+                                color: #ffffff;
+                                border: 1px solid #000000;
+                                border-radius: 5px;
+                                font-size: 24px;
+                                padding: 10px 30px;
+                                transition: all 0.4s ease;
+                                font-family: PLAY-REGULAR;
+                                margin-top: 10px;
+                            }
+
+                            button:hover {
+                                text-decoration: none;
+                                background-color: #ffffff;
+                                color: #000000;
+                                border-color: #000000;
+                                font-family: PLAY-REGULAR;
+                            }
+
+                        }
+                    }
+                }
             }
         }
     }
@@ -297,7 +422,7 @@
 
         .title {
             justify-content: center;
-            font-size: 24px;
+            font-size: 40px;
             padding-top: 20px;
             text-align: center;
             font-family: PLAY-Bold;
@@ -312,6 +437,7 @@
             width: 100%;
             margin-left: 20px;
             padding-right: 30px;
+            padding-bottom: 20px;
 
             .field.error .item {
                 border-color: $pink;

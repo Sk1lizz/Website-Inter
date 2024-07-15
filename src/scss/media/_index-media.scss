@@ -6,6 +6,30 @@
             .text {
                 font-size: 65px;
             }
+
+            .button_wrapper {
+                display: flex;
+                height: 75px;
+                padding-top: 25px;
+
+                .white_button {
+                    padding-right: 10px;
+
+                    button {
+                        font-size: 18px;
+                        padding: 10px 20px;
+                    }
+                }
+
+                .dark_button {
+
+                    button {
+                        font-size: 18px;
+                        padding: 10px 20px;
+                    }
+
+                }
+            }
         }
     }
 
@@ -71,6 +95,34 @@
         .content {
             .text {
                 font-size: 35px;
+            }
+
+            .button_wrapper {
+                display: flex;
+                flex-direction: column;
+                height: 75px;
+                padding-top: 25px;
+
+                .white_button {
+                    padding-right: 0px;
+
+                    button {
+                        font-size: 18px;
+                        padding: 10px 20px;
+                        min-width: 230px;
+                    }
+                }
+
+                .dark_button {
+                    padding-top: 10px;
+
+                    button {
+                        font-size: 18px;
+                        padding: 10px 20px;
+                        min-width: 230px;
+                    }
+
+                }
             }
         }
     }
