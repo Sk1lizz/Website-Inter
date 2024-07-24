@@ -1,3 +1,33 @@
+@media (max-width: 1366px) {
+    .literature {
+
+        .about_autor {
+            justify-content: center;
+            flex-direction: column;
+
+            .image_autor {
+                padding: 0%;
+                height: 0%;
+                width: 0%;
+
+                img {
+                    height: 0%;
+                    width: 0%;
+                }
+            }
+
+            .text_about_autor {
+                font-family: PLAY-REGULAR;
+                font-size: 20px;
+                color: $light;
+                text-align: left;
+                padding-top: 0px;
+                height: 100%;
+            }
+        }
+    }
+}
+
 @media (max-width: 768px) {
     .literature {
 

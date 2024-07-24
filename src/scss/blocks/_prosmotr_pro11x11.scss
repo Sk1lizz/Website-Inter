@@ -39,6 +39,13 @@
 
             .text {
                 font-size: 24px;
+                padding-top: 15px;
+            }
+
+            .text-2 {
+                font-size: 24px;
+                font-family: play-bold;
+                padding-top: 20px;
             }
 
             .icon_block {
@@ -104,6 +111,130 @@
         }
     }
 
+    .coach_prosmotr {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        padding: 10px 80px 10px 80px;
+
+        .title {
+            text-align: center;
+            font-family: PLAY-Bold;
+            font-size: 40px;
+            color: $black;
+            padding-bottom: 20px;
+            padding-top: 15px;
+        }
+
+        .wrapper_blocks {
+            display: flex;
+            height: 600px;
+
+
+            .block_coach_prosmotr {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+                height: 550px;
+                margin: 20px 10px 20px 10px;
+                border-radius: 6px;
+                color: $black;
+                justify-content: center;
+                align-items: center;
+                -webkit-box-shadow: 0px 0px 16px 2px rgba(34, 60, 80, 0.2);
+                -moz-box-shadow: 0px 0px 16px 2px rgba(34, 60, 80, 0.2);
+                box-shadow: 0px 0px 16px 2px rgba(34, 60, 80, 0.2);
+
+                .photoblock {
+                    display: flex;
+                    width: 100%;
+                    float: left;
+                    position: relative;
+                    min-height: 1px;
+                    padding-right: 15px;
+                    padding-left: 15px;
+                    box-sizing: border-box;
+
+                    .card_photo {
+                        border-radius: 6px;
+                        width: 100%;
+                        height: 500px;
+                        padding: 20px 0px 0px 0px;
+                        margin: 0 auto;
+                        text-align: center;
+                        box-sizing: border-box;
+                        display: block;
+
+                        img {
+                            width: 300px;
+                            height: 300px;
+                            border-radius: 50%;
+                            vertical-align: middle;
+                            border: 0;
+                            overflow-clip-margin: content-box;
+                            overflow: clip;
+                            text-align: center;
+                            -webkit-box-shadow: 0px 0px 16px 2px rgba(34, 60, 80, 0.2);
+                            -moz-box-shadow: 0px 0px 16px 2px rgba(34, 60, 80, 0.2);
+                            box-shadow: 0px 0px 16px 2px rgba(34, 60, 80, 0.2);
+                        }
+
+                        .text_box {
+                            display: flex;
+                            flex-direction: column;
+                            width: 100%;
+                            padding: 20px 10px 10px 10px;
+
+                            h4 {
+                                color: $black;
+                                font-size: 25px;
+                                font-family: PLAY-REGULAR;
+                                margin-bottom: 10px;
+                            }
+
+                            h5 {
+                                color: $black;
+                                font-size: 20px;
+                                font-family: PLAY-BOLD;
+                                margin-bottom: 10px;
+                            }
+
+                            p {
+                                color: $dark;
+                                font-size: 20px;
+                                font-family: PLAY-bold;
+                                margin-bottom: 10px;
+                            }
+
+                            button {
+                                display: inline-block;
+                                text-decoration: none;
+                                background-color: #1c3a75;
+                                color: #ffffff;
+                                border: 1px solid #000000;
+                                border-radius: 5px;
+                                font-size: 24px;
+                                padding: 10px 30px;
+                                transition: all 0.4s ease;
+                                font-family: PLAY-REGULAR;
+                                margin-top: 10px;
+                            }
+
+                            button:hover {
+                                text-decoration: none;
+                                background-color: #ffffff;
+                                color: #000000;
+                                border-color: #000000;
+                                font-family: PLAY-REGULAR;
+                            }
+
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     .training_place {
         display: flex;
         min-height: 500px;
@@ -111,7 +242,6 @@
         margin-top: 20px;
         padding-bottom: 20px;
         width: 100%;
-        background-color: $gray_50;
         justify-content: center;
 
         .block_place {
@@ -239,7 +369,7 @@
                 height: 50%;
 
                 li {
-                    list-style-type: none;
+                    list-style: decimal url('../img/icon/check.png') outside;
                     padding-bottom: 10px;
                 }
             }
@@ -281,7 +411,23 @@
         flex-direction: column;
         text-align: left;
         font-family: PLAY-REGULAR;
-        width: 100%;
+        margin-right: 80px;
+        margin-left: 80px;
+        -webkit-box-shadow: 0px 0px 16px 2px rgba(34, 60, 80, 0.2);
+        -moz-box-shadow: 0px 0px 16px 2px rgba(34, 60, 80, 0.2);
+        box-shadow: 0px 0px 16px 2px rgba(34, 60, 80, 0.2);
+        background-color: $light;
+        border-radius: 6px;
+        margin-bottom: 10px;
+
+        .title {
+            justify-content: center;
+            font-size: 40px;
+            padding-top: 20px;
+            text-align: center;
+            font-family: PLAY-Bold;
+            padding-bottom: 10px;
+        }
 
         form {
             display: flex;
@@ -289,6 +435,9 @@
             text-align: left;
             font-family: PLAY-REGULAR;
             width: 100%;
+            margin-left: 20px;
+            padding-right: 30px;
+            padding-bottom: 20px;
 
             .field.error .item {
                 border-color: $pink;
@@ -312,66 +461,52 @@
 
             input,
             textarea {
-                border-radius: 5px;
+                border-radius: 0;
                 font-family: PLAY-REGULAR;
-                height: 30px;
                 font-size: 15px;
                 border: 0;
+                border-bottom: 1px solid $gray;
                 width: 100%;
-                margin-bottom: 10px;
-                border: 1px solid $gray;
-            }
-
-            .select-container {
-                position: relative;
-                width: 100%;
-                margin-bottom: 10px;
-                font-family: PLAY-REGULAR;
-            }
-
-            .text_form {
-                font-size: 20px;
-                padding-bottom: 10px;
-                font-family: PLAY-REGULAR;
-            }
-
-            label {
-                font-size: 20px;
-                padding-bottom: 10px;
-                font-family: PLAY-REGULAR;
-            }
-
-            select {
-                border-radius: 6px;
-                font-family: PLAY-REGULAR;
-                height: 30px;
-                font-size: 15px;
-                border: 0;
-                width: 100%;
-                padding: 5px;
-                background-color: white;
-                border: 1px solid $gray;
+                margin-bottom: 30px;
+                padding: 10px 0;
+                background: none;
+                color: $dark;
             }
 
             textarea {
-                height: 120px;
+                height: 150px;
                 resize: none;
-                border: 1px solid $gray;
-                font-family: PLAY-REGULAR;
             }
 
-            input::placeholder {
-                color: $dark;
-                font-size: 15px;
+            input:focus,
+            textarea:focus {
+                outline: none;
+                border-bottom: 2px solid $dark;
             }
 
-            textarea::placeholder {
-                color: $dark;
-                font-size: 15px;
+            .input-field,
+            .textarea-field {
+                position: relative;
             }
 
             label {
-                padding: 15px 0 5px 0;
+                position: absolute;
+                left: 10px;
+                top: 10px;
+                font-size: 15px;
+                color: $dark;
+                pointer-events: none;
+                transition: 0.2s ease all;
+            }
+
+            input:focus+label,
+            textarea:focus+label,
+            input:not(:placeholder-shown)+label,
+            textarea:not(:placeholder-shown)+label {
+                top: -20px;
+                left: 10px;
+                font-size: 12px;
+                color: $dark;
             }
 
             button {
@@ -386,6 +521,7 @@
                 transition: all 0.4s ease;
                 font-family: PLAY-REGULAR;
                 margin-bottom: 10px;
+                margin-top: 15px;
             }
 
             button:hover {
@@ -396,6 +532,12 @@
                 font-family: PLAY-REGULAR;
             }
 
+            .text {
+                font-size: 15px;
+                text-align: start;
+                padding-top: 15px;
+                padding-bottom: 15px;
+            }
         }
     }
 
@@ -405,7 +547,7 @@
         justify-content: left;
         align-items: left;
         width: 100%;
-        margin-top: 30px;
+        margin-top: 10px;
         background-color: $dark_medium;
         color: $light;
         padding-bottom: 10px;

@@ -8,9 +8,7 @@
     <link rel="stylesheet" href="./css/main.css" />
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <meta name="description" content="Записаться на тренировки в футбольную команду FC Inter Moscow 8х8" />
     <link rel="manifest" href="/site.webmanifest">
 </head>
 
@@ -27,6 +25,7 @@
                     внутренних кубках, а также товарищеских матчах. Кол-во мест
                     ограничено. Участие в матчах
                     оплачивается отдельно.</div>
+                <div class="text-2" id="times">Ближайший просмотр в команду - </div>
                 <div class="icon_block">
                     <img src="img/prosmotr/prosmotr11x11/Russian_Football_Union_Logo.svg" alt="">
                     <img src="img/prosmotr/prosmotr11x11/uefa.svg" alt="">
@@ -86,8 +85,8 @@
                 <div class="value">400 ₽</div>
                 <div class="text">За тренировку</div>
                 <div class="list">
-                    <li>- Пробная тренировка;</li>
-                    <li>- Включим в месячную оплату, если решите остаться.</li>
+                    <li>Пробная тренировка;</li>
+                    <li>Включим в месячную оплату, если решите остаться.</li>
                 </div>
                 <div class="button">
                     <a href="#questionnaire"><button>Выбрать</button></a>
@@ -98,9 +97,9 @@
                 <div class="value">350 ₽</div>
                 <div class="text">Членский взнос</div>
                 <div class="list">
-                    <li>- Членство в команде;</li>
-                    <li>- Участие в матчах 8х8;</li>
-                    <li>- Взнос идет в бюджет команды.</li>
+                    <li>Членство в команде;</li>
+                    <li>Участие в матчах 8х8;</li>
+                    <li>Взнос идет в бюджет команды.</li>
                 </div>
                 <div class="button">
                     <a href="#questionnaire"><button>Выбрать</button></a>
@@ -111,9 +110,9 @@
                 <div class="value">900 ₽</div>
                 <div class="text">Членский взнос</div>
                 <div class="list">
-                    <li>- Членство в команде;</li>
-                    <li>- Участие в матчах 8х8;</li>
-                    <li>- Взнос идет в бюджет команды.</li>
+                    <li>Членство в команде;</li>
+                    <li>Участие в матчах 8х8;</li>
+                    <li>Взнос идет в бюджет команды.</li>
                 </div>
                 <div class="button">
                     <a href="#questionnaire"><button>Выбрать</button></a>
@@ -124,9 +123,9 @@
                 <div class="value">1500 ₽</div>
                 <div class="text">Игровая футболка</div>
                 <div class="list">
-                    <li>- Футболка с нанесением номера и фамилии;</li>
-                    <li>- Требуется для участия в матчах;</li>
-                    <li>- Оплачивается при внесении первого взноса.</li>
+                    <li>Футболка с нанесением номера и фамилии;</li>
+                    <li>Требуется для участия в матчах;</li>
+                    <li>Оплачивается при внесении первого взноса.</li>
                 </div>
                 <div class="button">
                     <a href="#questionnaire"><button>Выбрать</button></a>
@@ -135,12 +134,10 @@
         </div>
 
         <div class="questionnaire" id="questionnaire">
-            <div class=“text”>Заполняя анкету ниже, вы соглашаетесь на <a href=personal_data.html>
-                    обработку персональных данных. </a> Если по какой-то причине форма заполнения анкеты ниже не
-                работает, вы можете связаться с нами через раздел контакты</div>
-            <div class="text">В данный момент заполнение анкеты доступно только через Вконтакте</div>
 
-            <div class="text">* - обязательное поле</div>
+
+            <div class="title">Анкета на просмотр</div>
+
 
             <form action="#" method="POST">
                 <div class="input-box">
@@ -169,8 +166,13 @@
                         <div class="error-txt">Некорректный ввод</div>
                     </div>
                 </div>
+                <div class="text">* - обязательное поле</div>
                 <div class="text">Проверьте, что у вас открыты личные сообщения в vk. Если вы указали ваш ник в вк
-                вместо ссылки, то связаться там с вами не сможем</div>                    
+                    вместо ссылки, то связаться там с вами не сможем. Если вы предпочитаете другой способ связи,
+                    напишите об этом в информации про вас.</div>
+                <div class=“text”>Заполняя анкету, вы соглашаетесь на <a href=personal_data.html>
+                        обработку персональных данных. </a> Если по какой-то причине форма заполнения анкеты ниже не
+                    работает, вы можете связаться с нами через раздел контакты</div>
                 <button type="submit">Отправить</button>
             </form>
         </div>
@@ -265,7 +267,7 @@
         }
 
         if (!validateInput(subject.value, 1)) {
-            showError(subject, 'Введите тему');
+            showError(subject, 'Введите ссылку');
             isValid = false;
         } else {
             hideError(subject);
@@ -293,6 +295,39 @@
         sendEmail();
     });
 
+</script>
+
+<script>
+    function getNextThursday() {
+        const today = new Date();
+        const dayOfWeek = today.getDay();
+        let nextThursday;
+
+        if (dayOfWeek <= 4) {
+            // Если сегодня в воскресенье, понедельник, вторник или среду, следующий четверг
+            nextThursday = new Date(today);
+            nextThursday.setDate(today.getDate() + (4 - dayOfWeek));
+        } else {
+            // Если сегодня четверг, пятница или суббота, следующий четверг
+            nextThursday = new Date(today);
+            nextThursday.setDate(today.getDate() + (11 - dayOfWeek));
+        }
+
+        return nextThursday;
+    }
+
+    function formatDate(date) {
+        const options = { day: 'numeric', month: 'long' };
+        return date.toLocaleDateString('ru-RU', options);
+    }
+
+    function updateNextThursday() {
+        const nextThursday = getNextThursday();
+        const formattedDate = formatDate(nextThursday);
+        document.getElementById('times').textContent = `Ближайший просмотр в команду - ${formattedDate}`;
+    }
+
+    updateNextThursday();
 </script>
 
 </html>

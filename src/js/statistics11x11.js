@@ -24,7 +24,7 @@ const assistsData = [
     { number: "7.", name: "Шаропов", counter: "2" },
     { number: "8.", name: "Матвеев", counter: "1" },
     { number: "9.", name: "Штепа", counter: "1" },
-    { number: "10.", name: "Сыпченка", counter: "1" },
+    { number: "10.", name: "Сыпченко", counter: "1" },
     // Добавьте остальных игроков
 ];
 
