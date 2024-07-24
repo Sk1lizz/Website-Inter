@@ -14,9 +14,12 @@
 
 <body>
     <header>
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="icon" href="./img/favicon-16x16.png" sizes="16x16" type="image/png">
+    <link rel="icon" href="./img/favicon-32x32.png" sizes="32x32" type="image/png">
+    <link rel="icon" href="./img/apple-touch-icon.png" sizes="180x180" type="image/png">
+    <link rel="icon" href="./img/android-chrome-192x192.png" sizes="192x192" type="image/png">
+    <link rel="icon" href="./img/android-chrome-512x512.png" sizes="512x512" type="image/png">
+    <link rel="icon" href="./img/favicon.ico" type="image/x-icon">
     <link rel="manifest" href="/site.webmanifest">
 
     <div class="header_wrapper">
@@ -65,8 +68,8 @@
                     </ul>
                 </li>
                 <li><a href="gallery.html">Галерея</a></li>
-                <li><a href="pro11x11.html">Pro(11x11)</a></li>
-                <li><a href="8x8.html">Команда(8x8)</a></li>
+                <li><a href="pro11x11.html">Pro (11x11)</a></li>
+                <li><a href="8x8.html">Команда (8x8)</a></li>
                 <li><a href="prosmotr.html">Просмотр</a></li>
                 <li><a href="contacts.html">Контакты</a></li>
                 <li><a href="literature.html">Литература</a></li>
@@ -666,43 +669,6 @@
         </div>
     </div>
 
-    <!-- Top.Mail.Ru counter -->
-    <script type="text/javascript">
-        var _tmr = window._tmr || (window._tmr = []);
-        _tmr.push({ id: "3274127", type: "pageView", start: (new Date()).getTime() });
-        (function (d, w, id) {
-            if (d.getElementById(id)) return;
-            var ts = d.createElement("script"); ts.type = "text/javascript"; ts.async = true; ts.id = id;
-            ts.src = "https://top-fwz1.mail.ru/js/code.js";
-            var f = function () { var s = d.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ts, s); };
-            if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); }
-        })(document, window, "tmr-code");
-    </script>
-    <noscript>
-        <div><img src="https://top-fwz1.mail.ru/counter?id=3274127;js=na" style="position:absolute;left:-9999px;"
-                alt="Top.Mail.Ru" /></div>
-    </noscript>
-    <!-- /Top.Mail.Ru counter -->
-
-
-    <script>function checkCookieConsent() {
-            const consentCookie = "cookieConsentAccepted";
-            const oneDayMilliseconds = 48 * 60 * 60 * 8000; // 1 день в миллисекундах
-
-            if (!document.cookie.includes(consentCookie)) {
-                // Если согласие на куки еще не было предоставлено, показываем окно
-                const consent = confirm("Мы используем файлы cookie. Продолжить использование сайта означает согласие с этим.");
-
-                if (consent) {
-                    // Если пользователь согласился, устанавливаем куки и устанавливаем срок действия на 1 день
-                    const expiryDate = new Date(Date.now() + oneDayMilliseconds).toUTCString();
-                    document.cookie = `${consentCookie}=true; expires=${expiryDate}; path=/;`;
-                }
-            }
-        }
-
-        // Вызываем функцию при загрузке страницы
-        window.onload = checkCookieConsent;</script>
 
 </footer>
     <script src="./js/index.bundle.js"></script>

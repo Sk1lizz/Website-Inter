@@ -8,17 +8,18 @@
     <link rel="stylesheet" href="./css/main.css" />
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <meta name="description" content="Записаться на тренировки в футбольную команду FC Inter Moscow 8х8" />
     <link rel="manifest" href="/site.webmanifest">
 </head>
 
 <body>
     <header>
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="icon" href="./img/favicon-16x16.png" sizes="16x16" type="image/png">
+    <link rel="icon" href="./img/favicon-32x32.png" sizes="32x32" type="image/png">
+    <link rel="icon" href="./img/apple-touch-icon.png" sizes="180x180" type="image/png">
+    <link rel="icon" href="./img/android-chrome-192x192.png" sizes="192x192" type="image/png">
+    <link rel="icon" href="./img/android-chrome-512x512.png" sizes="512x512" type="image/png">
+    <link rel="icon" href="./img/favicon.ico" type="image/x-icon">
     <link rel="manifest" href="/site.webmanifest">
 
     <div class="header_wrapper">
@@ -67,8 +68,8 @@
                     </ul>
                 </li>
                 <li><a href="gallery.html">Галерея</a></li>
-                <li><a href="pro11x11.html">Pro(11x11)</a></li>
-                <li><a href="8x8.html">Команда(8x8)</a></li>
+                <li><a href="pro11x11.html">Pro (11x11)</a></li>
+                <li><a href="8x8.html">Команда (8x8)</a></li>
                 <li><a href="prosmotr.html">Просмотр</a></li>
                 <li><a href="contacts.html">Контакты</a></li>
                 <li><a href="literature.html">Литература</a></li>
@@ -87,6 +88,7 @@
                     внутренних кубках, а также товарищеских матчах. Кол-во мест
                     ограничено. Участие в матчах
                     оплачивается отдельно.</div>
+                <div class="text-2" id="times">Ближайший просмотр в команду - </div>
                 <div class="icon_block">
                     <img src="img/prosmotr/prosmotr11x11/Russian_Football_Union_Logo.svg" alt="">
                     <img src="img/prosmotr/prosmotr11x11/uefa.svg" alt="">
@@ -146,8 +148,8 @@
                 <div class="value">400 ₽</div>
                 <div class="text">За тренировку</div>
                 <div class="list">
-                    <li>- Пробная тренировка;</li>
-                    <li>- Включим в месячную оплату, если решите остаться.</li>
+                    <li>Пробная тренировка;</li>
+                    <li>Включим в месячную оплату, если решите остаться.</li>
                 </div>
                 <div class="button">
                     <a href="#questionnaire"><button>Выбрать</button></a>
@@ -158,9 +160,9 @@
                 <div class="value">350 ₽</div>
                 <div class="text">Членский взнос</div>
                 <div class="list">
-                    <li>- Членство в команде;</li>
-                    <li>- Участие в матчах 8х8;</li>
-                    <li>- Взнос идет в бюджет команды.</li>
+                    <li>Членство в команде;</li>
+                    <li>Участие в матчах 8х8;</li>
+                    <li>Взнос идет в бюджет команды.</li>
                 </div>
                 <div class="button">
                     <a href="#questionnaire"><button>Выбрать</button></a>
@@ -171,9 +173,9 @@
                 <div class="value">900 ₽</div>
                 <div class="text">Членский взнос</div>
                 <div class="list">
-                    <li>- Членство в команде;</li>
-                    <li>- Участие в матчах 8х8;</li>
-                    <li>- Взнос идет в бюджет команды.</li>
+                    <li>Членство в команде;</li>
+                    <li>Участие в матчах 8х8;</li>
+                    <li>Взнос идет в бюджет команды.</li>
                 </div>
                 <div class="button">
                     <a href="#questionnaire"><button>Выбрать</button></a>
@@ -184,9 +186,9 @@
                 <div class="value">1500 ₽</div>
                 <div class="text">Игровая футболка</div>
                 <div class="list">
-                    <li>- Футболка с нанесением номера и фамилии;</li>
-                    <li>- Требуется для участия в матчах;</li>
-                    <li>- Оплачивается при внесении первого взноса.</li>
+                    <li>Футболка с нанесением номера и фамилии;</li>
+                    <li>Требуется для участия в матчах;</li>
+                    <li>Оплачивается при внесении первого взноса.</li>
                 </div>
                 <div class="button">
                     <a href="#questionnaire"><button>Выбрать</button></a>
@@ -195,12 +197,10 @@
         </div>
 
         <div class="questionnaire" id="questionnaire">
-            <div class=“text”>Заполняя анкету ниже, вы соглашаетесь на <a href=personal_data.html>
-                    обработку персональных данных. </a> Если по какой-то причине форма заполнения анкеты ниже не
-                работает, вы можете связаться с нами через раздел контакты</div>
-            <div class="text">В данный момент заполнение анкеты доступно только через Вконтакте</div>
 
-            <div class="text">* - обязательное поле</div>
+
+            <div class="title">Анкета на просмотр</div>
+
 
             <form action="#" method="POST">
                 <div class="input-box">
@@ -229,8 +229,13 @@
                         <div class="error-txt">Некорректный ввод</div>
                     </div>
                 </div>
+                <div class="text">* - обязательное поле</div>
                 <div class="text">Проверьте, что у вас открыты личные сообщения в vk. Если вы указали ваш ник в вк
-                вместо ссылки, то связаться там с вами не сможем</div>                    
+                    вместо ссылки, то связаться там с вами не сможем. Если вы предпочитаете другой способ связи,
+                    напишите об этом в информации про вас.</div>
+                <div class=“text”>Заполняя анкету, вы соглашаетесь на <a href=personal_data.html>
+                        обработку персональных данных. </a> Если по какой-то причине форма заполнения анкеты ниже не
+                    работает, вы можете связаться с нами через раздел контакты</div>
                 <button type="submit">Отправить</button>
             </form>
         </div>
@@ -305,43 +310,6 @@
         </div>
     </div>
 
-    <!-- Top.Mail.Ru counter -->
-    <script type="text/javascript">
-        var _tmr = window._tmr || (window._tmr = []);
-        _tmr.push({ id: "3274127", type: "pageView", start: (new Date()).getTime() });
-        (function (d, w, id) {
-            if (d.getElementById(id)) return;
-            var ts = d.createElement("script"); ts.type = "text/javascript"; ts.async = true; ts.id = id;
-            ts.src = "https://top-fwz1.mail.ru/js/code.js";
-            var f = function () { var s = d.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ts, s); };
-            if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); }
-        })(document, window, "tmr-code");
-    </script>
-    <noscript>
-        <div><img src="https://top-fwz1.mail.ru/counter?id=3274127;js=na" style="position:absolute;left:-9999px;"
-                alt="Top.Mail.Ru" /></div>
-    </noscript>
-    <!-- /Top.Mail.Ru counter -->
-
-
-    <script>function checkCookieConsent() {
-            const consentCookie = "cookieConsentAccepted";
-            const oneDayMilliseconds = 48 * 60 * 60 * 8000; // 1 день в миллисекундах
-
-            if (!document.cookie.includes(consentCookie)) {
-                // Если согласие на куки еще не было предоставлено, показываем окно
-                const consent = confirm("Мы используем файлы cookie. Продолжить использование сайта означает согласие с этим.");
-
-                if (consent) {
-                    // Если пользователь согласился, устанавливаем куки и устанавливаем срок действия на 1 день
-                    const expiryDate = new Date(Date.now() + oneDayMilliseconds).toUTCString();
-                    document.cookie = `${consentCookie}=true; expires=${expiryDate}; path=/;`;
-                }
-            }
-        }
-
-        // Вызываем функцию при загрузке страницы
-        window.onload = checkCookieConsent;</script>
 
 </footer>
 
@@ -433,7 +401,7 @@
         }
 
         if (!validateInput(subject.value, 1)) {
-            showError(subject, 'Введите тему');
+            showError(subject, 'Введите ссылку');
             isValid = false;
         } else {
             hideError(subject);
@@ -461,6 +429,39 @@
         sendEmail();
     });
 
+</script>
+
+<script>
+    function getNextThursday() {
+        const today = new Date();
+        const dayOfWeek = today.getDay();
+        let nextThursday;
+
+        if (dayOfWeek <= 4) {
+            // Если сегодня в воскресенье, понедельник, вторник или среду, следующий четверг
+            nextThursday = new Date(today);
+            nextThursday.setDate(today.getDate() + (4 - dayOfWeek));
+        } else {
+            // Если сегодня четверг, пятница или суббота, следующий четверг
+            nextThursday = new Date(today);
+            nextThursday.setDate(today.getDate() + (11 - dayOfWeek));
+        }
+
+        return nextThursday;
+    }
+
+    function formatDate(date) {
+        const options = { day: 'numeric', month: 'long' };
+        return date.toLocaleDateString('ru-RU', options);
+    }
+
+    function updateNextThursday() {
+        const nextThursday = getNextThursday();
+        const formattedDate = formatDate(nextThursday);
+        document.getElementById('times').textContent = `Ближайший просмотр в команду - ${formattedDate}`;
+    }
+
+    updateNextThursday();
 </script>
 
 </html>

@@ -27,46 +27,61 @@ document.addEventListener('DOMContentLoaded', function () {
     const assists = parseInt(statisticElements[3].querySelector('.assistall').textContent);
     const zeroMatches = parseInt(statisticElements[7].querySelector('.zeromatchall').textContent);
 
+    // Получаем значения из элементов достижений
+    const numberAwards = parseInt(document.querySelector('.Number_Awards').textContent) || 0;
+    const numberMonthNomination = parseInt(document.querySelector('.Number_Month_nomination').textContent) || 0;
+    const numberPlayerMonth = parseInt(document.querySelector('.Number_Player_Month').textContent) || 0;
+    const numberYearNomination = parseInt(document.querySelector('.Number_Year_nomination').textContent) || 0;
+    const numberYearBest = parseInt(document.querySelector('.Number_Year_best').textContent) || 0;
+
+    // Вычисляем опыт на основе наград
+
+
     // Вычисляем опыт игрока
     const experience = monthsInTeam * 100 + // Опыт за каждый месяц пребывания в команде
         matchesPlayed * 50 + // Опыт за сыгранные матчи
         goalsScored * 125 + // Опыт за забитые голы
         assists * 100 + // Опыт за голевые передачи
-        zeroMatches * 250; // Опыт за матчи на 0
+        zeroMatches * 250 + // Опыт за матчи на 0
+        numberAwards * 1000 +
+        numberMonthNomination * 250 +
+        numberPlayerMonth * 500 +
+        numberYearNomination * 500 +
+        numberYearBest * 2500;
 
     // Определяем титул игрока
     let title = '';
     if (experience >= 0 && experience < 500) {
         title = 'Новичок';
-    } else if (experience >= 500 && experience < 1000) {
+    } else if (experience >= 500 && experience <= 1000) {
         title = 'Перспективный';
-    } else if (experience >= 1001 && experience < 2500) {
+    } else if (experience >= 1001 && experience <= 2500) {
         title = 'Футболист';
-    } else if (experience >= 2501 && experience < 5000) {
+    } else if (experience >= 2501 && experience <= 5000) {
         title = 'Опытный';
-    } else if (experience >= 5001 && experience < 7500) {
+    } else if (experience >= 5001 && experience <= 7500) {
         title = 'Старожил';
-    } else if (experience >= 7501 && experience < 10000) {
+    } else if (experience >= 7501 && experience <= 10000) {
         title = 'Мастер';
-    } else if (experience >= 10001 && experience < 12500) {
+    } else if (experience >= 10001 && experience <= 12500) {
         title = 'Герой';
-    } else if (experience >= 12501 && experience < 15000) {
+    } else if (experience >= 12501 && experience <= 15000) {
         title = 'Магистр';
-    } else if (experience >= 15001 && experience < 20000) {
+    } else if (experience >= 15001 && experience <= 20000) {
         title = 'Посвященный';
-    } else if (experience >= 20001 && experience < 25000) {
+    } else if (experience >= 20001 && experience <= 25000) {
         title = 'Ветеран';
-    } else if (experience >= 25001 && experience < 30000) {
+    } else if (experience >= 25001 && experience <= 30000) {
         title = 'Виртуоз';
-    } else if (experience >= 30001 && experience < 35000) {
+    } else if (experience >= 30001 && experience <= 35000) {
         title = 'Элита';
-    } else if (experience >= 35001 && experience < 45000) {
+    } else if (experience >= 35001 && experience <= 45000) {
         title = 'Чемпион';
-    } else if (experience >= 45001 && experience < 60000) {
+    } else if (experience >= 45001 && experience <= 60000) {
         title = 'Хранитель';
-    } else if (experience >= 60001 && experience < 75000) {
+    } else if (experience >= 60001 && experience <= 75000) {
         title = 'Вершитель';
-    } else if (experience >= 75001 && experience < 90000) {
+    } else if (experience >= 75001 && experience <= 90000) {
         title = 'Избранный';
     } else if (experience >= 90001) {
         title = 'Легенда';
