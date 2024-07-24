@@ -1,0 +1,256 @@
+.cooperation {
+    display: flex;
+    width: 100%;
+    background-color: $dark;
+    justify-content: center;
+
+    .banner_cooperation {
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 90svh;
+        width: 100%;
+        position: relative;
+
+        .fill {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: black;
+            opacity: 0.9;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+
+        .background {
+            background-image: url('../img/banner_cooperation.jpg');
+            height: 100%;
+            width: 100%;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+            z-index: 0;
+        }
+
+        .content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 2;
+            /* Ensures content is above the fill and background */
+            padding: 0 10%;
+            padding-top: 120px;
+
+            .logo {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 50%;
+                /* Occupies 50% width */
+
+                img {
+                    max-width: 50%;
+                    height: auto;
+                }
+            }
+
+            .wrapper_text {
+                width: 50%;
+                /* Occupies 50% width */
+                font-family: 'PLAY-BOLD';
+                display: flex;
+                justify-content: center;
+                align-items: left;
+                animation: revealText 1s ease forwards;
+                clip-path: inset(0 0 100% 0);
+                text-align: left;
+                flex-direction: column;
+
+                .title_1 {
+                    font-size: 4svh;
+                    color: $dark_light;
+                    padding-bottom: 50px;
+                    text-align: left;
+                }
+
+
+                .text {
+                    font-size: 2svh;
+                    color: $light;
+                    font-family: 'PLAY-Regular';
+                }
+            }
+
+        }
+    }
+}
+
+.whywe {
+    display: flex;
+    width: 100%;
+    padding: 15px 60px 20px 60px;
+    justify-content: center;
+    flex-direction: column;
+
+    .title {
+        font-family: 'PLAY-Bold';
+        color: $black;
+        padding-bottom: 35px;
+        padding-top: 15px;
+        font-size: 3svh;
+        text-align: center;
+    }
+
+    .wrapper_bloks {
+        display: flex;
+        flex-direction: column;
+
+        .part {
+            width: 100%;
+            display: flex;
+            padding-bottom: 20px;
+        }
+
+        .block {
+            display: flex;
+            height: 250px;
+            width: 50%;
+            border-radius: 6px;
+            margin-left: 20px;
+            margin-right: 20px;
+            -webkit-box-shadow: 0px 0px 16px 2px rgba(34, 60, 80, 0.2);
+            -moz-box-shadow: 0px 0px 16px 2px rgba(34, 60, 80, 0.2);
+            box-shadow: 0px 0px 16px 2px rgba(34, 60, 80, 0.2);
+            justify-content: center;
+            align-items: center;
+
+            .number {
+                width: 25%;
+                padding: 20px;
+                display: flex;
+                justify-content: center;
+                font-family: 'PLAY-Bold';
+                justify-content: center;
+                align-items: center;
+                font-size: 13svh;
+                color: $dark;
+                padding-left: 25px;
+            }
+
+            .wrapper_text {
+                display: flex;
+                flex-direction: column;
+
+                .title {
+                    text-align: left;
+                    height: 75%;
+                    padding: 20px;
+                    font-size: 2svh;
+                    font-family: 'PLAY-bold';
+                    color: $dark;
+                }
+
+                .text {
+                    text-align: left;
+                    height: 75%;
+                    padding: 20px;
+                    font-size: 1.5svh;
+                    font-family: 'PLAY-Regular';
+                }
+            }
+        }
+    }
+}
+
+.information_cooperation {
+    background-color: $black;
+    display: flex;
+    flex-direction: column;
+
+    .title {
+        font-family: 'PLAY-Bold';
+        color: $light;
+        padding-bottom: 20px;
+        padding-top: 25px;
+        font-size: 3svh;
+        text-align: center;
+    }
+
+    .text_block {
+        font-family: 'PLAY-regular';
+        color: $light;
+        padding: 25px;
+        font-size: 2svh;
+        text-align: center;
+    }
+
+    .wrapper_options {
+        display: flex;
+
+        .number {
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            font-family: 'PLAY-Bold';
+            justify-content: right;
+            align-items: center;
+            font-size: 14svh;
+            color: $dark;
+            padding-left: 15%;
+        }
+
+        .wrapper_text_options {
+            display: flex;
+            flex-direction: column;
+            padding-top: 20px;
+            padding-left: 25px;
+            padding-right: 25px;
+            justify-content: center;
+
+            .title {
+                text-align: left;
+                height: 75%;
+                padding: 20px;
+                font-size: 3svh;
+                font-family: 'PLAY-bold';
+                color: $dark_light;
+            }
+
+            .text {
+                text-align: left;
+                height: 75%;
+                padding: 20px;
+                font-size: 2svh;
+                font-family: 'PLAY-Regular';
+                color: $light;
+            }
+        }
+    }
+}
+
+.conclusion {
+    display: flex;
+    width: 100%;
+    padding: 15px 60px 20px 60px;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+
+    .text {
+        padding: 20px 40px;
+        justify-content: center;
+        color: $black;
+        font-family: 'PLAY-Bold';
+        font-size: 3svh;
+    }
+}
+
+@import "media/_cooperationmedia.scss";
