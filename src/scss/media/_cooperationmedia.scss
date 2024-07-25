@@ -1,0 +1,178 @@
+@media (max-width: 1366px) {
+    .cooperation {
+        .banner_cooperation .logo {
+            width: 65%;
+
+            img {
+                max-width: 50%;
+            }
+        }
+    }
+
+    .whywe {
+        padding: 15px 20px 20px 20px;
+    }
+}
+
+@media (max-width: 1024px) {
+
+    .cooperation {
+
+        .banner_cooperation {
+
+            .content {
+                flex-direction: column;
+                padding-top: 100px;
+
+                .logo {
+                    width: 100%;
+
+                    img {
+                        max-width: 35%;
+                    }
+                }
+
+                .wrapper_text {
+                    width: 100%;
+                    padding-left: 20px;
+                    padding-right: 20px;
+                    text-align: center;
+                    padding-top: 75px;
+
+                    .title_1 {
+                        text-align: center;
+                    }
+                }
+            }
+        }
+    }
+
+    .whywe {
+        padding: 15px 0px 20px 0px;
+
+        .wrapper_bloks {
+
+            .part {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                padding-left: 10px;
+                padding-right: 10px;
+                padding-bottom: 0px;
+
+                .block {
+                    width: 100%;
+                    padding-bottom: 30px;
+                    margin-left: 0px;
+                    margin-right: 0px;
+                    margin-bottom: 10px;
+                }
+            }
+        }
+    }
+
+    .information_cooperation {
+        .wrapper_options {
+
+
+            .number {
+                padding-left: 5%;
+            }
+        }
+    }
+}
+
+@media (max-width: 768px) {
+
+    .cooperation {
+
+        .banner_cooperation {
+            height: 70svh;
+
+            .content {
+                flex-direction: column;
+                padding-top: 0px;
+
+                .logo {
+                    width: 100%;
+                    display: none;
+
+                    img {
+                        max-width: 35%;
+                    }
+                }
+
+                .wrapper_text {
+                    width: 100%;
+                    padding-left: 0px;
+                    padding-right: 0px;
+                    text-align: center;
+                    padding-top: 75px;
+
+                    .title_1 {
+                        text-align: center;
+                    }
+                }
+            }
+        }
+    }
+
+    .whywe {
+        padding: 15px 0px 20px 0px;
+
+        .wrapper_bloks {
+
+            .part {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                padding-left: 10px;
+                padding-right: 10px;
+                padding-bottom: 0px;
+
+                .block {
+                    width: 100%;
+                    padding-bottom: 30px;
+                    margin-left: 0px;
+                    margin-right: 0px;
+                    margin-bottom: 10px;
+
+                    .number {
+                        display: none;
+                    }
+                }
+            }
+        }
+    }
+
+    .information_cooperation {
+        .wrapper_options {
+            padding-bottom: 10px;
+
+            .number {
+                display: none;
+            }
+
+            .wrapper_text_options {
+
+                .title {
+                    text-align: center;
+                }
+
+                .text {
+                    text-align: center;
+                }
+            }
+        }
+    }
+
+    .conclusion {
+        padding: 15px 5px 20px 5px;
+
+        .text {
+            padding: 10px 5px;
+            font-size: 2svh;
+        }
+    }
+
+}
