@@ -49,7 +49,7 @@ const goalsData = [{
 {
     number: "11.",
     name: "Белоножкин",
-    counter: "5"
+    counter: "6"
 },
 
 {
@@ -73,7 +73,7 @@ const goalsData = [{
 {
     number: "15.",
     name: "Бубнов",
-    counter: "2"
+    counter: "3"
 },
 
 {
