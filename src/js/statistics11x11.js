@@ -10,6 +10,7 @@ const goalsData = [
     { number: "8.", name: "Нишанов", counter: "2" },
     { number: "9.", name: "Шаропов", counter: "6" },
     { number: "10.", name: "Штепа", counter: "1" },
+    { number: "11.", name: "Кпавченко", counter: "1" },
     // Добавьте остальных игроков
 ];
 
@@ -26,6 +27,7 @@ const assistsData = [
     { number: "9.", name: "Штепа", counter: "1" },
     { number: "10.", name: "Сыпченко", counter: "1" },
     { number: "11.", name: "Клейменов", counter: "1" },
+    { number: "12.", name: "Королев И.", counter: "1" },
     // Добавьте остальных игроков
 ];
 
