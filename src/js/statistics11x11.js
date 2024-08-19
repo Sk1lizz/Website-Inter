@@ -2,14 +2,14 @@
 // ... данные для списка "Бомбардиры" ...
 const goalsData = [
     { number: "1.", name: "Костич", counter: "3" },
-    { number: "2.", name: "Волконский", counter: "9" },
+    { number: "2.", name: "Волконский", counter: "10" },
     { number: "3.", name: "Шеин", counter: "2" },
     { number: "4.", name: "Петрищев", counter: "2" },
     { number: "6.", name: "Пашаев", counter: "1" },
     { number: "7.", name: "Пожидаев", counter: "1" },
     { number: "8.", name: "Нишанов", counter: "2" },
     { number: "9.", name: "Шаропов", counter: "6" },
-    { number: "10.", name: "Штепа", counter: "1" },
+    { number: "10.", name: "Штепа", counter: "2" },
     { number: "11.", name: "Кпавченко", counter: "1" },
     // Добавьте остальных игроков
 ];
@@ -22,12 +22,13 @@ const assistsData = [
     { number: "4.", name: "Костич", counter: "1" },
     { number: "5.", name: "Волконский", counter: "2" },
     { number: "6.", name: "Петрищев", counter: "4" },
-    { number: "7.", name: "Шаропов", counter: "3" },
+    { number: "7.", name: "Шаропов", counter: "4" },
     { number: "8.", name: "Матвеев", counter: "1" },
     { number: "9.", name: "Штепа", counter: "1" },
     { number: "10.", name: "Сыпченко", counter: "1" },
     { number: "11.", name: "Клейменов", counter: "1" },
     { number: "12.", name: "Королев И.", counter: "1" },
+    { number: "13.", name: "Данишевский", counter: "1" },
     // Добавьте остальных игроков
 ];
 
