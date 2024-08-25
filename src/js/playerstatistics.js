@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
         { number: "5", name: "Волокитин", matches: "12", goals: "1", assist: "1", zeromatch: "0", lostgoals: "0", team: "8x8" },
         { number: "6", name: "Касулин", matches: "16", goals: "3", assist: "2", zeromatch: "0", lostgoals: "0", team: "8x8" },
         { number: "7", name: "Тапчан", matches: "13", goals: "0", assist: "5", zeromatch: "0", lostgoals: "0", team: "8x8" },
-        { number: "8", name: "Швамбергер", matches: "2", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "proand8x8" },
+        { number: "8", name: "Устинов", matches: "0", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "proand8x8" },
         { number: "9", name: "Белоножкин", matches: "34", goals: "7", assist: "11", zeromatch: "0", lostgoals: "0", team: "pro" },
         { number: "10", name: "Костич", matches: "26", goals: "10", assist: "5", zeromatch: "0", lostgoals: "0", team: "pro" },
         { number: "11", name: "Полевой", matches: "9", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro" },
@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function () {
         { number: "30", name: "Салимгареев", matches: "3", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro" },
         { number: "31", name: "Дудочкин", matches: "2", goals: "0", assist: "0", zeromatch: "0", lostgoals: "3", team: "8x8" },
         { number: "32", name: "Волконский", matches: "36", goals: "17", assist: "9", zeromatch: "0", lostgoals: "0", team: "pro", },
-        { number: "33", name: "Пашаев", matches: "5", goals: "1", assist: "1", zeromatch: "0", lostgoals: "0", team: "pro" },
+        { number: "33", name: "Кравченко", matches: "2", goals: "1", assist: "1", zeromatch: "0", lostgoals: "0", team: "pro" },
         { number: "35", name: "Сыпченко", matches: "20", goals: "0", assist: "1", zeromatch: "2", lostgoals: "48", team: "pro" },
         { number: "37", name: "Шеин", matches: "28", goals: "5", assist: "7", zeromatch: "0", lostgoals: "0", team: "pro" },
         { number: "41", name: "Синицын", matches: "25", goals: "1", assist: "2", zeromatch: "0", lostgoals: "0", team: "pro" },
@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function () {
         { number: "87", name: "Данишевский", matches: "1", goals: "0", assist: "1", zeromatch: "0", lostgoals: "0", team: "pro" },
         { number: "89", name: "Пожидаев", matches: "3", goals: "1", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro" },
         { number: "90", name: "Юсуф", matches: "2", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro" },
-        { number: "99", name: "Кулигин", matches: "2", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro" },
+        { number: "99", name: "Кулигин", matches: "2", goals: "0", assist: "0", zeromatch: "1", lostgoals: "3", team: "pro" },
         // Добавьте остальных игроков
     ];
 
@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function () {
         { number: "5", name: "Волокитин", matches: "70", goals: "24", assist: "13", zeromatch: "0", lostgoals: "0", team: "8x8" },
         { number: "6", name: "Касулин", matches: "16", goals: "3", assist: "3", zeromatch: "0", lostgoals: "0", team: "8x8" },
         { number: "7", name: "Тапчан", matches: "299", goals: "164", assist: "47", zeromatch: "0", lostgoals: "0", team: "8x8" },
-        { number: "8", name: "Швамбергер", matches: "8", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "proand8x8" },
+        { number: "8", name: "Устинов", matches: "0", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "proand8x8" },
         { number: "9", name: "Белоножкин", matches: "485", goals: "156", assist: "105", zeromatch: "0", lostgoals: "0", team: "proand8x8" },
         { number: "10", name: "Костич", matches: "55", goals: "15", assist: "5", zeromatch: "0", lostgoals: "0", team: "pro" },
         { number: "11", name: "Полевой", matches: "9", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro" },
@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', function () {
         { number: "30", name: "Салимгареев", matches: "23", goals: "0", assist: "2", zeromatch: "0", lostgoals: "0", team: "pro" },
         { number: "31", name: "Дудочкин", matches: "2", goals: "0", assist: "0", zeromatch: "0", lostgoals: "3", team: "8x8" },
         { number: "32", name: "Волконский", matches: "54", goals: "18", assist: "10", zeromatch: "0", lostgoals: "0", team: "pro" },
-        { number: "33", name: "Пашаев", matches: "15", goals: "4", assist: "2", zeromatch: "0", lostgoals: "0", team: "pro" },
+        { number: "33", name: "Кравченко", matches: "2", goals: "4", assist: "2", zeromatch: "0", lostgoals: "0", team: "pro" },
         { number: "35", name: "Сыпченко", matches: "20", goals: "0", assist: "1", zeromatch: "2", lostgoals: "46", team: "pro" },
         { number: "37", name: "Шеин", matches: "162", goals: "33", assist: "37", zeromatch: "0", lostgoals: "0", team: "pro" },
         { number: "41", name: "Синицын", matches: "42", goals: "1", assist: "3", zeromatch: "0", lostgoals: "0", team: "pro" },
@@ -116,7 +116,7 @@ document.addEventListener('DOMContentLoaded', function () {
         { number: "87", name: "Данишевский", matches: "1", goals: "0", assist: "1", zeromatch: "0", lostgoals: "0", team: "pro" },
         { number: "89", name: "Пожидаев", matches: "3", goals: "1", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro" },
         { number: "90", name: "Юсуф", matches: "18", goals: "1", assist: "3", zeromatch: "0", lostgoals: "0", team: "pro" },
-        { number: "99", name: "Кулигин", matches: "2", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro" },
+        { number: "99", name: "Кулигин", matches: "2", goals: "0", assist: "0", zeromatch: "1", lostgoals: "3", team: "pro" },
         // Добавьте остальных игроков
     ];
 
