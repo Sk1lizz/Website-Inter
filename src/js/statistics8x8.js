@@ -5,7 +5,7 @@ const goalsData = [{
 }, {
     number: "2.",
     name: "Языков",
-    counter: "30"
+    counter: "35"
 }, {
     number: "3.",
     name: "Макарчев",
@@ -49,13 +49,13 @@ const goalsData = [{
 {
     number: "11.",
     name: "Белоножкин",
-    counter: "5"
+    counter: "7"
 },
 
 {
     number: "12.",
     name: "Автогол",
-    counter: "3"
+    counter: "4"
 },
 
 {
@@ -73,7 +73,7 @@ const goalsData = [{
 {
     number: "15.",
     name: "Бубнов",
-    counter: "2"
+    counter: "5"
 },
 
 {
@@ -94,6 +94,12 @@ const goalsData = [{
     counter: "1"
 },
 
+{
+    number: "17.",
+    name: "Синицын",
+    counter: "1"
+},
+
 
 
     // Добавьте остальных игроков
@@ -107,7 +113,7 @@ const assistsData = [{
 }, {
     number: "1.",
     name: "Власов",
-    counter: "9"
+    counter: "10"
 }, {
     number: "1.",
     name: "Мищенко",
@@ -131,7 +137,7 @@ const assistsData = [{
 }, {
     number: "1.",
     name: "Синицын",
-    counter: "2"
+    counter: "3"
 }, {
     number: "1.",
     name: "Костич",
@@ -161,7 +167,7 @@ const assistsData = [{
 {
     number: "1.",
     name: "Бубнов",
-    counter: "3"
+    counter: "4"
 },
 {
     number: "1.",
@@ -171,7 +177,7 @@ const assistsData = [{
 {
     number: "1.",
     name: "Касулин",
-    counter: "2"
+    counter: "3"
 },
 {
     number: "1.",

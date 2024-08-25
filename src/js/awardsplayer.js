@@ -29,7 +29,7 @@ const awards = {
     "31": { name: "Дудочкин", Number_Awards: "0", Number_Month_nomination: "0", Number_Year_nomination: "0", Number_Player_Month: "0", Number_Year_best: "0" },
     "32": { name: "Волконский", Number_Awards: "0", Number_Month_nomination: "2", Number_Year_nomination: "1", Number_Player_Month: "2", Number_Year_best: "0" },
     "33": { name: "Пашаев", Number_Awards: "0", Number_Month_nomination: "2", Number_Year_nomination: "0", Number_Player_Month: "0", Number_Year_best: "0" },
-    "35": { name: "Сыпченко", Number_Awards: "0", Number_Month_nomination: "2", Number_Year_nomination: "0", Number_Player_Month: "0", Number_Year_best: "0" },
+    "35": { name: "Сыпченко", Number_Awards: "0", Number_Month_nomination: "3", Number_Year_nomination: "1", Number_Player_Month: "1", Number_Year_best: "1" },
     "37": { name: "Шеин", Number_Awards: "2", Number_Month_nomination: "4", Number_Year_nomination: "1", Number_Player_Month: "3", Number_Year_best: "0" },
     "41": { name: "Синицын", Number_Awards: "0", Number_Month_nomination: "0", Number_Year_nomination: "0", Number_Player_Month: "0", Number_Year_best: "0" },
     "47": { name: "Языков", Number_Awards: "10", Number_Month_nomination: "15", Number_Year_nomination: "4", Number_Player_Month: "6", Number_Year_best: "3" },
