@@ -5,7 +5,7 @@ const goalsData = [{
 }, {
     number: "2.",
     name: "Языков",
-    counter: "35"
+    counter: "38"
 }, {
     number: "3.",
     name: "Макарчев",
@@ -73,7 +73,7 @@ const goalsData = [{
 {
     number: "15.",
     name: "Бубнов",
-    counter: "5"
+    counter: "7"
 },
 
 {
@@ -121,11 +121,11 @@ const assistsData = [{
 }, {
     number: "1.",
     name: "Белоножкин",
-    counter: "10"
+    counter: "12"
 }, {
     number: "1.",
     name: "Языков",
-    counter: "13"
+    counter: "14"
 }, {
     number: "1.",
     name: "Шеин",
@@ -172,12 +172,12 @@ const assistsData = [{
 {
     number: "1.",
     name: "Хакимов",
-    counter: "4"
+    counter: "5"
 },
 {
     number: "1.",
     name: "Касулин",
-    counter: "3"
+    counter: "4"
 },
 {
     number: "1.",
