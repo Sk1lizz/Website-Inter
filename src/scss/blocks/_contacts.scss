@@ -54,6 +54,29 @@
                     font-size: 25px;
                     padding-top: 5px;
                 }
+
+                .social {
+                    display: flex;
+                    justify-content: center;
+                    padding-top: 30px;
+
+                    a {
+                        height: 30px;
+
+                        img {
+                            height: 100%;
+                            display: block;
+                        }
+                    }
+
+                    a:first-child {
+                        margin-right: 10px;
+                    }
+
+                    a:last-child {
+                        margin-left: 10px;
+                    }
+                }
             }
 
             .contact_form {
