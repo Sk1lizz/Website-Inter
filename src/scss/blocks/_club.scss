@@ -51,6 +51,29 @@
                     text-align: left;
                 }
             }
+
+            .social {
+                display: flex;
+                justify-content: left;
+                padding-top: 30px;
+
+                a {
+                    height: 30px;
+
+                    img {
+                        height: 100%;
+                        display: block;
+                    }
+                }
+
+                a:first-child {
+                    margin-right: 10px;
+                }
+
+                a:last-child {
+                    margin-left: 10px;
+                }
+            }
         }
     }
 }
