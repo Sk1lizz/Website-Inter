@@ -48,6 +48,7 @@ const goalkeepersZero = [
     { number: "1.", name: "Сыпченко", counter: "2" },
     { number: "2.", name: "Исаев", counter: "1" },
     { number: "3.", name: "Кулигин", counter: "1" }, 
+    { number: "4.", name: "Бутусов", counter: "1" }, 
     // Добавьте остальных вратарей
 ];
 
