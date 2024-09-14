@@ -4,13 +4,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Клейменов Алексей</title>
+    <title>Костоев Али</title>
     <link rel="stylesheet" href="./css/main.css" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
 </head>
 
 <body>
-    @@include('blocks/header.html')
 
+    @@include('blocks/header.html')
+    <script src="https://code.jquery.com/jquery-2.1.0.js"></script>
 
     <div class="page_player">
 
@@ -20,14 +25,13 @@
                     <img src="img/player/no_photo.png" alt="">
                 </div>
             </div>
-
             <div class="aboutme">
                 <div class="name">
-                    <h3>Клейменов</h3>
-                    <h4>Алексей Васильевич</h4>
+                    <h3>Костоев</h3>
+                    <h4>Али Магометович</h4>
                     <div class="position_number">
                         <div class="number">21</div>
-                        <div class="position">Полузащитник</div>
+                        <div class="position">Нападающий</div>
                     </div>
                 </div>
                 <div class="information">
@@ -38,35 +42,27 @@
                         </li>
                         <li>
                             <div class="title_information">Дата рождения</div>
-                            <div class="text" id="birthday">03.10.2002</div>
+                            <div class="text" id="birthday">11.08.2007</div>
                         </li>
                         <li>
                             <div class="title_information">Команда</div>
-                            <div class="text">Pro (11x11)</div>
+                            <div class="text">Pro (11х11)</div>
                         </li>
                         <li>
                             <div class="title_information">Присоединился</div>
-                            <div class="text">Июль, 2024</div>
+                            <div class="text">Сентябрь, 2024</div>
                         </li>
                         <li>
                             <div class="title_information" id="teamTime">Время в команде</div>
-                            <div class="text" id="datateamTime">01.07.2024</div>
+                            <div class="text" id="datateamTime">02.09.2024</div>
                         </li>
                         <li>
                             <div class="title_information">Рост</div>
-                            <div class="text">183</div>
+                            <div class="text">170</div>
                         </li>
                         <li>
                             <div class="title_information">Вес</div>
-                            <div class="text">62</div>
-                        </li>
-                        <li>
-                            <div class="title_information">Опыт</div>
-                            <div class="text" id="experience">0</div>
-                        </li>
-                        <li>
-                            <div class="title_information">Титул</div>
-                            <div class="text" id="title"></div>
+                            <div class="text">67</div>
                         </li>
                     </ul>
                 </div>
@@ -74,139 +70,24 @@
 
         </div>
 
-        <div class=statisticplayersall>
-            <div class="title">Статистика</div>
-            <div class="wrapper_block">
-                <div class="block">
-                    <div class="matchesall">0</div>
-                    <div class="text">Матчей</div>
-                </div>
-                <div class="block">
-                    <div class="goalall">0</div>
-                    <div class="text">Голов забито</div>
-                </div>
-                <div class="block">
-                    <div class="goalallOnaverage">0</div>
-                    <div class="text">В среднем</div>
-                </div>
-                <div class="block">
-                    <div class="assistall">0</div>
-                    <div class="text">Ассистов</div>
-                </div>
-                <div class="block">
-                    <div class="assistallOnaverage">0</div>
-                    <div class="text">В среднем</div>
-                </div>
-                <div class="block">
-                    <div class="assistgoalsall">0</div>
-                    <div class="text">Гол+пас</div>
-                </div>
-                <div class="block">
-                    <div class="goallostall">0</div>
-                    <div class="text">Голов пропущено</div>
-                </div>
-                <div class="block">
-                    <div class="zeromatchall">0</div>
-                    <div class="text">Матчей на 0</div>
-                </div>
-            </div>
-        </div>
-
-        <div class=statisticthisyears>
-            <div class="title">Текущий сезон</div>
-            <div class="wrapper_block">
-                <div class="block">
-                    <div class="matches">0</div>
-                    <div class="text">Матчей</div>
-                </div>
-                <div class="block">
-                    <div class="goal">0</div>
-                    <div class="text">Голов забито</div>
-                </div>
-                <div class="block">
-                    <div class="goalOnaverage">0</div>
-                    <div class="text">В среднем</div>
-                </div>
-                <div class="block">
-                    <div class="assist">0</div>
-                    <div class="text">Ассистов</div>
-                </div>
-                <div class="block">
-                    <div class="assistOnaverage">0</div>
-                    <div class="text">В среднем</div>
-                </div>
-                <div class="block">
-                    <div class="assistgoals">0</div>
-                    <div class="text">Гол+пас</div>
-                </div>
-                <div class="block">
-                    <div class="goallost">0</div>
-                    <div class="text">Голов пропущено</div>
-                </div>
-                <div class="block">
-                    <div class="zeromatch">0</div>
-                    <div class="text">Матчей на 0</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="wrapper_achieved">
-            <div class="achieved">
-                <div class="experience">
-                    <div class="title">Достижения</div>
-                    <div class="wrapper_awards">
-                        <div class="block_awards">
-                            <div class="Number_Awards">0</div>
-                            <div class="text">Наград</div>
-                        </div>
-                        <div class="block_awards">
-                            <div class="Number_Month_nomination">0</div>
-                            <div class="text">Номинант футболист месяца</div>
-                        </div>
-                        <div class="block_awards">
-                            <div class="Number_Player_Month">0</div>
-                            <div class="text">Футболист месяца</div>
-                        </div>
-                        <div class="block_awards">
-                            <div class="Number_Year_nomination">0</div>
-                            <div class="text">Номинант футболист года</div>
-                        </div>
-                        <div class="block_awards">
-                            <div class="Number_Year_best">0</div>
-                            <div class="text">Футболист года</div>
-                        </div>
-                    </div>
-
-                    <div class="title">Список наград</div>
-                    <div class="block">
-                        <div class="text">
-                            <div class="year">-</div>
-                            <div class="company">-</div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
         <div class="photo">
             <div class="title_gallerey">Галерея</title>
                 <div class="block">
                     <div class="img-container">
                         <div class="img">
-                            <img src="img/player/photo_player/.jpg" alt="">
+                            <img src="img/player/photo_player/1-1.JPG" alt="">
                         </div>
 
                         <div class="img">
-                            <img src="img/player/photo_player/.JPG" alt="">
+                            <img src="img/player/photo_player/1-2.JPG" alt="">
                         </div>
 
                         <div class="img">
-                            <img src="img/player/photo_player/.JPG" alt="">
+                            <img src="img/player/photo_player/1-3.JPG" alt="">
                         </div>
 
                         <div class="img">
-                            <img src="img/player/photo_player/.JPG" alt="">
+                            <img src="img/player/photo_player/1-4.JPG" alt="">
                         </div>
 
                     </div>
@@ -238,9 +119,8 @@
     </script>
 
     <script src="js/playerpage.bundle.js"></script>
-    <script src="js/playerstatistics.bundle.js"></script>
-    <script src="./js/levelplayer.bundle.js"></script>
-    <script src="./js/Awards.bundle.js"></script>
+
+
 
 </body>
 
