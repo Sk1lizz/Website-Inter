@@ -1951,7 +1951,7 @@
                     flex-direction: column;
                     text-align: center;
 
-                    button {
+                    view button {
                         margin: 10px 10px 0px 10px;
                     }
                 }
@@ -1995,6 +1995,8 @@
 
                     .small_block1 {
                         height: 250px;
+                        justify-content: center;
+                        text-align: center;
 
                         .text {
                             padding-top: 50px;

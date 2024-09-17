@@ -4,6 +4,49 @@
 
         .header_wrapper {
             width: 820px;
+            padding-top: 20px;
+
+            .social_view_wrapper {
+                button {
+                    padding: 0.5svh 20px;
+                }
+            }
+
+            .top_parth {
+                .logo_wrapper {
+                    .logo_image {
+                        position: relative;
+                        margin-right: 10px;
+
+                        img {
+                            height: 7svh;
+                            width: 7svh;
+                        }
+                    }
+
+                    .logo_text {
+                        margin-left: 10px;
+                        display: flex;
+                        flex-direction: column;
+
+                        div {
+                            display: flex;
+                            justify-content: flex-start;
+                            color: $light;
+                            font-family: PLAY-BOLD;
+
+                            &:first-child {
+                                font-size: 3svh;
+                            }
+
+                            &:last-child {
+                                font-size: 1.6svh;
+                            }
+
+                        }
+                    }
+                }
+            }
         }
     }
 }
