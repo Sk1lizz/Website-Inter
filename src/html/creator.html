@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/main.css" />
+    <title>Creator</title>
+</head>
+
+<body>
+    @@include('blocks/header.html')
+
+    <div class="creator">
+        <div class="wrapper_form_creator">
+            <div class="form">
+                <label for="date">Дата:</label>
+                <input type="date" id="date" name="date">
+
+                <label for="league">Лига:</label>
+                <input type="text" id="league" name="league">
+
+                <label for="tour">Тур:</label>
+                <input type="text" id="tour" name="tour">
+
+                <label for="stadium">Стадион:</label>
+                <input type="text" id="stadium" name="stadium">
+
+                <button type="button" onclick="addEvent()">Добавить</button>
+            </div>
+
+            <!-- Вторая строка: Номер, Футболист и кнопки Добавить и Стереть -->
+            <div class="form">
+                <label for="number">Номер:</label>
+                <input type="text" id="number" name="number">
+
+                <label for="player">Футболист:</label>
+                <input type="text" id="player" name="player">
+
+                <button type="button" onclick="addPlayer()">Добавить</button>
+                <button type="button" onclick="clearFields()">Стереть</button>
+                <button type="button" onclick="fontsizeHard()">Увеличить шрифт</button>
+                <button type="button" onclick="fontsizeEasy()">Уменьшить шрифт</button>
+            </div>
+        </div>
+
+        <div class="background">
+            <div class="information">
+                <div class="date"></div>
+                <div class="league"></div>
+                <div class="round"></div>
+            </div>
+            <div class="player">
+                <div class="player_wrapper">
+                    <div class="number">1</div>
+                    <div class="name">IVAN IVANOV</div>
+                </div>
+                <div class="player_wrapper">
+                    <div class="number">99</div>
+                    <div class="name">ARTEM BELONOZHKIN</div>
+                </div>
+            </div>
+            <div class="stadium"></div>
+        </div>
+
+    </div>
+
+    <script>
+        // Функция для добавления информации о событии
+        function addEvent() {
+            const date = document.getElementById('date').value;
+            const league = document.getElementById('league').value;
+            const tour = document.getElementById('tour').value;
+            const stadium = document.getElementById('stadium').value;
+
+            // Проверяем, что все поля заполнены
+            if (date && league && tour && stadium) {
+                document.querySelector('.information .date').textContent = date;
+                document.querySelector('.information .league').textContent = league;
+                document.querySelector('.information .round').textContent = tour;
+                document.querySelector('.stadium').textContent = stadium;
+            } else {
+                alert("Заполните все поля!");
+            }
+        }
+
+        // Функция для добавления игрока
+        function addPlayer() {
+            const number = document.getElementById('number').value;
+            const player = document.getElementById('player').value;
+
+            // Проверяем, что оба поля заполнены
+            if (number && player) {
+                const playerWrapper = document.createElement('div');
+                playerWrapper.className = 'player_wrapper';
+
+                const playerNumber = document.createElement('div');
+                playerNumber.className = 'number';
+                playerNumber.textContent = number;
+
+                const playerName = document.createElement('div');
+                playerName.className = 'name';
+                playerName.textContent = player;
+
+                playerWrapper.appendChild(playerNumber);
+                playerWrapper.appendChild(playerName);
+
+                document.querySelector('.player').appendChild(playerWrapper);
+
+                // Очищаем поля ввода
+                document.getElementById('number').value = '';
+                document.getElementById('player').value = '';
+            } else {
+                alert("Заполните оба поля: Номер и Футболист!");
+            }
+        }
+
+        // Функция для удаления последнего добавленного игрока
+        function removeLastPlayer() {
+            const players = document.querySelectorAll('.player .player_wrapper');
+            if (players.length > 0) {
+                const lastPlayer = players[players.length - 1];
+                lastPlayer.remove();
+            }
+        }
+
+        // Функции для изменения размера шрифта
+        function fontsizeHard() {
+            const playerBlock = document.querySelector('.player');
+            const currentFontSize = parseFloat(getComputedStyle(playerBlock).fontSize);
+            playerBlock.style.fontSize = `${currentFontSize + 2}px`;
+        }
+
+        function fontsizeEasy() {
+            const playerBlock = document.querySelector('.player');
+            const currentFontSize = parseFloat(getComputedStyle(playerBlock).fontSize);
+            playerBlock.style.fontSize = `${currentFontSize - 2}px`;
+        }
+    </script>
+
+    @@include('blocks/footer.html')
+
+</body>
+
+</html>

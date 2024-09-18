@@ -1,0 +1,93 @@
+.creator {
+    flex-direction: column;
+    display: flex;
+    height: 100svh;
+    background-color: $light;
+
+    .wrapper_form_creator {
+        flex-direction: column;
+        padding-top: 170px;
+        justify-content: center;
+        display: flex;
+        text-align: center;
+
+        .form {
+            padding-top: 20px;
+        }
+    }
+
+    .background {
+        margin-top: 10px;
+        display: flex;
+        height: 80svh;
+        background-image: url(/img/Zayavka.png);
+        background-size: contain;
+        /* Картинка будет видна полностью */
+        background-repeat: no-repeat;
+        /* Отключаем повторение фона */
+        background-position: center;
+        /* Центрируем фон по блоку */
+        flex-direction: column;
+
+        .information {
+            font-family: DINPRO-BLACK;
+            font-size: 1.7svh;
+            transform: rotate(-10deg);
+            /* Наклон на 10 градусов */
+            justify-content: center;
+            text-align: center;
+            padding-top: 11svh;
+            padding-left: 5svh;
+        }
+
+        .player {
+            font-size: 2.5svh;
+            transform: rotate(-10deg);
+            /* Наклон на 10 градусов */
+            text-align: center;
+            padding-top: 6svh;
+            display: flex;
+            font-family: DINPRO-REGULAR;
+            flex-direction: column;
+            align-items: center;
+            padding-left: 15svh;
+
+            .player_wrapper {
+                display: flex;
+                justify-content: left;
+                font-family: DINPRO-REGULAR;
+                width: 450px;
+                align-items: center;
+
+
+                .number {
+                    padding-right: 15px;
+                    font-family: DINPRO-BLACK;
+                    text-align: right;
+                    width: 45px;
+                }
+
+                .player {
+                    width: 400px;
+                }
+            }
+        }
+
+        .stadium {
+            position: absolute;
+            bottom: 0;
+            /* Прижимаем блок к низу родителя */
+            left: 50%;
+            /* Центрируем по горизонтали относительно родителя */
+            transform: translateX(-45%) rotate(-9deg);
+            /* Смещаем на 50% ширины для точного центрирования и наклоняем блок */
+            display: flex;
+            font-family: 'DINPRO-BLACK', sans-serif;
+            align-items: end;
+            width: 400px;
+            justify-content: center;
+            /* Центрируем содержимое внутри блока */
+            margin-bottom: 5svh;
+        }
+    }
+}

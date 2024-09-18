@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/main.css" />
+    <title>Creator</title>
+</head>
+
+<body>
+    <header>
+    <link rel="icon" href="./img/favicon-16x16.png" sizes="16x16" type="image/png">
+    <link rel="icon" href="./img/favicon-32x32.png" sizes="32x32" type="image/png">
+    <link rel="icon" href="./img/apple-touch-icon.png" sizes="180x180" type="image/png">
+    <link rel="icon" href="./img/android-chrome-192x192.png" sizes="192x192" type="image/png">
+    <link rel="icon" href="./img/android-chrome-512x512.png" sizes="512x512" type="image/png">
+    <link rel="icon" href="./img/favicon.ico" type="image/x-icon">
+    <link rel="manifest" href="/site.webmanifest">
+
+    <div class="header_wrapper">
+        <div class="top_parth">
+            <a class="logo_wrapper" href="index.html">
+                <div class="logo_image"><img src="img/logo.png" href="index.html"></div>
+                <div class="logo_text">
+                    <div>INTER MOSCOW</div>
+                    <div>Offical Site</div>
+                </div>
+            </a>
+
+            <div class="social_view_wrapper">
+                <a href="prosmotr.html" class="view button">Записаться на просмотр</a>
+                <div class="social">
+                    <a href="https://vk.com/fcintermoscow"><img src="img/VK_Logo.png""></a>
+                    <a href=" https://www.youtube.com/@fcintermoscow7572"><img src="img/youtube_logo.png"></a>
+                    <a href="https://t.me/fcintermoscow"><img src="img/telegram.png""></a>
+                </div>
+            </div>
+
+            <div class=" menu_toggle">
+                        <div class="icon" id="icon">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                </div>
+            </div>
+
+            <div class="bottom_parth">
+                <ul class="menu">
+                    <li><a href="index.html">Главная</a></li>
+                    <li>
+                        <a href="club.html">Клуб</a>
+                        <div id="icon">
+                            <p>></p>
+                        </div>
+                        <ul class="submenu">
+                            <li><a href="gallery.html">Галерея</a></li>
+                            <li><a href="hystory.html">История</a></li>
+                            <li><a href="ustav.html">Устав</a></li>
+                            <li><a href="records.html">Достижения</a></li>
+                            <li><a href="alumnus.html">Воспитанники</a></li>
+                            <li><a href="hall_of_fame.html">Зал Славы</a></li>
+                            <li><a href="club100.html">Клуб 100</a></li>
+                            <li><a href="archive.html">Архив</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="pro11x11.html">Pro (11x11)</a></li>
+                    <li><a href="8x8.html">Команда (8x8)</a></li>
+                    <li><a href="prosmotr.html">Просмотр</a></li>
+                    <li><a href="contacts.html">Контакты</a></li>
+                    <li><a href="cooperation.html">Сотрудничество</a></li>
+                    <li><a href="literature.html">Литература</a></li>
+                </ul>
+            </div>
+        </div>
+</header>
+
+    <div class="creator">
+        <div class="wrapper_form_creator">
+            <div class="form">
+                <label for="date">Дата:</label>
+                <input type="date" id="date" name="date">
+
+                <label for="league">Лига:</label>
+                <input type="text" id="league" name="league">
+
+                <label for="tour">Тур:</label>
+                <input type="text" id="tour" name="tour">
+
+                <label for="stadium">Стадион:</label>
+                <input type="text" id="stadium" name="stadium">
+
+                <button type="button" onclick="addEvent()">Добавить</button>
+            </div>
+
+            <!-- Вторая строка: Номер, Футболист и кнопки Добавить и Стереть -->
+            <div class="form">
+                <label for="number">Номер:</label>
+                <input type="text" id="number" name="number">
+
+                <label for="player">Футболист:</label>
+                <input type="text" id="player" name="player">
+
+                <button type="button" onclick="addPlayer()">Добавить</button>
+                <button type="button" onclick="clearFields()">Стереть</button>
+                <button type="button" onclick="fontsizeHard()">Увеличить шрифт</button>
+                <button type="button" onclick="fontsizeEasy()">Уменьшить шрифт</button>
+            </div>
+        </div>
+
+        <div class="background">
+            <div class="information">
+                <div class="date"></div>
+                <div class="league"></div>
+                <div class="round"></div>
+            </div>
+            <div class="player">
+                <div class="player_wrapper">
+                    <div class="number">1</div>
+                    <div class="name">IVAN IVANOV</div>
+                </div>
+                <div class="player_wrapper">
+                    <div class="number">99</div>
+                    <div class="name">ARTEM BELONOZHKIN</div>
+                </div>
+            </div>
+            <div class="stadium"></div>
+        </div>
+
+    </div>
+
+    <script>
+        // Функция для добавления информации о событии
+        function addEvent() {
+            const date = document.getElementById('date').value;
+            const league = document.getElementById('league').value;
+            const tour = document.getElementById('tour').value;
+            const stadium = document.getElementById('stadium').value;
+
+            // Проверяем, что все поля заполнены
+            if (date && league && tour && stadium) {
+                document.querySelector('.information .date').textContent = date;
+                document.querySelector('.information .league').textContent = league;
+                document.querySelector('.information .round').textContent = tour;
+                document.querySelector('.stadium').textContent = stadium;
+            } else {
+                alert("Заполните все поля!");
+            }
+        }
+
+        // Функция для добавления игрока
+        function addPlayer() {
+            const number = document.getElementById('number').value;
+            const player = document.getElementById('player').value;
+
+            // Проверяем, что оба поля заполнены
+            if (number && player) {
+                const playerWrapper = document.createElement('div');
+                playerWrapper.className = 'player_wrapper';
+
+                const playerNumber = document.createElement('div');
+                playerNumber.className = 'number';
+                playerNumber.textContent = number;
+
+                const playerName = document.createElement('div');
+                playerName.className = 'name';
+                playerName.textContent = player;
+
+                playerWrapper.appendChild(playerNumber);
+                playerWrapper.appendChild(playerName);
+
+                document.querySelector('.player').appendChild(playerWrapper);
+
+                // Очищаем поля ввода
+                document.getElementById('number').value = '';
+                document.getElementById('player').value = '';
+            } else {
+                alert("Заполните оба поля: Номер и Футболист!");
+            }
+        }
+
+        // Функция для удаления последнего добавленного игрока
+        function removeLastPlayer() {
+            const players = document.querySelectorAll('.player .player_wrapper');
+            if (players.length > 0) {
+                const lastPlayer = players[players.length - 1];
+                lastPlayer.remove();
+            }
+        }
+
+        // Функции для изменения размера шрифта
+        function fontsizeHard() {
+            const playerBlock = document.querySelector('.player');
+            const currentFontSize = parseFloat(getComputedStyle(playerBlock).fontSize);
+            playerBlock.style.fontSize = `${currentFontSize + 2}px`;
+        }
+
+        function fontsizeEasy() {
+            const playerBlock = document.querySelector('.player');
+            const currentFontSize = parseFloat(getComputedStyle(playerBlock).fontSize);
+            playerBlock.style.fontSize = `${currentFontSize - 2}px`;
+        }
+    </script>
+
+    <footer>
+    <div class="footer_wrapper">
+
+        <div class="footer_left">
+            <a class="logo_wrapper" href="index.html">
+                <div class="logo_image"><img src="img/logo.png" href="index.html"></div>
+                <div class="logo_text">
+                    <div>INTER MOSCOW</div>
+                    <div>Offical Site</div>
+                </div>
+            </a>
+
+            <div class="info">
+                <div class="title">Email:</div>
+                <div class="text">info@fcintermoscow.com</div>
+            </div>
+
+            <div class="info">
+                <div class="title">Юридическая информация:</div>
+                <div class="text">Самозанятый Пешехонов Д.М.</div>
+                <div class="text">ИНН 503810091397</div>
+            </div>
+
+            <div class="view">
+                <a href="prosmotr.html" class="view button">Записаться на просмотр</a>
+            </div>
+
+            <div class="info">
+                <div class="title">Сreated by V. Vlasov and D. Peshekhonov</div>
+            </div>
+        </div>
+
+        <div class="footer_right">
+            <div class="menu">
+                <ul>
+                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="contacts.html">Контакты</a></li>
+                    <li><a href="gallery.html">Галерея</a></li>
+                    <li><a href="literature.html">Литература</a></li>
+                </ul>
+                <ul>
+                    <li><a href="club.html">Клуб</a></li>
+                    <li><a href="cooperation.html">Сотрудничество</a></li>
+                    <li><a href="ustav.html">Устав</a></li>
+                    <li><a href="testirovanie.html">Тестирование</a></li>
+                    <li><a href="alumnus.html">Воспитанники</a></li>
+                    <li><a href="hall_of_fame.html">Зал славы</a></li>
+                    <li><a href="club100.html">Клуб 100</a></li>
+                </ul>
+                <ul>
+                    <li><a href="club.html">О команде</a></li>
+                    <li><a href="hystory.html">История</a></li>
+                    <li><a href="records.html">Достижения</a></li>
+                    <li><a href="pro11x11.html">Команда (11x11)</a></li>
+                    <li><a href="8x8.html">Команда (8x8)</a></li>
+                    <li><a href="archive.html">Архив</a></li>
+                </ul>
+                <ul>
+                    <li><a href="prosmotr.html">Просмотр</a></li>
+                    <li><a href="prosmotr_pro11x11.html">Просмотр 11x11</a></li>
+                    <li><a href="prosmotr_8x8.html">Просмотр 8x8</a></li>
+                </ul>
+            </div>
+
+            <div class="social">
+                <a href="https://vk.com/fcintermoscow"><img src="img/VK_Logo.png" href="intex.html"></a>
+                <a href="https://www.youtube.com/@fcintermoscow7572"><img src="img/youtube_logo.png"></a>
+                <a href="https://t.me/fcintermoscow"><img src="img/telegram.png""></a>
+            </div>
+        </div>
+    </div>
+
+
+</footer>
+
+</body>
+
+</html>
