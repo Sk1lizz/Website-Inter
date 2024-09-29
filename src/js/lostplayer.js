@@ -1,6 +1,11 @@
 // АРХИВ
 
 const statisticsarchive = [
+    
+    { number: "89", name: "Пожидаев", matches: "4", goals: "1", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.02.2023" },
+    { number: "21", name: "Костоев", matches: "3", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.09.2024" },
+    { number: "8", name: "Устинов", matches: "0", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "proand8x8", time_in: "01.08.2024" },
+    { number: "10", name: "Костич", matches: "58", goals: "15", assist: "6", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.04.2023" },
     { number: "1", name: "Исаев", matches: "87", goals: "0", assist: "1", zeromatch: "10", lostgoals: "237", team: "proand8x8", time_in: "01.05.2021" },
     { number: "2", name: "Хакимов", matches: "17", goals: "16", assist: "6", zeromatch: "0", lostgoals: "0", team: "8x8", time_in: "" },
     { number: "4", name: "Малышев", matches: "23", goals: "1", assist: "6", zeromatch: "0", lostgoals: "0", team: "8x8", time_in: "" },
