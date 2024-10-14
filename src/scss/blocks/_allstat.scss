@@ -297,6 +297,58 @@
                 }
             }
         }
+
+        .player-item {
+            display: flex;
+            justify-content: space-between;
+            /* Распределяем элементы по краям */
+            align-items: center;
+            /* Выравниваем по вертикали */
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .player-number {
+            flex: 1;
+            text-align: left;
+            /* Нумерация по левому краю */
+            font-size: 24px;
+
+        }
+
+        .player-name {
+            flex: 2;
+            text-align: center;
+            /* Имя по центру */
+            font-size: 24px;
+
+        }
+
+        .player-matches {
+            flex: 1;
+            text-align: right;
+            /* Количество матчей по правому краю */
+            font-size: 24px;
+
+        }
+
+        /* Подсветка для юбилейных матчей */
+        .anniversary {
+            background-color: $dark_light_50;
+            /* Цвет для юбилейных матчей */
+        }
+
+        /* Общие стили для списка */
+        ul.game_in_team_list {
+            list-style-type: none;
+            /* Убираем стандартные маркеры списка */
+            padding: 0;
+            margin: 0;
+        }
+
+        li.player-item {
+            margin: 0;
+        }
     }
 }
 

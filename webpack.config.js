@@ -12,7 +12,7 @@ const config = {
 		matchlist11x11: './src/js/matchlist11x11.js',
 		matchlist8x8: './src/js/matchlist8x8.js',
 		Awards: './src/js/awardsplayer.js',
-		Lostplayers: './src/js/lostplayer.js',
+		lostplayer: './src/js/lostplayer.js',
 
 	},
 	output: {

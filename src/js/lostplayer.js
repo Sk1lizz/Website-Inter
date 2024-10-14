@@ -1,7 +1,7 @@
 // АРХИВ
 
 const statisticsarchive = [
-    
+
     { number: "89", name: "Пожидаев", matches: "4", goals: "1", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.02.2023" },
     { number: "21", name: "Костоев", matches: "3", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.09.2024" },
     { number: "8", name: "Устинов", matches: "0", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "proand8x8", time_in: "01.08.2024" },
@@ -153,8 +153,10 @@ const statisticsarchive = [
     { number: "0", name: "Мищенко", matches: "18", goals: "1", assist: "0", zeromatch: "0", lostgoals: "12", team: "pro", time_in: "" },
     { number: "0", name: "Тапанайнен", matches: "12", goals: "0", assist: "0", zeromatch: "0", lostgoals: "20", team: "pro", time_in: "" },
     { number: "0", name: "Косовских", matches: "1", goals: "0", assist: "1", zeromatch: "0", lostgoals: "12", team: "pro", time_in: "" },
+    { number: "0", name: "Костоев", matches: "2", goals: "0", assist: "1", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "" },
 
 ];
+
 
 function updateLostList() {
     const lostList = document.querySelector(".lost-list");

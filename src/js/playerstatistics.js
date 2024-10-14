@@ -4,53 +4,54 @@ document.addEventListener('DOMContentLoaded', function () {
     const statistics2024 = [
         // Номер, фамилия, матчей, голов забито, ассистов, матчей на 0, голов пропущено
         { number: "3", name: "Фирдавс", matches: "14", goals: "0", assist: "1", zeromatch: "0", lostgoals: "0", team: "pro" },
-        { number: "5", name: "Волокитин", matches: "12", goals: "1", assist: "1", zeromatch: "0", lostgoals: "0", team: "8x8" },
+        { number: "5", name: "Волокитин", matches: "13", goals: "1", assist: "1", zeromatch: "0", lostgoals: "0", team: "8x8" },
         { number: "6", name: "Касулин", matches: "17", goals: "3", assist: "3", zeromatch: "0", lostgoals: "0", team: "8x8" },
-        { number: "7", name: "Тапчан", matches: "15", goals: "0", assist: "5", zeromatch: "0", lostgoals: "0", team: "8x8" },
-        { number: "9", name: "Белоножкин", matches: "43", goals: "7", assist: "14", zeromatch: "0", lostgoals: "0", team: "pro" },
+        { number: "7", name: "Тапчан", matches: "16", goals: "0", assist: "5", zeromatch: "0", lostgoals: "0", team: "8x8" },
+        { number: "8", name: "Нарватов", matches: "0", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro" },
+        { number: "9", name: "Белоножкин", matches: "45", goals: "7", assist: "14", zeromatch: "0", lostgoals: "0", team: "pro" },
         { number: "10", name: "Костич", matches: "29", goals: "10", assist: "6", zeromatch: "0", lostgoals: "0", team: "pro" },
         { number: "11", name: "Полевой", matches: "11", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro" },
-        { number: "12", name: "Шаропов", matches: "22", goals: "6", assist: "3", zeromatch: "0", lostgoals: "0", team: "pro" },
+        { number: "12", name: "Шаропов", matches: "23", goals: "6", assist: "3", zeromatch: "0", lostgoals: "0", team: "pro" },
         { number: "14", name: "Голуб", matches: "16", goals: "10", assist: "6", zeromatch: "0", lostgoals: "0", team: "pro" },
-        { number: "16", name: "Петросян", matches: "1", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "8x8" },
+        { number: "16", name: "Степанян", matches: "0", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro", },
         { number: "17", name: "Петрищев", matches: "25", goals: "3", assist: "5", zeromatch: "0", lostgoals: "0", team: "pro" },
         { number: "18", name: "Губский", matches: "0", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro" },
         { number: "19", name: "Агатов", matches: "0", goals: "0", assist: "2", zeromatch: "0", lostgoals: "0", team: "pro" },
-        { number: "20", name: "Власов", matches: "38", goals: "5", assist: "11", zeromatch: "0", lostgoals: "0", team: "pro" },
-        { number: "21", name: "Костоев", matches: "4", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro" },
+        { number: "20", name: "Ларин И.", matches: "5", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro" },
+        { number: "21", name: "Макаров", matches: "0", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro" },
         { number: "22", name: "Макарчев", matches: "10", goals: "7", assist: "1", zeromatch: "0", lostgoals: "0", team: "pro" },
         { number: "23", name: "Бубнов", matches: "19", goals: "8", assist: "6", zeromatch: "0", lostgoals: "0", team: "8x8" },
         { number: "24", name: "Лешанков", matches: "5", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro" },
-        { number: "25", name: "Матвеев", matches: "35", goals: "5", assist: "3", zeromatch: "0", lostgoals: "0", team: "pro" },
+        { number: "25", name: "Матвеев", matches: "37", goals: "5", assist: "3", zeromatch: "0", lostgoals: "0", team: "pro" },
         { number: "26", name: "Голованов", matches: "0", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro" },
         { number: "27", name: "Филимонов", matches: "4", goals: "1", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro" },
-        { number: "28", name: "Ларин", matches: "2", goals: "0", assist: "0", zeromatch: "0", lostgoals: "5", team: "pro" },
+        { number: "28", name: "Ларин Д.", matches: "2", goals: "0", assist: "0", zeromatch: "0", lostgoals: "5", team: "pro" },
         { number: "29", name: "Свирщевский", matches: "12", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro" },
         { number: "30", name: "Салимгареев", matches: "4", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro" },
         { number: "31", name: "Дудочкин", matches: "3", goals: "0", assist: "0", zeromatch: "0", lostgoals: "3", team: "8x8" },
         { number: "32", name: "Волконский", matches: "41", goals: "17", assist: "10", zeromatch: "0", lostgoals: "0", team: "pro", },
         { number: "33", name: "Кравченко", matches: "2", goals: "1", assist: "1", zeromatch: "0", lostgoals: "0", team: "pro" },
         { number: "35", name: "Сыпченко", matches: "25", goals: "0", assist: "1", zeromatch: "2", lostgoals: "52", team: "pro" },
-        { number: "37", name: "Шеин", matches: "32", goals: "5", assist: "7", zeromatch: "0", lostgoals: "0", team: "pro" },
+        { number: "37", name: "Шеин", matches: "33", goals: "5", assist: "7", zeromatch: "0", lostgoals: "0", team: "pro" },
         { number: "41", name: "Синицын", matches: "26", goals: "1", assist: "2", zeromatch: "0", lostgoals: "0", team: "pro" },
         { number: "42", name: "Белов", matches: "4", goals: "0", assist: "1", zeromatch: "0", lostgoals: "0", team: "pro" },
-        { number: "47", name: "Языков", matches: "33", goals: "44", assist: "19", zeromatch: "0", lostgoals: "0", team: "pro" },
+        { number: "47", name: "Языков", matches: "35", goals: "44", assist: "19", zeromatch: "0", lostgoals: "0", team: "pro" },
         { number: "49", name: "Бутусов", matches: "3", goals: "0", assist: "0", zeromatch: "1", lostgoals: "0", team: "pro" },
         { number: "50", name: "Штепа", matches: "11", goals: "3", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro" },
         { number: "52", name: "Мкома", matches: "5", goals: "0", assist: "0", zeromatch: "0", lostgoals: "10", team: "pro" },
         { number: "55", name: "Нестор", matches: "3", goals: "0", assist: "1", zeromatch: "0", lostgoals: "0", team: "pro" },
-        { number: "63", name: "Скворцов", matches: "37", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro" },
+        { number: "63", name: "Скворцов", matches: "38", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro" },
         { number: "64", name: "Беров", matches: "0", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro" },
-        { number: "66", name: "Королев", matches: "19", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro" },
+        { number: "66", name: "Королев", matches: "21", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro" },
         { number: "69", name: "Долгов", matches: "3", goals: "1", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro" },
-        { number: "71", name: "Иванов", matches: "1", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro"},
+        { number: "71", name: "Иванов", matches: "1", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro" },
         { number: "72", name: "Абянов", matches: "15", goals: "12", assist: "3", zeromatch: "0", lostgoals: "0", team: "pro" },
-        { number: "74", name: "Котов", matches: "13", goals: "2", assist: "1", zeromatch: "0", lostgoals: "0", team: "pro" },
+        { number: "74", name: "Котов", matches: "15", goals: "2", assist: "1", zeromatch: "0", lostgoals: "0", team: "pro" },
         { number: "77", name: "Иванов", matches: "12", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro" },
         { number: "81", name: "Мытько", matches: "17", goals: "0", assist: "0", zeromatch: "1b", lostgoals: "36", team: "pro" },
         { number: "86", name: "Гусев", matches: "0", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro" },
-        { number: "87", name: "Данишевский", matches: "6", goals: "1", assist: "1", zeromatch: "0", lostgoals: "0", team: "pro" },
-        { number: "88", name: "Стребков", matches: "1", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.08.2024" },
+        { number: "87", name: "Данишевский", matches: "7", goals: "1", assist: "1", zeromatch: "0", lostgoals: "0", team: "pro" },
+        { number: "88", name: "Стребков", matches: "2", goals: "0", assist: "0", zeromatch: "0", lostgoals: "3", team: "pro", time_in: "01.08.2024" },
         { number: "89", name: "Пожидаев", matches: "5", goals: "1", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro" },
         { number: "90", name: "Юсуф", matches: "4", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro" },
         { number: "101", name: "Грумынский", matches: "0", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro" },
@@ -63,21 +64,25 @@ document.addEventListener('DOMContentLoaded', function () {
         // Номер, фамилия, матчей, голов забито, ассистов, матчей на 0, голов пропущено
         { number: "coach", name: "Пешехонов", matches: "480", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.05.2013" },
         { number: "3", name: "Амири", matches: "14", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.06.2023" },
-        { number: "5", name: "Волокитин", matches: "70", goals: "24", assist: "13", zeromatch: "0", lostgoals: "0", team: "8x8", time_in: "01.09.2020" },
+        { number: "5", name: "Волокитин", matches: "71", goals: "24", assist: "13", zeromatch: "0", lostgoals: "0", team: "8x8", time_in: "01.09.2020" },
         { number: "6", name: "Касулин", matches: "17", goals: "3", assist: "4", zeromatch: "0", lostgoals: "0", team: "8x8", time_in: "01.03.2024" },
-        { number: "7", name: "Тапчан", matches: "301", goals: "164", assist: "47", zeromatch: "0", lostgoals: "0", team: "8x8", time_in: "01.08.2015" },
-        { number: "9", name: "Белоножкин", matches: "500", goals: "156", assist: "108", zeromatch: "0", lostgoals: "0", team: "proand8x8", time_in: "01.07.2014" },
+        { number: "7", name: "Тапчан", matches: "302", goals: "164", assist: "47", zeromatch: "0", lostgoals: "0", team: "8x8", time_in: "01.08.2015" },
+        { number: "8", name: "Нарватов", matches: "58", goals: "25", assist: "12", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.07.2021" },
+        { number: "9", name: "Белоножкин", matches: "502", goals: "156", assist: "108", zeromatch: "0", lostgoals: "0", team: "proand8x8", time_in: "01.07.2014" },
         { number: "11", name: "Полевой", matches: "11", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.04.2024" },
-        { number: "12", name: "Шаропов", matches: "22", goals: "6", assist: "3", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.07.2023" },
+        { number: "12", name: "Шаропов", matches: "23", goals: "6", assist: "3", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.07.2023" },
         { number: "14", name: "Голуб", matches: "232", goals: "23", assist: "17", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.02.2023" },
         { number: "NaN", name: "Петросян", matches: "1", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "8x8", time_in: "" },
+        { number: "16", name: "Степанян", matches: "0", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.08.2024" },
         { number: "17", name: "Петрищев", matches: "50", goals: "4", assist: "7", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.03.2023" },
         { number: "18", name: "Губский", matches: "235", goals: "124", assist: "19", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.07.2014" },
         { number: "19", name: "Агатов", matches: "15", goals: "1", assist: "8", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.11.2022" },
+        { number: "20", name: "Ларин И.", matches: "5", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro" },
+        { number: "21", name: "Макаров", matches: "0", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.08.2024" },
         { number: "22", name: "Макарчев", matches: "59", goals: "51", assist: "24", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.10.2022" },
         { number: "23", name: "Бубнов", matches: "19", goals: "8", assist: "6", zeromatch: "0", lostgoals: "0", team: "8x8", time_in: "01.05.2024" },
         { number: "24", name: "Лешанков", matches: "94", goals: "8", assist: "9", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.10.2019" },
-        { number: "25", name: "Матвеев", matches: "35", goals: "5", assist: "3", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.01.2024" },
+        { number: "25", name: "Матвеев", matches: "37", goals: "5", assist: "3", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.01.2024" },
         { number: "26", name: "Голованов", matches: "32", goals: "0", assist: "3", zeromatch: "2", lostgoals: "123", team: "pro", time_in: "01.10.2021" },
         { number: "27", name: "Филимонов", matches: "4", goals: "1", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.07.2024" },
         { number: "28", name: "Ларин", matches: "27", goals: "0", assist: "0", zeromatch: "4", lostgoals: "57", team: "pro", time_in: "01.07.2021" },
@@ -86,25 +91,25 @@ document.addEventListener('DOMContentLoaded', function () {
         { number: "NaN", name: "Дудочкин", matches: "3", goals: "0", assist: "0", zeromatch: "0", lostgoals: "3", team: "8x8", time_in: "" },
         { number: "32", name: "Волконский", matches: "60", goals: "18", assist: "11", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.04.2023" },
         { number: "35", name: "Сыпченко", matches: "25", goals: "0", assist: "1", zeromatch: "2", lostgoals: "48", team: "pro", time_in: "01.01.2024" },
-        { number: "37", name: "Шеин", matches: "165", goals: "33", assist: "37", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.10.2020" },
+        { number: "37", name: "Шеин", matches: "166", goals: "33", assist: "37", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.10.2020" },
         { number: "41", name: "Синицын", matches: "43", goals: "1", assist: "3", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.12.2022" },
         { number: "42", name: "Белов", matches: "113", goals: "40", assist: "34", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.06.2020" },
-        { number: "47", name: "Языков", matches: "196", goals: "330", assist: "135", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.10.2018" },
+        { number: "47", name: "Языков", matches: "198", goals: "330", assist: "135", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.10.2018" },
         { number: "49", name: "Бутусов", matches: "2", goals: "0", assist: "0", zeromatch: "1", lostgoals: "0", team: "pro", time_in: "01.08.2024" },
         { number: "50", name: "Штепа", matches: "12", goals: "3", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.04.2024" },
         { number: "52", name: "Мкома", matches: "5", goals: "0", assist: "0", zeromatch: "0", lostgoals: "10", team: "pro", time_in: "01.07.2024" },
         { number: "55", name: "Нестор", matches: "40", goals: "0", assist: "8", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.12.2022" },
-        { number: "63", name: "Скворцов", matches: "118", goals: "2", assist: "9", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.10.2019" },
+        { number: "63", name: "Скворцов", matches: "119", goals: "2", assist: "9", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.10.2019" },
         { number: "64", name: "Беров", matches: "39", goals: "39", assist: "3", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.12.2020" },
-        { number: "66", name: "Королев", matches: "20", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.01.2024" },
+        { number: "66", name: "Королев", matches: "21", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.01.2024" },
         { number: "71", name: "Иванов", matches: "1", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.09.2024" },
         { number: "72", name: "Абянов", matches: "20", goals: "9", assist: "4", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.11.2023" },
-        { number: "74", name: "Котов", matches: "24", goals: "3", assist: "2", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.10.2023" },
+        { number: "74", name: "Котов", matches: "26", goals: "3", assist: "2", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.10.2023" },
         { number: "77", name: "Иванов Никита", matches: "12", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.02.2024" },
         { number: "81", name: "Мытько", matches: "26", goals: "0", assist: "0", zeromatch: "1b", lostgoals: "73", team: "pro", time_in: "01.07.2023" },
         { number: "86", name: "Гусев", matches: "10", goals: "0", assist: "1", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.02.2023" },
-        { number: "87", name: "Данишевский", matches: "5", goals: "1", assist: "1", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.08.2024" },
-        { number: "88", name: "Стребков", matches: "1", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.08.2024" },
+        { number: "87", name: "Данишевский", matches: "7", goals: "1", assist: "1", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.08.2024" },
+        { number: "88", name: "Стребков", matches: "2", goals: "0", assist: "0", zeromatch: "0", lostgoals: "3", team: "pro", time_in: "01.08.2024" },
         { number: "90", name: "Юсуф", matches: "19", goals: "1", assist: "3", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.07.2023" },
         { number: "101", name: "Грумынский", matches: "8", goals: "0", assist: "3", zeromatch: "2", lostgoals: "0", team: "pro", time_in: "01.03.2023" },
         // Добавьте остальных игроков
@@ -294,5 +299,53 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Вызов функции для обновления общего списка
     updateGeneralList();
+
+    // Цвет для подсветки, если количество матчей кратно 100
+    const highlightColor = "#2D62B5";
+
+    // Функция для обновления списка матчей за команду
+    function updateGameInTeamList() {
+        const gameInTeamList = document.querySelector(".game_in_team_list");
+        gameInTeamList.innerHTML = ""; // Очищаем список перед добавлением данных
+
+        // Сортируем игроков по количеству матчей (в порядке убывания)
+        const sortedPlayers = statisticsall
+            .map(player => ({ ...player, matches: Number(player.matches.trim()) })) // Убираем лишние пробелы и преобразуем строку в число
+            .sort((a, b) => b.matches - a.matches);
+
+        // Добавляем игроков в список
+        sortedPlayers.forEach((player, index) => {
+            const listItem = document.createElement("li");
+            listItem.classList.add("player-item");
+
+            // Подсветка, если количество матчей юбилейное (100, 200, 300 и т.д.)
+            if (player.matches > 0 && player.matches % 100 === 0) {
+                listItem.style.backgroundColor = highlightColor; // Задаем синий цвет для юбилейных матчей
+            }
+
+            // Создаем элементы: порядковый номер, имя и количество матчей
+            const playerNumber = document.createElement("span");
+            playerNumber.classList.add("player-number");
+            playerNumber.textContent = index + 1;
+
+            const playerName = document.createElement("span");
+            playerName.classList.add("player-name");
+            playerName.textContent = player.name;
+
+            const playerMatches = document.createElement("span");
+            playerMatches.classList.add("player-matches");
+            playerMatches.textContent = player.matches + " матчей";
+
+            // Добавляем элементы в элемент списка
+            listItem.appendChild(playerNumber);
+            listItem.appendChild(playerName);
+            listItem.appendChild(playerMatches);
+
+            gameInTeamList.appendChild(listItem);
+        });
+    }
+
+    // Вызов функции для обновления списка
+    updateGameInTeamList();
 
 });

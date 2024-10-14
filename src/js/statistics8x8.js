@@ -226,7 +226,7 @@ const assistsData = [{
 const goalkeepersData = [{
     number: "3.",
     name: "Мищенко",
-    counter: "13"
+    counter: "17"
 }, {
     number: "1.",
     name: "Мытько",
@@ -239,6 +239,11 @@ const goalkeepersData = [{
     number: "4.",
     name: "Сыпченко",
     counter: "13"
+},
+{
+    number: "5.",
+    name: "Стребков",
+    counter: "3"
 },
     // Добавьте остальных вратарей
 ];

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Нет игрока</title>
+    <link rel="stylesheet" href="./css/main.css" />
+
+</head>
+
+<body>
+    @@include('blocks/header.html')
+
+
+    <div class="page_player">
+        <div class="player">
+            <div class="photoblock">
+                <div class="card_photo">
+                    <img src="img/player/1.png" alt="">
+                </div>
+
+            </div>
+            <div class="aboutme">
+                <div class="name">
+                    <h3>
+                        <?php echo ?player{'name'}; ?>
+                    </h3>
+                    <h4>
+                        <?php echo ?player{'lastname'}; ?player{'Middle_name'}; ?>
+                    </h4>
+                    <div class="position_number">
+                        <div class="number">1</div>
+                        <div class="position">Вратарь</div>
+                    </div>
+                </div>
+                <div class="information">
+                    <ul class="information_me">
+                        <li>
+                            <div class="title_information">Возраст</div>
+                            <div class="text" id="age"></div>
+                        </li>
+                        <li>
+                            <div class="title_information">Дата рождения</div>
+                            <div class="text" id="birthday">28.09.2006</div>
+                        </li>
+                        <li>
+                            <div class="title_information">Команда</div>
+                            <div class="text">Pro (11х11)</div>
+                        </li>
+                        <li>
+                            <div class="title_information">Присоединился</div>
+                            <div class="text">Май, 2021</div>
+                        </li>
+                        <li>
+                            <div class="title_information" id="teamTime">Время в команде</div>
+                            <div class="text" id="datateamTime">04.05.2021</div>
+                        </li>
+                        <li>
+                            <div class="title_information">Рост</div>
+                            <div class="text">179</div>
+                        </li>
+                        <li>
+                            <div class="title_information">Вес</div>
+                            <div class="text">80</div>
+                        </li>
+                        <li>
+                            <div class="title_information">Опыт</div>
+                            <div class="text" id="experience">0</div>
+                        </li>
+                        <li>
+                            <div class="title_information">Титул</div>
+                            <div class="text" id="title"></div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+
+    @@include('blocks/footer.html')
+
+    <script src="./js/index.bundle.js"></script>
+
+    <script>
+        document.querySelectorAll('.img-container img').forEach(img => {
+            img.onclick = () => {
+                document.querySelector('.pop-up').style.display = 'block';
+                document.querySelector('.pop-up img').src = img.getAttribute('src'); // Исправление: заменили дефис на знак равенства
+            }
+        });
+
+        document.querySelector('.pop-up span').onclick = () => {
+            document.querySelector('.pop-up').style.display = 'none';
+        }
+    </script>
+
+    <script src="js/playerpage.bundle.js"></script>
+    <script src="js/playerstatistics.bundle.js"></script>
+</body>
+
+</html>
