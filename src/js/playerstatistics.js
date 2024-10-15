@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', function () {
         { number: "26", name: "Голованов", matches: "32", goals: "0", assist: "3", zeromatch: "2", lostgoals: "123", team: "pro", time_in: "01.10.2021" },
         { number: "27", name: "Филимонов", matches: "4", goals: "1", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.07.2024" },
         { number: "28", name: "Ларин", matches: "27", goals: "0", assist: "0", zeromatch: "4", lostgoals: "57", team: "pro", time_in: "01.07.2021" },
-        { number: "29", name: "Свирщевский", matches: "11", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.06.2024" },
+        { number: "29", name: "Свирщевский", matches: "12", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.06.2024" },
         { number: "30", name: "Салимгареев", matches: "23", goals: "0", assist: "2", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.02.2022" },
         { number: "NaN", name: "Дудочкин", matches: "3", goals: "0", assist: "0", zeromatch: "0", lostgoals: "3", team: "8x8", time_in: "" },
         { number: "32", name: "Волконский", matches: "60", goals: "18", assist: "11", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.04.2023" },
