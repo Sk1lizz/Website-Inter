@@ -23,166 +23,173 @@
                     <div class="text">info@fcintermoscow.com</div>
                     <div class="title">Вконтакте:</div>
                     <div class="text">vk.com/fcintermoscow</div>
+
+                    <div class="social">
+                        <a href="https://vk.com/fcintermoscow"><img src="img/VK_Logo.png" href="intex.html"></a>
+                        <a href="https://www.youtube.com/@fcintermoscow7572"><img src="img/youtube_logo.png"></a>
+                        <a href="https://t.me/fcintermoscow"><img src="img/telegram.png""></a>
+                                </div>
+                                
                 </div>
 
-                <section class="contact_form">
+                <section class=" contact_form">
 
-                    <form action="#" method="POST">
-                        <div class="input-box">
-                            <div class="input-field field">
-                                <input type="name" placeholder="Введите ваше имя*" id="name" class="item"
-                                    autocomplete="off">
-                                <div class="error-txt">Некорректный ввод</div>
-                            </div>
-                            <div class="input-field field">
-                                <input type="text" placeholder="Введите ваш Email*" id="email" class="item"
-                                    autocomplete="off">
-                                <div class="error-txt">Некорректный ввод</div>
-                            </div>
-                            <div class="input-field field">
-                                <input type="text" placeholder="Введите тему" id="subject" class="item"
-                                    autocomplete="off">
-                                <div class="error-txt">Некорректный ввод</div>
-                            </div>
-                            <div class="input-field field">
-                                <input type="text" placeholder="Введите ваш номер телефона*" id="number" class="item"
-                                    autocomplete="off">
-                                <div class="error-txt">Некорректный ввод</div>
-                            </div>
-                            <div class="textarea-field field">
-                                <textarea type="message" placeholder="Введите ваше сообщение*" id="message" cols="30"
-                                    rows="10" class="item" autocomplete="off"></textarea>
-                                <div class="error-txt">Некорректный ввод</div>
-                            </div>
-                        </div>
-                        <button type="submit">Отправить</button>
-                    </form>
+                            <form action="#" method="POST">
+                                <div class="input-box">
+                                    <div class="input-field field">
+                                        <input type="name" placeholder="Введите ваше имя*" id="name" class="item"
+                                            autocomplete="off">
+                                        <div class="error-txt">Некорректный ввод</div>
+                                    </div>
+                                    <div class="input-field field">
+                                        <input type="text" placeholder="Введите ваш Email*" id="email" class="item"
+                                            autocomplete="off">
+                                        <div class="error-txt">Некорректный ввод</div>
+                                    </div>
+                                    <div class="input-field field">
+                                        <input type="text" placeholder="Введите тему" id="subject" class="item"
+                                            autocomplete="off">
+                                        <div class="error-txt">Некорректный ввод</div>
+                                    </div>
+                                    <div class="input-field field">
+                                        <input type="text" placeholder="Введите ваш номер телефона*" id="number"
+                                            class="item" autocomplete="off">
+                                        <div class="error-txt">Некорректный ввод</div>
+                                    </div>
+                                    <div class="textarea-field field">
+                                        <textarea type="message" placeholder="Введите ваше сообщение*" id="message"
+                                            cols="30" rows="10" class="item" autocomplete="off"></textarea>
+                                        <div class="error-txt">Некорректный ввод</div>
+                                    </div>
+                                </div>
+                                <button type="submit">Отправить</button>
+                            </form>
 
-                </section>
+                            </section>
 
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
 
-    @@include('blocks/footer.html')
-    <script src="./js/index.bundle.js"></script>
-    <script src="https://smtpjs.com/v3/smtp.js"></script>
+            @@include('blocks/footer.html')
+            <script src="./js/index.bundle.js"></script>
+            <script src="https://smtpjs.com/v3/smtp.js"></script>
 
-    <script>
-        const form = document.querySelector('form');
-        const fullName = document.querySelector('#name');
-        const email = document.querySelector('#email');
-        const subject = document.querySelector('#subject');
-        const number = document.querySelector('#number');
-        const mess = document.querySelector('#message');
+            <script>
+                const form = document.querySelector('form');
+                const fullName = document.querySelector('#name');
+                const email = document.querySelector('#email');
+                const subject = document.querySelector('#subject');
+                const number = document.querySelector('#number');
+                const mess = document.querySelector('#message');
 
-        function sendEmail() {
-            if (validateForm()) {
-                const bodyMessage = `Имя: ${fullName.value}<br> Email: ${email.value} <br>  Тема: ${subject.value}<br> Телефон: ${number.value}<br> Сообщение:${mess.value} `;
+                function sendEmail() {
+                    if (validateForm()) {
+                        const bodyMessage = `Имя: ${fullName.value}<br> Email: ${email.value} <br>  Тема: ${subject.value}<br> Телефон: ${number.value}<br> Сообщение:${mess.value} `;
 
-                Email.send({
-                    Host: "smtp.elasticemail.com",
-                    Username: "skvanter@gmail.com",
-                    Password: "74193B46F107BD12D9D5BD9059C32473A494",
-                    To: 'skvanter@gmail.com',
-                    From: "skvanter@gmail.com",
-                    Subject: subject.value,
-                    Body: bodyMessage
-                }).then(
-                    message => {
-                        if (message === "OK") {
-                            Swal.fire({
-                                title: "Ваше сообщение отправлено!",
-                                text: "Мы свяжемся с вами в ближайшее время",
-                                icon: "success"
-                            });
-                        }
+                        Email.send({
+                            Host: "smtp.elasticemail.com",
+                            Username: "skvanter@gmail.com",
+                            Password: "74193B46F107BD12D9D5BD9059C32473A494",
+                            To: 'skvanter@gmail.com',
+                            From: "skvanter@gmail.com",
+                            Subject: subject.value,
+                            Body: bodyMessage
+                        }).then(
+                            message => {
+                                if (message === "OK") {
+                                    Swal.fire({
+                                        title: "Ваше сообщение отправлено!",
+                                        text: "Мы свяжемся с вами в ближайшее время",
+                                        icon: "success"
+                                    });
+                                }
+                            }
+                        );
+                    } else {
+                        alert('Пожалуйста, заполните форму корректно.');
                     }
-                );
-            } else {
-                alert('Пожалуйста, заполните форму корректно.');
-            }
-        }
+                }
 
-        function isEmailValid(email) {
-            // Регулярное выражение для проверки email
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return emailRegex.test(email);
-        }
+                function isEmailValid(email) {
+                    // Регулярное выражение для проверки email
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    return emailRegex.test(email);
+                }
 
-        function isPhoneNumberValid(number) {
-            // Регулярное выражение для проверки номера телефона (только цифры)
-            const phoneRegex = /^\+?\d+$/;
-            return phoneRegex.test(number);
-        }
+                function isPhoneNumberValid(number) {
+                    // Регулярное выражение для проверки номера телефона (только цифры)
+                    const phoneRegex = /^\+?\d+$/;
+                    return phoneRegex.test(number);
+                }
 
-        function validateInput(input, minLength) {
-            return input.length >= minLength;
-        }
+                function validateInput(input, minLength) {
+                    return input.length >= minLength;
+                }
 
-        function showError(input, message) {
-            const parent = input.parentElement;
-            const error = parent.querySelector('.error-txt');
-            error.innerText = message;
-            parent.classList.add('error');
-        }
+                function showError(input, message) {
+                    const parent = input.parentElement;
+                    const error = parent.querySelector('.error-txt');
+                    error.innerText = message;
+                    parent.classList.add('error');
+                }
 
-        function hideError(input) {
-            const parent = input.parentElement;
-            const error = parent.querySelector('.error-txt');
-            error.innerText = '';
-            parent.classList.remove('error');
-        }
+                function hideError(input) {
+                    const parent = input.parentElement;
+                    const error = parent.querySelector('.error-txt');
+                    error.innerText = '';
+                    parent.classList.remove('error');
+                }
 
-        function validateForm() {
-            let isValid = true;
+                function validateForm() {
+                    let isValid = true;
 
-            if (!validateInput(fullName.value, 2)) {
-                showError(fullName, 'Имя должно быть не менее 2 символов');
-                isValid = false;
-            } else {
-                hideError(fullName);
-            }
+                    if (!validateInput(fullName.value, 2)) {
+                        showError(fullName, 'Имя должно быть не менее 2 символов');
+                        isValid = false;
+                    } else {
+                        hideError(fullName);
+                    }
 
-            if (!isEmailValid(email.value)) {
-                showError(email, 'Введите корректный email');
-                isValid = false;
-            } else {
-                hideError(email);
-            }
+                    if (!isEmailValid(email.value)) {
+                        showError(email, 'Введите корректный email');
+                        isValid = false;
+                    } else {
+                        hideError(email);
+                    }
 
-            if (!validateInput(subject.value, 1)) {
-                showError(subject, 'Введите тему');
-                isValid = false;
-            } else {
-                hideError(subject);
-            }
+                    if (!validateInput(subject.value, 1)) {
+                        showError(subject, 'Введите тему');
+                        isValid = false;
+                    } else {
+                        hideError(subject);
+                    }
 
-            if (!isPhoneNumberValid(number.value)) {
-                showError(number, 'Введите корректный номер телефона');
-                isValid = false;
-            } else {
-                hideError(number);
-            }
+                    if (!isPhoneNumberValid(number.value)) {
+                        showError(number, 'Введите корректный номер телефона');
+                        isValid = false;
+                    } else {
+                        hideError(number);
+                    }
 
-            if (!validateInput(mess.value, 10)) {
-                showError(mess, 'Сообщение должно быть не короче 10 символов');
-                isValid = false;
-            } else {
-                hideError(mess);
-            }
+                    if (!validateInput(mess.value, 10)) {
+                        showError(mess, 'Сообщение должно быть не короче 10 символов');
+                        isValid = false;
+                    } else {
+                        hideError(mess);
+                    }
 
-            return isValid;
-        }
+                    return isValid;
+                }
 
-        form.addEventListener("submit", (e) => {
-            e.preventDefault();
-            sendEmail();
-        });
+                form.addEventListener("submit", (e) => {
+                    e.preventDefault();
+                    sendEmail();
+                });
 
-    </script>
+            </script>
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </body>
 
