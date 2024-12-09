@@ -5,7 +5,7 @@ const goalsData = [{
 }, {
     number: "2.",
     name: "Языков",
-    counter: "64"
+    counter: "68"
 }, {
     number: "3.",
     name: "Макарчев",
@@ -49,7 +49,7 @@ const goalsData = [{
 {
     number: "11.",
     name: "Белоножкин",
-    counter: "12"
+    counter: "13"
 },
 
 {
@@ -67,7 +67,7 @@ const goalsData = [{
 {
     number: "14.",
     name: "Хакимов",
-    counter: "17"
+    counter: "18"
 },
 
 {
@@ -79,7 +79,7 @@ const goalsData = [{
 {
     number: "15.",
     name: "Шаропов",
-    counter: "2"
+    counter: "5"
 },
 
 {
@@ -109,7 +109,7 @@ const goalsData = [{
 {
     number: "19.",
     name: "Тапчан",
-    counter: "1"
+    counter: "2"
 },
 
 
@@ -125,6 +125,11 @@ const goalsData = [{
     counter: "1"
 },
 
+{
+    number: "22.",
+    name: "Шутов",
+    counter: "1"
+},
     // Добавьте остальных игроков
 ];
 // ... данные для списка "Ассистенты" ...
@@ -144,11 +149,11 @@ const assistsData = [{
 }, {
     number: "1.",
     name: "Белоножкин",
-    counter: "22"
+    counter: "23"
 }, {
     number: "1.",
     name: "Языков",
-    counter: "23"
+    counter: "24"
 }, {
     number: "1.",
     name: "Шеин",
@@ -176,7 +181,7 @@ const assistsData = [{
 }, {
     number: "1.",
     name: "Голуб",
-    counter: "8"
+    counter: "9"
 }, {
     number: "1.",
     name: "Волконский",
@@ -185,7 +190,7 @@ const assistsData = [{
 {
     number: "1.",
     name: "Тапчан",
-    counter: "4"
+    counter: "5"
 },
 {
     number: "1.",
@@ -195,7 +200,7 @@ const assistsData = [{
 {
     number: "1.",
     name: "Хакимов",
-    counter: "6"
+    counter: "7"
 },
 {
     number: "1.",
@@ -239,6 +244,30 @@ const assistsData = [{
 {
     number: "1.",
     name: "Перес",
+    counter: "1"
+},
+
+{
+    number: "1.",
+    name: "Рахматов",
+    counter: "1"
+},
+
+{
+    number: "1.",
+    name: "Шутов",
+    counter: "1"
+},
+
+{
+    number: "1.",
+    name: "Ларин И.",
+    counter: "1"
+},
+
+{
+    number: "1.",
+    name: "Петров",
     counter: "1"
 },
 
