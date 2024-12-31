@@ -24,6 +24,41 @@
         padding-left: 10px;
         padding-right: 10px;
 
+        .time_in_team_list {
+            list-style: none;
+            padding: 0;
+            font-size: 24px;
+        }
+
+        .time_in_team_list li {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 10px;
+        }
+
+        /* Номер игрока выравнивается по левому краю */
+        .player-number {
+            flex: 1;
+            text-align: left;
+        }
+
+        /* Фамилия игрока по центру */
+        .player-name {
+            flex: 2;
+            text-align: center;
+        }
+
+        /* Время в команде по правому краю */
+        .time-in-team {
+            flex: 1;
+            text-align: right;
+        }
+
+        /* Стиль для юбилейных игроков (синий фон) */
+        .anniversary {
+            background-color: lightblue;
+        }
+
         .statistic:nth-child(1) {
             background-color: $light;
             margin-bottom: 10px;
@@ -176,6 +211,143 @@
                     }
                 }
             }
+        }
+
+        .statistic-lost {
+            display: flex;
+            justify-content: center;
+            align-items: start;
+            padding: 5px 10px;
+            color: $black;
+            background-color: $light;
+            text-align: center;
+            width: 100%;
+            border-radius: 6px;
+            margin-bottom: 10px;
+
+            .wrapper {
+                width: 100%;
+                padding-bottom: 10px;
+
+                ul {
+                    font-family: PLAY-REGULAR;
+                    height: 90%;
+
+                    li {
+                        display: flex;
+                        padding: 5px 0;
+                        justify-content: space-between;
+
+                        .number {
+                            display: flex;
+                            justify-content: flex-start;
+                            width: 20px;
+                            font-size: 27px;
+                            padding-left: 10px;
+                        }
+
+                        .player {
+                            display: flex;
+                            font-size: 27px;
+                        }
+
+                        .counter {
+                            display: flex;
+                            justify-content: flex-end;
+                            width: 30px;
+                            font-size: 27px;
+                            padding-right: 10px;
+                        }
+
+                        .total {
+                            display: flex;
+                            justify-content: flex-end;
+                            width: 30px;
+                            font-size: 27px;
+                            padding-right: 10px;
+                        }
+
+                        .position {
+                            display: flex;
+                            font-size: 27px;
+                            padding-left: 10px;
+                        }
+
+                        .name {
+                            display: flex;
+                            font-size: 27px;
+                        }
+
+                        .training {
+                            display: flex;
+                            font-size: 27px;
+                            padding-right: 10px;
+                        }
+                    }
+
+                    li:nth-child(odd) {
+                        background-color: $gray_light_50;
+                    }
+
+                    li:hover {
+                        background-color: $black;
+                        color: $light;
+                        border-radius: 3px;
+                    }
+                }
+            }
+        }
+
+        .player-item {
+            display: flex;
+            justify-content: space-between;
+            /* Распределяем элементы по краям */
+            align-items: center;
+            /* Выравниваем по вертикали */
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .player-number {
+            flex: 1;
+            text-align: left;
+            /* Нумерация по левому краю */
+            font-size: 24px;
+
+        }
+
+        .player-name {
+            flex: 2;
+            text-align: center;
+            /* Имя по центру */
+            font-size: 24px;
+
+        }
+
+        .player-matches {
+            flex: 1;
+            text-align: right;
+            /* Количество матчей по правому краю */
+            font-size: 24px;
+
+        }
+
+        /* Подсветка для юбилейных матчей */
+        .anniversary {
+            background-color: $dark_light_50;
+            /* Цвет для юбилейных матчей */
+        }
+
+        /* Общие стили для списка */
+        ul.game_in_team_list {
+            list-style-type: none;
+            /* Убираем стандартные маркеры списка */
+            padding: 0;
+            margin: 0;
+        }
+
+        li.player-item {
+            margin: 0;
         }
     }
 }

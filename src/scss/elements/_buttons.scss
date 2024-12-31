@@ -16,7 +16,7 @@
 }
 
 .button {
-    @include button($light, $gray_black, 1.6svh, 1svh 20px)
+    @include button($light, $gray_black, 1.4svh, 1svh 20px)
 }
 
 .button_large {

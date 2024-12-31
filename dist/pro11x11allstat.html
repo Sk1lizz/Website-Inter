@@ -131,10 +131,23 @@
                 </div>
             </div>
 
+            <div class="statistic time_in_team">
+                <div class="wrapper">
+                    <div class="title" id="7">Время в команде (11x11)</div>
+                    <ul class="time_in_team_list"></ul>
+                </div>
+            </div>
+
+            <div class="statistic game_in_team">
+                <div class="wrapper">
+                    <div class="title" id="6">Матчей за команду</div>
+                    <ul class="game_in_team_list"></ul>
+                </div>
+            </div>
+
 
         </div>
 </body>
-
 
 <footer>
     <div class="footer_wrapper">
@@ -164,39 +177,7 @@
             </div>
 
             <div class="info">
-                <div class="title">Сreated by V. Vlasov and D. Peshekhonov</div>
-            </div>
-        </div>
-
-        <footer>
-    <div class="footer_wrapper">
-
-        <div class="footer_left">
-            <a class="logo_wrapper" href="index.html">
-                <div class="logo_image"><img src="img/logo.png" href="index.html"></div>
-                <div class="logo_text">
-                    <div>INTER MOSCOW</div>
-                    <div>Offical Site</div>
-                </div>
-            </a>
-
-            <div class="info">
-                <div class="title">Email:</div>
-                <div class="text">info@fcintermoscow.com</div>
-            </div>
-
-            <div class="info">
-                <div class="title">Юридическая информация:</div>
-                <div class="text">Самозанятый Пешехонов Д.М.</div>
-                <div class="text">ИНН 503810091397</div>
-            </div>
-
-            <div class="view">
-                <a href="prosmotr.html" class="view button">Записаться на просмотр</a>
-            </div>
-
-            <div class="info">
-                <div class="title">Сreated by V. Vlasov and D. Peshekhonov</div>
+                <div class="title">Сreated by D. Peshekhonov</div>
             </div>
         </div>
 
@@ -242,45 +223,46 @@
 
 
 </footer>
-    </div>
+</div>
 
-    <!-- Top.Mail.Ru counter -->
-    <script type="text/javascript">
-        var _tmr = window._tmr || (window._tmr = []);
-        _tmr.push({ id: "3274127", type: "pageView", start: (new Date()).getTime() });
-        (function (d, w, id) {
-            if (d.getElementById(id)) return;
-            var ts = d.createElement("script"); ts.type = "text/javascript"; ts.async = true; ts.id = id;
-            ts.src = "https://top-fwz1.mail.ru/js/code.js";
-            var f = function () { var s = d.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ts, s); };
-            if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); }
-        })(document, window, "tmr-code");
-    </script>
-    <noscript>
-        <div><img src="https://top-fwz1.mail.ru/counter?id=3274127;js=na" style="position:absolute;left:-9999px;"
-                alt="Top.Mail.Ru" /></div>
-    </noscript>
-    <!-- /Top.Mail.Ru counter -->
+<!-- Top.Mail.Ru counter -->
+<script src="./js/playerstatistics.bundle.js"></script>
+<script type="text/javascript">
+    var _tmr = window._tmr || (window._tmr = []);
+    _tmr.push({ id: "3274127", type: "pageView", start: (new Date()).getTime() });
+    (function (d, w, id) {
+        if (d.getElementById(id)) return;
+        var ts = d.createElement("script"); ts.type = "text/javascript"; ts.async = true; ts.id = id;
+        ts.src = "https://top-fwz1.mail.ru/js/code.js";
+        var f = function () { var s = d.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ts, s); };
+        if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); }
+    })(document, window, "tmr-code");
+</script>
+<noscript>
+    <div><img src="https://top-fwz1.mail.ru/counter?id=3274127;js=na" style="position:absolute;left:-9999px;"
+            alt="Top.Mail.Ru" /></div>
+</noscript>
+<!-- /Top.Mail.Ru counter -->
 
 
-    <script>function checkCookieConsent() {
-            const consentCookie = "cookieConsentAccepted";
-            const oneDayMilliseconds = 48 * 60 * 60 * 8000; // 1 день в миллисекундах
+<script>function checkCookieConsent() {
+        const consentCookie = "cookieConsentAccepted";
+        const oneDayMilliseconds = 48 * 60 * 60 * 8000; // 1 день в миллисекундах
 
-            if (!document.cookie.includes(consentCookie)) {
-                // Если согласие на куки еще не было предоставлено, показываем окно
-                const consent = confirm("Мы используем файлы cookie. Продолжить использование сайта означает согласие с этим.");
+        if (!document.cookie.includes(consentCookie)) {
+            // Если согласие на куки еще не было предоставлено, показываем окно
+            const consent = confirm("Мы используем файлы cookie. Продолжить использование сайта означает согласие с этим.");
 
-                if (consent) {
-                    // Если пользователь согласился, устанавливаем куки и устанавливаем срок действия на 1 день
-                    const expiryDate = new Date(Date.now() + oneDayMilliseconds).toUTCString();
-                    document.cookie = `${consentCookie}=true; expires=${expiryDate}; path=/;`;
-                }
+            if (consent) {
+                // Если пользователь согласился, устанавливаем куки и устанавливаем срок действия на 1 день
+                const expiryDate = new Date(Date.now() + oneDayMilliseconds).toUTCString();
+                document.cookie = `${consentCookie}=true; expires=${expiryDate}; path=/;`;
             }
         }
+    }
 
-        // Вызываем функцию при загрузке страницы
-        window.onload = checkCookieConsent;</script>
+    // Вызываем функцию при загрузке страницы
+    window.onload = checkCookieConsent;</script>
 
 </footer>
 <script src="./js/index.bundle.js"></script>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Полный список 8х8</title>
+    <link rel="stylesheet" href="./css/main.css" />
+</head>
+
+<body>
+    @@include('blocks/header.html')
+
+    <div class="allstat">
+        <div class="title_page">Статистика ушедших игроков</div>
+        <div class="tablegoal">
+
+            <div class="statistic-lost">
+                <div class="wrapper">
+                    <ul class="lost-list">
+                        <!-- Сюда будут добавлены элементы списка голеодателей -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <style>
+            .lost-list span {
+                flex: 1;
+                text-align: center;
+            }
+        </style>
+
+    </div>
+    </div>
+
+    @@include('blocks/footer.html')
+</body>
+
+<script src="./js/index.bundle.js"></script>
+<script src="./js/lostplayer.bundle.js"></script>
+
+
+
+</html>
