@@ -65,7 +65,6 @@ document.addEventListener('DOMContentLoaded', function () {
         // Номер, фамилия, матчей, голов забито, ассистов, матчей на 0, голов пропущено
         { number: "coach", name: "Пешехонов", matches: "480", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.05.2013" },
         { number: "2", name: "Хакимов", matches: "19", goals: "23", assist: "8", zeromatch: "0", lostgoals: "0", team: "8x8", time_in: "" },
-        { number: "3", name: "Амири", matches: "15", goals: "0", assist: "3", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.06.2023" },
         { number: "5", name: "Волокитин", matches: "72", goals: "24", assist: "13", zeromatch: "0", lostgoals: "0", team: "8x8", time_in: "01.09.2020" },
         { number: "6", name: "Касулин", matches: "18", goals: "3", assist: "4", zeromatch: "0", lostgoals: "0", team: "8x8", time_in: "01.03.2024" },
         { number: "7", name: "Тапчан", matches: "309", goals: "166", assist: "50", zeromatch: "0", lostgoals: "0", team: "8x8", time_in: "01.08.2015" },

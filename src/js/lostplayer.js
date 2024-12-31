@@ -2,6 +2,7 @@
 
 const statisticsarchive = [
     
+    { number: "3", name: "Амири", matches: "15", goals: "0", assist: "3", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.06.2023" },
     { number: "17", name: "Петрищев", matches: "52", goals: "4", assist: "7", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.03.2023" },
     { number: "89", name: "Пожидаев", matches: "4", goals: "1", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.02.2023" },
     { number: "21", name: "Костоев", matches: "3", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.09.2024" },
