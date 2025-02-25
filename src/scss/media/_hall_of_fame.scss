@@ -79,6 +79,17 @@
         .photo_block {
             left: 45%;
             right: 45%;
+            top: 90%;
+
+            .player {
+                margin-left: 70px;
+                width: 15%;
+            }
+        }
+
+        .photo_block_2 {
+            left: 45%;
+            right: 45%;
             top: 70%;
 
             .player {
@@ -176,7 +187,36 @@
         .photo_block {
             left: 50%;
             right: 50%;
-            top: 1050px;
+            top: 700px;
+            display: flex;
+            flex-direction: column;
+            flex-wrap: nowrap;
+            justify-content: center;
+            text-align: center;
+            align-items: center;
+
+            .player {
+                margin-right: 40px;
+                margin-left: 40px;
+                width: 200px;
+
+
+                .image {
+                    margin-bottom: 10px;
+                    margin-top: 10px;
+                }
+
+                .name {
+                    font-size: 18px;
+                }
+            }
+
+        }
+
+        .photo_block_2 {
+            left: 50%;
+            right: 50%;
+            top: 1325px;
             display: flex;
             flex-direction: column;
             flex-wrap: nowrap;

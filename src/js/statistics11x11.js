@@ -1,122 +1,68 @@
 
 // ... данные для списка "Бомбардиры" ...
 const goalsData = [
-    { number: "1.", name: "Костич", counter: "3" },
-    { number: "2.", name: "Волконский", counter: "12" },
-    { number: "3.", name: "Шеин", counter: "2" },
-    { number: "4.", name: "Петрищев", counter: "3" },
-    { number: "6.", name: "Пашаев", counter: "1" },
-    { number: "7.", name: "Пожидаев", counter: "1" },
-    { number: "8.", name: "Нишанов", counter: "2" },
-    { number: "9.", name: "Шаропов", counter: "8" },
-    { number: "10.", name: "Штепа", counter: "4" },
-    { number: "11.", name: "Кпавченко", counter: "1" },
-    { number: "13.", name: "Филимонов", counter: "1" },
-    { number: "13.", name: "Данишевский", counter: "4" },
-    { number: "14.", name: "Степанян", counter: "1" },
-    { number: "15.", name: "Макаров", counter: "2" },
-    { number: "16.", name: "Иванов", counter: "1" },
+    { number: "1.", name: "Волконский", counter: "2" },
+    { number: "1.", name: "Шаропов", counter: "2" },
+    { number: "1.", name: "Корчагин", counter: "1" },
+    { number: "1.", name: "Тошев", counter: "2" },
     // Добавьте остальных игроков
 ];
 
 // ... данные для списка "Ассистенты" ...
 const assistsData = [
-    { number: "1.", name: "Власов", counter: "1" },
-    { number: "2.", name: "Пашаев", counter: "1" },
-    { number: "3.", name: "Долгов", counter: "1" },
-    { number: "4.", name: "Костич", counter: "2" },
-    { number: "5.", name: "Волконский", counter: "4" },
-    { number: "6.", name: "Петрищев", counter: "4" },
-    { number: "7.", name: "Шаропов", counter: "5" },
-    { number: "8.", name: "Матвеев", counter: "2" },
-    { number: "9.", name: "Штепа", counter: "1" },
-    { number: "10.", name: "Сыпченко", counter: "1" },
-    { number: "11.", name: "Клейменов", counter: "1" },
-    { number: "12.", name: "Королев И.", counter: "1" },
-    { number: "13.", name: "Данишевский", counter: "1" },
-    { number: "14.", name: "Белов", counter: "2" },
-    { number: "15.", name: "Шеин", counter: "1" },
-    { number: "16.", name: "Амири", counter: "2" },
-    { number: "17.", name: "Макаров", counter: "2" },
+    { number: "1.", name: "Самарин", counter: "1" },
+    { number: "1.", name: "Корнилов", counter: "1" },
+    { number: "1.", name: "Якушин", counter: "1" },
     // Добавьте остальных игроков
 ];
 
 // Статистика вратарей
 const goalkeepersData = [
     { number: "1.", name: "Сыпченко", counter: "13" },
-    { number: "3.", name: "Мищенко", counter: "4" },
-    { number: "2.", name: "Исаев", counter: "9" },
+    { number: "2.", name: "Бутусов", counter: "5" },
+    { number: "3.", name: "Ларин Д.", counter: "2" },   
     // Добавьте остальных вратарей
 ];
 
 // Матчи на ноль
 const goalkeepersZero = [
-    { number: "1.", name: "Сыпченко", counter: "2" },
-    { number: "2.", name: "Исаев", counter: "1" },
-    { number: "3.", name: "Кулигин", counter: "1" }, 
-    { number: "4.", name: "Бутусов", counter: "1" }, 
+    { number: "1.", name: "Матчей не было", counter: "0" },
     // Добавьте остальных вратарей
 ];
 
 // Посещаемость
 const zanettiTopData = [
-    { name: "Батуев", training: 20 },
-    { name: "Белов", training: 25 },
-    { name: "Белоножкин", training: 15 },
-    { name: "Бутин", training: 11 },
-    { name: "Бутусов", training: 14 },
-    { name: "Власов", training: 16 },
-    { name: "Волконский", training: 46 },
-    { name: "Данишевский", training: 29 },
-    { name: "Иванов", training: 51 },
-    { name: "Долгов", training: 23 },
-    { name: "Швамбергер", training: 19 },
-    { name: "Исаев", training: 9 },
-    { name: "Пашаев", training: 4 },
-    { name: "Клеменой", training: 9 },
-    { name: "Королев Д.", training: 66 },
-    { name: "Королев И.", training: 24 },
-    { name: "Кравченко", training: 4 },
-    { name: "Костич", training: 17 },
-    { name: "Кулигин", training: 10 },
-    { name: "Нарванов", training: 4 },
-    { name: "Ларин", training: 30 },
-    { name: "Лешанков", training: 30 },
-    { name: "Макаров", training: 19 },
-    { name: "Матвеев", training: 85 },
-    { name: "Мкома", training: 3 },
-    { name: "Нарванов", training: 7 },
-    { name: "Нишанов", training: 9 },
-    { name: "Мищенко", training: 3 },
-    { name: "Петрищев", training: 63 },
-    { name: "Пожидаев", training: 31 },
-    { name: "Полевой", training: 52 },
-    { name: "Родионов", training: 0 },
-    { name: "Тапчан", training: 0 },
-    { name: "Савельев", training: 11 },
-    { name: "Салимгареев", training: 51 },
-    { name: "Свирщевский", training: 53 },
-    { name: "Стребков", training: 28 },
-    { name: "Сыпченко", training: 37 },
-    { name: "Устинов", training: 9 },
-    { name: "Филимонов", training: 11 },
-    { name: "Амири", training: 61 },
-    { name: "Шаропов", training: 83 },
-    { name: "Шеин", training: 76 },
-    { name: "Штепа", training: 27 },
-    { name: "Эрик", training: 23 },
-    { name: "Юсуф", training: 9 },
-    { name: "Майоров", training: 9 },
-    { name: "Сафаров", training: 8 },
-    { name: "Аралекян", training: 5 },
-    { name: "Демидов", training: 1 },
-    { name: "Хамзин", training: 2 },
-    { name: "Турнусов", training: 2 },
-    { name: "Саидов", training: 4 },
-    { name: "Малышев", training: 3 },
-    { name: "Михайлов", training: 9 },
-    { name: "Андреев", training: 6 },
-
+    { name: "Белов", training: 5 },
+    { name: "Бутусов", training: 3 },
+    { name: "Волконский", training: 6 },
+    { name: "Данишевский", training: 0 },
+    { name: "Иванов", training: 2 },
+    { name: "Королев", training: 8 },
+    { name: "Ларин", training: 3 },
+    { name: "Лешанков", training: 5 },
+    { name: "Майоров", training: 5 },
+    { name: "Макаров", training: 6 },
+    { name: "Матвеев", training: 7 },
+    { name: "Михайлов", training: 2 },
+    { name: "Москалев", training: 2 },
+    { name: "Нарватов", training: 1 },
+    { name: "Павлов", training: 4 },
+    { name: "Полевой", training: 8 },
+    { name: "Салимгареев", training: 1 },
+    { name: "Свирщевский", training: 5 },
+    { name: "Сокирко", training: 7 },
+    { name: "Стребков", training: 6 },
+    { name: "Сыпченко", training: 4 },
+    { name: "Тошев", training: 6 },
+    { name: "Шаропов", training: 7 },
+    { name: "Шеин", training: 8 },
+    { name: "Штепа", training: 4 },
+    { name: "Степанян", training: 8 },
+    { name: "Якушин", training: 8 },
+    { name: "Корнилов", training: 5 },
+    { name: "Потнов", training: 3 },
+    { name: "Самарин", training: 2 },
+    { name: "Кардаш", training: 2 },
 ];
 
 const sortByCounterDescending = (data) => {
@@ -174,7 +120,8 @@ goalsAssistsArray.sort((a, b) => {
     return totalB - totalA;
 });
 
-// Создаем элементы списка и добавляем их в разметку
+// Создаем элементы списка и добавляем и
+// х в разметку
 const goalsList = document.querySelector('.goals-list');
 const assistsList = document.querySelector('.assists-list');
 const goalsAssistsList = document.querySelector('.goals-assists-list');

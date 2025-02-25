@@ -1,8 +1,8 @@
 // АРХИВ
 
 const statisticsarchive = [
-    
     { number: "3", name: "Амири", matches: "15", goals: "0", assist: "3", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.06.2023" },
+    { number: "18", name: "Губский", matches: "235", goals: "124", assist: "19", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.07.2014" },
     { number: "17", name: "Петрищев", matches: "52", goals: "4", assist: "7", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.03.2023" },
     { number: "89", name: "Пожидаев", matches: "4", goals: "1", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.02.2023" },
     { number: "21", name: "Костоев", matches: "3", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.09.2024" },
@@ -139,11 +139,10 @@ const statisticsarchive = [
     { number: "0", name: "Иконников", matches: "44", goals: "5", assist: "6", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "" },
     { number: "0", name: "Кузнецов И.", matches: "28", goals: "22", assist: "23", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "" },
     { number: "0", name: "Прыдывус", matches: "67", goals: "24", assist: "12", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "" },
-    { number: "0", name: "ДЛорохольский", matches: "43", goals: "54", assist: "19", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "" },
+    { number: "0", name: "Дорохольский", matches: "43", goals: "54", assist: "19", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "" },
     { number: "0", name: "Нарватов", matches: "58", goals: "25", assist: "12", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "" },
     { number: "0", name: "Кузнецов Д.", matches: "26", goals: "9", assist: "7", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "" },
     { number: "0", name: "Гиско", matches: "7", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "" },
-    { number: "0", name: "Борзенков", matches: "55", goals: "1", assist: "3", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "" },
     { number: "0", name: "Файзиев", matches: "18", goals: "0", assist: "1", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "" },
     { number: "0", name: "Батуев", matches: "3", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "" },
     { number: "0", name: "Светилов", matches: "198", goals: "259", assist: "197", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "" },

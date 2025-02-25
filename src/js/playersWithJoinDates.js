@@ -39,7 +39,7 @@ const playersWithJoinDates = [
     { nameJoin: 'Швамбергер Илья', joinDate: '05.03.2023' },
     { nameJoin: 'Шеин Сергей', joinDate: '07.10.2020' },
     { nameJoin: 'Юсуф Ясир', joinDate: '09.07.2023' },
-    { nameJoin: 'Языков Алексей', joinDate: '10.10.2028' }
+    { nameJoin: 'Языков Алексей', joinDate: '10.10.2018' }
 ];
 
 if (typeof module !== 'undefined' && module.exports) {
