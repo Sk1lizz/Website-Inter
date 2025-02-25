@@ -1,17 +1,26 @@
 const goalsData = [
-    { number: "1.", name: "Матчей не было", counter: "0" },
+    { number: "1.", name: "Языков", counter: "8" },
+    { number: "1.", name: "Долгополов", counter: "4" },
+    { number: "1.", name: "Белоножкин", counter: "2" },
+    { number: "1.", name: "Хакимов", counter: "6" },
+    { number: "1.", name: "Волокитин", counter: "1" },
     // Добавьте остальных игроков
 ];
 // ... данные для списка "Ассистенты" ...
 
 const assistsData = [
-    { number: "1.", name: "Матчей не было", counter: "0" },
+    { number: "1.", name: "Языков", counter: "8" },
+    { number: "1.", name: "Хакимов", counter: "1" },
+    { number: "1.", name: "Тапчан", counter: "3" },
+    { number: "1.", name: "Петров", counter: "2" },
+    { number: "1.", name: "Белоножкин", counter: "2" },
+    { number: "1.", name: "Долгополов", counter: "1" },
 
     // Добавьте остальных игроков
 ];
 
 const goalkeepersData = [
-    { number: "1.", name: "Матчей не было", counter: "0" },
+    { number: "1.", name: "Мытько", counter: "11"},
     // Добавьте остальных вратарей
 ];
 
@@ -19,7 +28,7 @@ const goalkeepersData = [
 
 const goalkeepersZero = [
 
-    { number: "1.", name: "Матчей не было", counter: "0" },
+    { number: "1.", name: "Мытько", counter: "1" },
     // Добавьте остальных вратарей
 ];
 
