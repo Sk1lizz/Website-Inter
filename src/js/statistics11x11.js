@@ -2,17 +2,21 @@
 // ... данные для списка "Бомбардиры" ...
 const goalsData = [
     { number: "1.", name: "Волконский", counter: "2" },
-    { number: "1.", name: "Шаропов", counter: "2" },
-    { number: "1.", name: "Корчагин", counter: "1" },
+    { number: "1.", name: "Шаропов", counter: "3" },
+    { number: "1.", name: "Корчагин", counter: "3" },
     { number: "1.", name: "Тошев", counter: "2" },
+    { number: "1.", name: "Самарин", counter: "1" },
     // Добавьте остальных игроков
 ];
 
 // ... данные для списка "Ассистенты" ...
 const assistsData = [
-    { number: "1.", name: "Самарин", counter: "1" },
+    { number: "1.", name: "Самарин", counter: "2" },
     { number: "1.", name: "Корнилов", counter: "1" },
     { number: "1.", name: "Якушин", counter: "1" },
+    { number: "1.", name: "Корчагин", counter: "1" },
+    { number: "1.", name: "Шеин", counter: "1" },
+    { number: "1.", name: "Белов", counter: "1" },
     // Добавьте остальных игроков
 ];
 

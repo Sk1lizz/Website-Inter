@@ -11,7 +11,7 @@ const awards = {
     "9": { name: "Белоножкин", Number_Awards: "8", Number_Month_nomination: "4", Number_Year_nomination: "4", Number_Player_Month: "1", Number_Year_best: "2" },
     "10": { name: "Костич", Number_Awards: "1", Number_Month_nomination: "3", Number_Year_nomination: "2", Number_Player_Month: "1", Number_Year_best: "0" },
     "11": { name: "Полевой", Number_Awards: "0", Number_Month_nomination: "0", Number_Year_nomination: "0", Number_Player_Month: "0", Number_Year_best: "0" },
-    "12": { name: "Шаропов", Number_Awards: "1", Number_Month_nomination: "2", Number_Year_nomination: "0", Number_Player_Month: "0", Number_Year_best: "0" },
+    "12": { name: "Шаропов", Number_Awards: "2", Number_Month_nomination: "3", Number_Year_nomination: "0", Number_Player_Month: "0", Number_Year_best: "0" },
     "14": { name: "Голуб", Number_Awards: "0", Number_Month_nomination: "3", Number_Year_nomination: "0", Number_Player_Month: "0", Number_Year_best: "0" },
     "15": { name: "Королев", Number_Awards: "0", Number_Month_nomination: "0", Number_Year_nomination: "0", Number_Player_Month: "0", Number_Year_best: "0" },
     "16": { name: "Степанян", Number_Awards: "0", Number_Month_nomination: "0", Number_Year_nomination: "0", Number_Player_Month: "0", Number_Year_best: "0" },
