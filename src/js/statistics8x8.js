@@ -1,12 +1,12 @@
 const goalsData = [
-    { number: "1.", name: "Языков", counter: "9" },
+    { number: "1.", name: "Языков", counter: "11" },
     { number: "1.", name: "Долгополов", counter: "6" },
-    { number: "1.", name: "Белоножкин", counter: "4" },
-    { number: "1.", name: "Хакимов", counter: "12" },
+    { number: "1.", name: "Белоножкин", counter: "5" },
+    { number: "1.", name: "Хакимов", counter: "15" },
     { number: "1.", name: "Волокитин", counter: "1" },
     { number: "1.", name: "Котов", counter: "1" },
-    { number: "1.", name: "Костич", counter: "1" },
-    { number: "1.", name: "Тапчан", counter: "1" },
+    { number: "1.", name: "Костич", counter: "2" },
+    { number: "1.", name: "Тапчан", counter: "2" },
     { number: "1.", name: "Матвеев", counter: "1" },
     { number: "1.", name: "Автогол", counter: "1" },
     // Добавьте остальных игроков
@@ -14,19 +14,19 @@ const goalsData = [
 // ... данные для списка "Ассистенты" ...
 
 const assistsData = [
-    { number: "1.", name: "Языков", counter: "11" },
+    { number: "1.", name: "Языков", counter: "12" },
     { number: "1.", name: "Хакимов", counter: "3" },
     { number: "1.", name: "Тапчан", counter: "4" },
     { number: "1.", name: "Петров", counter: "2" },
     { number: "1.", name: "Белоножкин", counter: "2" },
-    { number: "1.", name: "Долгополов", counter: "2" },
+    { number: "1.", name: "Долгополов", counter: "3" },
     { number: "1.", name: "Костич", counter: "2" },
-
+    { number: "1.", name: "Голуб", counter: "1" },
     // Добавьте остальных игроков
 ];
 
 const goalkeepersData = [
-    { number: "1.", name: "Мытько", counter: "11"},
+    { number: "1.", name: "Мытько", counter: "33"},
     // Добавьте остальных вратарей
 ];
 
