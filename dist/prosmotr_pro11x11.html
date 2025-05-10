@@ -1,587 +1,1029 @@
 <!DOCTYPE html>
+
 <html lang="en">
 
+
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Просмотр в команду 11х11</title>
+
     <link rel="stylesheet" href="./css/main.css" />
+
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
     <meta name="description" content="Записаться на тренировки в футбольную команду FC Inter Moscow 11х11" />
+
     <link rel="manifest" href="/site.webmanifest">
+
 </head>
 
+
+
 <body>
+
     <header>
-    <link rel="icon" href="./img/favicon-16x16.png" sizes="16x16" type="image/png">
-    <link rel="icon" href="./img/favicon-32x32.png" sizes="32x32" type="image/png">
-    <link rel="icon" href="./img/apple-touch-icon.png" sizes="180x180" type="image/png">
-    <link rel="icon" href="./img/android-chrome-192x192.png" sizes="192x192" type="image/png">
-    <link rel="icon" href="./img/android-chrome-512x512.png" sizes="512x512" type="image/png">
-    <link rel="icon" href="./img/favicon.ico" type="image/x-icon">
-    <link rel="manifest" href="/site.webmanifest">
 
-    <div class="header_wrapper">
-        <div class="top_parth">
-            <a class="logo_wrapper" href="index.html">
-                <div class="logo_image"><img src="img/logo.png" href="index.html"></div>
-                <div class="logo_text">
-                    <div>INTER MOSCOW</div>
-                    <div>Offical Site</div>
-                </div>
-            </a>
+        <link rel="icon" href="./img/favicon-16x16.png" sizes="16x16" type="image/png">
 
-            <div class="social_view_wrapper">
-                <a href="prosmotr.html" class="view button">Записаться на просмотр</a>
-                <div class="social">
-                    <a href="https://vk.com/fcintermoscow"><img src="img/VK_Logo.png""></a>
+        <link rel="icon" href="./img/favicon-32x32.png" sizes="32x32" type="image/png">
+
+        <link rel="icon" href="./img/apple-touch-icon.png" sizes="180x180" type="image/png">
+
+        <link rel="icon" href="./img/android-chrome-192x192.png" sizes="192x192" type="image/png">
+
+        <link rel="icon" href="./img/android-chrome-512x512.png" sizes="512x512" type="image/png">
+
+        <link rel="icon" href="./img/favicon.ico" type="image/x-icon">
+
+        <link rel="manifest" href="/site.webmanifest">
+
+
+
+        <div class="header_wrapper">
+
+            <div class="top_parth">
+
+                <a class="logo_wrapper" href="index.html">
+
+                    <div class="logo_image"><img src="img/logo.png" href="index.html"></div>
+
+                    <div class="logo_text">
+
+                        <div>INTER MOSCOW</div>
+
+                        <div>Offical Site</div>
+
+                    </div>
+
+                </a>
+
+
+
+                <div class="social_view_wrapper">
+
+                    <a href="prosmotr.html" class="view button">Записаться на просмотр</a>
+
+                    <div class="social">
+
+                        <a href="https://vk.com/fcintermoscow"><img src="img/VK_Logo.png""></a>
+
                     <a href=" https://www.youtube.com/@fcintermoscow7572"><img src="img/youtube_logo.png"></a>
-                    <a href="https://t.me/fcintermoscow"><img src="img/telegram.png""></a>
+
+                        <a href="https://t.me/fcintermoscow"><img src="img/telegram.png""></a>
+
                 </div>
+
             </div>
+
+
 
             <div class=" menu_toggle">
-                        <div class="icon" id="icon">
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                        </div>
+
+                            <div class="icon" id="icon">
+
+                                <span></span>
+
+                                <span></span>
+
+                                <span></span>
+
+                            </div>
+
+                    </div>
+
                 </div>
+
+
+
+                <div class="bottom_parth">
+
+                    <ul class="menu">
+
+                        <li><a href="index.html">Главная</a></li>
+
+                        <li>
+
+                            <a href="club.html">Клуб</a>
+
+                            <div id="icon">
+
+                                <p>></p>
+
+                            </div>
+
+                            <ul class="submenu">
+
+                                <li><a href="gallery.html">Галерея</a></li>
+
+                                <li><a href="hystory.html">История</a></li>
+
+                                <li><a href="ustav.html">Устав</a></li>
+
+                                <li><a href="records.html">Достижения</a></li>
+
+                                <li><a href="alumnus.html">Воспитанники</a></li>
+
+                                <li><a href="hall_of_fame.html">Зал Славы</a></li>
+
+                                <li><a href="club100.html">Клуб 100</a></li>
+
+                                <li><a href="archive.html">Архив</a></li>
+
+                            </ul>
+
+                        </li>
+
+                        <li><a href="pro11x11.html">Pro (11x11)</a></li>
+
+                        <li><a href="8x8.html">Команда (8x8)</a></li>
+
+                        <li><a href="prosmotr.html">Просмотр</a></li>
+
+                        <li><a href="contacts.html">Контакты</a></li>
+
+                        <li><a href="cooperation.html">Сотрудничество</a></li>
+
+                        <li><a href="literature.html">Литература</a></li>
+
+                    </ul>
+
+                </div>
+
             </div>
 
-            <div class="bottom_parth">
-                <ul class="menu">
-                    <li><a href="index.html">Главная</a></li>
-                    <li>
-                        <a href="club.html">Клуб</a>
-                        <div id="icon">
-                            <p>></p>
-                        </div>
-                        <ul class="submenu">
-                            <li><a href="gallery.html">Галерея</a></li>
-                            <li><a href="hystory.html">История</a></li>
-                            <li><a href="ustav.html">Устав</a></li>
-                            <li><a href="records.html">Достижения</a></li>
-                            <li><a href="alumnus.html">Воспитанники</a></li>
-                            <li><a href="hall_of_fame.html">Зал Славы</a></li>
-                            <li><a href="club100.html">Клуб 100</a></li>
-                            <li><a href="archive.html">Архив</a></li>
-                        </ul>
-                    </li>
-                    <li><a href="pro11x11.html">Pro (11x11)</a></li>
-                    <li><a href="8x8.html">Команда (8x8)</a></li>
-                    <li><a href="prosmotr.html">Просмотр</a></li>
-                    <li><a href="contacts.html">Контакты</a></li>
-                    <li><a href="cooperation.html">Сотрудничество</a></li>
-                    <li><a href="literature.html">Литература</a></li>
-                </ul>
-            </div>
-        </div>
-</header>
+    </header>
+
     <div class="wrapper_prosmotrpro">
 
+
+
         <div class="about_team">
+
             <div class="text_block">
+
                 <div class="title">FC Inter Moscow Pro (11х11)</div>
+
                 <div class="title_2">Набор от 16 лет</div>
+
                 <div class=“text”><a href="prosmotr_pro11x11EN.html">English version</a></div>
+
                 <div class="text">Стать футболистом команды FC Inter Moscow PRO выступающей в формате 11х11 под
+
                     руководством опытного тренера с лицензией
+
                     UEFA. Участие в футбольной лиге и внутренних кубках, а также товарищеских матчах. Кол-во мест
+
                     ограничено. Участие в матчах
+
                     оплачивается отдельно.</div>
+
                 <div class="text">Вспомните моменты, когда вы мечтали подняться на новый уровень, но не знали, как это
+
                     сделать. У нас вы получите шанс не
+
                     просто играть, а расти и развиваться как футболист. Мы помогаем нашим игрокам продвигаться по
+
                     футбольной лестнице, а
+
                     если у вас нет достаточно навыков для высокого уровня, вы все равно почувствуете себя настоящим
+
                     профессионалом.
+
                     Представьте, каково это — выходить на поле, зная, что вы играете в команде, где ваш вклад
+
                     действительно ценят.</div>
+
                 <div class="text">Наша команда — это не просто место для тренировок, это ваша футбольная семья.
+
                     Представьте, что каждая тренировка и
+
                     каждый матч — это не просто игра, а событие, которое объединяет и вдохновляет.</div>
+
                 <div class="text-2" id="times">Ближайший просмотр в команду - </div>
+
                 <div class="icon_block">
+
                     <img src="img/prosmotr/prosmotr11x11/Russian_Football_Union_Logo.svg" alt="">
+
                     <img src="img/prosmotr/prosmotr11x11/uefa.svg" alt="">
+
                 </div>
+
             </div>
+
             <div class="icon_tactics">
+
                 <img src="img/prosmotr/prosmotr11x11/tactics.svg" alt="">
+
             </div>
+
         </div>
+
+
 
         <div class="advantages">
+
             <div class="block">
+
                 <div class="icon">
+
                     <img src="img/prosmotr/prosmotr11x11/training.svg" alt="">
+
                 </div>
+
                 <div class="text">Профессиональные тренировки</div>
+
             </div>
+
             <div class="block">
+
                 <div class="icon">
+
                     <img src="img/prosmotr/prosmotr11x11/sorevnovaniya.svg" alt="">
+
                 </div>
+
                 <div class="text">Матчи по выходным</div>
+
             </div>
+
             <div class="block">
+
                 <div class="icon">
+
                     <img src="img/prosmotr/prosmotr11x11/teoria.svg" alt="">
+
                 </div>
+
                 <div class="text">Теоретические занятия</div>
+
             </div>
+
             <div class="block">
+
                 <div class="icon">
+
                     <img src="img/prosmotr/prosmotr11x11/nagrazhdeniy.svg" alt="">
+
                 </div>
+
                 <div class="text">Награждение лучших игроков</div>
+
             </div>
+
         </div>
+
+
 
         <div class="coach_prosmotr">
+
             <div class="title">Тренеры</div>
+
             <div class="wrapper_blocks">
+
                 <div class="block_coach_prosmotr">
+
                     <div class="photoblock">
+
                         <div class="card_photo">
+
                             <img src="img/coach/peshekhonov.png" alt="">
+
                             <div class="text_box">
+
                                 <h4>Пешехонов Дмитрий</h4>
+
                                 <h5>Главный тренер</h5>
+
                                 <p>Лицензия C UEFA</p>
+
                                 <a href="peshekhonov.html"><button>Подробнее</button></a>
+
                             </div>
+
                         </div>
+
                     </div>
+
                 </div>
+
                 <div class="block_coach_prosmotr">
+
                     <div class="photoblock">
+
                         <div class="card_photo">
+
                             <img src="img/coach/gruminsky.png" alt="">
+
                             <div class="text_box">
+
                                 <h4>Грумынский Александр</h4>
+
                                 <h5>Тренер</h5>
+
                                 <p>Лицензия E UEFA</p>
+
                                 <a href="gruminsky.html"><button>Подробнее</button></a>
+
                             </div>
+
                         </div>
+
                     </div>
+
                 </div>
+
             </div>
+
         </div>
+
+
 
         <div class="training_place">
+
             <div class="block_place">
+
                 <div class="photo">
+
                     <img src="img/prosmotr/prosmotr11x11/Field.jpg" alt="">
+
                 </div>
+
                 <div class="info_block">
+
                     <div class="text_box">
+
                         <div class="title">Тренировочное поле</div>
+
                         <div class="text">Стадион Москвич</div>
+
                         <div class="text">Искусственный газон с подогревом последнего поколения</div>
+
                         <div class="text">Парковка рядом со стадионом</div>
+
                         <div class="text">Удобные и комфортные раздевалки с душевыми</div>
+
                         <div class="text">Адрес: Волгоградский просп., 46/15с7, Москва (м. Текстильщики)</div>
+
                         <div class="text">По понедельникам и пятницам в 21:30</div>
+
                         <div class="text">Заниматься на одном из самых современных стадионов Москвы и не разориться —
+
                             это реально с
+
                             FC Inter Moscow. Вы заслуживаете лучшие
+
                             условия, и мы их вам предоставляем. Не упустите шанс тренироваться в топовых условиях по
+
                             доступной цене.</div>
+
                     </div>
+
                 </div>
+
             </div>
+
         </div>
+
+
 
         <div class="prices">
+
             <div class="block11x11">
+
                 <div class="title">Пробная тренировка</div>
+
                 <div class="value">0 ₽</div>
+
                 <div class="text">За тренировку</div>
+
                 <div class="list">
+
                     <li>Пробная тренировка;</li>
+
                     <li>Предоплата перед тренировкой;</li>
+
                     <li>Продолжительность тренировки - 90 минут;</li>
+
                     <li>Включим в месячную оплату, если решите остаться;</li>
 
+
+
                 </div>
+
                 <div class="button">
+
                     <a href="#questionnaire"><button>Выбрать</button></a>
+
                 </div>
+
             </div>
+
             <div class="block11x11">
+
                 <div class="title">Вратарь</div>
+
                 <div class="value">3 575 ₽</div>
+
                 <div class="text">За месяц (8-9 тренировок)</div>
+
                 <div class="text">Тренировка 398р</div>
+
                 <div class="list">
+
                     <li>Членство в команде;</li>
+
                     <li>Возможность участия в матчах 11х11;</li>
+
                     <li>Продолжительность тренировок - 90 минут;</li>
+
                     <li>Перспективы развития и спортивной карьеры.</li>
+
                     <li>Включает 2 тренировки в неделю в течении месяца.</li>
+
                 </div>
+
                 <div class="button">
+
                     <a href="#questionnaire"><button>Выбрать</button></a>
+
                 </div>
+
             </div>
+
             <div class="block11x11">
+
                 <div class="title">Полевой</div>
+
                 <div class="value">4 345 ₽</div>
+
                 <div class="text">За месяц (8-9 тренировок)</div>
+
                 <div class="text">Тренировка 483р</div>
+
                 <div class="list">
+
                     <li>Членство в команде;</li>
+
                     <li>Возможность участия в матчах 11х11;</li>
+
                     <li>Продолжительность тренировок - 90 минут;</li>
+
                     <li>Перспективы развития и спортивной карьеры.</li>
+
                     <li>Включает 2 тренировки в неделю в течении месяца;</li>
+
                 </div>
+
                 <div class="button">
+
                     <a href="#questionnaire"><button>Выбрать</button></a>
+
                 </div>
+
             </div>
+
         </div>
+
+
+
 
 
         <div class="questionnaire" id="questionnaire">
 
 
+
+
+
             <div class="title">Анкета на просмотр</div>
 
 
+
+
+
             <form action="#" method="POST">
+
                 <div class="input-box">
+
                     <div class="input-field field">
+
                         <input type="name" placeholder="Введите ваше ФИО*" id="name" class="item" autocomplete="off">
+
                         <div class="error-txt">Некорректный ввод</div>
+
                     </div>
+
                     <div class="input-field field">
-                        <input type="text" placeholder="Введите ваш Email*" id="email" class="item" autocomplete="off">
-                        <div class="error-txt">Некорректный ввод</div>
-                    </div>
-                    <div class="input-field field">
-                        <input type="text" placeholder="Введите ссылку на вашу страницу vk" id="subject" class="item"
+
+                        <input type="name" placeholder="Введите вашу дату рождения*" id="birthday" class="item"
                             autocomplete="off">
+
                         <div class="error-txt">Некорректный ввод</div>
+
                     </div>
+
                     <div class="input-field field">
+
+                        <input type="text" placeholder="Введите ваш Email*" id="email" class="item" autocomplete="off">
+
+                        <div class="error-txt">Некорректный ввод</div>
+
+                    </div>
+
+                    <div class="input-field field">
+
                         <input type="text" placeholder="Введите ваш номер телефона*" id="number" class="item"
                             autocomplete="off">
+
                         <div class="error-txt">Некорректный ввод</div>
+
                     </div>
+
+                    <div class="input-field field">
+
+                        <input type="text" placeholder="Введите ссылку на вашу страницу vk" id="subject" class="item"
+                            autocomplete="off">
+
+                        <div class="error-txt">Некорректный ввод</div>
+
+                    </div>
+
+                    <div class="input-field field">
+
+                        <input type="text" placeholder="Основная игровая позиция" id="position" class="item"
+                            autocomplete="off">
+
+                        <div class="error-txt">Некорректный ввод</div>
+
+                    </div>
+
+
                     <div class="textarea-field field">
-                        <textarea type="message"
-                            placeholder="Информация о вас: позиция, игровой опыт, ведущая нога, дата рождения и тд*"
+
+                        <textarea type="message" placeholder="Информация о вас: игровой опыт, ведущая нога, и.т.д.*"
                             id="message" cols="30" rows="10" class="item" autocomplete="off"></textarea>
+
                         <div class="error-txt">Некорректный ввод</div>
+
                     </div>
+
                 </div>
+
                 <div class="text">* - обязательное поле</div>
+
                 <div class="text">Проверьте, что у вас открыты личные сообщения в vk. Если вы указали ваш ник в вк
+
                     вместо ссылки, то связаться там с вами не сможем. Если вы предпочитаете другой способ связи,
+
                     напишите об этом в информации про вас.</div>
+
                 <div class=“text”>Заполняя анкету, вы соглашаетесь на <a href=personal_data.html>
+
                         обработку персональных данных</a> и подтверждаете, что у вас нет противопоказаний для занятий
+
                     футболом. Если по какой-то причине форма заполнения анкеты ниже не
+
                     работает, вы можете связаться с нами через раздел контакты. Абонемент не включает в себя участие в
+
                     чемпионатах. Оплата за игры осуществляется отдельно.</div>
+
                 <button type="submit">Отправить</button>
+
             </form>
+
         </div>
 
+
+
         <div class="faq">
+
             <div class="title">Ответы на частые вопросы:</div>
+
             <details>
+
                 <summary>Цели команды?</summary>
+
                 <p>Воспитывать футболистов и помогать им. Наша главная цель на текущий момент - привлечение спонсора.
+
                     Команда постепенно решает различные
+
                     поставленные задачи, чтобы достигнуть цели</p>
+
             </details>
+
             <details>
+
                 <summary>Вы платите зарплату?</summary>
+
                 <p>Нет, команда на самообеспечении</p>
+
             </details>
+
             <details>
+
                 <summary>В какой лиге играет команда?</summary>
+
                 <p>Плюшевая лига</p>
+
             </details>
+
             <details>
+
                 <summary>Можно ли состоять в команде без гражданства РФ?</summary>
+
                 <p>Да, правила лиги позволяют</p>
+
             </details>
+
             <details>
+
                 <summary>Гарантировано игровое время?</summary>
+
                 <p>Да, если вы попали в заявку на матч, вы проведете как минимум 50% игрового времени на поле. Только в
+
                     исключительных случаях игровое время может быть снижено до 25%</p>
+
             </details>
+
             <details>
+
                 <summary>Могут ли меня отправить в дубль?</summary>
+
                 <p>У нас одна команда 11х11, вы можете при желании играть за нашу команду 8х8, она не является дублем
+
                     команды Pro.</p>
+
             </details>
+
             <details>
+
                 <summary>Как попасть на просмотр в клуб через вас?</summary>
+
                 <p>Помощь осуществляется бесплатно
+
                     только для членов команды по прошедствии времени. Тут все индивидуально. Лучше обратится к тренеру с
+
                     этим вопросом.
+
                 </p>
+
             </details>
+
             <details>
+
                 <summary>В какие клубы можно постасть на просмотр через вас?</summary>
+
                 <p>В большистве случаев клубы из КФК, выступающие в 3 дивизионе. Если ваши навыки игры позволяют вам
+
                     пройти просмотр в клубе ФНЛ-2, тогда, если это возможно, поможем и с этим.
+
                 </p>
+
             </details>
+
             <details>
+
                 <summary>Можно ли играть и тренироваться у вас бесплатно?</summary>
+
                 <p>Если вы выпускник академии из Клубной лиги, имеете опыт игры в ЮФЛ или ФНЛ-2 (или имеете аналогичный
+
                     опыт), индивидуально можем
+
                     рассмотреть этот вопрос. Напишите нам по электронной почте - info@fcintermoscow.com
+
                 </p>
+
             </details>
+
             <details>
+
                 <summary>Есть ли у вас интернат?</summary>
+
                 <p>Нет
+
                 </p>
+
             </details>
+
         </div>
+
+
+
+
 
 
 
         <footer>
-    <div class="footer_wrapper">
 
-        <div class="footer_left">
-            <a class="logo_wrapper" href="index.html">
-                <div class="logo_image"><img src="img/logo.png" href="index.html"></div>
-                <div class="logo_text">
-                    <div>INTER MOSCOW</div>
-                    <div>Offical Site</div>
+            <div class="footer_wrapper">
+
+
+
+                <div class="footer_left">
+
+                    <a class="logo_wrapper" href="index.html">
+
+                        <div class="logo_image"><img src="img/logo.png" href="index.html"></div>
+
+                        <div class="logo_text">
+
+                            <div>INTER MOSCOW</div>
+
+                            <div>Offical Site</div>
+
+                        </div>
+
+                    </a>
+
+
+
+                    <div class="info">
+
+                        <div class="title">Email:</div>
+
+                        <div class="text">info@fcintermoscow.com</div>
+
+                    </div>
+
+
+
+                    <div class="info">
+
+                        <div class="title">Юридическая информация:</div>
+
+                        <div class="text">Самозанятый Пешехонов Д.М.</div>
+
+                        <div class="text">ИНН 503810091397</div>
+
+                    </div>
+
+
+
+                    <div class="view">
+
+                        <a href="prosmotr.html" class="view button">Записаться на просмотр</a>
+
+                    </div>
+
+
+
+                    <div class="info">
+
+                        <div class="title">Сreated by D. Peshekhonov</div>
+
+                    </div>
+
                 </div>
-            </a>
 
-            <div class="info">
-                <div class="title">Email:</div>
-                <div class="text">info@fcintermoscow.com</div>
+
+
+                <div class="footer_right">
+
+                    <div class="menu">
+
+                        <ul>
+
+                            <li><a href="index.html">Главная</a></li>
+
+                            <li><a href="contacts.html">Контакты</a></li>
+
+                            <li><a href="gallery.html">Галерея</a></li>
+
+                            <li><a href="literature.html">Литература</a></li>
+
+                        </ul>
+
+                        <ul>
+
+                            <li><a href="club.html">Клуб</a></li>
+
+                            <li><a href="cooperation.html">Сотрудничество</a></li>
+
+                            <li><a href="ustav.html">Устав</a></li>
+
+                            <li><a href="testirovanie.html">Тестирование</a></li>
+
+                            <li><a href="alumnus.html">Воспитанники</a></li>
+
+                            <li><a href="hall_of_fame.html">Зал славы</a></li>
+
+                            <li><a href="club100.html">Клуб 100</a></li>
+
+                        </ul>
+
+                        <ul>
+
+                            <li><a href="club.html">О команде</a></li>
+
+                            <li><a href="hystory.html">История</a></li>
+
+                            <li><a href="records.html">Достижения</a></li>
+
+                            <li><a href="pro11x11.html">Команда (11x11)</a></li>
+
+                            <li><a href="8x8.html">Команда (8x8)</a></li>
+
+                            <li><a href="archive.html">Архив</a></li>
+
+                        </ul>
+
+                        <ul>
+
+                            <li><a href="prosmotr.html">Просмотр</a></li>
+
+                            <li><a href="prosmotr_pro11x11.html">Просмотр 11x11</a></li>
+
+                            <li><a href="prosmotr_8x8.html">Просмотр 8x8</a></li>
+
+                        </ul>
+
+                    </div>
+
+
+
+                    <div class="social">
+
+                        <a href="https://vk.com/fcintermoscow"><img src="img/VK_Logo.png" href="intex.html"></a>
+
+                        <a href="https://www.youtube.com/@fcintermoscow7572"><img src="img/youtube_logo.png"></a>
+
+                        <a href="https://t.me/fcintermoscow"><img src="img/telegram.png""></a>
+
             </div>
 
-            <div class="info">
-                <div class="title">Юридическая информация:</div>
-                <div class="text">Самозанятый Пешехонов Д.М.</div>
-                <div class="text">ИНН 503810091397</div>
-            </div>
-
-            <div class="view">
-                <a href="prosmotr.html" class="view button">Записаться на просмотр</a>
-            </div>
-
-            <div class="info">
-                <div class="title">Сreated by D. Peshekhonov</div>
-            </div>
         </div>
 
-        <div class="footer_right">
-            <div class="menu">
-                <ul>
-                    <li><a href="index.html">Главная</a></li>
-                    <li><a href="contacts.html">Контакты</a></li>
-                    <li><a href="gallery.html">Галерея</a></li>
-                    <li><a href="literature.html">Литература</a></li>
-                </ul>
-                <ul>
-                    <li><a href="club.html">Клуб</a></li>
-                    <li><a href="cooperation.html">Сотрудничество</a></li>
-                    <li><a href="ustav.html">Устав</a></li>
-                    <li><a href="testirovanie.html">Тестирование</a></li>
-                    <li><a href="alumnus.html">Воспитанники</a></li>
-                    <li><a href="hall_of_fame.html">Зал славы</a></li>
-                    <li><a href="club100.html">Клуб 100</a></li>
-                </ul>
-                <ul>
-                    <li><a href="club.html">О команде</a></li>
-                    <li><a href="hystory.html">История</a></li>
-                    <li><a href="records.html">Достижения</a></li>
-                    <li><a href="pro11x11.html">Команда (11x11)</a></li>
-                    <li><a href="8x8.html">Команда (8x8)</a></li>
-                    <li><a href="archive.html">Архив</a></li>
-                </ul>
-                <ul>
-                    <li><a href="prosmotr.html">Просмотр</a></li>
-                    <li><a href="prosmotr_pro11x11.html">Просмотр 11x11</a></li>
-                    <li><a href="prosmotr_8x8.html">Просмотр 8x8</a></li>
-                </ul>
-            </div>
-
-            <div class="social">
-                <a href="https://vk.com/fcintermoscow"><img src="img/VK_Logo.png" href="intex.html"></a>
-                <a href="https://www.youtube.com/@fcintermoscow7572"><img src="img/youtube_logo.png"></a>
-                <a href="https://t.me/fcintermoscow"><img src="img/telegram.png""></a>
-            </div>
-        </div>
     </div>
 
 
-</footer>
 
+
+
+</footer>
 </body>
 
-<script src="./js/index.bundle.js"></script>
-<script src="https://smtpjs.com/v3/smtp.js"></script>
+<script src=" ./js/index.bundle.js"></script>
+
+                            <script>
+                                const form = document.querySelector('form');
+                                const fullName = document.querySelector('#name');
+                                const email = document.querySelector('#email');
+                                const birthday = document.querySelector('#birthday');
+                                const subject = document.querySelector('#subject');
+                                const number = document.querySelector('#number');
+                                const position = document.querySelector('#position');
+                                const mess = document.querySelector('#message');
+
+                                function sendEmail() {
+                                    if (validateForm()) {
+                                        const bodyMessage = `В команду 11x11, Имя: ${fullName.value} <br> Дата рождения: ${birthday.value} <br> Email: ${email.value} <br>  Ссылка на страницу вк: ${subject.value}<br> Телефон: ${number.value}<br> Позиция:${position.value} <br> Информация об игроке:${mess.value} `;
+                                        Swal.fire({
+                                            title: "Сообщение отправляется",
+                                            text: "Подождите, пожалуйста!",
+                                            icon: "info"
+                                        });
 
 
-<script>
-    const form = document.querySelector('form');
-    const fullName = document.querySelector('#name');
-    const email = document.querySelector('#email');
-    const subject = document.querySelector('#subject');
-    const number = document.querySelector('#number');
-    const mess = document.querySelector('#message');
+                                        $.ajax({
+                                            method: "POST",
+                                            url: "mail.php",
+                                            data: { subject: "В команду 11x11 - заявка", body: bodyMessage }
+                                        })
+                                            .done(function (msg) {
+                                                Swal.close();
+                                                Swal.fire({
+                                                    title: "Ваше сообщение отправлено!",
+                                                    text: "Мы свяжемся с вами в ближайшее время",
+                                                    icon: "success"
+                                                });
+                                            });
+                                    } else {
+                                        alert('Пожалуйста, заполните форму корректно.');
+                                    }
+                                }
 
-    function sendEmail() {
-        if (validateForm()) {
-            const bodyMessage = `В команду 11x11, Имя: ${fullName.value}<br> Email: ${email.value} <br>  Ссылка на страницу вк: ${subject.value}<br> Телефон: ${number.value}<br> Информация об игроке:${mess.value} `;
 
-            Email.send({
-                Host: "smtp.elasticemail.com",
-                Username: "skvanter@gmail.com",
-                Password: "74193B46F107BD12D9D5BD9059C32473A494",
-                To: 'skvanter@gmail.com',
-                From: "skvanter@gmail.com",
-                Subject: subject.value,
-                Body: bodyMessage
-            }).then(
-                message => {
-                    if (message === "OK") {
-                        Swal.fire({
-                            title: "Ваше сообщение отправлено!",
-                            text: "Мы свяжемся с вами в ближайшее время",
-                            icon: "success"
-                        });
-                    }
-                }
-            );
-        } else {
-            alert('Пожалуйста, заполните форму корректно.');
-        }
-    }
 
-    function isEmailValid(email) {
-        // Регулярное выражение для проверки email
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailRegex.test(email);
-    }
+                                function isEmailValid(email) {
+                                    // Регулярное выражение для проверки email
+                                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                                    return emailRegex.test(email);
+                                }
 
-    function isPhoneNumberValid(number) {
-        // Регулярное выражение для проверки номера телефона (только цифры)
-        const phoneRegex = /^\+?\d+$/;
-        return phoneRegex.test(number);
-    }
 
-    function validateInput(input, minLength) {
-        return input.length >= minLength;
-    }
 
-    function showError(input, message) {
-        const parent = input.parentElement;
-        const error = parent.querySelector('.error-txt');
-        error.innerText = message;
-        parent.classList.add('error');
-    }
+                                function isPhoneNumberValid(number) {
+                                    // Регулярное выражение для проверки номера телефона (только цифры)
+                                    const phoneRegex = /^\+?\d+$/;
+                                    return phoneRegex.test(number);
+                                }
 
-    function hideError(input) {
-        const parent = input.parentElement;
-        const error = parent.querySelector('.error-txt');
-        error.innerText = '';
-        parent.classList.remove('error');
-    }
 
-    function validateForm() {
-        let isValid = true;
 
-        if (!validateInput(fullName.value, 2)) {
-            showError(fullName, 'Имя должно быть не менее 2 символов');
-            isValid = false;
-        } else {
-            hideError(fullName);
-        }
+                                function validateInput(input, minLength) {
+                                    return input.length >= minLength;
+                                }
 
-        if (!isEmailValid(email.value)) {
-            showError(email, 'Введите корректный email');
-            isValid = false;
-        } else {
-            hideError(email);
-        }
 
-        if (!validateInput(subject.value, 1)) {
-            showError(subject, 'Введите ссылку');
-            isValid = false;
-        } else {
-            hideError(subject);
-        }
 
-        if (!isPhoneNumberValid(number.value)) {
-            showError(number, 'Введите корректный номер телефона');
-            isValid = false;
-        } else {
-            hideError(number);
-        }
+                                function showError(input, message) {
+                                    const parent = input.parentElement;
+                                    const error = parent.querySelector('.error-txt');
+                                    error.innerText = message;
+                                    parent.classList.add('error');
+                                }
 
-        if (!validateInput(mess.value, 10)) {
-            showError(mess, 'Сообщение должно быть не короче 10 символов');
-            isValid = false;
-        } else {
-            hideError(mess);
-        }
+                                function hideError(input) {
+                                    const parent = input.parentElement;
+                                    const error = parent.querySelector('.error-txt');
+                                    error.innerText = '';
+                                    parent.classList.remove('error');
+                                }
 
-        return isValid;
-    }
+                                function validateForm() {
+                                    let isValid = true;
+                                    if (!validateInput(fullName.value, 2)) {
+                                        showError(fullName, 'Имя должно быть не менее 2 символов');
+                                        isValid = false;
+                                    } else {
+                                        hideError(fullName);
+                                    }
+                                    if (!isEmailValid(email.value)) {
+                                        showError(email, 'Введите корректный email');
+                                        isValid = false;
+                                    } else {
+                                        hideError(email);
+                                    }
+                                    if (!validateInput(subject.value, 1)) {
+                                        showError(subject, 'Введите ссылку');
+                                        isValid = false;
+                                    } else {
+                                        hideError(subject);
+                                    }
+                                    if (!isPhoneNumberValid(number.value)) {
+                                        showError(number, 'Введите корректный номер телефона');
+                                        isValid = false;
+                                    } else {
+                                        hideError(number);
+                                    }
+                                    if (!validateInput(mess.value, 10)) {
+                                        showError(mess, 'Сообщение должно быть не короче 10 символов');
+                                        isValid = false;
+                                    } else {
+                                        hideError(mess);
+                                    }
+                                    return isValid;
+                                }
+                                form.addEventListener("submit", (e) => {
+                                    e.preventDefault();
+                                    sendEmail();
+                                });
+                            </script>
+                            <script>
+                                function getNextViewingDate() {
+                                    const today = new Date();
+                                    const dayOfWeek = today.getDay();
+                                    let nextViewingDate;
+                                    if (dayOfWeek <= 1) {
+                                        // Если сегодня воскресенье или понедельник, следующий понедельник
+                                        nextViewingDate = new Date(today);
+                                        nextViewingDate.setDate(today.getDate() + (1 - dayOfWeek));
+                                    } else if (dayOfWeek <= 5) {
+                                        // Если сегодня между вторником и пятницей, ближайшая пятница
+                                        nextViewingDate = new Date(today);
+                                        nextViewingDate.setDate(today.getDate() + (5 - dayOfWeek));
+                                    } else {
+                                        // Если сегодня суббота, следующий понедельник
+                                        nextViewingDate = new Date(today);
+                                        nextViewingDate.setDate(today.getDate() + (8 - dayOfWeek));
+                                    }
+                                    return nextViewingDate;
+                                }
+                                function formatDate(date) {
 
-    form.addEventListener("submit", (e) => {
-        e.preventDefault();
-        sendEmail();
-    });
+                                    const options = { day: 'numeric', month: 'long' };
 
-</script>
+                                    return date.toLocaleDateString('ru-RU', options);
 
-<script>
-    function getNextViewingDate() {
-        const today = new Date();
-        const dayOfWeek = today.getDay();
-        let nextViewingDate;
+                                }
+                                function updateViewingDate() {
 
-        if (dayOfWeek <= 1) {
-            // Если сегодня воскресенье или понедельник, следующий понедельник
-            nextViewingDate = new Date(today);
-            nextViewingDate.setDate(today.getDate() + (1 - dayOfWeek));
-        } else if (dayOfWeek <= 5) {
-            // Если сегодня между вторником и пятницей, ближайшая пятница
-            nextViewingDate = new Date(today);
-            nextViewingDate.setDate(today.getDate() + (5 - dayOfWeek));
-        } else {
-            // Если сегодня суббота, следующий понедельник
-            nextViewingDate = new Date(today);
-            nextViewingDate.setDate(today.getDate() + (8 - dayOfWeek));
-        }
+                                    const nextViewingDate = getNextViewingDate();
 
-        return nextViewingDate;
-    }
+                                    const formattedDate = formatDate(nextViewingDate);
 
-    function formatDate(date) {
-        const options = { day: 'numeric', month: 'long' };
-        return date.toLocaleDateString('ru-RU', options);
-    }
-
-    function updateViewingDate() {
-        const nextViewingDate = getNextViewingDate();
-        const formattedDate = formatDate(nextViewingDate);
-        document.getElementById('times').textContent = `Ближайший просмотр в команду - ${formattedDate}`;
-    }
-
-    updateViewingDate();
-</script>
-
+                                    document.getElementById('times').textContent = `Ближайший просмотр в команду - ${formattedDate}`;
+                                }
+                                updateViewingDate();
+                            </script>
 </html>
