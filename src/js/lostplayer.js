@@ -1,7 +1,7 @@
 // АРХИВ
 
 const statisticsarchive = [
-    { number: "3", name: "Амири", matches: "15", goals: "0", assist: "3", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.06.2023" },
+    { number: "20", name: "Ларин И.", matches: "17", goals: "0", assist: "1", zeromatch: "0", lostgoals: "0", team: "pro" },
     { number: "18", name: "Губский", matches: "235", goals: "124", assist: "19", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.07.2014" },
     { number: "17", name: "Петрищев", matches: "52", goals: "4", assist: "7", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.03.2023" },
     { number: "89", name: "Пожидаев", matches: "4", goals: "1", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.02.2023" },
