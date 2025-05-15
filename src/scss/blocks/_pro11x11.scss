@@ -20,6 +20,13 @@
             flex-direction: column;
             align-items: center;
 
+            .team_description {
+                font-size: 2svh;
+                padding: 20px;
+                color: $light;
+                text-align: center;
+            }
+
             .team_name {
                 display: flex;
                 height: 100px;

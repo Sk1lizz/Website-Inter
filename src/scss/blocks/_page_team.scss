@@ -1,0 +1,243 @@
+.page_team {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #1a2a44;
+    color: white;
+    padding: 20px;
+}
+
+.container_page_team {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-top: 280px;
+}
+
+.tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.tab {
+    padding: 10px 20px;
+    background-color: #3b5998;
+    border: none;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.tab.active {
+    background-color: #4a90e2;
+}
+
+.stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.stat-block {
+    background-color: #2e3b5a;
+    padding: 20px;
+    border-radius: 5px;
+    flex: 1;
+    min-width: 200px;
+    text-align: center;
+}
+
+.stat-block h3 {
+    margin: 0;
+    font-size: 1.2em;
+}
+
+.stat-block p {
+    margin: 5px 0 0;
+    font-size: 1.5em;
+}
+
+h2 {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.team {
+    display: none;
+    /* Состав скрыт по умолчанию */
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.team-column {
+    flex: 1;
+    min-width: 200px;
+}
+
+.team-column h3 {
+    margin: 0 0 10px;
+    background-color: #3b5998;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.team-column ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    background-color: white;
+    color: black;
+    border-radius: 5px;
+}
+
+.team-column li {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.team-column li:last-child {
+    border-bottom: none;
+}
+
+.results {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.result-block {
+    background-color: #2e3b5a;
+    padding: 20px;
+    border-radius: 5px;
+    flex: 1;
+    min-width: 150px;
+    text-align: center;
+}
+
+.result-block p {
+    margin: 0;
+    font-size: 1.5em;
+}
+
+.result-block small {
+    display: block;
+    margin-top: 5px;
+    font-size: 0.9em;
+}
+
+.tablegoal {
+    width: 100%;
+    display: flex;
+    font-size: 16px;
+    flex-direction: column;
+    padding-bottom: 5px;
+
+    .block-wrapper {
+        display: flex;
+        width: 100%;
+        justify-content: center;
+
+        .statistic:nth-child(1) {
+            background-color: $dark;
+        }
+
+        .statistic:nth-child(2) {
+            background-color: $gray_black;
+        }
+
+        .statistic:nth-child(3) {
+            background-color: $dark;
+        }
+
+        .statistic {
+            display: flex;
+            justify-content: center;
+            align-items: start;
+            padding: 5px 10px;
+            color: $light;
+            text-align: center;
+            width: 32%;
+            border-radius: 6px;
+            margin: 5px;
+
+
+            .wrapper {
+                width: 90%;
+                max-width: 250px;
+                padding-bottom: 10px;
+                height: 100%;
+
+                .title {
+                    display: flex;
+                    justify-content: center;
+                    padding-bottom: 30px;
+                    font-size: 22px;
+                    font-family: PLAY-BOLD;
+                    height: 75px;
+                    padding-top: 20px;
+                }
+
+                ul {
+                    font-family: PLAY-REGULAR;
+                    height: 90%;
+                    font-size: 18px;
+
+                    li {
+                        display: flex;
+                        padding: 5px 0;
+                        justify-content: space-between;
+
+
+                        .number {
+                            display: flex;
+                            justify-content: flex-start;
+                            width: 20px;
+                        }
+
+                        .player {
+                            display: flex;
+                        }
+
+                        .counter {
+                            display: flex;
+                            justify-content: flex-end;
+                            width: 30px;
+                        }
+                    }
+                }
+
+                .link {
+                    display: flex;
+                    justify-content: center;
+                    padding-top: 7px;
+                    font-family: PLAY-Bold;
+                    align-items: end;
+
+                    a {
+                        font-size: 16px;
+                        color: $light;
+                        font-family: PLAY-BOLD;
+                    }
+
+                    a:hover {
+                        color: $gray;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 768px) {
+
+    .stat-block,
+    .result-block {
+        flex: 1 1 100%;
+    }
+
+    .team-column {
+        flex: 1 1 100%;
+    }
+
+}

@@ -27,11 +27,11 @@ const assistsData = [
 
 // Статистика вратарей
 const goalkeepersData = [
-    { number: "1.", name: "Стребков.", counter: "24" }, 
+    { number: "1.", name: "Стребков.", counter: "24" },
     { number: "2.", name: "Сыпченко", counter: "13" },
     { number: "3.", name: "Бутусов", counter: "5" },
-    { number: "4.", name: "Ларин Д.", counter: "2" }, 
-      
+    { number: "4.", name: "Ларин Д.", counter: "2" },
+
     // Добавьте остальных вратарей
 ];
 
@@ -290,5 +290,7 @@ document.addEventListener('DOMContentLoaded', function () {
             parentElement.appendChild(listItem);
         }
     };
+
+
 
 });

@@ -1,232 +1,144 @@
-.literature {
-    display: flex;
-    width: 100%;
-    background-color: $dark;
-    justify-content: center;
-    flex-direction: column;
+.wrapper_literature {
+    background: $gray_black;
+    color: #fff;
+    font-family: "PLAY-Regular";
+    margin: 0;
+    padding-bottom: 15px;
 
-    .banner {
-        text-align: center;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 85svh;
-        width: 100%;
-        position: relative;
+    .container_literature {
+        max-width: 1500px;
+        margin: 0 auto;
+        background: $gray_black;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
 
-        .fill {
-            position: absolute;
-            top: 0;
-            left: 0;
-            background: black;
-            opacity: .5;
-            width: 100%;
-            height: 100%;
+    .section {
+        margin-top: 20px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        padding: 20px;
+
+        ul {
+            list-style-type: disc;
+            padding-left: 20px;
         }
 
-        .background {
-            background-image: url(../img/literature/photoauror.jpg);
-            height: 100%;
-            width: 100%;
-            background-repeat: no-repeat;
-            background-position: center;
-            background-size: cover;
-        }
-
-        .content {
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            width: 95%;
-            color: white;
-            font-family: PLAY-BOLD;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-
-            .text {
-                font-size: 40px;
-                text-shadow: 1px 1px 1px $black,
-                    0 1px 1px $black,
-                    -1px 0 1px $black,
-                    0 -1px 1px $black;
-            }
-
-            .text_2 {
-                font-size: 50px;
-                margin-top: 20px;
-                text-shadow: 1px 1px 1px $black,
-                    0 1px 1px $black,
-                    -1px 0 1px $black,
-                    0 -1px 1px $black;
-            }
-
-            @import "elements/_buttons.scss";
+        li {
+            margin-bottom: 10px;
         }
     }
 
-    .about_autor {
-        display: flex;
-        height: 100%;
-        width: 100%;
-        background-color: $gray_black;
-        justify-content: center;
+    h1,
+    h2 {
+        color: #fff;
+        padding-bottom: 15px;
+        font-family: "PLAY-BOLD", sans-serif;
+    }
 
-        .image_autor {
-            display: flex;
-            width: 50%;
-            height: 100%;
-            background-color: $gray_black;
-            justify-content: center;
-            padding-left: 20px;
-
-            img {
-                height: 90%;
-                margin-top: 20px;
-                margin-bottom: 20px;
-                border-radius: 6px;
-                transition: 1s;
-                border-radius: 6px;
-                -webkit-box-shadow: 0px 0px 16px 2px rgba(34, 60, 80, 0.2);
-                -moz-box-shadow: 0px 0px 16px 2px rgba(34, 60, 80, 0.2);
-                box-shadow: 0px 0px 16px 2px rgba(34, 60, 80, 0.2);
-            }
-
-            img:hover {
-                transform: scale(1.05);
-            }
-        }
-
-        .text_about_autor {
-            display: flex;
-            width: 100%;
-            height: 100%;
-            background-color: $gray_black;
-            flex-direction: column;
-            padding: 30px 20px 20px 20px;
-
-            .title {
-                font-family: PLAY-BOLD;
-                font-size: 40px;
-                color: $light;
-                text-align: center;
-            }
-
-            .text_about_autor {
-                font-family: PLAY-REGULAR;
-                font-size: 20px;
-                color: $light;
-                text-align: left;
-                padding-top: 40px;
-                height: 100%;
-
-                li {
-                    padding-top: 30px;
-                    padding-right: 10px;
-                }
-            }
-        }
+    h3 {
+        padding-bottom: 20px;
+        font-family: "PLAY-BOLD", sans-serif;
     }
 
     .books {
         display: flex;
-        height: 100%;
-        width: 100%;
-        background-color: $dark;
-        flex-direction: column;
+        justify-content: space-between;
+        gap: 20px;
+    }
 
-        .title_block_books {
-            display: flex;
-            text-align: center;
-            justify-content: center;
-            font-family: PLAY-BOLD;
-            padding-top: 25px;
-            padding-bottom: 10px;
-            font-size: 32px;
-            color: $light;
+    .book {
+        flex: 1;
+        background: rgba(0, 0, 0, 0.3);
+        padding: 20px;
+        border-radius: 10px;
+
+        img {
+            width: 100%;
+            height: 100%;
+            background: #555; // Placeholder for missing images
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+    }
+
+    .link_literature {
+        font-family: "PLAY-Regular", sans-serif;
+        padding-top: 20px;
+        list-style-type: none;
+
+        ul {
+            list-style-type: none;
+            padding-left: 0;
         }
 
-        .books_wrapper {
+        li {
+            margin-bottom: 10px;
+
+            a {
+                text-decoration: none;
+                color: inherit;
+            }
+        }
+    }
+
+    .literature {
+        display: flex;
+        width: 100%;
+        justify-content: center;
+        flex-direction: column;
+
+        .banner {
+            text-align: center;
             display: flex;
-            height: 100%;
+            justify-content: center;
+            align-items: center;
+            height: 85svh;
             width: 100%;
-            padding-bottom: 20px;
+            position: relative;
 
-            .book {
-                display: flex;
-                width: 50%;
+            .fill {
+                position: absolute;
+                top: 0;
+                left: 0;
+                background: $black;
+                opacity: 0.5;
+                width: 100%;
                 height: 100%;
-                background-color: $dark;
-                justify-content: center;
+            }
+
+            .background {
+                background-image: url("../img/literature/photoauror.jpg");
+                height: 100%;
+                width: 100%;
+                background-repeat: no-repeat;
+                background-position: center;
+                background-size: cover;
+            }
+
+            .content {
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                width: 95%;
+                color: #fff;
+                font-family: "PLAY-BOLD", sans-serif;
+                display: flex;
                 flex-direction: column;
+                justify-content: center;
 
-                .image {
-                    display: flex;
-                    height: 600px;
-                    justify-content: center;
-                    padding: 5% 20% 5% 20%;
-
-                    img {
-                        height: 100%;
-                        transition: 1s;
-                        border-radius: 6px;
-                    }
-
-                    img:hover {
-                        transform: scale(1.05);
-                    }
+                .text {
+                    font-size: 40px;
+                    text-shadow: 1px 1px 1px $black, 0 1px 1px $black, -1px 0 1px $black,
+                        0 -1px 1px $black;
                 }
 
-                .text_block {
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    height: 70%;
-                    flex-direction: column;
-
-                    .title {
-                        font-family: PLAY-BOLD;
-                        text-align: center;
-                        color: $light;
-                        font-size: 20px;
-                        padding-left: 50px;
-                        padding-right: 50px;
-                    }
-
-                    .text {
-                        font-family: PLAY-REGULAR;
-                        text-align: center;
-                        color: $light;
-                        font-size: 16px;
-                        padding-top: 20px;
-                        padding-left: 50px;
-                        padding-right: 50px;
-
-                    }
-
-                    .link {
-                        font-family: PLAY-REGULAR;
-                        text-align: center;
-                        color: $light;
-                        font-size: 20px;
-                        padding-top: 20px;
-                        list-style-type: none;
-
-                        a {
-                            color: $light;
-                        }
-
-                        b {
-                            background-color: $black;
-                            color: $light;
-                            padding: 5px;
-                        }
-
-                        li {
-                            padding-top: 20px;
-                        }
-                    }
+                .text_2 {
+                    font-size: 50px;
+                    margin-top: 20px;
+                    text-shadow: 1px 1px 1px $black, 0 1px 1px $black, -1px 0 1px $black,
+                        0 -1px 1px $black;
                 }
             }
         }

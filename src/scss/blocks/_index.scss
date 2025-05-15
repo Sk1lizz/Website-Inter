@@ -63,12 +63,13 @@
                     background-color: $light;
                     color: $dark;
                     border: 1px solid #000000;
-                    border-radius: 5px;
-                    font-size: 24px;
-                    padding: 10px 30px;
+                    border-radius: 20px;
+                    font-size: 18px;
+                    padding: 10px 21px;
                     transition: all 0.4s ease;
                     font-family: PLAY-REGULAR;
-                    max-width: 340px;
+                    max-width: 250px;
+                    min-width: 200px;
                 }
 
                 button:hover {
@@ -88,11 +89,13 @@
                     background-color: $dark;
                     color: #ffffff;
                     border: 1px solid #000000;
-                    border-radius: 5px;
-                    font-size: 24px;
-                    padding: 10px 30px;
+                    border-radius: 20px;
+                    font-size: 18px;
+                    padding: 10px 21px;
                     transition: all 0.4s ease;
                     font-family: PLAY-REGULAR;
+                    max-width: 250px;
+                    min-width: 200px;
                 }
 
                 button:hover {
@@ -115,193 +118,294 @@
     }
 }
 
+.wrapper_info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding-top: 20px;
+    width: 100%;
+    height: 100%;
 
+    .wrapper_bloks {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20svh;
+        width: 100%;
+        padding: 10px;
+        flex-wrap: wrap;
+
+        .block {
+
+            h1 {
+                font-family: PLAY-BOLD;
+                color: $dark;
+                font-size: 5svh;
+            }
+
+            p {
+                font-family: PLAY-REGULAR;
+                font-size: 2.5svh;
+            }
+        }
+    }
+}
 
 .last_matches {
     width: 100%;
-    padding-left: 15%;
-    padding-right: 15%;
+    padding: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
     margin-top: 30px;
     flex-direction: column;
 
-    .title {
-        width: 100%;
-        justify-content: left;
+    .last_matches_container {
+        width: 85%;
+        margin: 0 auto;
         text-align: left;
-        color: $black;
-        font-family: PLAY-BOLD;
-        font-size: 35px;
-        margin-bottom: 10px;
-    }
 
-    .last_match_pro {
-        width: 100%;
-        height: 200px;
-        background-image: url(../img/last_match.jpg);
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: cover;
-        border-radius: 3px;
-
-        .fill {
-            background: $dark;
-            opacity: .9;
+        .title {
             width: 100%;
-            height: 100%;
-            flex-direction: column;
-            z-index: 0;
-            border-radius: 6px;
+            justify-content: left;
+            text-align: left;
+            color: $black;
+            font-family: PLAY-BOLD;
+            font-size: 3svh;
+            margin-bottom: 10px;
+        }
 
-            .data {
-                text-align: center;
-                padding-top: 30px;
-                font-size: 16px;
-                color: $light;
-                font-family: play-regular;
-            }
+        .last_match_pro {
+            width: 100%;
+            height: 200px;
+            background-image: url(../img/last_match.jpg);
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+            border-radius: 10px;
 
-            .title_last_matches {
-                text-align: center;
-                padding-top: 10px;
-                font-size: 16px;
-                color: $light;
-                font-family: play-regular;
-            }
-
-            .text_block {
-                display: flex;
+            .fill {
+                background: $dark;
+                opacity: .9;
                 width: 100%;
-                justify-content: center;
-                padding: 20px;
-                font-family: play-regular;
-                z-index: 1;
+                height: 100%;
+                flex-direction: column;
+                z-index: 0;
+                border-radius: 6px;
 
-                .team_name_1 {
-                    justify-content: left;
-                    text-align: left;
-                    font-size: 18px;
-                    color: $light;
-                    width: 45%;
-                    padding: 10px;
-                }
-
-                .match_score {
-                    justify-content: center;
+                .data {
                     text-align: center;
-                    font-size: 24px;
+                    padding-top: 30px;
+                    font-size: 16px;
                     color: $light;
-                    background: $black;
-                    border-radius: 3px;
-                    width: 80px;
-                    padding: 10px;
+                    font-family: play-regular;
                 }
 
-                .team_name_2 {
-                    justify-content: right;
-                    text-align: right;
-                    font-size: 18px;
+                .title_last_matches {
+                    text-align: center;
+                    padding-top: 10px;
+                    font-size: 16px;
                     color: $light;
-                    width: 45%;
-                    padding: 10px;
+                    font-family: play-regular;
                 }
-            }
 
-            .goals {
-                text-align: center;
-                font-size: 16px;
-                padding: 10px;
-                color: $light;
-                font-family: play-regular;
+                .text_block {
+                    display: flex;
+                    width: 100%;
+                    justify-content: center;
+                    padding: 20px;
+                    font-family: play-regular;
+                    z-index: 1;
+
+                    .team_name_1 {
+                        justify-content: left;
+                        text-align: left;
+                        font-size: 18px;
+                        color: $light;
+                        width: 45%;
+                        padding: 10px;
+                    }
+
+                    .match_score {
+                        justify-content: center;
+                        text-align: center;
+                        font-size: 24px;
+                        color: $light;
+                        background: $black;
+                        border-radius: 3px;
+                        width: 80px;
+                        padding: 10px;
+                    }
+
+                    .team_name_2 {
+                        justify-content: right;
+                        text-align: right;
+                        font-size: 18px;
+                        color: $light;
+                        width: 45%;
+                        padding: 10px;
+                    }
+                }
+
+                .goals {
+                    text-align: center;
+                    font-size: 16px;
+                    padding: 10px;
+                    color: $light;
+                    font-family: play-regular;
+                }
             }
         }
-    }
 
-    .last_match_8x8 {
-        width: 100%;
-        height: 200px;
-        background-image: url(../img/last_match_2.jpg);
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: cover;
-        margin-top: 20px;
-        border-radius: 3px;
-
-        .fill {
-            background: $black;
-            opacity: .9;
+        .last_match_8x8 {
             width: 100%;
-            height: 100%;
-            flex-direction: column;
-            z-index: 0;
-            border-radius: 6px;
+            height: 200px;
+            background-image: url(../img/last_match_2.jpg);
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+            margin-top: 20px;
+            border-radius: 10px;
 
-            .data {
-                text-align: center;
-                padding-top: 30px;
-                font-size: 16px;
-                color: $light;
-                font-family: play-regular;
-            }
-
-            .title_last_matches {
-                text-align: center;
-                padding-top: 10px;
-                font-size: 16px;
-                color: $light;
-                font-family: play-regular;
-            }
-
-            .text_block {
-                display: flex;
+            .fill {
+                background: $black;
+                opacity: .9;
                 width: 100%;
-                justify-content: center;
-                padding: 20px;
-                font-family: play-regular;
-                z-index: 1;
+                height: 100%;
+                flex-direction: column;
+                z-index: 0;
+                border-radius: 6px;
 
-                .team_name_1 {
-                    justify-content: left;
-                    text-align: left;
-                    font-size: 18px;
-                    color: $light;
-                    width: 45%;
-                    padding: 10px;
-                }
-
-                .match_score {
-                    justify-content: center;
+                .data {
                     text-align: center;
-                    font-size: 24px;
+                    padding-top: 30px;
+                    font-size: 16px;
                     color: $light;
-                    background: $dark;
-                    border-radius: 3px;
-                    width: 80px;
-                    padding: 10px;
+                    font-family: play-regular;
                 }
 
-                .team_name_2 {
-                    justify-content: right;
-                    text-align: right;
-                    font-size: 18px;
+                .title_last_matches {
+                    text-align: center;
+                    padding-top: 10px;
+                    font-size: 16px;
                     color: $light;
-                    width: 45%;
-                    padding: 10px;
+                    font-family: play-regular;
                 }
-            }
 
-            .goals {
-                padding: 10px;
-                text-align: center;
-                font-size: 16px;
-                color: $light;
-                font-family: play-regular;
+                .text_block {
+                    display: flex;
+                    width: 100%;
+                    justify-content: center;
+                    padding: 20px;
+                    font-family: play-regular;
+                    z-index: 1;
+
+                    .team_name_1 {
+                        justify-content: left;
+                        text-align: left;
+                        font-size: 18px;
+                        color: $light;
+                        width: 45%;
+                        padding: 10px;
+                    }
+
+                    .match_score {
+                        justify-content: center;
+                        text-align: center;
+                        font-size: 24px;
+                        color: $light;
+                        background: $dark;
+                        border-radius: 3px;
+                        width: 80px;
+                        padding: 10px;
+                    }
+
+                    .team_name_2 {
+                        justify-content: right;
+                        text-align: right;
+                        font-size: 18px;
+                        color: $light;
+                        width: 45%;
+                        padding: 10px;
+                    }
+                }
+
+                .goals {
+                    padding: 10px;
+                    text-align: center;
+                    font-size: 16px;
+                    color: $light;
+                    font-family: play-regular;
+                }
             }
         }
     }
 }
+
+.training_times {
+    margin: 0;
+    padding: 20px;
+    margin-top: 20px;
+    font-family: PLAY-REGULAR;
+
+    .schedule-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        text-align: left;
+
+        .schedule-title {
+            color: $black;
+            font-size: 2em;
+            margin-bottom: 20px;
+            font-family: PLAY-bold;
+            font-size: 3svh;
+        }
+
+        .schedule-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .schedule-item {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            background-color: $gray_light_25;
+        }
+
+        .schedule-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .schedule-item h3 {
+            color: #1a3c72;
+            margin: 0 0 10px;
+            font-size: 1.2em;
+            font-family: PLAY-bold;
+        }
+
+        .schedule-item p {
+            color: #333;
+            margin: 5px 0;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 600px) {
+            .schedule-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .schedule-title {
+                font-size: 1.5em;
+            }
+        }
+    }
+}
+
 
 .about_the_team {
     display: flex;
@@ -324,14 +428,14 @@
             padding-right: 40px;
 
             .title {
-                font-size: 45px;
+                font-size: 3svh;
                 font-family: PLAY-BOLD;
                 margin-bottom: 30px;
                 text-align: left;
             }
 
             .text {
-                font-size: 22px;
+                font-size: 2svh;
                 font-family: PLAY-REGULAR;
                 text-align: start;
             }
@@ -346,11 +450,12 @@
                     background-color: #1c3a75;
                     color: #ffffff;
                     border: 1px solid #000000;
-                    border-radius: 5px;
-                    font-size: 24px;
+                    border-radius: 20px;
+                    font-size: 18px;
                     padding: 10px 30px;
                     transition: all 0.4s ease;
                     font-family: PLAY-REGULAR;
+                    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
                 }
 
                 button:hover {
@@ -694,6 +799,11 @@
     scrollbar-width: none;
     /* убираем стандартный скролл для Firefox */
     scroll-behavior: smooth;
+
+    img {
+        border-radius: 20px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
 }
 
 .scrolling-wrapper .card {

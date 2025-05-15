@@ -1,94 +1,84 @@
 .alumnus {
     display: flex;
     width: 100%;
-    background-color: $black;
+    background-color: $light;
     justify-content: center;
-    padding: 190px 0 60px 0;
+    padding: 190px 20px 60px 20px;
+    font-family: PLAY-REGULAR;
 
-    .about_alumnus {
-        display: flex;
+    .container_alumnus {
+        max-width: 1400px;
+        margin: 0 auto;
+        text-align: center;
 
-        .about_alumnus_wrapper {
-            text-align: center;
-            width: 100%;
-            margin: 50px 20px;
-            line-height: 22px;
+        h2 {
+            font-size: 2em;
+            margin-bottom: 10px;
+            font-family: PLAY-BOLD;
+        }
+
+        h3 {
+            font-size: 1em;
+            margin-bottom: 10px;
+            font-family: PLAY-BOLD;
+        }
+
+
+        .subtitle {
+            font-size: 1em;
+            margin-bottom: 30px;
+            color: $black;
+        }
+
+        .success-cards {
             display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
 
-            .index_text_block {
-                width: 42%;
-                display: flex;
-                flex-direction: column;
-                justify-content: start;
-                margin-left: 50px;
-                padding-right: 40px;
+        .card {
+            background-color: $gray_light_25;
+            border-radius: 20px;
+            overflow: hidden;
+            width: 400px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
 
+        .card img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+        }
 
-                .title {
-                    font-size: 45px;
-                    font-family: PLAY-BOLD;
-                    margin-bottom: 35px;
-                    text-align: left;
-                    color: $dark_light;
-                }
+        .card-content {
+            padding: 15px;
+        }
 
-                .text {
-                    font-size: 22px;
-                    font-family: PLAY-REGULAR;
-                    text-align: start;
-                    color: $light;
-                    padding-bottom: 40px;
-                }
+        .card-content h3 {
+            margin: 0;
+            font-size: 1.2em;
+            color: $dark;
+        }
 
-                .text_background {
-                    background-color: #00509D;
-                    color: $light;
-                    text-align: center;
-                    font-family: PLAY-REGULAR;
-                    font-size: 22px;
-                    align-items: center;
-                    height: 100px;
-                    justify-content: center;
-                }
-            }
-
-            .index_photo_block {
-                display: flex;
-                flex-direction: column;
-                width: 58%;
-
-                .big_photo {
-                    width: 100%;
-                    padding: 5px 20px 10px 20px;
-
-                    img {
-                        width: 100%;
-                        border-radius: 3px;
-                        aspect-ratio: 16/11;
-                    }
-                }
-
-                .smalll_photo {
-                    width: 100%;
-                    display: flex;
-                    padding: 10px 20px 20px 20px;
-                    border-radius: 3px;
-
-                    img {
-                        aspect-ratio: 16/11;
-                        width: 50%;
-                        background-repeat: no-repeat;
-                        background-position: center;
-                        background-size: cover;
-                    }
-
-                    :last-child {
-                        padding-left: 10px;
-                    }
-                }
-            }
+        .card-content p {
+            margin: 5px 0;
+            font-size: 1em;
+            color: $black;
         }
     }
+
+
+
+    @media (max-width: 768px) {
+        .card {
+            width: 100%;
+            max-width: 300px;
+        }
+    }
+
+
 }
 
 

@@ -1,3 +1,12 @@
+@media (max-width: 1366px) {
+    .wrapper_info {
+        .wrapper_bloks {
+            gap: 15svh;
+        }
+    }
+}
+
+
 @media (max-width: 1024px) {
     .banner {
         height: 650px;
@@ -9,14 +18,14 @@
 
             .button_wrapper {
                 display: flex;
-                height: 75px;
+                height: 70px;
                 padding-top: 25px;
 
                 .white_button {
                     padding-right: 10px;
 
                     button {
-                        font-size: 18px;
+                        font-size: 2svh;
                         padding: 10px 20px;
                     }
                 }
@@ -24,10 +33,30 @@
                 .dark_button {
 
                     button {
-                        font-size: 18px;
+                        font-size: 2svh;
                         padding: 10px 20px;
                     }
 
+                }
+            }
+        }
+    }
+
+    .wrapper_info {
+        .wrapper_bloks {
+            gap: 10svh;
+
+            .block {
+
+                h1 {
+                    font-family: PLAY-BOLD;
+                    color: $dark;
+                    font-size: 4svh;
+                }
+
+                p {
+                    font-family: PLAY-REGULAR;
+                    font-size: 2.5svh;
                 }
             }
         }
@@ -90,7 +119,7 @@
 
 @media (max-width: 768px) {
     .banner {
-        height: 650px;
+        height: 80svh;
 
         .content {
             height: 400px;
@@ -129,90 +158,120 @@
         }
     }
 
+    .wrapper_info {
+        height: 150px;
+        margin-top: 25px;
+
+        .wrapper_bloks {
+            gap: 5svh;
+
+            .block {
+                min-width: 100px;
+
+                h1 {
+                    font-family: PLAY-BOLD;
+                    color: $dark;
+                    font-size: 4svh;
+                }
+
+                p {
+                    font-family: PLAY-REGULAR;
+                    font-size: 2svh;
+                }
+            }
+        }
+    }
+
+
+
     .last_matches {
         padding-left: 5%;
         padding-right: 5%;
         margin-top: 15px;
 
-        .title {
-            margin-bottom: 15px;
-            text-align: center;
-        }
+        .last_matches_container {
+            width: 100%;
 
-        .last_match_8x8 {
-            height: 230px;
+            .title {
+                margin-bottom: 15px;
+                text-align: center;
+            }
 
-            .fill {
-                .data {
-                    text-align: center;
-                    padding-top: 30px;
-                    font-size: 14px;
-                    color: $light;
-                    font-family: play-regular;
-                }
+            .last_match_8x8 {
+                height: 230px;
 
-                .title_last_matches {
-                    padding-top: 10px;
-                    font-size: 14px;
-                }
-
-                .text_block {
-                    align-items: center;
-                    padding: 10px;
-
-                    .team_name_1 {
-                        font-size: 16px;
+                .fill {
+                    .data {
+                        text-align: center;
+                        padding-top: 30px;
+                        font-size: 14px;
+                        color: $light;
+                        font-family: play-regular;
                     }
 
-                    .team_name_2 {
-                        font-size: 16px;
+                    .title_last_matches {
+                        padding-top: 10px;
+                        font-size: 14px;
                     }
-                }
 
-                .goals {
-                    font-size: 16px;
-                    height: 30%;
-                    justify-content: center;
-                    align-items: center;
+                    .text_block {
+                        align-items: center;
+                        padding: 10px;
+
+                        .team_name_1 {
+                            font-size: 16px;
+                        }
+
+                        .team_name_2 {
+                            font-size: 16px;
+                        }
+                    }
+
+                    .goals {
+                        font-size: 16px;
+                        height: 30%;
+                        justify-content: center;
+                        align-items: center;
+                    }
                 }
             }
-        }
 
-        .last_match_pro {
-            height: 230px;
+            .last_match_pro {
+                height: 230px;
 
-            .fill {
-                .data {
-                    text-align: center;
-                    padding-top: 30px;
-                    font-size: 14px;
-                    color: $light;
-                    font-family: play-regular;
-                }
-
-                .title_last_matches {
-                    padding-top: 10px;
-                    font-size: 14px;
-                }
-
-                .text_block {
-                    align-items: center;
-                    padding: 10px;
-
-                    .team_name_1 {
-                        font-size: 16px;
+                .fill {
+                    .data {
+                        text-align: center;
+                        padding-top: 30px;
+                        font-size: 14px;
+                        color: $light;
+                        font-family: play-regular;
                     }
 
-                    .team_name_2 {
+                    .title_last_matches {
+                        padding-top: 10px;
+                        font-size: 14px;
+                    }
+
+                    .text_block {
+                        align-items: center;
+                        padding: 10px;
+
+                        .team_name_1 {
+                            font-size: 16px;
+                        }
+
+                        .team_name_2 {
+                            font-size: 16px;
+                        }
+                    }
+
+                    .goals {
+                        height: 30%;
+                        justify-content: center;
+                        align-items: center;
                         font-size: 16px;
                     }
-                }
-
-                .goals {
-                    height: 30%;
-                    justify-content: center;
-                    align-items: center;
-                    font-size: 16px;
                 }
             }
         }
