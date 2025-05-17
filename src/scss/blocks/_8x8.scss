@@ -10,7 +10,7 @@
         display: flex;
         height: 100%;
         width: 100%;
-        margin-top: 190px;
+        margin-top: 22svh;
         background-color: $black;
         flex-direction: column;
 
@@ -20,19 +20,25 @@
             flex-direction: column;
             align-items: center;
 
+            .team_description {
+                font-size: 2svh;
+                padding: 20px;
+                color: $light;
+                text-align: center;
+            }
+
             .team_name {
                 display: flex;
-                height: 100px;
+                height: 4svh;
                 width: 95%;
                 background-color: $black;
-                padding: 25px;
-                border-bottom: 10px solid $dark;
 
                 .name_team {
-                    font-size: 30px;
-                    color: $dark_light;
+                    font-size: 4svh;
+                    color: $gold;
                     width: 50%;
                     padding-left: 20px;
+                    font-family: PLAY-BOLD;
                 }
 
                 .button_8x8 {
@@ -40,15 +46,16 @@
                     width: 50%;
                     justify-content: end;
                     padding-right: 20px;
+                    flex: 1;
 
                     button {
                         font-family: PLAY-REGULAR;
-                        font-size: 16px;
-                        color: $light;
+                        font-size: 2svh;
+                        color: $gold;
                         background-color: $dark;
-                        padding: 10px 5px;
-                        border: solid $light 1px;
-                        border-radius: 8px;
+                        padding: 1svh 0.5svh;
+                        border: solid $gold 2px;
+                        border-radius: 20px;
                         transition: 101ms;
                         display: flex;
                         flex-direction: row;
@@ -62,22 +69,26 @@
                         padding: 10px 5px;
                         background-color: $black;
                         color: $light;
-                        border: solid 1px $light;
+                        border: solid 2px $light;
                     }
                 }
             }
 
             .players {
-                display: flex;
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr;
+                /* Равные столбцы */
+                align-items: stretch;
+                /* Равномерная высота */
                 height: 100%;
-                width: 95%;
+                width: 100%;
+                padding: 3svh;
                 background-color: $black;
-                justify-content: center;
-                border-bottom: 10px solid $dark;
+                justify-content: space-between;
 
                 .player {
                     display: flex;
-                    font-size: 25px;
+                    font-size: 2.5svh;
                     color: $light;
                     margin-bottom: 10px;
                     padding-left: 20px;
@@ -99,22 +110,28 @@
                         }
 
                         a:hover {
-                            color: $dark_light;
+                            color: $gold;
                         }
                     }
                 }
 
                 .player:hover {
-                    color: $dark_light;
+                    color: $gold;
                     font-family: PLAY-BOLD;
                 }
+
+
             }
 
             .player_blok {
+                display: flex;
                 height: 100%;
-                width: 33%;
                 flex-direction: column;
                 padding: 20px;
+                background-color: $dark;
+                border-radius: 20px;
+                margin: 10px;
+                flex: 1;
 
 
                 .goalkeeper {
@@ -122,20 +139,22 @@
                     justify-content: center;
 
                     .title {
-                        font-size: 25px;
-                        color: $dark_light;
+                        font-size: 2.8svh;
+                        color: $gold;
                         margin-bottom: 10px;
                         padding-left: 20px;
+                        font-family: PLAY-BOLD;
                     }
                 }
 
                 .defender {
                     .title {
-                        font-size: 25px;
-                        color: $dark_light;
+                        font-size: 2.8svh;
+                        color: $gold;
                         margin-bottom: 10px;
                         margin-top: 20px;
                         padding-left: 20px;
+                        font-family: PLAY-BOLD;
                     }
                 }
             }
@@ -143,24 +162,32 @@
             .midfielders {
                 display: flex;
                 height: 100%;
-                width: 33%;
                 flex-direction: column;
                 padding: 20px;
+                background-color: $dark;
+                border-radius: 20px;
+                margin: 10px;
+                flex: 1;
 
                 .title {
-                    font-size: 25px;
-                    color: $dark_light;
+                    font-size: 2.8svh;
+                    color: $gold;
                     margin-bottom: 10px;
                     padding-left: 20px;
+                    font-family: PLAY-BOLD;
                 }
             }
 
             .forvards_coach_block {
                 display: flex;
                 height: 100%;
-                width: 33%;
                 flex-direction: column;
-                padding: 20px 20px 20px 0;
+                padding: 20px;
+                background-color: $dark;
+                border-radius: 20px;
+                margin: 10px;
+                flex: 1;
+
             }
 
             .forvards {
@@ -169,11 +196,13 @@
                 width: 100%;
                 flex-direction: column;
 
+
                 .title {
-                    font-size: 25px;
-                    color: $dark_light;
+                    font-size: 2.8svh;
+                    color: $gold;
                     margin-bottom: 10px;
                     padding-left: 20px;
+                    font-family: PLAY-BOLD;
                 }
             }
 
@@ -182,13 +211,16 @@
                 height: 100%;
                 width: 100%;
                 flex-direction: column;
-                margin-top: 50px;
+                justify-content: end;
+                padding-bottom: 2.3svh;
+
 
                 .title {
-                    font-size: 25px;
-                    color: $dark_light;
+                    font-size: 2.8svh;
+                    color: $gold;
                     margin-bottom: 10px;
                     padding-left: 20px;
+                    font-family: PLAY-BOLD;
 
                 }
 
@@ -220,24 +252,24 @@
     }
 
     .statistics {
-        width: 95%;
+        width: 100%;
         height: 100%;
         background-color: $black;
         justify-content: center;
+        padding: 0 3svh;
 
         .title {
-            display: flex;
-            height: 100px;
-            width: 95%;
+            width: 100%;
+            height: 100%;
             background-color: $black;
-            padding: 30px;
             justify-content: center;
+            padding: 0 3svh 3svh 3svh;
 
             .title_text {
-                font-size: 30px;
-                color: $dark_light;
+                font-size: 4svh;
+                font-family: PLAY-BOLD;
+                color: $gold;
                 width: 95%;
-                padding-left: 30px;
             }
         }
 
@@ -254,8 +286,16 @@
                 transition: transform 0.5s ease;
 
                 .slider {
-                    display: flex;
+                    display: grid;
+                    grid-template-columns: 1fr 1fr 1fr;
+                    /* Равные столбцы */
+                    align-items: stretch;
+                    /* Равномерная высота */
                     width: 100%;
+                    gap: 1svh;
+                    padding: 1svh;
+                    justify-content: center;
+
 
                     .blocks {
                         display: flex;
@@ -264,109 +304,21 @@
                         justify-content: center;
                         align-items: center;
                         flex-direction: column;
-                        padding: 0 20px 20px 20px;
+                        background-color: $gray_black;
+                        border-radius: 20px;
                     }
 
-                    .game {
-                        display: flex;
-                        width: 100%;
-                        height: 100%;
-                        margin-bottom: 10px;
-                        justify-content: center;
-                        padding: 20px;
-                    }
-
-                    .wins {
-                        display: flex;
-                        width: 100%;
-                        height: 100%;
-                        margin-bottom: 10px;
-                        justify-content: center;
-                        padding: 20px;
-                    }
-
-                    .draw {
-                        display: flex;
-                        width: 100%;
-                        height: 100%;
-                        margin-bottom: 10px;
-                        justify-content: center;
-                        padding: 20px;
-                    }
-
-                    .lose {
-                        display: flex;
-                        width: 100%;
-                        height: 100%;
-                        margin-bottom: 10px;
-                        justify-content: center;
-                        padding: 20px;
-                    }
-
-                    .goals {
-                        display: flex;
-                        width: 100%;
-                        height: 100%;
-                        margin-bottom: 10px;
-                        justify-content: center;
-                        padding: 20px;
-                    }
-
-                    .goals_conceded {
-                        display: flex;
-                        width: 100%;
-                        height: 100%;
-                        margin-bottom: 10px;
-                        justify-content: center;
-                        padding: 20px;
-                    }
-
-                    .difference {
-                        display: flex;
-                        width: 100%;
-                        height: 100%;
-                        margin-bottom: 10px;
-                        justify-content: center;
-                        padding: 20px;
-                    }
-
-                    .form {
-                        display: flex;
-                        width: 100%;
-                        height: 100%;
-                        margin-bottom: 10px;
-                        justify-content: center;
-                        padding: 20px;
-                    }
-
-                    .wins_series {
-                        display: flex;
-                        width: 100%;
-                        height: 100%;
-                        margin-bottom: 10px;
-                        justify-content: center;
-                        padding: 20px;
-                    }
-
-                    .wins_lose {
-                        display: flex;
-                        width: 100%;
-                        height: 100%;
-                        margin-bottom: 10px;
-                        justify-content: center;
-                        padding: 20px;
-                    }
-
-
-                    .the_best_win {
-                        display: flex;
-                        width: 100%;
-                        height: 100%;
-                        margin-bottom: 10px;
-                        justify-content: center;
-                        padding: 20px;
-                    }
-
+                    .game,
+                    .wins,
+                    .draw,
+                    .lose,
+                    .goals,
+                    .goals_conceded,
+                    .difference,
+                    .form,
+                    .wins_series,
+                    .wins_lose,
+                    .the_best_win,
                     .the_best_lose {
                         display: flex;
                         width: 100%;
@@ -378,22 +330,24 @@
 
 
                     .text {
-                        justify-content: start;
-                        flex-direction: column;
-                        width: 70%;
-                        height: 100%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        width: 100%;
 
                         .name {
-                            font-size: 15px;
-                            color: $gray;
+                            font-size: 2svh;
+                            color: $gold;
                             text-align: left;
                             padding-bottom: 5px;
+                            width: 50%;
                         }
 
                         .number {
-                            font-size: 20px;
+                            font-size: 2svh;
                             color: $light;
-                            text-align: left;
+                            text-align: right;
+                            width: 50%;
                         }
                     }
 
@@ -414,11 +368,26 @@
         }
     }
 
+    .title_tablegoal {
+        width: 100%;
+        height: 100%;
+        background-color: $black;
+        justify-content: center;
+        padding: 3svh 3svh 3svh 5svh;
+
+        .text_title {
+            font-size: 4svh;
+            font-family: PLAY-BOLD;
+            color: $gold;
+            width: 100%;
+        }
+    }
+
     .tablegoal {
         width: 100%;
         display: flex;
         font-size: 16px;
-        padding-bottom: 5px;
+        padding-bottom: 20px;
 
         .statistic:nth-child(1) {
             background-color: $dark;
@@ -462,15 +431,17 @@
                     display: flex;
                     justify-content: center;
                     padding-bottom: 30px;
-                    font-size: 22px;
+                    font-size: 2svh;
                     font-family: PLAY-BOLD;
                     height: 75px;
                     padding-top: 20px;
+                    color: $gold;
                 }
 
                 ul {
                     font-family: PLAY-REGULAR;
                     height: 90%;
+                    font-size: 2svh;
 
                     li {
                         display: flex;
@@ -503,7 +474,7 @@
                     align-items: end;
 
                     a {
-                        font-size: 16px;
+                        font-size: 2svh;
                         color: $light;
                         font-family: PLAY-BOLD;
                     }
