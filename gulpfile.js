@@ -57,6 +57,26 @@ gulp.task('includeFiles', function () {
         .pipe(gulp.dest('./dist/'))
 });
 
+gulp.task('copyPhp', function () {
+    return gulp.src('./src/php/**/*').pipe(gulp.dest('./dist/php/'));
+});
+
+gulp.task('copyRoutes', function () {
+    return gulp.src('./src/routes/**/*').pipe(gulp.dest('./dist/routes/'));
+});
+
+gulp.task('copyMiddlewares', function () {
+    return gulp.src('./src/middlewares/**/*').pipe(gulp.dest('./dist/middlewares/'));
+});
+
+gulp.task('copyViews', function () {
+    return gulp.src('./src/views/**/*').pipe(gulp.dest('./dist/views/'));
+});
+
+gulp.task('copyPublic', function () {
+    return gulp.src('./src/public/**/*').pipe(gulp.dest('./dist/public/'));
+});
+
 //  ===> SCSS
 gulp.task('sass', function () {
     return gulp
@@ -126,12 +146,13 @@ gulp.task('copyFiles', function () {
 //  ===> Сервер для автообновления страницы
 gulp.task('server', function () {
     return gulp
-        // Указываем откуда берем файлы
         .src('./dist/')
         .pipe(server({
             livereload: true,
-            open: true
-        }))
+            open: 'http://localhost:3000',
+            host: 'localhost',
+            port: 3000
+        }));
 });
 
 //  ===> Удаление папки
@@ -152,7 +173,11 @@ gulp.task('watch', function () {
     gulp.watch('./src/js/**/*.js', gulp.parallel('js'));
     gulp.watch('./src/img/**/*', gulp.parallel('copyImages'));
     gulp.watch('./src/fonts/**/*', gulp.parallel('copyFonts'));
-    gulp.watch('./src/files/**/*', gulp.parallel('copyFiles'));
+    gulp.watch('./src/php/**/*', gulp.parallel('copyPhp'));
+    gulp.watch('./src/routes/**/*', gulp.parallel('copyRoutes'));
+    gulp.watch('./src/middlewares/**/*', gulp.parallel('copyMiddlewares'));
+    gulp.watch('./src/views/**/*', gulp.parallel('copyViews'));
+    gulp.watch('./src/public/**/*', gulp.parallel('copyPublic'));
 });
 
 
@@ -160,14 +185,18 @@ gulp.task('watch', function () {
 // (Пишем в терминале команду "npm i", а после команду"gulp")
 gulp.task('default', gulp.series(
     'clean',
-    gulp.parallel('includeFiles',
+    gulp.parallel(
+        'includeFiles',
         'sass',
         'copyImages',
         'copyFonts',
-        'copyFiles',
-        'js'),
-    gulp.parallel('server',
-        'watch')
+        'js',
+        'copyPhp',
+        'copyRoutes',
+        'copyMiddlewares',
+        'copyViews',
+        'copyPublic'
+    ),
+    gulp.parallel('server', 'watch')
 ));
-
 

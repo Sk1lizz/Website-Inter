@@ -166,20 +166,8 @@
     <div class="birthday">
         <div class="birthday_players">
             <div class="title">День Рождения</div>
-            <div class="block_birthday_players">
-                <div class="name_player"></div>
-                <div class="data_title"></div>
-                <div class="timer"></div>
-            </div>
-            <div class="block_birthday_players">
-                <div class="name_player"></div>
-                <div class="data_title"></div>
-                <div class="timer"></div>
-            </div>
-            <div class="block_birthday_players">
-                <div class="name_player"></div>
-                <div class="data_title"></div>
-                <div class="timer"></div>
+            <div class="birthday_list">
+                <!-- здесь динамически добавим блоки через JS -->
             </div>
         </div>
         <div class="player_in_team">
@@ -240,342 +228,33 @@
     @@include('blocks/footer.html')
 
     <script src="./js/index.bundle.js"></script>
+    <script src="./js/birthday.bundle.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 
+
     <script>
-        moment.updateLocale('ru', {
-            months: [
-                "января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"
-            ],
-            monthsShort: [
-                "янв", "фев", "мар", "апр", "май", "июн", "июл", "авг", "сен", "окт", "ноя", "дек"
-            ],
-            weekdays: [
-                "воскресенье", "понедельник", "вторник", "среда", "четверг", "пятница", "суббота"
-            ],
-            weekdaysShort: [
-                "вс", "пн", "вт", "ср", "чт", "пт", "сб"
-            ],
-            weekdaysMin: [
-                "вс", "пн", "вт", "ср", "чт", "пт", "сб"
-            ]
-        });
+        fetch('/api/birthdays')
+            .then(res => res.json())
+            .then(data => {
+                const container = document.querySelector('.birthday_list'); // ⬅️ изменено
+                container.innerHTML = ''; // безопасно, заголовок не трогаем
 
-        const players = [{
-            name: 'Абянов Руфат',
-            birthday: '21.04.1997'
-        },
-        {
-            name: 'Агатов Александр',
-            birthday: '01.06.1991'
-        },
-        {
-            name: 'Алексий Нестор',
-            birthday: '22.05.1999'
-        },
-        {
-            name: 'Белоножкин Артём',
-            birthday: '09.02.1996'
-        },
-        {
-            name: 'Волконский Максим',
-            birthday: '26.08.2003'
-        },
-        {
-            name: 'Волокитин Тимур',
-            birthday: '31.07.1993'
-        },
-        {
-            name: 'Голованов Денис',
-            birthday: '28.02.1997'
-        },
-        {
-            name: 'Голуб Василий',
-            birthday: '26.01.1988'
-        },
-        {
-            name: 'Грумынский Александр',
-            birthday: '10.04.1991'
-        },
-        {
-            name: 'Губский Никита',
-            birthday: '18.02.1995'
-        },
-        {
-            name: 'Гусев Даниил',
-            birthday: '23.12.1996'
-        },
-        {
-            name: 'Долгов Данила',
-            birthday: '12.10.2003'
-        },
-        {
-            name: 'Костич Илья',
-            birthday: '24.06.2002'
-        },
-        {
-            name: 'Ларин Дмитрий',
-            birthday: '19.02.2003'
-        },
-        {
-            name: 'Лешанков Дмитрий',
-            birthday: '02.07.2004'
-        },
-        {
-            name: 'Макарчев Дмитрий',
-            birthday: '20.12.1995'
-        },
-        {
-            name: 'Мытько Владислав',
-            birthday: '09.08.1994'
-        },
-        {
-            name: 'Петрищев Андрей',
-            birthday: '13.02.2005'
-        },
-        {
-            name: 'Пешехонов Дмитрий',
-            birthday: '26.01.1995'
-        },
-        {
-            name: 'Салимгареев Руслан',
-            birthday: '18.05.2009'
-        },
-        {
-            name: 'Синицын Александр',
-            birthday: '14.12.1992'
-        },
-        {
-            name: 'Скворцов Александр',
-            birthday: '06.01.1998'
-        },
-        {
-            name: 'Тапчан Роман',
-            birthday: '29.12.1988'
-        },
-        {
-            name: 'Шаропов Фирдавс',
-            birthday: '17.02.2005'
-        },
-        {
-            name: 'Шеин Сергей',
-            birthday: '24.04.1999'
-        },
-        {
-            name: 'Юсуф Ясир',
-            birthday: '28.03.2004'
-        },
-        {
-            name: 'Языков Алексей',
-            birthday: '25.04.1997'
-        },
-        {
-            name: 'Королев Дмитрий',
-            birthday: '10.11.2005'
-        },
-        {
-            name: 'Матвеев Алексей',
-            birthday: '25.09.2005'
-        },
-        {
-            name: 'Амири Фирдавс',
-            birthday: '03.07.2005'
-        },
-        {
-            name: 'Пожидаев Дмитрий',
-            birthday: '26.06.2005'
-        },
-        {
-            name: 'Касулин Данил',
-            birthday: '22.01.2002'
-        },
-        {
-            name: 'Котов Кирилл',
-            birthday: '22.05.1998'
-        },
-        {
-            name: 'Сыпченко Александр',
-            birthday: '10.02.2006'
-        },
-        {
-            name: 'Штепа Максим',
-            birthday: '25.03.2002'
-        },
-        {
-            name: 'Полевой Тимофей',
-            birthday: '10.01.2004'
-        },
-        {
-            name: 'Хакимов Салават',
-            birthday: '20.08.2005'
-        },
-        {
-            name: 'Бутусов Денис',
-            birthday: '27.10.2005'
-        },
-        {
-            name: 'Мкома Максим',
-            birthday: '19.11.2001'
-        },
-        {
-            name: 'Стребков Роман',
-            birthday: '27.05.1994'
-        },
-        {
-            name: 'Филимонов Евгений',
-            birthday: '12.09.2007'
-        },
-        {
-            name: 'Бубнов Виктор',
-            birthday: '25.10.1996'
-        },
-        {
-            name: 'Ларин Дмитрий',
-            birthday: '19.02.2003'
-        },
-        {
-            name: 'Свирщевский Юрий',
-            birthday: '29.12.2003'
-        },
-        {
-            name: 'Иванов Никита',
-            birthday: '10.02.2006'
-        },
-        {
-            name: 'Иванов Илья',
-            birthday: '13.09.2003'
-        },
-        {
-            name: 'Белов Константин',
-            birthday: '14.12.2004'
-        },
-        {
-            name: 'Макаров Андрей',
-            birthday: '07.09.2006'
-        },
-        {
-            name: 'Нарватов Дмитрий',
-            birthday: '21.06.2005'
-        },
-        {
-            name: 'Степанян Эрик',
-            birthday: '03.02.2003'
-        },
-        {
-            name: 'Самарин Никита',
-            birthday: '03.09.2004'
-        },
-        {
-            name: 'Портнов Алексей',
-            birthday: '18.10.2007'
-        },
-        {
-            name: 'Михайлов Алексей',
-            birthday: '23.12.1996'
-        },
-        {
-            name: 'Сокирко Ярослав',
-            birthday: '09.11.2007'
-        },
-        {
-            name: 'Якушин Валерий',
-            birthday: '18.12.2003'
-        },
-        {
-            name: 'Корнилов Кирилл',
-            birthday: '10.12.2007'
-        },
-        {
-            name: 'Тошев Наврузбек',
-            birthday: '20.03.1995'
-        },
-        {
-            name: 'Майоров Максим',
-            birthday: '22.08.2009'
-        },
-        {
-            name: 'Вячеслав Москалев',
-            birthday: '21.09.2006'
-        },
-        {
-            name: 'Бурлаков Евгений',
-            birthday: '30.07.2008'
-        },
-        {
-            name: 'Петров Антон',
-            birthday: '07.11.2001'
-        },
-
-
-
-        ];
-
-
-        function displayUpcomingBirthdays(players) {
-            const sortedPlayers = players
-                .map((player) => {
-                    const birthday = moment(player.birthday, 'DD.MM.YYYY').set({
-                        year: moment().year()
-                    });
-                    const diff = birthday.diff(moment().startOf('day'), 'days');
-                    return {
-                        ...player,
-                        birthday,
-                        diff
-                    };
-                })
-                .filter((player) => player.diff >= 0)
-                .sort((a, b) => a.diff - b.diff)
-                .slice(0, 3);
-            const blocks = document.querySelectorAll('.block_birthday_players');
-
-            sortedPlayers.forEach((player, index) => {
-                const block = blocks[index];
-
-                const namePlayer = block.querySelector('.name_player');
-                const dataTitle = block.querySelector('.data_title');
-                const executedBlock = block.querySelector('.executed_block');
-                const timer = block.querySelector('.timer');
-
-                const birthdayFormatted = player.birthday.format('DD MMMM', 'ru');
-                const daysLeft = player.diff;
-
-                namePlayer.textContent = player.name;
-                dataTitle.textContent = birthdayFormatted;
-
-                if (daysLeft === 0) {
-                    timer.textContent = 'Сегодня';
-                } else {
-                    timer.textContent = formatDaysLeft(daysLeft);
-                }
-            });
-
-        }
-
-        function formatDaysLeft(daysLeft) {
-            if (daysLeft === 1) {
-                return 'Завтра';
-            } else if (daysLeft === 2) {
-                return 'Послезавтра';
-            } else {
-                const daysLeftString = daysLeft.toString();
-                const lastDigit = parseInt(daysLeftString.charAt(daysLeftString.length - 1));
-                const lastTwoDigits = parseInt(daysLeftString.slice(-2));
-
-                if (lastTwoDigits >= 11 && lastTwoDigits <= 14) {
-                    return `Через ${daysLeft} дней`;
-                } else if (lastDigit === 1) {
-                    return `Через ${daysLeft} день`;
-                } else if (lastDigit >= 2 && lastDigit <= 4) {
-                    return `Через ${daysLeft} дня`;
-                } else {
-                    return `Через ${daysLeft} дней`;
-                }
-            }
-        }
-
-        displayUpcomingBirthdays(players);
+                data.forEach(player => {
+                    const block = document.createElement('div');
+                    block.className = 'block_birthday_players';
+                    block.innerHTML = `
+        <div class="name_player">${player.name}</div>
+        <div class="data_title">${player.birthday}</div>
+        <div class="timer">Через ${player.days_left} дн.</div>
+        <div class="timer">
+  ${player.days_left === 0 ? '🎉 Сегодня!' : `Через ${player.days_left} дн.`}
+</div>
+      `;
+                    container.appendChild(block);
+                });
+            })
+            .catch(err => console.error('Ошибка загрузки дней рождения:', err));
     </script>
 
     <script src="./js/scrollindex.bundle.js"></script>
