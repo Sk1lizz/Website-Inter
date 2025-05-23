@@ -6,6 +6,7 @@ const db = require('./db');
 require('dotenv').config();
 
 
+
 const adminApiRoutes = require('./dist/routes/admin'); // или где у тебя лежит API
 app.use('/api/admin', adminApiRoutes);
 
@@ -152,3 +153,20 @@ app.put('/api/admin/players/:playerId/statistics', async (req, res) => {
 });
 
 
+/// команды
+
+// API endpoint
+
+
+app.get('/api/players/team/:teamId', async (req, res) => {
+    const teamId = req.params.teamId;
+    try {
+        const [players] = await db.query(
+            'SELECT name, number, position FROM players WHERE team_id = ?',
+            [teamId]
+        );
+        res.json(players);
+    } catch (error) {
+        res.status(500).json({ error: 'Server error' });
+    }
+});

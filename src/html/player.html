@@ -4,102 +4,140 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Нет игрока</title>
-    <link rel="stylesheet" href="./css/main.css" />
-
+    <title>Герман Англичанинов</title>
+    <link rel="stylesheet" href="/css/main.css">
 </head>
 
 <body>
     @@include('blocks/header.html')
+    <div class="forever_payer">
+        <script src="https://code.jquery.com/jquery-2.1.0.js"></script>
 
-
-    <div class="page_player">
-        <div class="player">
-            <div class="photoblock">
-                <div class="card_photo">
-                    <img src="img/player/1.png" alt="">
-                </div>
-
-            </div>
-            <div class="aboutme">
-                <div class="name">
-                    <h3>
-                        <?php echo ?player{'name'}; ?>
-                    </h3>
-                    <h4>
-                        <?php echo ?player{'lastname'}; ?player{'Middle_name'}; ?>
-                    </h4>
-                    <div class="position_number">
-                        <div class="number">1</div>
-                        <div class="position">Вратарь</div>
+        <div class="profile-container">
+            <div class="left-column">
+                <div class="player-card">
+                    <img src="/img/player/player_0.png" alt="">
+                    <h2 class="player-name">
+                        Англичанинов Герман
+                    </h2>
+                    <div class="player-info">
+                        <p><strong>Номер:</strong>1</p>
+                        <p><strong>Позиция:</strong> Вратарь</p>
+                        <p><strong>Возраст:</strong> <span id="age">1</span></p>
+                        <p><strong>Дата Рождения:</strong> <span id="birthdate">13.02.1996</span></p>
+                        <p><strong>Присоединился:</strong> 2013 г.</p>
+                        <p><strong>Покинул:</strong> 2016 г.</p>
                     </div>
                 </div>
-                <div class="information">
-                    <ul class="information_me">
-                        <li>
-                            <div class="title_information">Возраст</div>
-                            <div class="text" id="age"></div>
-                        </li>
-                        <li>
-                            <div class="title_information">Дата рождения</div>
-                            <div class="text" id="birthday">28.09.2006</div>
-                        </li>
-                        <li>
-                            <div class="title_information">Команда</div>
-                            <div class="text">Pro (11х11)</div>
-                        </li>
-                        <li>
-                            <div class="title_information">Присоединился</div>
-                            <div class="text">Май, 2021</div>
-                        </li>
-                        <li>
-                            <div class="title_information" id="teamTime">Время в команде</div>
-                            <div class="text" id="datateamTime">04.05.2021</div>
-                        </li>
-                        <li>
-                            <div class="title_information">Рост</div>
-                            <div class="text">179</div>
-                        </li>
-                        <li>
-                            <div class="title_information">Вес</div>
-                            <div class="text">80</div>
-                        </li>
-                        <li>
-                            <div class="title_information">Опыт</div>
-                            <div class="text" id="experience">0</div>
-                        </li>
-                        <li>
-                            <div class="title_information">Титул</div>
-                            <div class="text" id="title"></div>
-                        </li>
-                    </ul>
+
+                <div class="player-card">
+                    <h2 class="player-name">
+                        Опыт
+                    </h2>
+                    <div class="player-info">
+                        <p><strong>Очков опыта</strong> 111</p>
+                        <p><strong>Титул</strong> Вратарь</p>
+
+                    </div>
                 </div>
             </div>
+
+            <div class="right-column">
+                <div class="card">
+                    <h3>Статистика текущего сезона</h3>
+                    <div class="stats-grid">
+                        <div>
+                            <div class="number">80</div>Матчей
+                        </div>
+                        <div>
+                            <div class="number">0</div>Голов
+                        </div>
+                        <div>
+                            <div class="number">0</div>Ассистов
+                        </div>
+                        <div>
+                            <div class="number">0</div>Гол+пас
+                        </div>
+                        <div>
+                            <div class="number">269</div>Голов пропущено
+                        </div>
+                        <div>
+                            <div class="number">0</div>Матчей на 0
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Достижения</h3>
+                    <div class="career-item">
+                        Лучший вратарь года<span>2014</span>
+                        <small>FC Inter Moscow 8x8</small>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Статистика общая</h3>
+                    <div class="stats-grid">
+                        <div>
+                            <div class="number">80</div>Матчей
+                        </div>
+                        <div>
+                            <div class="number">0</div>Голов
+                        </div>
+                        <div>
+                            <div class="number">0</div>Ассистов
+                        </div>
+                        <div>
+                            <div class="number">0</div>Гол+пас
+                        </div>
+                        <div>
+                            <div class="number">269</div>Голов пропущено
+                        </div>
+                        <div>
+                            <div class="number">0</div>Матчей на 0
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
         </div>
-
-
-
     </div>
+
 
     @@include('blocks/footer.html')
 
-    <script src="./js/index.bundle.js"></script>
+    <script src="../js/index.bundle.js"></script>
 
     <script>
-        document.querySelectorAll('.img-container img').forEach(img => {
-            img.onclick = () => {
-                document.querySelector('.pop-up').style.display = 'block';
-                document.querySelector('.pop-up img').src = img.getAttribute('src'); // Исправление: заменили дефис на знак равенства
-            }
-        });
+        function calculateAge(birthDateStr) {
+            const [day, month, year] = birthDateStr.split('.').map(Number);
+            const birthDate = new Date(year, month - 1, day);
+            const today = new Date();
+            let age = today.getFullYear() - birthDate.getFullYear();
 
-        document.querySelector('.pop-up span').onclick = () => {
-            document.querySelector('.pop-up').style.display = 'none';
+            // Учитываем, прошёл ли день рождения в этом году
+            const hasHadBirthdayThisYear =
+                today.getMonth() > birthDate.getMonth() ||
+                (today.getMonth() === birthDate.getMonth() && today.getDate() >= birthDate.getDate());
+
+            if (!hasHadBirthdayThisYear) {
+                age--;
+            }
+
+            return age;
         }
+
+        // Пример: получить дату из DOM и вставить возраст
+        const birthdateText = document.getElementById('birthdate').textContent.trim();
+        const age = calculateAge(birthdateText);
+        document.getElementById('age').textContent = age;
     </script>
 
-    <script src="js/playerpage.bundle.js"></script>
-    <script src="js/playerstatistics.bundle.js"></script>
+
+    <script src="../js/playerpage.bundle.js"></script>
+
 </body>
 
 </html>

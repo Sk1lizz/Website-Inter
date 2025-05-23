@@ -27,111 +27,20 @@
                     <div class="player_blok">
                         <div class="goalkeeper">
                             <div class="title">Вратари</div>
-                            <div class="player">
-                                <div class="number">26</div>
-                                <div class="name"><a href="player_26.html">Голованов Денис</a></div>
-                            </div>
-                            <div class="player">
-                                <div class="number">81</div>
-                                <div class="name"><a href="player_81.html">Мытько Владислав</a></div>
-                            </div>
                         </div>
+
                         <div class="defender">
                             <div class="title">Защитники</div>
-                            <div class="player">
-                                <div class="number">6</div>
-                                <div class="name"><a href="player_6.html">Касулин Данил</a></div>
-                            </div>
-                            <div class="player">
-                                <div class="number">37</div>
-                                <div class="name"><a href="player_37.html">Шеин Сергей</a></div>
-                            </div>
-                            <div class="player">
-                                <div class="number">41</div>
-                                <div class="name"><a href="player_41.html">Синицын Александр</a></div>
-                            </div>
-                            <div class="player">
-                                <div class="number">42</div>
-                                <div class="name"><a href="player_42.html">Изосимов Артём</a></div>
-                            </div>
-                            <div class="player">
-                                <div class="number">55</div>
-                                <div class="name"><a href="player_55.html">Алексий Нестор</a></div>
-                            </div>
-                            <div class="player">
-                                <div class="number">63</div>
-                                <div class="name"><a href="player_63.html">Скворцов Александр</a></div>
-                            </div>
-                            <div class="player">
-                                <div class="number">72</div>
-                                <div class="name"><a href="player_72.html">Абянов Руфат</a></div>
-                            </div>
-                            <div class="player">
-                                <div class="number">99</div>
-                                <div class="name"><a href="player_99.html">Петров Антон</a></div>
-                            </div>
                         </div>
                     </div>
                     <div class="midfielders">
                         <div class="title">Полузащитники</div>
-                        <div class="player">
-                            <div class="number">5</div>
-                            <div class="name"><a href="player_5.html">Волокитин Тимур</a></div>
-                        </div>
-                        <div class="player">
-                            <div class="number">7</div>
-                            <div class="name"><a href="player_7.html">Тапчан Роман</a></div>
-                        </div>
-                        <div class="player">
-                            <div class="number">9</div>
-                            <div class="name"><a href="player_9.html">Белоножкин Артем (С)</a></div>
-                        </div>
-                        <div class="player">
-                            <div class="number">10</div>
-                            <div class="name"><a href="player_10.html">Костич Илья</a></div>
-                        </div>
-                        <div class="player">
-                            <div class="number">14</div>
-                            <div class="name"><a href="player_14.html">Голуб Василий</a></div>
-                        </div>
-                        <div class="player">
-                            <div class="number">19</div>
-                            <div class="name"><a href="player_19.html">Агатов Александр</a></div>
-                        </div>
-                        <div class="player">
-                            <div class="number">22</div>
-                            <div class="name"><a href="player_22.html">Макарчев Дмитрий</a></div>
-                        </div>
-                        <div class="player">
-                            <div class="number">33</div>
-                            <div class="name"><a href="player_33.html">Долгополов Никита</a></div>
-                        </div>
-                        <div class="player">
-                            <div class="number">74</div>
-                            <div class="name"><a href="player_74.html">Котов Кирилл</a></div>
-                        </div>
-                        <div class="forvards"></div>
                     </div>
 
                     <div class="forvards_coach_block">
                         <div class="forvards">
                             <div class="title">Нападающие</div>
-                            <div class="player">
-                                <div class="number">2</div>
-                                <div class="name"><a href="player_2.html">Салават Хакимов</a></div>
-                            </div>
-                            <div class="player">
-                                <div class="number">23</div>
-                                <div class="name"><a href="player_23.html">Бубнов Виктор</a></div>
-                            </div>
-                            <div class="player">
-                                <div class="number">47</div>
-                                <div class="name"><a href="player_47.html">Языков Алексей (VC)</a></div>
-                            </div>
-                            <div class="player">
-                                <div class="number">64</div>
-                                <div class="name"><a href="player_64.html">Беров Иван</a></div>
-                            </div>
+                            <div class="forvards"></div>
                         </div>
                         <div class="coach">
                             <div class="title">И.О. Тренера</div>
@@ -298,6 +207,42 @@
 </body>
 
 <script src=" ./js/index.bundle.js"></script>
+
+                                                                            <script>
+                                                                                document.addEventListener("DOMContentLoaded", () => {
+                                                                                    fetch('/api/players/team/1')
+                                                                                        .then(res => res.json())
+                                                                                        .then(data => {
+
+                                                                                            data.sort((a, b) => a.number - b.number);
+                                                                                            const groups = {
+                                                                                                'Вратарь': document.querySelector('.goalkeeper'),
+                                                                                                'Защитник': document.querySelector('.defender'),
+                                                                                                'Полузащитник': document.querySelector('.midfielders'),
+                                                                                                'Нападающий': document.querySelector('.forvards')
+                                                                                            };
+
+                                                                                            data.forEach(player => {
+                                                                                                const playerEl = document.createElement('div');
+                                                                                                playerEl.classList.add('player');
+                                                                                                playerEl.innerHTML = `
+<div class="number">${player.number}</div>
+<div class="name"><a href="player_${player.number}.html">${player.name}</a></div>
+`;
+
+                                                                                                const container = groups[player.position];
+                                                                                                if (container) {
+                                                                                                    container.appendChild(playerEl);
+                                                                                                } else {
+                                                                                                    console.warn('Неизвестная позиция игрока:', player.position);
+                                                                                                }
+                                                                                            });
+                                                                                        })
+                                                                                        .catch(error => console.error('Ошибка загрузки игроков:', error));
+                                                                                });
+
+
+                                                                            </script>
 
                                                                             <script
                                                                                 src="js/statistics8x8.bundle.js"></script>
