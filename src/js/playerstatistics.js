@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function () {
         { number: "37", name: "Иванов", matches: "9", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro" },
         { number: "41", name: "Синицын", matches: "0", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro" },
         { number: "42", name: "Изосимов", matches: "5", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro" },
-        { number: "45", name: "Амири", matches: "0", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro"},
+        { number: "45", name: "Амири", matches: "0", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro" },
         { number: "47", name: "Языков", matches: "16", goals: "12", assist: "11", zeromatch: "0", lostgoals: "0", team: "pro" },
         { number: "49", name: "Бутусов", matches: "6", goals: "0", assist: "0", zeromatch: "0", lostgoals: "17", team: "pro" },
         { number: "50", name: "Штепа", matches: "6", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro" },
@@ -105,7 +105,7 @@ document.addEventListener('DOMContentLoaded', function () {
         { number: "41", name: "Синицын", matches: "43", goals: "1", assist: "3", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.12.2022" },
         { number: "42", name: "Изосимов", matches: "0", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.06.2020" },
         { number: "44", name: "Борзенков", matches: "55", goals: "1", assist: "3", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.01.2020" },
-        { number: "45", name: "Амири", matches: "15", goals: "0", assist: "3", zeromatch: "0", lostgoals: "0", team: "pro"},
+        { number: "45", name: "Амири", matches: "15", goals: "0", assist: "3", zeromatch: "0", lostgoals: "0", team: "pro" },
         { number: "47", name: "Языков", matches: "205", goals: "346", assist: "140", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.10.2018" },
         { number: "49", name: "Бутусов", matches: "5", goals: "0", assist: "0", zeromatch: "1", lostgoals: "0", team: "pro", time_in: "01.08.2024" },
         { number: "50", name: "Штепа", matches: "17", goals: "4", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.04.2024" },
@@ -125,125 +125,49 @@ document.addEventListener('DOMContentLoaded', function () {
         { number: "87", name: "Данишевский", matches: "12", goals: "3", assist: "1", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.08.2024" },
         { number: "88", name: "Стребков", matches: "6", goals: "0", assist: "0", zeromatch: "0", lostgoals: "19", team: "pro", time_in: "01.08.2024" },
         { number: "90", name: "Юсуф", matches: "20", goals: "1", assist: "3", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.07.2023" },
-        { number: "95", name: "Сокирко", matches: "0", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.01.2025"},
+        { number: "95", name: "Сокирко", matches: "0", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.01.2025" },
         { number: "97", name: "Москалев", matches: "1", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "pro", time_in: "01.01.2025" },
         { number: "99", name: "Петров", matches: "4", goals: "0", assist: "0", zeromatch: "0", lostgoals: "0", team: "8x8", time_in: "01.01.2025" },
         { number: "101", name: "Грумынский", matches: "8", goals: "0", assist: "3", zeromatch: "2", lostgoals: "0", team: "pro", time_in: "01.03.2023" },
         // Добавьте остальных игроков
     ];
 
-    // Функция для обновления статистики за все время на основе текущего сезона
-    function updateStatistics() {
-        // Обрабатываем каждый игрок из текущего сезона
-        statistics2025.forEach(player => {
-            // Ищем игрока по его номеру в статистике за все время
-            const playerInAllStats = statisticsall.find(p => p.number === player.number);
+    // Шаг 1: Получить номер игрока со страницы
+    const numberElement = document.querySelector('.player-info p:nth-child(1)');
+    if (!numberElement) return;
 
-            if (playerInAllStats) {
-                // Если игрок найден в общем списке, обновляем его статистику
-                playerInAllStats.matches = String(Number(playerInAllStats.matches) + Number(player.matches));
-                playerInAllStats.goals = String(Number(playerInAllStats.goals) + Number(player.goals));
-                playerInAllStats.assist = String(Number(playerInAllStats.assist) + Number(player.assist));
-                playerInAllStats.zeromatch = String(Number(playerInAllStats.zeromatch) + Number(player.zeromatch));
-                playerInAllStats.lostgoals = String(Number(playerInAllStats.lostgoals) + Number(player.lostgoals));
-            } else {
-                // Если игрок не найден в общем списке, добавляем его
-                statisticsall.push({
-                    number: player.number,
-                    name: player.name,
-                    matches: player.matches,
-                    goals: player.goals,
-                    assist: player.assist,
-                    zeromatch: player.zeromatch,
-                    lostgoals: player.lostgoals,
-                    team: player.team
-                });
-            }
-        });
-    }
+    const number = numberElement.textContent.replace(/\D/g, ''); // Извлечь только цифры
 
-    // Пример использования (вызываем функцию обновления)
-    updateStatistics();
+    // Шаг 2: Найти объект игрока по номеру
+    const playerStats = statisticsall.find(player => player.number === number);
+    if (!playerStats) return;
 
-    // Получаем элемент с номером игрока
-    const playerNumber = document.querySelector('.number').textContent;
+    // Шаг 3: Получить текущую статистику из DOM
+    const getNumber = (selector) => parseInt(document.querySelector(selector)?.textContent || '0');
 
-    // Получаем элементы статистики за все время и за текущий сезон
-    const statisticplayersall = document.querySelector('.statisticplayersall');
-    const statisticthisyears = document.querySelector('.statisticthisyears');
+    const currentMatches = getNumber('.stats-grid .number:nth-child(1)');
+    const currentGoals = getNumber('.stats-grid .number:nth-child(2)');
+    const currentAssists = getNumber('.stats-grid .number:nth-child(3)');
+    const currentZeromatch = getNumber('.stats-grid .number:nth-child(6)');
+    const currentLostGoals = getNumber('.stats-grid .number:nth-child(5)');
 
-    // Находим соответствующего игрока в статистике за все время
-    const playerStatsAll = statisticsall.find(playerStat => playerStat.number === playerNumber);
+    // Шаг 4: Просуммировать статистику
+    const totalMatches = currentMatches + parseInt(playerStats.matches);
+    const totalGoals = currentGoals + parseInt(playerStats.goals);
+    const totalAssists = currentAssists + parseInt(playerStats.assist);
+    const totalZeromatch = currentZeromatch + parseInt(playerStats.zeromatch);
+    const totalLostGoals = currentLostGoals + parseInt(playerStats.lostgoals);
+    const totalGoalPlusAssist = totalGoals + totalAssists;
 
-    // Находим соответствующего игрока в статистике текущего сезона
-    const playerStatsThisYear = statistics2025.find(playerStat => playerStat.number === playerNumber);
-
-    // Функция для форматирования чисел с округлением до двух знаков после запятой
-    const formatNumber = (number) => {
-        return Math.round(number * 100) / 100;
-    };
-
-    // Если статистика за все время найдена
-    if (playerStatsAll) {
-        // Передаем данные в соответствующие блоки
-        statisticplayersall.querySelector('.matchesall').textContent = playerStatsAll.matches;
-        statisticplayersall.querySelector('.goalall').textContent = playerStatsAll.goals;
-        statisticplayersall.querySelector('.assistall').textContent = playerStatsAll.assist;
-        statisticplayersall.querySelector('.zeromatchall').textContent = playerStatsAll.zeromatch !== "0" ? playerStatsAll.zeromatch : "0";
-        statisticplayersall.querySelector('.goallostall').textContent = playerStatsAll.lostgoals !== "0" ? playerStatsAll.lostgoals : "0";
-
-        // Вычисляем средние значения
-        const goalAverageAll = formatNumber(playerStatsAll.goals / playerStatsAll.matches);
-        const assistAverageAll = formatNumber(playerStatsAll.assist / playerStatsAll.matches);
-        const assistGoalsAll = formatNumber(parseFloat(playerStatsAll.goals) + parseFloat(playerStatsAll.assist));
-
-        // Проверяем, не является ли среднее значение `NaN`
-        if (isNaN(goalAverageAll)) {
-            goalAverageAll = 0;
-        }
-        if (isNaN(assistAverageAll)) {
-            assistAverageAll = 0;
-        }
-        if (isNaN(assistGoalsAll)) {
-            assistGoalsAll = 0;
-        }
-
-        // Передаем средние значения в соответствующие блоки
-        statisticplayersall.querySelector('.goalallOnaverage').textContent = goalAverageAll;
-        statisticplayersall.querySelector('.assistallOnaverage').textContent = assistAverageAll;
-        statisticplayersall.querySelector('.assistgoalsall').textContent = assistGoalsAll;
-    }
-
-    // Если статистика текущего сезона найдена
-    if (playerStatsThisYear) {
-        // Передаем данные в соответствующие блоки
-        statisticthisyears.querySelector('.matches').textContent = playerStatsThisYear.matches;
-        statisticthisyears.querySelector('.goal').textContent = playerStatsThisYear.goals;
-        statisticthisyears.querySelector('.assist').textContent = playerStatsThisYear.assist;
-        statisticthisyears.querySelector('.zeromatch').textContent = playerStatsThisYear.zeromatch !== "0" ? playerStatsThisYear.zeromatch : "0";
-        statisticthisyears.querySelector('.goallost').textContent = playerStatsThisYear.lostgoals !== "0" ? playerStatsThisYear.lostgoals : "0";
-
-
-        // Вычисляем средние значения
-        const goalAverageThisYear = formatNumber(playerStatsThisYear.goals / playerStatsThisYear.matches);
-        const assistAverageThisYear = formatNumber(playerStatsThisYear.assist / playerStatsThisYear.matches);
-        const assistGoalsThisYear = formatNumber(parseFloat(playerStatsThisYear.goals) + parseFloat(playerStatsThisYear.assist));
-
-        // Проверяем, не является ли среднее значение `NaN`
-        if (isNaN(goalAverageThisYear)) {
-            goalAverageThisYear = 0;
-        }
-        if (isNaN(assistAverageThisYear)) {
-            assistAverageThisYear = 0;
-        }
-        if (isNaN(assistGoalsThisYear)) {
-            assistGoalsThisYear = 0;
-        }
-
-        // Передаем средние значения в соответствующие блоки
-        statisticthisyears.querySelector('.goalOnaverage').textContent = goalAverageThisYear;
-        statisticthisyears.querySelector('.assistOnaverage').textContent = assistAverageThisYear;
-        statisticthisyears.querySelector('.assistgoals').textContent = assistGoalsThisYear;
+    // Шаг 5: Вставить в блок "Статистика общая"
+    const statsGrid = document.querySelectorAll('.card:nth-of-type(3) .number');
+    if (statsGrid.length >= 6) {
+        statsGrid[0].textContent = totalMatches;
+        statsGrid[1].textContent = totalGoals;
+        statsGrid[2].textContent = totalAssists;
+        statsGrid[3].textContent = totalGoalPlusAssist;
+        statsGrid[4].textContent = totalLostGoals;
+        statsGrid[5].textContent = totalZeromatch;
     }
 
 

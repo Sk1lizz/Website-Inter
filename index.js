@@ -170,3 +170,31 @@ app.get('/api/players/team/:teamId', async (req, res) => {
         res.status(500).json({ error: 'Server error' });
     }
 });
+
+//стаа игрока
+app.get('/api/players/number/:number', async (req, res) => {
+    const number = req.params.number;
+
+    try {
+        const [rows] = await db.query('SELECT * FROM players WHERE number = ?', [number]);
+        if (rows.length === 0) {
+            return res.status(404).json({ error: 'Игрок не найден' });
+        }
+        res.json(rows[0]);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Ошибка сервера' });
+    }
+});
+
+app.get('/api/admin/players/:id/statistics/all', async (req, res) => {
+    const { id } = req.params;
+    try {
+        const stats = await db.query('SELECT * FROM player_statistics_all WHERE player_id = ?', [id]);
+        if (stats.length === 0) return res.status(404).json({ error: 'Нет общей статистики' });
+        res.json(stats[0]);
+    } catch (err) {
+        console.error("Ошибка получения общей статистики:", err);
+        res.status(500).json({ error: 'Ошибка сервера' });
+    }
+});
