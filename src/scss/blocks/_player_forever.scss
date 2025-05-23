@@ -1,8 +1,9 @@
 .player_page {
-    background-color: #111;
+    background-color: $gray_black;
     color: #fff;
     font-family: "PLAY-Regular";
     margin: 0;
+
 
     .profile-container {
         display: flex;
@@ -10,7 +11,7 @@
         margin: 0 auto;
         gap: 2rem;
         padding: 0 2rem;
-        padding-top: 180px;
+        padding-top: 22svh;
         padding-bottom: 30px;
 
         .left-column {
@@ -21,6 +22,17 @@
                 border-radius: 12px;
                 padding: 1.5rem;
                 margin-bottom: 15px;
+
+                .player-info {
+
+                    /* Стиль для параграфа с титулом */
+                    >p {
+
+                        strong {
+                            color: $light; // Золотой цвет для "Титул:"
+                        }
+                    }
+                }
             }
         }
 
@@ -49,6 +61,8 @@
             align-items: center;
             font-size: 1.4rem;
             margin: 0;
+            padding-top: 10px;
+            padding-bottom: 10px;
         }
 
         .badge {
@@ -104,6 +118,76 @@
         }
     }
 
+    .player-expensive {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+
+        h2 {
+            font-size: 1.4rem;
+        }
+
+        .player-info {
+            background: #1a1a1a;
+            border-radius: 12px;
+            padding: 1.0rem;
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            .experience-bar-container {
+                position: relative;
+                width: 250px;
+                height: 25px;
+                background-color: #ddd;
+                border-radius: 12px;
+                overflow: hidden;
+                margin-bottom: 10px;
+
+                p {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: 100%;
+                    height: 100%;
+                    margin: 0;
+                }
+            }
+
+            .experience-bar-fill {
+                height: 100%;
+                width: 0%;
+                background: linear-gradient(90deg, #FDC500, #00509D);
+                border-radius: 12px 0 0 12px;
+                transition: width 0.5s ease-in-out;
+            }
+
+            .experience-bar-text {
+                position: absolute;
+                top: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                height: 100%;
+                line-height: 25px;
+                font-weight: bold;
+                color: #fff;
+                text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
+                user-select: none;
+            }
+
+            /* Стиль для параграфа с титулом */
+            >p {
+                text-align: center;
+                width: 100%;
+                margin: 0.5rem 0 0 0;
+
+                span {
+                    color: $gold; // Золотой цвет для "Титул:"
+                }
+            }
+        }
+    }
 }
 
 

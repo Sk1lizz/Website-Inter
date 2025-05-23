@@ -369,7 +369,7 @@
                                                                                                 playerEl.classList.add('player');
                                                                                                 playerEl.innerHTML = `
 <div class="number">${player.number}</div>
-<div class="name"><a href="player_${player.number}.html">${player.name}</a></div>
+<div class="name"><a href="player.html?id=${player.number}">${player.name}</a></div>
 `;
 
                                                                                                 const container = groups[player.position];
@@ -381,8 +381,11 @@
                                                                                             });
                                                                                         })
                                                                                         .catch(error => console.error('Ошибка загрузки игроков:', error));
+                                                                                    data.sort((a, b) => a.number - b.number);
                                                                                 });
 
+
+                                                                            </script>
 
                                                                             </script>
 
@@ -423,6 +426,8 @@
                                                                                 // Обновляем значение разницы
                                                                                 differenceElement.textContent = `${difference >= 0 ? '+' : ''}${difference}`;
                                                                             </script>
+
+
 
 
 </html>
