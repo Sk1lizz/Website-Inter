@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Имя игрока</title>
+    <title>Футболист FC Intrer Moscow</title>
     <link rel="stylesheet" href="/css/main.css">
 </head>
 
@@ -45,7 +45,7 @@
             <div class="right-column">
                 <div class="card">
                     <h3>Статистика текущего сезона</h3>
-                    <div class="stats-grid">
+                    <div class="stats-grid season-stats">
                         <div>
                             <div class="number">player_statistics_2025/matches</div>Матчей
                         </div>
@@ -66,160 +66,192 @@
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <!-- Пока оставляем так -->
-                    <div class="card">
-                        <h3>Достижения</h3>
-                        <div class="career-item">
-                            Лучший вратарь года<span>2014</span>
-                            <small>FC Inter Moscow 8x8</small>
-                        </div>
+                <!-- Пока оставляем так -->
+                <div class="card">
+                    <h3>Достижения</h3>
+                    <div class="career-item">
+                        Лучший вратарь года<span>2014</span>
+                        <small>FC Inter Moscow 8x8</small>
                     </div>
-
-
-                    <!-- Пока оставляем так -->
-                    <div class="card">
-                        <h3>Статистика общая</h3>
-                        <div class="stats-grid">
-                            <div>
-                                <div class="number">80</div>Матчей
-                            </div>
-                            <div>
-                                <div class="number">0</div>Голов
-                            </div>
-                            <div>
-                                <div class="number">0</div>Ассистов
-                            </div>
-                            <div>
-                                <div class="number">0</div>Гол+пас
-                            </div>
-                            <div>
-                                <div class="number">269</div>Голов пропущено
-                            </div>
-                            <div>
-                                <div class="number">0</div>Матчей на 0
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
 
 
+                <!-- Пока оставляем так -->
+                <div class="card">
+                    <h3>Статистика общая</h3>
+                    <div class="stats-grid all-stats">
+                        <div>
+                            <div class="number">80</div>Матчей
+                        </div>
+                        <div>
+                            <div class="number">0</div>Голов
+                        </div>
+                        <div>
+                            <div class="number">0</div>Ассистов
+                        </div>
+                        <div>
+                            <div class="number">0</div>Гол+пас
+                        </div>
+                        <div>
+                            <div class="number">269</div>Голов пропущено
+                        </div>
+                        <div>
+                            <div class="number">0</div>Матчей на 0
+                        </div>
+                    </div>
+                </div>
+
             </div>
+
+
         </div>
+    </div>
 
 
-        @@include('blocks/footer.html')
+    @@include('blocks/footer.html')
 
-        <script src="../js/index.bundle.js"></script>
+    <script src="../js/index.bundle.js"></script>
 
-        <script>
+    <script>
 
-            /// считаем двозраст
-            function calculateAge(birthDateStr) {
-                const [day, month, year] = birthDateStr.split('.').map(Number);
-                const birthDate = new Date(year, month - 1, day);
-                const today = new Date();
-                let age = today.getFullYear() - birthDate.getFullYear();
+        /// считаем двозраст
+        function calculateAge(birthDateStr) {
+            const [day, month, year] = birthDateStr.split('.').map(Number);
+            const birthDate = new Date(year, month - 1, day);
+            const today = new Date();
+            let age = today.getFullYear() - birthDate.getFullYear();
 
-                // Учитываем, прошёл ли день рождения в этом году
-                const hasHadBirthdayThisYear =
-                    today.getMonth() > birthDate.getMonth() ||
-                    (today.getMonth() === birthDate.getMonth() && today.getDate() >= birthDate.getDate());
+            // Учитываем, прошёл ли день рождения в этом году
+            const hasHadBirthdayThisYear =
+                today.getMonth() > birthDate.getMonth() ||
+                (today.getMonth() === birthDate.getMonth() && today.getDate() >= birthDate.getDate());
 
-                if (!hasHadBirthdayThisYear) {
-                    age--;
-                }
-
-                return age;
+            if (!hasHadBirthdayThisYear) {
+                age--;
             }
 
-            // Пример: получить дату из DOM и вставить возраст
-            const birthdateText = document.getElementById('birthdate').textContent.trim();
-            const age = calculateAge(birthdateText);
-            document.getElementById('age').textContent = age;
-        </script>
+            return age;
+        }
 
-        <script>
+        // Пример: получить дату из DOM и вставить возраст
+        const birthdateText = document.getElementById('birthdate').textContent.trim();
+        const age = calculateAge(birthdateText);
+        document.getElementById('age').textContent = age;
+    </script>
 
 
-            document.addEventListener("DOMContentLoaded", async () => {
-                const params = new URLSearchParams(window.location.search);
-                const playerNumber = params.get("id"); // здесь номер игрока из URL
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            const params = new URLSearchParams(window.location.search);
+            const playerNumber = params.get("id");
 
-                if (!playerNumber) {
-                    console.error("ID игрока не указан в URL");
-                    return;
-                }
+            if (!playerNumber) {
+                console.error("ID игрока не указан в URL");
+                return;
+            }
 
-                function formatDate(dateStr) {
-                    const d = new Date(dateStr);
-                    return d.toLocaleDateString('ru-RU', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric'
-                    });
-                }
+            function formatDate(dateStr) {
+                const d = new Date(dateStr);
+                return d.toLocaleDateString('ru-RU', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+            }
 
-                try {
-                    // 1. Получаем данные игрока по номеру
-                    const playerRes = await fetch(`/api/players/number/${playerNumber}`);
-                    if (!playerRes.ok) throw new Error("Игрок не найден");
-                    const player = await playerRes.json();
+            try {
+                // Получаем данные игрока по номеру
+                const playerRes = await fetch(`/api/players/number/${playerNumber}`);
+                if (!playerRes.ok) throw new Error("Игрок не найден");
+                const player = await playerRes.json();
+                if (!player || !player.id) throw new Error("Данные игрока неполные");
 
-                    // Проверяем, что player получен
-                    if (!player || !player.id) throw new Error("Данные игрока неполные");
+                // Получаем статистику текущего сезона
+                const seasonStatsRes = await fetch(`/api/admin/players/${player.id}/statistics`);
+                if (!seasonStatsRes.ok) throw new Error("Ошибка при загрузке статистики сезона");
+                const seasonStats = await seasonStatsRes.json();
 
-                    // 2. Получаем статистику по player.id
-                    const statsRes = await fetch(`/api/admin/players/${player.id}/statistics`);
-                    if (!statsRes.ok) throw new Error("Ошибка при загрузке статистики");
-                    const stats = await statsRes.json();
+                // Получаем общую статистику
+                const allStatsRes = await fetch(`/api/admin/players/${player.id}/statistics/all`);
+                if (!allStatsRes.ok) throw new Error("Ошибка при загрузке общей статистики");
+                const allStatsRaw = await allStatsRes.json();
+                const allStats = (allStatsRaw && allStatsRaw.length > 0) ? allStatsRaw[0] : {};
 
-                    // Получаем общую статистику
-                    const allStatsRes = await fetch(`/api/admin/players/${player.id}/statistics/all`);
-                    if (!allStatsRes.ok) throw new Error("Ошибка при загрузке общей статистики");
-                    const allStats = await allStatsRes.json();
+                // Вывод в консоль для отладки
+                console.log("player:", player);
+                console.log("seasonStats:", seasonStats);
+                console.log("allStats:", allStats);
 
-                    // Вычисляем произведение значений
-                    const multiplyStats = (key) => {
-                        const season = seasonStats?.[key] ?? 0;
-                        const all = allStats?.[key] ?? 0;
-                        return season * all;
-                    };
-
-                    // 3. Отображаем информацию
-                    const nameEl = document.querySelector(".player-name");
-                    const infoEl = document.querySelector(".player-info");
-                    const statsGrid = document.querySelector(".stats-grid");
-
-                    if (nameEl) nameEl.textContent = `${player.name} ${player.patronymic || ''}`;
-                    if (infoEl) infoEl.innerHTML = `
-      <p><strong>Номер:</strong> ${player.number}</p>
-      <p><strong>Позиция:</strong> ${player.position}</p>
-      <p><strong>Возраст:</strong> ${Math.floor((Date.now() - new Date(player.birth_date)) / (365.25 * 24 * 60 * 60 * 1000))}</p>
-      <p><strong>Дата Рождения:</strong> ${formatDate(player.birth_date)}</p>
-      <p><strong>Присоединился:</strong> ${formatDate(player.join_date)}</p>
-    `;
-
-                    if (statsGrid && stats) {
-                        statsGrid.innerHTML = `
-        <div><div class="number">${stats.matches}</div>Матчей</div>
-        <div><div class="number">${stats.goals}</div>Голов</div>
-        <div><div class="number">${stats.assists}</div>Ассистов</div>
-        <div><div class="number">${stats.goals + stats.assists}</div>Гол+пас</div>
-        <div><div class="number">${stats.lostgoals}</div>Голов пропущено</div>
-        <div><div class="number">${stats.zeromatch}</div>Матчей на 0</div>
-      `;
+                // Функция подсчёта возраста игрока
+                function calculateAge(dateStr) {
+                    const birthDate = new Date(dateStr);
+                    const today = new Date();
+                    let age = today.getFullYear() - birthDate.getFullYear();
+                    const m = today.getMonth() - birthDate.getMonth();
+                    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                        age--;
                     }
-
-                } catch (error) {
-                    console.error("Ошибка при загрузке данных игрока:", error);
+                    return age;
                 }
-            });
 
-        </script>
+                // Обновляем основную информацию игрока
+                const nameEl = document.querySelector(".player-name");
+                const infoEl = document.querySelector(".player-info");
 
-        <script src="../js/playerpage.bundle.js"></script>
+                if (nameEl) {
+                    nameEl.textContent = `${player.name} ${player.patronymic || ''}`.trim();
+                }
+
+                if (infoEl) {
+                    infoEl.innerHTML = `
+          <p><strong>Номер:</strong> ${player.number}</p>
+          <p><strong>Позиция:</strong> ${player.position}</p>
+          <p><strong>Возраст:</strong> ${calculateAge(player.birth_date)}</p>
+          <p><strong>Дата Рождения:</strong> ${formatDate(player.birth_date)}</p>
+          <p><strong>Присоединился:</strong> ${formatDate(player.join_date)}</p>
+        `;
+                }
+
+                // Вывод статистики сезона
+                const seasonStatsGrid = document.querySelector(".season-stats");
+                if (seasonStatsGrid) {
+                    seasonStatsGrid.innerHTML = `
+          <div><div class="number">${seasonStats.matches || 0}</div>Матчей</div>
+          <div><div class="number">${seasonStats.goals || 0}</div>Голов</div>
+          <div><div class="number">${seasonStats.assists || 0}</div>Ассистов</div>
+          <div><div class="number">${(seasonStats.goals || 0) + (seasonStats.assists || 0)}</div>Гол+пас</div>
+          <div><div class="number">${seasonStats.lostgoals || 0}</div>Голов пропущено</div>
+          <div><div class="number">${seasonStats.zeromatch || 0}</div>Матчей на 0</div>
+        `;
+                }
+
+                // Вывод общей статистики
+                const allStatsGrid = document.querySelector(".all-stats");
+                if (allStatsGrid) {
+                    const sum = (key) => (seasonStats[key] || 0) + (allStats[key] || 0);
+
+                    allStatsGrid.innerHTML = `
+    <div><div class="number">${sum('matches')}</div>Матчей</div>
+    <div><div class="number">${sum('goals')}</div>Голов</div>
+    <div><div class="number">${sum('assists')}</div>Ассистов</div>
+    <div><div class="number">${sum('goals') + sum('assists')}</div>Гол+пас</div>
+    <div><div class="number">${sum('lostgoals')}</div>Голов пропущено</div>
+    <div><div class="number">${sum('zeromatch')}</div>Матчей на 0</div>
+  `;
+
+                }
+
+            } catch (error) {
+                console.error("Ошибка при загрузке данных игрока:", error);
+            }
+        });
+    </script>
+
+
+    </script>
+
 
 </body>
 
