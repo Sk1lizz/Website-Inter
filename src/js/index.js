@@ -34,32 +34,5 @@ document.addEventListener("DOMContentLoaded", function () {
   }
   window.addEventListener('scroll', toggleMenuVisibility);
 
-  // Загрузка дней рождения с сервера и вставка в DOM
-  fetch('/api/birthdays')
-    .then(res => res.json())
-    .then(data => {
-      const container = document.querySelector('.birthday_players');
-
-      // Удаляем только блоки игроков, не трогая заголовок
-      const playerBlocks = container.querySelectorAll('.block_birthday_players');
-      playerBlocks.forEach(block => block.remove());
-
-      // Добавляем новые блоки с игроками
-      data.forEach(player => {
-        const block = document.createElement('div');
-        block.classList.add('block_birthday_players');
-        block.innerHTML = `
-          <div class="name_player">${player.name}</div>
-          <div class="data_title">${player.birthday}</div>
-          <div class="timer">Через ${player.days_left} дн.</div>
-        `;
-        container.appendChild(block);
-      });
-    })
-    .catch(err => console.error('Ошибка загрузки дней рождения:', err));
-});
-
-app.get('/admin', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist', 'views', 'admin.html'));
 });
 

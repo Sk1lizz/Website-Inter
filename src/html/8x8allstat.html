@@ -54,13 +54,6 @@
                 </div>
             </div>
 
-            <div class="statistic time_in_team">
-                <div class="wrapper">
-                    <div class="title" id="6">Время в команде</div>
-                    <ul class="time_in_team_list"></ul>
-                </div>
-            </div>
-
             <div class="statistic game_in_team">
                 <div class="wrapper">
                     <div class="title" id="6">Матчей за команду</div>
@@ -78,320 +71,117 @@
 </body>
 
 <script src="./js/index.bundle.js"></script>
-<script src="./js/playerstatistics.bundle.js"></script>
 
-<!-- Тут список бомбардиров и ассистентов -->
 <script>
-    const goalsData = [{
-        number: "1.",
-        name: "Костич",
-        counter: "6"
-    }, {
-        number: "2.",
-        name: "Языков",
-        counter: "22"
-    }, {
-        number: "3.",
-        name: "Макарчев",
-        counter: "3"
-    }, {
-        number: "4.",
-        name: "Волконский",
-        counter: "3"
-    }, {
-        number: "5.",
-        name: "Шеин",
-        counter: "2"
-    }, {
-        number: "6.",
-        name: "Матвеев",
-        counter: "2"
-    }, {
-        number: "7.",
-        name: "Белкин",
-        counter: "1"
-    },
+    document.addEventListener("DOMContentLoaded", () => {
+        fetch('/api/player_statistics_2025?team_id=1')
+            .then(res => res.json())
+            .then(data => {
+                console.log('Статистика игроков:', data);
+                if (!Array.isArray(data)) return;
 
-    {
-        number: "8.",
-        name: "Голуб",
-        counter: "8"
-    },
+                const goalkeepers = data.filter(p => p.position === 'Вратарь');
+                console.log('Вратари:', goalkeepers);
 
-    {
-        number: "9.",
-        name: "Власов",
-        counter: "1"
-    },
+                // Функция для получения топа игроков по ключу или функции
+                function getTopPlayers(data, keyOrFn, count = 5) {
+                    return [...data]
+                        .filter(p => {
+                            // Отфильтруем нули
+                            const val = typeof keyOrFn === 'function' ? keyOrFn(p) : p[keyOrFn];
+                            return val > 0;
+                        })
+                        .sort((a, b) => {
+                            const aVal = typeof keyOrFn === 'function' ? keyOrFn(a) : a[keyOrFn];
+                            const bVal = typeof keyOrFn === 'function' ? keyOrFn(b) : b[keyOrFn];
+                            return bVal - aVal;
+                        })
+                        .slice(0, count);
+                }
 
-    {
-        number: "10.",
-        name: "Касулин",
-        counter: "1"
-    },
+                // Для времени в команде — сортируем по дате join_date (самые старые в топ)
+                function getLongestInTeam(data, count = 5) {
+                    return [...data]
+                        .filter(p => p.join_date) // у кого есть join_date
+                        .sort((a, b) => new Date(a.join_date) - new Date(b.join_date))
+                        .slice(0, count);
+                }
 
-    {
-        number: "11.",
-        name: "Белоножкин",
-        counter: "2"
-    },
+                // Получаем топы
+                const topGoals = getTopPlayers(data, 'goals', 29);
+                const topAssists = getTopPlayers(data, 'assists', 29);
+                const topGoalPlusAssist = getTopPlayers(data, p => p.goals + p.assists, 29);
+                const topLostGoals = getTopPlayers(goalkeepers, 'lostgoals', 29);
+                const topZero = getTopPlayers(goalkeepers, 'zeromatch', 29);
+                const topTimeInTeam = getLongestInTeam(data, 29);
+                const topGamesInTeam = getTopPlayers(data, 'matches', 29);
 
-    {
-        number: "12.",
-        name: "Автогол",
-        counter: "1"
-    },
+                // Вставка списков
+                insertTopList('.goals-list', topGoals, 'goals');
+                insertTopList('.assists-list', topAssists, 'assists');
+                insertTopList('.goals-assists-list', topGoalPlusAssist, p => p.goals + p.assists);
+                insertTopList('.goalkeepers-list', topLostGoals, 'lostgoals');
+                insertTopList('.goalkeepers-list-zero', topZero, 'zeromatch');
+                insertTopList('.time_in_team_list', topTimeInTeam, p => formatDate(p.join_date));
+                insertTopList('.game_in_team_list', topGamesInTeam, 'matches');
+            })
+            .catch(err => console.error("Ошибка загрузки статистики:", err));
 
-    {
-        number: "13.",
-        name: "Абянов",
-        counter: "1"
-    },
+        function insertTopList(selector, players, valueKeyOrFn) {
+            const ul = document.querySelector(selector);
+            if (!ul) {
+                console.warn(`Элемент с селектором ${selector} не найден!`);
+                return;
+            }
 
-        // Добавьте остальных игроков
-    ];
-    // ... данные для списка "Ассистенты" ...
+            ul.innerHTML = '';
 
-    const assistsData = [{
-        number: "1.",
-        name: "Макарчев",
-        counter: "1"
-    }, {
-        number: "1.",
-        name: "Власов",
-        counter: "4"
-    }, {
-        number: "1.",
-        name: "Мищенко",
-        counter: "1"
-    }, {
-        number: "1.",
-        name: "Белоножкин",
-        counter: "5"
-    }, {
-        number: "1.",
-        name: "Языков",
-        counter: "8"
-    }, {
-        number: "1.",
-        name: "Шеин",
-        counter: "4"
-    }, {
-        number: "1.",
-        name: "Петрищев",
-        counter: "1"
-    }, {
-        number: "1.",
-        name: "Синицын",
-        counter: "2"
-    }, {
-        number: "1.",
-        name: "Костич",
-        counter: "4"
-    }, {
-        number: "1.",
-        name: "Матвеев",
-        counter: "1"
-    }, {
-        number: "1.",
-        name: "Котов",
-        counter: "2"
-    }, {
-        number: "1.",
-        name: "Голуб",
-        counter: "4"
-    }, {
-        number: "1.",
-        name: "Волконский",
-        counter: "3"
-    },
+            // Для списка матчей на ноль (goalkeepers-list-zero) покажем "Не было", если никто не с нулём > 0
+            if (selector === '.goalkeepers-list-zero') {
+                const hasAnyZeroMatches = players.some(p => {
+                    const val = typeof valueKeyOrFn === 'function' ? valueKeyOrFn(p) : p[valueKeyOrFn];
+                    return val > 0;
+                });
+                if (!hasAnyZeroMatches) {
+                    const li = document.createElement('li');
+                    li.textContent = 'Не было';
+                    ul.appendChild(li);
+                    return;
+                }
+                players = players.filter(p => {
+                    const val = typeof valueKeyOrFn === 'function' ? valueKeyOrFn(p) : p[valueKeyOrFn];
+                    return val > 0;
+                });
+            }
 
-    {
-        number: "1.",
-        name: "Тапчан",
-        counter: "2"
-    },
+            players.forEach((p, index) => {
+                const li = document.createElement('li');
+                const lastName = p.name.split(' ')[0]; // фамилия
 
+                let value;
+                if (typeof valueKeyOrFn === 'function') {
+                    value = valueKeyOrFn(p);
+                } else {
+                    value = p[valueKeyOrFn];
+                }
 
-        // Добавьте остальных игроков
-    ];
+                li.innerHTML = `
+        <span class="place">${index + 1}.</span>
+        <span class="name">${lastName}</span>
+        <span class="value">${value}</span>
+      `;
+                ul.appendChild(li);
+            });
+        }
 
-    const sortByCounterDescending = (data) => {
-        return data.sort((a, b) => {
-            return parseInt(b.counter) - parseInt(a.counter);
-        });
-    };
-
-    // Сортировка списка "Бомбардиры" по убыванию количества голов
-    sortByCounterDescending(goalsData);
-
-    // Сортировка списка "Ассистенты" по убыванию количества голов
-    sortByCounterDescending(assistsData);
-    // ... данные для списка "Бомбардиры" ...
-
-    // Обновление номеров игроков в зависимости от позиции в отсортированном списке
-    const updatePlayerNumbers = (data) => {
-        data.forEach((player, index) => {
-            player.number = `${index + 1}.`;
-        });
-    };
-
-    updatePlayerNumbers(goalsData);
-    updatePlayerNumbers(assistsData);
-
-
-    const mergedData = {};
-
-    goalsData.forEach((player) => {
-        mergedData[player.name] = {
-            name: player.name,
-            goals: parseInt(player.counter) || 0,
-            assists: 0
-        };
-    });
-
-    assistsData.forEach((player) => {
-        if (mergedData[player.name]) {
-            mergedData[player.name].assists = parseInt(player.counter) || 0;
-        } else {
-            mergedData[player.name] = {
-                name: player.name,
-                goals: 0,
-                assists: parseInt(player.counter) || 0
-            };
+        // Форматирование даты в удобный вид: 2023-04-15 -> 15.04.2023
+        function formatDate(dateStr) {
+            if (!dateStr) return '';
+            const d = new Date(dateStr);
+            if (isNaN(d)) return '';
+            return d.toLocaleDateString('ru-RU');
         }
     });
-
-    const goalsAssistsArray = Object.values(mergedData);
-
-    // Сортировка по общему количеству голов и ассистов
-    goalsAssistsArray.sort((a, b) => {
-        const totalA = a.goals + a.assists;
-        const totalB = b.goals + b.assists;
-        return totalB - totalA;
-    });
-
-    // Создаем элементы списка и добавляем их в разметку
-    const goalsList = document.querySelector('.goals-list');
-    const assistsList = document.querySelector('.assists-list');
-    const goalsAssistsList = document.querySelector('.goals-assists-list');
-
-    goalsData.forEach((player) => {
-        const listItem = document.createElement('li');
-        listItem.innerHTML = `
-            <div class="number">${player.number}</div>
-            <div class="player">${player.name}</div>
-            <div class="counter">${player.counter}</div>
-        `;
-        goalsList.appendChild(listItem);
-    });
-
-    assistsData.forEach((player) => {
-        const listItem = document.createElement('li');
-        listItem.innerHTML = `
-            <div class="number">${player.number}</div>
-            <div class="player">${player.name}</div>
-            <div class="counter">${player.counter}</div>
-        `;
-        assistsList.appendChild(listItem);
-    });
-
-    goalsAssistsArray.forEach((player, index) => {
-        const listItem = document.createElement('li');
-        listItem.innerHTML = `
-            <div class="number">${index + 1}.</div>
-            <div class="player">${player.name}</div>
-            <div class="total">${player.goals + player.assists}</div>
-        `;
-        goalsAssistsList.appendChild(listItem);
-    });
-</script>
-
-<!-- Тут список вратарей -->
-<script>
-    const goalkeepersData = [{
-        number: "2.",
-        name: "Мищенко",
-        counter: "13"
-    }, {
-        number: "1.",
-        name: "Мытько",
-        counter: "24"
-    }, {
-        number: "3.",
-        name: "Исаев",
-        counter: "12"
-    }, {
-        number: "4.",
-        name: "Сыпченко",
-        counter: "4"
-    },
-        // Добавьте остальных вратарей
-    ];
-
-    // Находим элемент списка вратарей
-    const goalkeepersList = document.querySelector('.goalkeepers-list');
-
-    // Сортируем вратарей по значению счетчика (counter)
-    goalkeepersData.sort((a, b) => {
-        return parseInt(b.counter) - parseInt(a.counter);
-    });
-
-    // Создаем элементы списка и добавляем их в разметку
-    goalkeepersData.forEach((goalkeeper) => {
-        const listItem = document.createElement('li');
-        listItem.innerHTML = `
-        <div class="number">${goalkeeper.number}</div>
-        <div class="player">${goalkeeper.name}</div>
-        <div class="counter">${goalkeeper.counter}</div>
-    `;
-        goalkeepersList.appendChild(listItem);
-    });
-
-    // Матчи на ноль
-
-    const goalkeepersZero = [{
-        number: "1.",
-        name: "-",
-        counter: "-"
-    },
-        // Добавьте остальных вратарей
-    ];
-
-    // Находим элемент списка вратарей
-    const goalkeepersListZero = document.querySelector('.goalkeepers-list-zero');
-
-    // Сортируем вратарей по значению счетчика (counter)
-    goalkeepersZero.sort((a, b) => {
-        return parseInt(b.counter) - parseInt(a.counter);
-    });
-
-    // Создаем элементы списка и добавляем их в разметку
-    goalkeepersZero.forEach((goalkeeper) => {
-        const listItem = document.createElement('li');
-        listItem.innerHTML = `
-<div class="number">${goalkeeper.number}</div>
-<div class="player">${goalkeeper.name}</div>
-<div class="counter">${goalkeeper.counter}</div>
-`;
-        goalkeepersListZero.appendChild(listItem);
-    });
-</script>
-
-
-<script>
-    // Получаем элементы для голов забито и голов пропущено
-    const goalsScored = parseInt(document.querySelector('.goals .number').textContent);
-    const goalsConceded = parseInt(document.querySelector('.goals_conceded .number').textContent);
-
-    // Вычисляем разницу
-    const difference = goalsScored - goalsConceded;
-
-    // Получаем элемент разницы
-    const differenceElement = document.querySelector('.difference .number');
-
-    // Обновляем значение разницы
-    differenceElement.textContent = `${difference >= 0 ? '+' : ''}${difference}`;
 </script>
 
 

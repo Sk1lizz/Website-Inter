@@ -185,99 +185,181 @@
             <div class=block-wrapper>
                 <div class=" statistic goalkeepers">
                                                         <div class="wrapper">
-                                                            <div class="title">Вратари</div>
+                                                            <div class="title">Пропущенные мячи</div>
+                                                            <!-- поменял название -->
                                                             <ul class="goalkeepers-list"></ul>
-                                                            <div class="link"><a href="pro11x11allstat.html#4"">Полный список</a></div>
-                    </div>
-                </div>
+                                                            <!-- оставил класс, чтоб не ломать скрипт -->
+                                                            <div class="link"><a href="pro11x11allstat.html#4">Полный
+                                                                    список</a></div>
+                                                        </div>
+                                                </div>
 
-                <div class=" statistic goalkeepers_zero">
-                                                                    <div class="wrapper">
-                                                                        <div class="title">Матчей на ноль</div>
-                                                                        <ul class="goalkeepers-list-zero"></ul>
-                                                                        <div class="link"><a
-                                                                                href="pro11x11allstat.html#5"">Полный список</a></div>
+                                                <div class=" statistic goalkeepers_zero">
+                                                    <div class="wrapper">
+                                                        <div class="title">Матчей на ноль</div>
+                                                        <ul class="goalkeepers-list-zero"></ul>
+                                                        <div class="link"><a href="pro11x11allstat.html#5"">Полный список</a></div>
                     </div>
                 </div>
 
                 <div class=" statistic zanetti_top">
-                                                                                <div class="wrapper">
-                                                                                    <div class="title"> Топ-5 приз
-                                                                                        Дзанетти </div>
-                                                                                    <ul class="zanetti_top-list"></ul>
-                                                                                    <div class="link"><a
-                                                                                            href="pro11x11allstat.html#6"">Полный список</a></div>
+                                                                <div class="wrapper">
+                                                                    <div class="title"> Топ-5 приз
+                                                                        Дзанетти </div>
+                                                                    <ul class="zanetti_top-list"></ul>
+                                                                    <div class="link"><a href="pro11x11allstat.html#6"">Полный список</a></div>
                     </div>
                 </div>
             </div>
 
         </div>
+    </div>
+</div>
 
 
 
     @@include('blocks/footer.html')
     </body>
     <script src=" ./js/index.bundle.js"></script>
-                                                                                            <script
-                                                                                                src="
-                                                                                            js/statistics11x11.bundle.js">
-                                                                                            </script>
-
-                                                                                            <script>
-                                                                                                // Ограничение списков пятью элементами
-                                                                                                const limitListItems = (listClass) => {
-                                                                                                    const list = document.querySelectorAll(`.${listClass} li`);
-                                                                                                    if (list.length > 5) {
-                                                                                                        for (let i = 5; i < list.length; i++) {
-                                                                                                            list[i].style.display = 'none'; // Скрыть элементы списка, начиная с шестого
-                                                                                                        }
-                                                                                                    }
-                                                                                                };
-                                                                                                // Ограничение каждого списка пятью элементами
-                                                                                                limitListItems('goals-list');
-                                                                                                limitListItems('assists-list');
-                                                                                                limitListItems('goals-assists-list');
-                                                                                                limitListItems('goalkeepers-list');
-                                                                                                limitListItems('goalkeepers-list-zero');
-                                                                                                limitListItems('zanetti_top-list'); 
-                                                                                            </script>
-
-                                                                                            <script>
-                                                                                                document.addEventListener("DOMContentLoaded", () => {
-                                                                                                    fetch('/api/players/team/2')
-                                                                                                        .then(res => res.json())
-                                                                                                        .then(data => {
-
-                                                                                                            data.sort((a, b) => a.number - b.number);
-                                                                                                            const groups = {
-                                                                                                                'Вратарь': document.querySelector('.goalkeeper'),
-                                                                                                                'Защитник': document.querySelector('.defender'),
-                                                                                                                'Полузащитник': document.querySelector('.midfielders'),
-                                                                                                                'Нападающий': document.querySelector('.forvards')
-                                                                                                            };
-
-                                                                                                            data.forEach(player => {
-                                                                                                                const playerEl = document.createElement('div');
-                                                                                                                playerEl.classList.add('player');
-                                                                                                                playerEl.innerHTML = `
-                        <div class="number">${player.number}</div>
-                        <div class="name"><a href="player.html?id=${player.number}">${player.name}</a></div>
-                    `;
-
-                                                                                                                const container = groups[player.position];
-                                                                                                                if (container) {
-                                                                                                                    container.appendChild(playerEl);
-                                                                                                                } else {
-                                                                                                                    console.warn('Неизвестная позиция игрока:', player.position);
-                                                                                                                }
-                                                                                                            });
-                                                                                                        })
-                                                                                                        .catch(error => console.error('Ошибка загрузки игроков:', error));
-                                                                                                    data.sort((a, b) => a.number - b.number);
-                                                                                                });
 
 
-                                                                                            </script>
+
+                                                                            <script>
+                                                                                document.addEventListener("DOMContentLoaded", () => {
+                                                                                    fetch('/api/players/team/2')
+                                                                                        .then(res => res.json())
+                                                                                        .then(data => {
+                                                                                            data.sort((a, b) => a.number - b.number); // ← сортировка тут!
+
+                                                                                            const groups = {
+                                                                                                'Вратарь': document.querySelector('.goalkeeper'),
+                                                                                                'Защитник': document.querySelector('.defender'),
+                                                                                                'Полузащитник': document.querySelector('.midfielders'),
+                                                                                                'Нападающий': document.querySelector('.forvards')
+                                                                                            };
+
+                                                                                            data.forEach(player => {
+                                                                                                const playerEl = document.createElement('div');
+                                                                                                playerEl.classList.add('player');
+                                                                                                playerEl.innerHTML = `
+                <div class="number">${player.number}</div>
+                <div class="name"><a href="player.html?id=${player.number}">${player.name}</a></div>
+            `;
+
+                                                                                                const container = groups[player.position];
+                                                                                                if (container) {
+                                                                                                    container.appendChild(playerEl);
+                                                                                                } else {
+                                                                                                    console.warn('Неизвестная позиция игрока:', player.position);
+                                                                                                }
+                                                                                            });
+                                                                                        })
+                                                                                        .catch(error => console.error('Ошибка загрузки игроков:', error));
+                                                                                });
+
+
+                                                                            </script>
+
+                                                                            <script>
+                                                                                document.addEventListener("DOMContentLoaded", () => {
+                                                                                    fetch('/api/player_statistics_2025?team_id=2')
+                                                                                        .then(res => res.json())
+                                                                                        .then(data => {
+                                                                                            console.log('Статистика игроков:', data);
+                                                                                            if (!Array.isArray(data)) return;
+
+                                                                                            // Фильтруем вратарей
+                                                                                            const goalkeepers = data.filter(p => p.position === 'Вратарь');
+                                                                                            console.log('Вратари:', goalkeepers);
+
+                                                                                            // Уникальные позиции игроков
+                                                                                            const positions = [...new Set(data.map(p => p.position))];
+                                                                                            console.log('Уникальные позиции игроков:', positions);
+
+                                                                                            // Лог по lostgoals у каждого вратаря
+                                                                                            goalkeepers.forEach(gk => {
+                                                                                                console.log(`${gk.name}: lostgoals =`, gk.lostgoals);
+                                                                                            });
+
+                                                                                            // Получаем топы по нужным критериям
+                                                                                            const topGoals = getTopPlayers(data, 'goals');
+                                                                                            const topAssists = getTopPlayers(data, 'assists');
+                                                                                            const topGoalPlusAssist = getTopPlayers(data, p => p.goals + p.assists);
+                                                                                            const topLostGoals = getTopPlayers(goalkeepers, 'lostgoals');
+                                                                                            const topZero = getTopPlayers(goalkeepers, 'zeromatch');
+                                                                                            const topZanetti = getTopPlayers(data, 'zanetti_priz');
+
+                                                                                            // Вставляем списки на страницу
+                                                                                            insertTopList('.goals-list', topGoals, 'goals');
+                                                                                            insertTopList('.assists-list', topAssists, 'assists');
+                                                                                            insertTopList('.goals-assists-list', topGoalPlusAssist, p => p.goals + p.assists);
+                                                                                            insertTopList('.goalkeepers-list', topLostGoals, 'lostgoals');
+                                                                                            insertTopList('.goalkeepers-list-zero', topZero, 'zeromatch');
+                                                                                            insertTopList('.zanetti_top-list', topZanetti, 'zanetti_priz');
+                                                                                        })
+                                                                                        .catch(err => console.error("Ошибка загрузки статистики:", err));
+
+                                                                                    // Функция для сортировки и получения топ N игроков
+                                                                                    function getTopPlayers(data, keyOrFn, count = 5) {
+                                                                                        return [...data]
+                                                                                            .sort((a, b) => {
+                                                                                                const aVal = typeof keyOrFn === 'function' ? keyOrFn(a) : a[keyOrFn];
+                                                                                                const bVal = typeof keyOrFn === 'function' ? keyOrFn(b) : b[keyOrFn];
+                                                                                                return bVal - aVal;
+                                                                                            })
+                                                                                            .slice(0, count);
+                                                                                    }
+
+                                                                                    // Функция для вставки списка игроков в DOM
+                                                                                    function insertTopList(selector, players, valueKeyOrFn) {
+                                                                                        const ul = document.querySelector(selector);
+                                                                                        if (!ul) {
+                                                                                            console.warn(`Элемент с селектором ${selector} не найден!`);
+                                                                                            return;
+                                                                                        }
+
+                                                                                        ul.innerHTML = ''; // Очистка списка
+
+                                                                                        if (selector === '.goalkeepers-list-zero') {
+                                                                                            const hasAnyZeroMatches = players.some(p => {
+                                                                                                const val = typeof valueKeyOrFn === 'function' ? valueKeyOrFn(p) : p[valueKeyOrFn];
+                                                                                                return val > 0;  // Есть игрок с матчами на 0
+                                                                                            });
+                                                                                            if (!hasAnyZeroMatches) {
+                                                                                                const li = document.createElement('li');
+                                                                                                li.textContent = 'Не было';
+                                                                                                ul.appendChild(li);
+                                                                                                return;
+                                                                                            }
+
+                                                                                            // Показываем только игроков с zeromatch > 0
+                                                                                            players = players.filter(p => {
+                                                                                                const val = typeof valueKeyOrFn === 'function' ? valueKeyOrFn(p) : p[valueKeyOrFn];
+                                                                                                return val > 0;
+                                                                                            });
+                                                                                        }
+
+                                                                                        players.forEach((p, index) => {
+                                                                                            const li = document.createElement('li');
+                                                                                            const lastName = p.name.split(' ')[0]; // фамилия
+
+                                                                                            let value;
+                                                                                            if (typeof valueKeyOrFn === 'function') {
+                                                                                                value = valueKeyOrFn(p);
+                                                                                            } else {
+                                                                                                value = p[valueKeyOrFn];
+                                                                                            }
+
+                                                                                            li.innerHTML = `
+            <span class="place">${index + 1}.</span>
+            <span class="name">${lastName}</span>
+            <span class="value">${value}</span>
+        `;
+                                                                                            ul.appendChild(li);
+                                                                                        });
+                                                                                    }
+                                                                                });
+                                                                            </script>
 
 </body>
 

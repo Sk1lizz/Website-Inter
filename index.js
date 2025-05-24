@@ -198,3 +198,19 @@ app.get('/api/admin/players/:id/statistics/all', async (req, res) => {
         res.status(500).json({ error: 'Ошибка сервера' });
     }
 });
+
+app.get('/api/player_statistics_2025', async (req, res) => {
+    const teamId = parseInt(req.query.team_id, 10);
+    try {
+        const [rows] = await db.query(`
+            SELECT ps.*, p.name, p.position
+            FROM player_statistics_2025 ps
+            JOIN players p ON ps.player_id = p.id
+            WHERE p.team_id = ?
+        `, [teamId]);
+        res.json(rows);
+    } catch (err) {
+        console.error('Ошибка запроса к базе:', err.sqlMessage || err.message);
+        res.status(500).json({ error: 'Ошибка при запросе к базе данных' });
+    }
+});

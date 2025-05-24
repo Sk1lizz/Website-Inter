@@ -447,23 +447,27 @@
                             display: flex;
                             padding: 5px 0;
                             justify-content: space-between;
+                            align-items: center;
+                            padding: 4px 8px;
+                        }
 
+                        ul li .place {
+                            flex: 0 0 30px;
+                            /* фиксированная ширина */
+                            text-align: left;
+                        }
 
-                            .number {
-                                display: flex;
-                                justify-content: flex-start;
-                                width: 20px;
-                            }
+                        /* Фамилия — по центру */
+                        ul li .name {
+                            flex: 1;
+                            text-align: center;
+                        }
 
-                            .player {
-                                display: flex;
-                            }
-
-                            .counter {
-                                display: flex;
-                                justify-content: flex-end;
-                                width: 30px;
-                            }
+                        /* Значение — справа */
+                        ul li .value {
+                            flex: 0 0 40px;
+                            /* фиксированная ширина */
+                            text-align: right;
                         }
                     }
 
