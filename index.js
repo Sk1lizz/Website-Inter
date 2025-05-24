@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 3000;
 
 const cors = require('cors');
 app.use(cors({
-    origin: '*', // или указать конкретно 'https://www.fcintermoscow.com'
+    origin: 'https://www.fcintermoscow.com' // или '*' для теста
 }));
 
 const adminApiRoutes = require('./dist/routes/admin'); // или где у тебя лежит API

@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    fetch('http://localhost:3000/api/birthdays')
+    fetch("https://api.fcintermoscow.com/api/...")
         .then(response => response.json())
         .then(data => {
             const blocks = document.querySelectorAll('.block_birthday_players');
