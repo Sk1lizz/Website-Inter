@@ -4,8 +4,13 @@ app.use(express.json());
 const path = require('path');
 const db = require('./db');
 require('dotenv').config();
+const PORT = process.env.PORT || 3000;
 
 
+const cors = require('cors');
+app.use(cors({
+    origin: '*', // или указать конкретно 'https://www.fcintermoscow.com'
+}));
 
 const adminApiRoutes = require('./dist/routes/admin'); // или где у тебя лежит API
 app.use('/api/admin', adminApiRoutes);
@@ -62,8 +67,7 @@ app.get(/^\/(?!api).*/, (req, res) => {
 });
 
 // Запуск сервера
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
     console.log(`Сервер запущен на порту ${PORT}`);
 });
 
