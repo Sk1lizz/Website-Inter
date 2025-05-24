@@ -47,6 +47,12 @@
                 border-radius: 12px;
                 padding: 1.5rem;
             }
+
+            /* Убираем padding у внутреннего блока */
+            .achievements-card {
+                padding: 0 !important;
+                /* !important на случай, если другие стили переопределяют */
+            }
         }
 
         .player-card img {
@@ -192,4 +198,4 @@
 
 
 
-@import "media/_player_forever_media.scss";
+@import "media/_player_page_media.scss";

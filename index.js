@@ -214,3 +214,33 @@ app.get('/api/player_statistics_2025', async (req, res) => {
         res.status(500).json({ error: 'Ошибка при запросе к базе данных' });
     }
 });
+
+app.get('/api/achievements', async (req, res) => {
+    const playerId = parseInt(req.query.player_id, 10);
+    const teamId = parseInt(req.query.team_id, 10);
+
+    try {
+        let query = `
+            SELECT a.*, p.name
+            FROM achievements a
+            JOIN players p ON a.player_id = p.id
+        `;
+        const params = [];
+
+        if (playerId) {
+            query += ` WHERE a.player_id = ?`;
+            params.push(playerId);
+        } else if (teamId) {
+            query += ` WHERE p.team_id = ?`;
+            params.push(teamId);
+        }
+
+        query += ` ORDER BY a.award_year DESC, a.player_id`;
+
+        const [rows] = await db.query(query, params);
+        res.json(rows);
+    } catch (err) {
+        console.error('Ошибка получения достижений:', err.sqlMessage || err.message);
+        res.status(500).json({ error: 'Ошибка сервера при получении достижений' });
+    }
+});

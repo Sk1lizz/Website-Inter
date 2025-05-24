@@ -1,0 +1,119 @@
+@media (max-width: 1366px) {}
+
+@media (max-width: 1024px) {}
+
+@media (max-width: 768px) {
+    .player_page {
+
+        .player-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            /* Две колонки */
+            gap: 10px;
+
+            p {
+                display: contents;
+                /* "Разбираем" параграфы на ячейки сетки */
+            }
+
+            strong {
+                text-align: right;
+                padding-right: 10px;
+            }
+
+            span,
+            /* Все значения */
+            :not(strong) {
+                text-align: left;
+            }
+        }
+
+        .profile-container {
+            flex-direction: column;
+            padding-top: 10svh;
+            padding-bottom: 20px;
+            gap: 1.5rem;
+
+
+
+            .left-column {
+                width: 0px;
+                width: 100%;
+                order: 1;
+                /* Карточка игрока будет первой */
+
+                .player-card {
+                    margin-bottom: 1.5rem;
+                }
+            }
+
+            .right-column {
+                order: 2;
+                /* Статистика и достижения будут вторыми */
+                gap: 1.5rem;
+            }
+        }
+
+        /* Оптимизация внутренних элементов */
+        .player-name {
+            display: flex !important;
+            flex-direction: column !important;
+            /* Если нужно вертикальное расположение */
+            justify-content: center !important;
+            /* Центрирование по вертикали */
+            align-items: center !important;
+            /* Центрирование по горизонтали */
+            text-align: center !important;
+            width: 100% !important;
+            margin: 0 auto !important;
+            /* Дополнительное центрирование блока */
+            padding: 0px 10px 10px 10px !important;
+            font-family: "PLAY-Bold";
+        }
+
+        .stats-grid {
+            grid-template-columns: repeat(3, 1fr) !important;
+            /* 3 колонки вместо адаптивных */
+            gap: 0.8rem !important;
+        }
+
+        .stats-grid .number {
+            font-size: 1.5rem !important;
+        }
+
+        /* Уменьшаем отступы в карточках */
+        .card {
+            padding: 1rem !important;
+        }
+
+        /* Особые стили для progress bar */
+        .player-expensive {
+
+            .player-info {
+                margin-bottom: 0px;
+
+                p {
+                    padding-bottom: 20px;
+                }
+            }
+
+            .experience-bar-container {
+                width: 0px !important;
+                width: 95% !important;
+                height: 20px !important;
+            }
+
+            .experience-bar-text {
+                line-height: 20px !important;
+                font-size: 0.8rem !important;
+            }
+
+        }
+
+        /* Корректировка отступов в достижениях */
+        .career-item {
+            padding: 0.5rem 0 !important;
+            padding-top: 15px !important;
+        }
+    }
+}

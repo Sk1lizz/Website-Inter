@@ -54,6 +54,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const player = await playerRes.json();
         if (!player || !player.id) throw new Error("Данные игрока неполные");
 
+
         // Устанавливаем фото игрока
         const playerPhoto = `/img/player/player_${player.id}.png`;
         const playerImgEl = document.querySelector(".player-card img");
@@ -228,7 +229,51 @@ document.addEventListener("DOMContentLoaded", async () => {
             updateExperienceBar(experience);
         }
 
+        const achievementsBlock = document.getElementById('achievements-block'); // Весь блок достижений
+        const achievementsCard = document.querySelector('.achievements-card');  // Внутренний контейнер
+        const listEl = document.querySelector('.achievements-list');
+
+        try {
+            const achRes = await fetch(`/api/achievements?player_id=${player.id}`);
+            if (!achRes.ok) throw new Error("Ошибка при получении достижений");
+
+            const achievements = await achRes.json();
+
+            // Всегда показываем блок достижений (убираем проверку на achievementsBlock)
+            achievementsCard.style.display = 'block'; // Показываем внутренний контейнер
+            listEl.innerHTML = ''; // Очищаем список
+
+            if (achievements?.length) {
+                // Если есть достижения — рендерим их
+                achievements.forEach(a => {
+                    const div = document.createElement('div');
+                    div.classList.add('career-item');
+                    div.innerHTML = `
+                        ${a.award_title}<span>${a.award_year}</span>
+                        <small>${a.team_name}</small>
+                    `;
+                    listEl.appendChild(div);
+                });
+            } else {
+                // Если достижений нет — выводим сообщение
+                const emptyMsg = document.createElement('div');
+                emptyMsg.classList.add('empty-achievements');
+                emptyMsg.textContent = 'Нет достижений';
+                listEl.appendChild(emptyMsg);
+            }
+
+        } catch (err) {
+            console.error("Ошибка при загрузке достижений:", err);
+            // В случае ошибки показываем сообщение
+            achievementsCard.style.display = 'block';
+            listEl.innerHTML = '<div class="error-msg">Не удалось загрузить достижения</div>';
+        }
+
+
     } catch (error) {
         console.error("Ошибка при загрузке данных игрока:", error);
     }
+
 });
+
+

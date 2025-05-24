@@ -4,116 +4,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forever Team</title>
+    <title>Команда 8х8</title>
     <link rel="stylesheet" href="./css/main.css" />
     <meta name="description"
-        content="Inter Forever - команда из бывших игроков FC Inter Moscow, ярко выступавших в 2013–2016 годах, собирающаяся для участия в ежегодных турнирах и товарищеских матчах" />
+        content="FC Inter Moscow 8x8 - футбольная команда и тренировки для взрослых в Москве в формате 11х11" />
 </head>
 
 <body>
     @@include('blocks/header.html')
 
-    <div class="pro11x11_wrapper">
+    <div class="team8x8_wrapper">
         <div class="selection_players">
             <div class="team">
-                <div class="team_description">
-                    Inter Forever — это команда, объединяющая бывших игроков FC Inter Moscow, которые активно выступали
-                    в период с 2013
-                    по 2016 годы. Сегодня команда не участвует в регулярных чемпионатах, но с энтузиазмом собирается для
-                    ежегодных
-                    турниров и товарищеских матчей, продолжая традиции клуба и поддерживая дух товарищества.
-                </div>
                 <div class="team_name">
                     <div class="name_team">FC Inter Moscow Forever</div>
-                    <div class="button">
-                        <a href="/forever/forever_result.html"><button>Результаты матчей</button></a>
+                    <div class="button_8x8">
+                        <a href="prosmotr_8x8.html"><button>Просмотр в эту команду</button></a>
+                        <a href="./forever/forever_result.html.html"><button>Результаты матчей</button></a>
                     </div>
                 </div>
                 <div class="players">
                     <div class="player_blok">
                         <div class="goalkeeper">
                             <div class="title">Вратари</div>
-                            <div class="player">
-                                <div class="number">1</div>
-                                <div class="name"><a href="forever/player_forever_1.html">Англичанинов Герман</a></div>
-                            </div>
-                            <div class="player">
-                                <div class="number">2</div>
-                                <div class="name"><a href="forever/player_forever_2.html">Брыков Александр</a></div>
-                            </div>
                         </div>
 
                         <div class="defender">
                             <div class="title">Защитники</div>
-                            <div class="player">
-                                <div class="number">3</div>
-                                <div class="name"><a href="forever/player_forever_3.html">Дьяконов Максим (C)</a></div>
-                            </div>
-                            <div class="player">
-                                <div class="number">4</div>
-                                <div class="name"><a href="forever/player_forever_4.html">Бокатенко Егор</a></div>
-                            </div>
-                            <div class="player">
-                                <div class="number">5</div>
-                                <div class="name"><a href="forever/player_forever_5.html">Мелконян Армен</a></div>
-                            </div>
-                            <div class="player">
-                                <div class="number">6</div>
-                                <div class="name"><a href="forever/player_forever_6.html">Ким Петр</a></div>
-                            </div>
-                            <div class="player">
-                                <div class="number">7</div>
-                                <div class="name"><a href="forever/player_forever_7.html">Ким Павел</a></div>
-                            </div>
-                            <div class="player">
-                                <div class="number">8</div>
-                                <div class="name"><a href="forever/player_forever_8.html">Куликов Антон</a></div>
-                            </div>
-                            <div class="player">
-                                <div class="number">9</div>
-                                <div class="name"><a href="forever/player_forever_9.html">Сергеев Александр</a></div>
-                            </div>
                         </div>
                     </div>
                     <div class="midfielders">
                         <div class="title">Полузащитники</div>
-                        <div class="player">
-                            <div class="number">10</div>
-                            <div class="name"><a href="forever/player_forever_10.html">Демин Семен</a></div>
-                        </div>
-                        <div class="player">
-                            <div class="number">11</div>
-                            <div class="name"><a href="forever/player_forever_11.html">Василина Владислав</a></div>
-                        </div>
-                        <div class="player">
-                            <div class="number">12</div>
-                            <div class="name"><a href="forever/player_forever_12.html">Алкин Андрей</a></div>
-                        </div>
-                        <div class="player">
-                            <div class="number">13</div>
-                            <div class="name"><a href="forever/player_forever_13.html">Торосян Арам</a></div>
-                        </div>
-                        <div class="player">
-                            <div class="number">14</div>
-                            <div class="name"><a href="forever/player_forever_14.html">Августин Александр</a></div>
-                        </div>
-                        <div class="player">
-                            <div class="number">15</div>
-                            <div class="name"><a href="forever/player_forever_15.html">Светилов Виталий</a></div>
-                        </div>
-                        <div class="player">
-                            <div class="number">16</div>
-                            <div class="name"><a href="forever/player_forever_16.html">Алешин Алексей</a></div>
-                        </div>
                     </div>
 
                     <div class="forvards_coach_block">
                         <div class="forvards">
                             <div class="title">Нападающие</div>
-                            <div class="player">
-                                <div class="number">17</div>
-                                <div class="name"><a href="forever/player_forever_17.html">Губский Никита</a></div>
-                            </div>
+                            <div class="forvards"></div>
                         </div>
                     </div>
                 </div>
@@ -224,35 +151,158 @@
                 </div>
             </div>
         </div>
-
-        @@include('blocks/footer.html')
     </div>
 
-    <script src="../js/index.bundle.js"></script>
-    <script>
-        // Ограничение списков пятью элементами
-        const limitListItems = (listClass) => {
-            const list = document.querySelectorAll(`.${listClass} li`);
-            if (list.length > 5) {
-                for (let i = 5; i < list.length; i++) {
-                    list[i].style.display = 'none'; // Скрыть элементы списка, начиная с шестого
-                }
-            }
-        };
+    </div>
+    </div>
 
-        // Получаем элементы для голов забито и голов пропущено
-        const goalsScored = parseInt(document.querySelector('.goals .number').textContent);
-        const goalsConceded = parseInt(document.querySelector('.goals_conceded .number').textContent);
-
-        // Вычисляем разницу
-        const difference = goalsScored - goalsConceded;
-
-        // Получаем элемент разницы
-        const differenceElement = document.querySelector('.difference .number');
-
-        // Обновляем значение разницы
-        differenceElement.textContent = `${difference >= 0 ? '+' : ''}${difference}`;
-    </script>
+    @@include('blocks/footer.html')
 </body>
+
+<script src=" ./js/index.bundle.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        fetch('/api/players/team/4')
+            .then(res => res.json())
+            .then(data => {
+
+                data.sort((a, b) => a.number - b.number);
+                const groups = {
+                    'Вратарь': document.querySelector('.goalkeeper'),
+                    'Защитник': document.querySelector('.defender'),
+                    'Полузащитник': document.querySelector('.midfielders'),
+                    'Нападающий': document.querySelector('.forvards')
+                };
+
+                data.forEach(player => {
+                    const playerEl = document.createElement('div');
+                    playerEl.classList.add('player');
+                    playerEl.innerHTML = `
+<div class="number">${player.number}</div>
+<div class="name"><a href="player.html?id=${player.number}">${player.name}</a></div>
+`;
+
+                    const container = groups[player.position];
+                    if (container) {
+                        container.appendChild(playerEl);
+                    } else {
+                        console.warn('Неизвестная позиция игрока:', player.position);
+                    }
+                });
+            })
+            .catch(error => console.error('Ошибка загрузки игроков:', error));
+        data.sort((a, b) => a.number - b.number);
+    });
+
+
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        fetch('/api/player_statistics_2025?team_id=4')
+            .then(res => res.json())
+            .then(data => {
+                console.log('Статистика игроков:', data);
+                if (!Array.isArray(data)) return;
+
+                // Фильтруем вратарей
+                const goalkeepers = data.filter(p => p.position === 'Вратарь');
+                console.log('Вратари:', goalkeepers);
+
+                // Уникальные позиции игроков
+                const positions = [...new Set(data.map(p => p.position))];
+                console.log('Уникальные позиции игроков:', positions);
+
+                // Лог по lostgoals у каждого вратаря
+                goalkeepers.forEach(gk => {
+                    console.log(`${gk.name}: lostgoals =`, gk.lostgoals);
+                });
+
+                // Получаем топы по нужным критериям
+                const topGoals = getTopPlayers(data, 'goals');
+                const topAssists = getTopPlayers(data, 'assists');
+                const topGoalPlusAssist = getTopPlayers(data, p => p.goals + p.assists);
+                const topLostGoals = getTopPlayers(goalkeepers, 'lostgoals');
+                const topZero = getTopPlayers(goalkeepers, 'zeromatch');
+
+
+                // Вставляем списки на страницу
+                insertTopList('.goals-list', topGoals, 'goals');
+                insertTopList('.assists-list', topAssists, 'assists');
+                insertTopList('.goals-assists-list', topGoalPlusAssist, p => p.goals + p.assists);
+                insertTopList('.goalkeepers-list', topLostGoals, 'lostgoals');
+                insertTopList('.goalkeepers-list-zero', topZero, 'zeromatch');
+
+            })
+            .catch(err => console.error("Ошибка загрузки статистики:", err));
+
+        // Функция для сортировки и получения топ N игроков
+        function getTopPlayers(data, keyOrFn, count = 5) {
+            return [...data]
+                .sort((a, b) => {
+                    const aVal = typeof keyOrFn === 'function' ? keyOrFn(a) : a[keyOrFn];
+                    const bVal = typeof keyOrFn === 'function' ? keyOrFn(b) : b[keyOrFn];
+                    return bVal - aVal;
+                })
+                .slice(0, count);
+        }
+
+        // Функция для вставки списка игроков в DOM
+        function insertTopList(selector, players, valueKeyOrFn) {
+            const ul = document.querySelector(selector);
+            if (!ul) {
+                console.warn(`Элемент с селектором ${selector} не найден!`);
+                return;
+            }
+
+            ul.innerHTML = ''; // Очистка списка
+
+            if (selector === '.goalkeepers-list-zero') {
+                const hasAnyZeroMatches = players.some(p => {
+                    const val = typeof valueKeyOrFn === 'function' ? valueKeyOrFn(p) : p[valueKeyOrFn];
+                    return val > 0;  // Есть игрок с матчами на 0
+                });
+                if (!hasAnyZeroMatches) {
+                    const li = document.createElement('li');
+                    li.textContent = 'Не было';
+                    ul.appendChild(li);
+                    return;
+                }
+
+                // Показываем только игроков с zeromatch > 0
+                players = players.filter(p => {
+                    const val = typeof valueKeyOrFn === 'function' ? valueKeyOrFn(p) : p[valueKeyOrFn];
+                    return val > 0;
+                });
+            }
+
+            players.forEach((p, index) => {
+                const li = document.createElement('li');
+                const lastName = p.name.split(' ')[0]; // фамилия
+
+                let value;
+                if (typeof valueKeyOrFn === 'function') {
+                    value = valueKeyOrFn(p);
+                } else {
+                    value = p[valueKeyOrFn];
+                }
+
+                li.innerHTML = `
+            <span class="place">${index + 1}.</span>
+            <span class="name">${lastName}</span>
+            <span class="value">${value}</span>
+        `;
+                ul.appendChild(li);
+            });
+        }
+    });
+</script>
+
+
+
+
+
+
 
 </html>
