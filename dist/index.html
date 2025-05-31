@@ -370,13 +370,12 @@
 </footer>
 
     <script src="./js/index.bundle.js"></script>
-    <script src="./js/birthday.bundle.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 
 
     <script>
-        fetch("https://api.fcintermoscow.com/api/birthdays")
+        fetch('/api/birthdays.php')
             .then(res => res.json())
             .then(data => {
                 const container = document.querySelector('.birthday_list'); // ⬅️ изменено
@@ -401,50 +400,43 @@
 
     <script src="./js/scrollindex.bundle.js"></script>
 
-    <script>document.addEventListener('DOMContentLoaded', function () {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
             const background = document.querySelector('.background');
             const images = [
-                '../img/index.jpg',
-                '../img/index2.jpg',
-                '../img/index3.jpg',
-                '../img/index4.jpg',
-                '../img/index5.jpg',
+                '/img/index.jpg',
+                '/img/index2.jpg',
+                '/img/index3.jpg',
+                '/img/index4.jpg',
+                '/img/index5.jpg',
             ];
 
             const randomIndex = Math.floor(Math.random() * images.length);
             background.style.backgroundImage = `url(${images[randomIndex]})`;
-        });</script>
-
+        });
+    </script>
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            // Загрузка дней рождения с сервера и вставка в DOM
-            fetch('/api/birthdays')
+            fetch('/api/birthdays.php')
                 .then(res => res.json())
                 .then(data => {
                     const container = document.querySelector('.birthday_players');
-
-                    // Удаляем только блоки игроков, не трогая заголовок
                     const playerBlocks = container.querySelectorAll('.block_birthday_players');
                     playerBlocks.forEach(block => block.remove());
 
-                    // Добавляем новые блоки с игроками
                     data.forEach(player => {
                         const block = document.createElement('div');
                         block.classList.add('block_birthday_players');
                         block.innerHTML = `
-          <div class="name_player">${player.name}</div>
-          <div class="data_title">${player.birthday}</div>
-          <div class="timer">Через ${player.days_left} дн.</div>
-        `;
+                              <div class="name_player">${player.name}</div>
+                              <div class="data_title">${player.birthday}</div>
+                              <div class="timer">Через ${player.days_left} дн.</div>
+                            `;
                         container.appendChild(block);
                     });
                 })
                 .catch(err => console.error('Ошибка загрузки дней рождения:', err));
-        });
-
-        app.get('/admin', (req, res) => {
-            res.sendFile(path.join(__dirname, 'dist', 'views', 'admin.html'));
         });
     </script>
 

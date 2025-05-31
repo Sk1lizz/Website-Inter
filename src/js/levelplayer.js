@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     try {
         // Получаем данные игрока по номеру
-        const playerRes = await fetch(`/api/players/number/${playerNumber}`);
+        const playerRes = await fetch(`/api/players_by_number.php?number=${playerNumber}`)
         if (!playerRes.ok) throw new Error("Игрок не найден");
         const player = await playerRes.json();
         if (!player || !player.id) throw new Error("Данные игрока неполные");
@@ -67,12 +67,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
 
         // Получаем статистику текущего сезона
-        const seasonStatsRes = await fetch(`/api/admin/players/${player.id}/statistics`);
+        const seasonStatsRes = await fetch(`/api/player_statistics.php?id=${player.id}`)
         if (!seasonStatsRes.ok) throw new Error("Ошибка при загрузке статистики сезона");
         const seasonStats = await seasonStatsRes.json();
 
         // Получаем общую статистику
-        const allStatsRes = await fetch(`/api/admin/players/${player.id}/statistics/all`);
+        const allStatsRes = await fetch(`/api/player_statistics_all.php?id=${player.id}`)
         if (!allStatsRes.ok) throw new Error("Ошибка при загрузке общей статистики");
         const allStatsRaw = await allStatsRes.json();
         const allStats = (allStatsRaw && allStatsRaw.length > 0) ? allStatsRaw[0] : {};
@@ -234,7 +234,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const listEl = document.querySelector('.achievements-list');
 
         try {
-            const achRes = await fetch(`/api/achievements?player_id=${player.id}`);
+            const achRes = await fetch(`/api/achievements.php?player_id=${player.id}`)
             if (!achRes.ok) throw new Error("Ошибка при получении достижений");
 
             const achievements = await achRes.json();

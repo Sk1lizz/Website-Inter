@@ -226,7 +226,7 @@
 
                                                                             <script>
                                                                                 document.addEventListener("DOMContentLoaded", () => {
-                                                                                    fetch('/api/players/team/2')
+                                                                                    fetch('/api/players.php?team_id=2')
                                                                                         .then(res => res.json())
                                                                                         .then(data => {
                                                                                             data.sort((a, b) => a.number - b.number); // ← сортировка тут!
@@ -262,7 +262,7 @@
 
                                                                             <script>
                                                                                 document.addEventListener("DOMContentLoaded", () => {
-                                                                                    fetch('/api/player_statistics_2025?team_id=2')
+                                                                                    fetch('/api/player_statistics_2025.php?team_id=2')
                                                                                         .then(res => res.json())
                                                                                         .then(data => {
                                                                                             console.log('Статистика игроков:', data);

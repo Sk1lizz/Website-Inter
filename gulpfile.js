@@ -151,7 +151,7 @@ gulp.task('server', function () {
             livereload: true,
             open: 'http://localhost:3000',
             host: 'localhost',
-            port: 3000
+            port: 8000
         }));
 });
 
