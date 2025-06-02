@@ -127,18 +127,20 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         // Вывод общей статистики
         const allStatsGrid = document.querySelector(".all-stats");
+
         if (allStatsGrid) {
             // Суммируем поля сезона и общей статистики
-            const sum = (key) => (seasonStats[key] || 0) + (allStats[key] || 0);
+            const statsCombined = await fetch(`/api/player_statistics_all.php?id=${a.id}`).then(res => res.json());
+            const combined = statsCombined.combined || statsCombined; // защита на случай старого формата
 
-            allStatsGrid.innerHTML = `
-                <div><div class="number number2 matches">${sum('matches')}</div>Матчей</div>
-                <div><div class="number number2 goals">${sum('goals')}</div>Голов</div>
-                <div><div class="number number2 assists">${sum('assists')}</div>Ассистов</div>
-                <div><div class="number">${sum('goals') + sum('assists')}</div>Гол+пас</div>
-                <div><div class="number number2 lostgoals">${sum('lostgoals')}</div>Голов пропущено</div>
-                <div><div class="number number2 zeromatch">${sum('zeromatch')}</div>Матчей на 0</div>
-            `;
+            document.querySelector(".all-stats").innerHTML = `
+    <div><div class="number number2 matches">${combined.matches}</div>Матчей</div>
+    <div><div class="number number2 goals">${combined.goals}</div>Голов</div>
+    <div><div class="number number2 assists">${combined.assists}</div>Ассистов</div>
+    <div><div class="number">${combined.goals + combined.assists}</div>Гол+пас</div>
+    <div><div class="number number2 lostgoals">${combined.lostgoals}</div>Голов пропущено</div>
+    <div><div class="number number2 zeromatch">${combined.zeromatch}</div>Матчей на 0</div>
+`;
 
             // Функция для подсчёта опыта
             function calculateExperience() {

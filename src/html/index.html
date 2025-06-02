@@ -233,45 +233,46 @@
 
 
     <script>
+        function declension(num, forms) {
+            const mod10 = num % 10;
+            const mod100 = num % 100;
+            if (mod100 >= 11 && mod100 <= 14) return forms[2];
+            if (mod10 === 1) return forms[0];
+            if (mod10 >= 2 && mod10 <= 4) return forms[1];
+            return forms[2];
+        }
+
         fetch('/api/birthdays.php')
             .then(res => res.json())
             .then(data => {
-                const container = document.querySelector('.birthday_list'); // ⬅️ изменено
-                container.innerHTML = ''; // безопасно, заголовок не трогаем
+                const container = document.querySelector('.birthday_list');
+                container.innerHTML = '';
 
                 data.forEach(player => {
                     const block = document.createElement('div');
                     block.className = 'block_birthday_players';
+
+                    const daysLeft = Number(player.days_left); // <-- важно
+                    let dayText = '';
+
+                    if (daysLeft === 0) {
+                        dayText = '🎉 Сегодня!';
+                    } else if (daysLeft === 1) {
+                        dayText = 'Завтра';
+                    } else {
+                        dayText = `Через ${daysLeft} ${declension(daysLeft, ['день', 'дня', 'дней'])}`;
+                    }
+
                     block.innerHTML = `
-        <div class="name_player">${player.name}</div>
-        <div class="data_title">${player.birthday}</div>
-        <div class="timer">Через ${player.days_left} дн.</div>
-        <div class="timer">
-  ${player.days_left === 0 ? '🎉 Сегодня!' : `Через ${player.days_left} дн.`}
-</div>
-      `;
+                    <div class="name_player">${player.name}</div>
+                    <div class="data_title">${player.birthday}</div>
+                    <div class="timer">${dayText}</div>
+                `;
+
                     container.appendChild(block);
                 });
             })
             .catch(err => console.error('Ошибка загрузки дней рождения:', err));
-    </script>
-
-    <script src="./js/scrollindex.bundle.js"></script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const background = document.querySelector('.background');
-            const images = [
-                '/img/index.jpg',
-                '/img/index2.jpg',
-                '/img/index3.jpg',
-                '/img/index4.jpg',
-                '/img/index5.jpg',
-            ];
-
-            const randomIndex = Math.floor(Math.random() * images.length);
-            background.style.backgroundImage = `url(${images[randomIndex]})`;
-        });
     </script>
 
     <script>

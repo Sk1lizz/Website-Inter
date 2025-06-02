@@ -360,7 +360,7 @@
                 const allStatsRes = await fetch(`/api/player_statistics_all.php?id=${player.id}`)
                 if (!allStatsRes.ok) throw new Error("Ошибка при загрузке общей статистики");
                 const allStatsRaw = await allStatsRes.json();
-                const allStats = (allStatsRaw && allStatsRaw.length > 0) ? allStatsRaw[0] : {};
+                const allStats = allStatsRaw.combined || allStatsRaw;
 
                 // Обновляем основную информацию игрока
                 const nameEl = document.querySelector(".player-name");

@@ -1,4 +1,6 @@
-const config = {
+const path = require('path');
+
+module.exports = {
 	mode: 'production',
 	entry: {
 		index: './src/js/index.js',
@@ -15,10 +17,10 @@ const config = {
 		lostplayer: './src/js/lostplayer.js',
 		birthday: './src/js/brithday.js',
 		admin: './src/public/js/admin.js',
-
 	},
 	output: {
 		filename: '[name].bundle.js',
+		path: path.resolve(__dirname, 'dist/js'),
 	},
 	module: {
 		rules: [
@@ -29,25 +31,3 @@ const config = {
 		],
 	},
 };
-
-const webpack = require('webpack');
-
-module.exports = {
-	// ...
-	resolve: {
-		fallback: {
-			zlib: require.resolve('browserify-zlib'),
-			stream: require.resolve('stream-browserify'),
-			path: require.resolve('path-browserify'),
-			crypto: require.resolve('crypto-browserify'),
-		},
-	},
-	plugins: [
-		new webpack.ProvidePlugin({
-			process: 'process/browser',
-			Buffer: ['buffer', 'Buffer'],
-		}),
-	],
-};
-
-module.exports = config;
