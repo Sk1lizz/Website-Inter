@@ -1,13 +1,59 @@
+<?php
+session_start();
+
+// Установите логин/пароль
+define('ADMIN_LOGIN', 'admin');
+define('ADMIN_PASS', 'fcinter2025');
+
+// Обработка формы входа
+if (isset($_POST['auth_login'], $_POST['auth_pass'])) {
+    if ($_POST['auth_login'] === ADMIN_LOGIN && $_POST['auth_pass'] === ADMIN_PASS) {
+        $_SESSION['admin_logged_in'] = true;
+        header("Location: admin.php");
+        exit;
+    } else {
+        $error = 'Неверный логин или пароль';
+    }
+}
+
+// Если не вошли — показать форму
+if (!isset($_SESSION['admin_logged_in'])):
+?>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Вход в админку</title>
+</head>
+<body>
+    <h2>Авторизация</h2>
+    <?php if (!empty($error)) echo "<p style='color:red;'>$error</p>"; ?>
+    <form method="post">
+        <label>Логин: <input name="auth_login" required></label><br>
+        <label>Пароль: <input type="password" name="auth_pass" required></label><br>
+        <button type="submit">Войти</button>
+    </form>
+</body>
+</html>
+<?php
+exit;
+endif;
+?>
+
 <!DOCTYPE html>
 <html lang="ru">
 
 <head>
     <meta charset="UTF-8">
     <title>Админка - Статистика игроков</title>
-    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="styles.css"> 
 </head>
 
 <body>
+
+<form method="post" action="logout.php" style="float:right;">
+    <button type="submit">Выйти</button>
+</form>
     <h1>Выберите команду</h1>
     <select id="teamSelect"></select>
 
@@ -81,7 +127,7 @@
 
 
             async function loadTeams() {
-                const res = await fetch('/api/admin/teams');
+                const res = await fetch('api/get_teams.php');
                 if (!res.ok) {
                     alert('Ошибка загрузки команд');
                     return;
@@ -136,7 +182,7 @@
             }
 
             async function fetchPlayers(teamId) {
-                const res = await fetch(`/api/admin/players/${teamId}`);
+                const res = await fetch(`api/get_players.php?team_id=${teamId}`)
                 const players = await res.json();
                 const tbody = document.querySelector('#playersTable tbody');
                 tbody.innerHTML = '';
@@ -178,7 +224,7 @@
                     if (!confirmed) return;
 
                     try {
-                        const res = await fetch(`/api/admin/players/${playerId}/archive`, {
+                        const res = await fetch(`api/archive_player.php?id=${playerId}`, {
                             method: 'PUT',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({ new_team_id: 3 })
@@ -218,11 +264,11 @@
                 const data = Object.fromEntries(formData.entries());
                 data.team_id = currentTeamId;
 
-                const res = await fetch('/api/admin/players', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
-                });
+                const res = await fetch('api/add_player.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+});
 
                 if (res.ok) {
                     alert('Игрок добавлен!');
@@ -254,11 +300,11 @@
                 });
 
                 try {
-                    const res = await fetch('/api/admin/players/statistics', {
-                        method: 'PUT',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ updates })
-                    });
+                    const res = await fetch('api/update_statistics.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ updates })
+});
 
                     if (res.ok) {
                         alert('Статистика успешно обновлена!');
@@ -279,7 +325,7 @@
 
                 // Загружаем данные игрока с сервера
                 console.log('Загружаем данные игрока с ID:', playerId);
-                const res = await fetch(`/api/admin/players/${playerId}`);
+                const res = await fetch(`api/get_player.php?id=${playerId}`);
                 if (!res.ok) {
                     alert('Ошибка загрузки данных игрока');
                     return;
@@ -290,7 +336,7 @@
                 // Загружаем команды
                 const teamSelect = document.getElementById('editPlayerTeamSelect');
                 teamSelect.innerHTML = '';
-                const teamsRes = await fetch('/api/admin/teams');
+                const teamsRes = await fetch('api/get_teams.php');
                 const teams = await teamsRes.json();
 
                 teams.forEach(team => {
@@ -335,7 +381,7 @@
                     team_id: +form.team_id.value
                 };
 
-                const res = await fetch(`/api/admin/players/${editingPlayerId}`, {
+                const res = await fetch(`api/update_player.php?id=${editingPlayerId}`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(updatedData)

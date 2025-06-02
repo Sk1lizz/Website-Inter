@@ -1,11 +1,11 @@
 document.addEventListener("DOMContentLoaded", async () => {
-    const params = new URLSearchParams(window.location.search);
-    const playerNumber = params.get("id");
+    const playerId = new URLSearchParams(window.location.search).get("id");
 
-    if (!playerNumber) {
+    if (!playerId) {
         console.error("ID игрока не указан в URL");
         return;
     }
+
 
     function formatDate(dateStr, format = "full") {
         const d = new Date(dateStr);
@@ -48,8 +48,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     try {
-        // Получаем данные игрока по номеру
-        const playerRes = await fetch(`/api/players_by_number.php?number=${playerNumber}`)
+        // Получаем данные игрока по id
+        const playerRes = await fetch(`/api/get_player.php?id=${playerId}`);
         if (!playerRes.ok) throw new Error("Игрок не найден");
         const player = await playerRes.json();
         if (!player || !player.id) throw new Error("Данные игрока неполные");
@@ -130,16 +130,23 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         if (allStatsGrid) {
             // Суммируем поля сезона и общей статистики
-            const statsCombined = await fetch(`/api/player_statistics_all.php?id=${a.id}`).then(res => res.json());
-            const combined = statsCombined.combined || statsCombined; // защита на случай старого формата
+            const useSeasonOnly = !allStats || !allStats.matches;
+
+            const totalStats = useSeasonOnly ? seasonStats : {
+                matches: (seasonStats.matches || 0) + (allStats.matches || 0),
+                goals: (seasonStats.goals || 0) + (allStats.goals || 0),
+                assists: (seasonStats.assists || 0) + (allStats.assists || 0),
+                zeromatch: (seasonStats.zeromatch || 0) + (allStats.zeromatch || 0),
+                lostgoals: (seasonStats.lostgoals || 0) + (allStats.lostgoals || 0),
+            };
 
             document.querySelector(".all-stats").innerHTML = `
-    <div><div class="number number2 matches">${combined.matches}</div>Матчей</div>
-    <div><div class="number number2 goals">${combined.goals}</div>Голов</div>
-    <div><div class="number number2 assists">${combined.assists}</div>Ассистов</div>
-    <div><div class="number">${combined.goals + combined.assists}</div>Гол+пас</div>
-    <div><div class="number number2 lostgoals">${combined.lostgoals}</div>Голов пропущено</div>
-    <div><div class="number number2 zeromatch">${combined.zeromatch}</div>Матчей на 0</div>
+  <div><div class="number number2 matches">${totalStats.matches}</div>Матчей</div>
+  <div><div class="number number2 goals">${totalStats.goals}</div>Голов</div>
+  <div><div class="number number2 assists">${totalStats.assists}</div>Ассистов</div>
+  <div><div class="number">${totalStats.goals + totalStats.assists}</div>Гол+пас</div>
+  <div><div class="number number2 lostgoals">${totalStats.lostgoals}</div>Голов пропущено</div>
+  <div><div class="number number2 zeromatch">${totalStats.zeromatch}</div>Матчей на 0</div>
 `;
 
             // Функция для подсчёта опыта
