@@ -299,6 +299,98 @@
         });
     </script>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const fillElement = document.querySelector(".banner .background");
+
+            if (fillElement) {
+                const randomIndex = Math.floor(Math.random() * 5) + 1;
+                const imageUrl = `img/index${randomIndex === 1 ? '' : randomIndex}.jpg`;
+
+                fillElement.style.backgroundImage = `url('${imageUrl}')`;
+                fillElement.style.backgroundSize = "cover";
+                fillElement.style.backgroundPosition = "center";
+            }
+        });
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            try {
+                const [res8x8, resPro] = await Promise.all([
+                    fetch("/api/get_matches_8x8.php"),
+                    fetch("/api/get_matches_pro.php")
+                ]);
+
+                const matches8x8 = await res8x8.json();
+                const matchesPro = await resPro.json();
+
+                const now = new Date();
+
+                function getLastPlayedMatch(matches, label = "") {
+                    const parsed = matches.map(m => {
+                        const d = new Date(m.date);
+                        return {
+                            ...m,
+                            _parsedDate: d,
+                            _valid: d instanceof Date && !isNaN(d),
+                            _isPast: d <= now
+                        };
+                    });
+
+                    console.log(`=== ${label} ===`);
+                    parsed.forEach(m => {
+                        console.log(`${m.date} →`, m._parsedDate.toISOString(), `VALID: ${m._valid} PAST: ${m._isPast}`);
+                    });
+
+                    return parsed
+                        .filter(m => m._valid && m._isPast)
+                        .sort((a, b) => b._parsedDate - a._parsedDate)[0];
+                }
+
+                const last8x8 = getLastPlayedMatch(matches8x8, "8x8");
+                const lastPro = getLastPlayedMatch(matchesPro, "PRO");
+
+                console.log("🎯 last8x8 =", last8x8?.date);
+                console.log("🎯 lastPro =", lastPro?.date);
+
+                if (last8x8) {
+                    const block = document.querySelector(".last_match_8x8 .fill");
+                    block.innerHTML = `
+                    <div class="data">${last8x8.date}</div>
+                    <div class="title_last_matches">${last8x8.championship_name}, ${last8x8.tour}</div>
+                    <div class="text_block">
+                        <div class="team_name_1">FC Inter Moscow 8x8</div>
+                        <div class="match_score">${last8x8.our_goals}:${last8x8.opponent_goals}</div>
+                        <div class="team_name_2">${last8x8.opponent}</div>
+                    </div>
+                    <div class="goals">${last8x8.goals ? `Голы: ${last8x8.goals}` : ''}</div>
+                `;
+                }
+
+                if (lastPro) {
+                    const block = document.querySelector(".last_match_pro .fill");
+                    block.innerHTML = `
+                    <div class="data">${lastPro.date}</div>
+                    <div class="title_last_matches">${lastPro.championship_name}, ${lastPro.tour}</div>
+                    <div class="text_block">
+                        <div class="team_name_1">FC Inter Moscow Pro</div>
+                        <div class="match_score">${lastPro.our_goals}:${lastPro.opponent_goals}</div>
+                        <div class="team_name_2">${lastPro.opponent}</div>
+                    </div>
+                    <div class="goals">${lastPro.goals ? `Голы: ${lastPro.goals}` : ''}</div>
+                `;
+                }
+
+            } catch (err) {
+                console.error("❌ Ошибка при загрузке последних матчей:", err);
+            }
+        });
+    </script>
+
+
+
+
 </body>
 
 </html>

@@ -24,15 +24,86 @@ if (!isset($_SESSION['admin_logged_in'])):
 <head>
     <meta charset="UTF-8">
     <title>Вход в админку</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f4f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .login-container {
+            background-color: white;
+            padding: 30px 40px;
+            border-radius: 10px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        h2 {
+            color: #004080;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+            margin-bottom: 20px;
+        }
+
+        button {
+            width: 100%;
+            background-color: #004080;
+            color: white;
+            border: none;
+            padding: 12px;
+            font-size: 15px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #003060;
+        }
+
+        .error {
+            color: red;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+    </style>
 </head>
 <body>
-    <h2>Авторизация</h2>
-    <?php if (!empty($error)) echo "<p style='color:red;'>$error</p>"; ?>
-    <form method="post">
-        <label>Логин: <input name="auth_login" required></label><br>
-        <label>Пароль: <input type="password" name="auth_pass" required></label><br>
-        <button type="submit">Войти</button>
-    </form>
+    <div class="login-container">
+        <h2>Авторизация</h2>
+        <?php if (!empty($error)) echo "<p class='error'>$error</p>"; ?>
+        <form method="post">
+            <label>Логин:
+                <input name="auth_login" type="text" required>
+            </label>
+            <label>Пароль:
+                <input name="auth_pass" type="password" required>
+            </label>
+            <button type="submit">Войти</button>
+        </form>
+    </div>
 </body>
 </html>
 <?php
@@ -53,9 +124,58 @@ endif;
       <button type="submit">Выйти</button>
     </form>
 
+    <button id="openAddMatchModal" class="admin-button">➕ Добавить матч</button>
+
+<div id="addMatchModal" class="modal-backdrop">
+  <div class="modal-content">
+    <h2>Добавить матч</h2>
+    <form id="addMatchForm">
+      <label>Команда:
+        <select id="matchTeamSelect" name="teams_id" required></select>
+      </label>
+      <label>Дата матча:
+        <input type="date" name="date" required>
+      </label>
+      <label>Год отдельно:
+        <input type="number" name="year" required>
+      </label>
+      <label>Название чемпионата:
+        <input type="text" name="championship_name" required>
+      </label>
+      <label>Тур:
+        <input type="text" name="tour">
+      </label>
+      <label>Соперник:
+        <input type="text" name="opponent" required>
+      </label>
+      <label>Наши голы:
+        <input type="number" name="our_goals" required>
+      </label>
+      <label>Голы соперника:
+        <input type="number" name="opponent_goals" required>
+      </label>
+      <label>Голы кто забивал (текстом):
+        <input type="text" name="goals">
+      </label>
+      <label>Голевые кто отдавал (текстом):
+        <input type="text" name="assists">
+      </label>
+      <label>Результат матча:
+        <select name="match_result" required>
+          <option value="W">Победа</option>
+          <option value="L">Поражение</option>
+          <option value="X">Ничья</option>
+        </select>
+      </label>
+      <button type="submit">Добавить матч</button>
+      <button type="button" onclick="closeAddMatchModal()">Отмена</button>
+    </form>
+  </div>
+</div>
+
     <h1>Выберите команду</h1>
     <select id="teamSelect"></select>
-
+    <section>
     <h2>Список игроков</h2>
     <table id="playersTable">
       <thead>
@@ -74,7 +194,8 @@ endif;
     </table>
 
     <button id="saveStatsBtn">Сохранить изменения</button>
-
+    </section>
+    <section>
     <h2>Добавить игрока</h2>
     <form id="add-player-form">
       <label>Выберите команду:
@@ -98,8 +219,9 @@ endif;
       <label>Вес (кг): <input name="weight_kg" type="number"></label>
       <button type="submit">Добавить игрока</button>
     </form>
+    </section>
 
-    <div class="admin-achievements">
+    <section class="admin-achievements">
   <h2>Управление достижениями</h2>
 
   <label for="team-select">Выберите команду:</label>
@@ -127,7 +249,7 @@ endif;
     </select>
     <button type="submit">Добавить</button>
   </form>
-</div>
+</section>
 
     <div id="editPlayerModal" style="display:none;">
       <div class="modal-content">
@@ -149,6 +271,7 @@ endif;
       </div>
     </div>
   </div>
+
 </body>
 </html>
 
@@ -526,6 +649,91 @@ async function deleteAchievement(id, playerId) {
 // Запуск при загрузке страницы
 document.addEventListener('DOMContentLoaded', loadTeamsAndPlayers);
 </script>
+
+<script>
+const addMatchForm = document.getElementById("addMatchForm");
+const matchTeamSelect = document.getElementById("matchTeamSelect");
+
+document.addEventListener("DOMContentLoaded", async () => {
+    async function l(url, options = {}) {
+        try {
+            const res = await fetch(url, options);
+            if (!res.ok) throw new Error(`Ошибка ${res.status} при загрузке ${url}`);
+            return await res.json();
+        } catch (err) {
+            alert(err.message);
+            console.error(err);
+            return null;
+        }
+    }
+
+    async function loadTeamsIntoMatchForm() {
+        const teams = await l("/api/get_teams.php");
+        if (teams) {
+            matchTeamSelect.innerHTML = "";
+            teams.forEach(team => {
+                const option = document.createElement("option");
+                option.value = team.id;
+                option.textContent = team.name;
+                matchTeamSelect.appendChild(option);
+            });
+            matchTeamSelect.value = matchTeamSelect.options[0]?.value || '';
+        }
+    }
+
+    addMatchForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const formData = new FormData(addMatchForm);
+        const data = {};
+        formData.forEach((value, key) => data[key] = value);
+
+        // Явно передаём ID и название команды
+        data.teams_id = matchTeamSelect.value;
+        data.our_team = matchTeamSelect.options[matchTeamSelect.selectedIndex]?.textContent || '';
+
+        console.log("📤 Данные для отправки:", data); // ← лог перед отправкой
+
+        const res = await fetch("/api/matches.php", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(data)
+        });
+
+        let result;
+        try {
+            result = await res.json();
+            console.log("📦 Ответ от сервера:", result);
+        } catch (err) {
+            console.error("❌ Не удалось распарсить JSON-ответ:", err);
+        }
+
+        if (res.ok && result?.success) {
+            alert("✅ Матч добавлен! ID: " + result.match_id);
+            console.log("📋 Полученные данные:", result.received_data);
+            addMatchForm.reset();
+        } else {
+            alert("❌ Ошибка при добавлении матча: " + (result?.error || "неизвестная"));
+            console.error("🪵 Сервер вернул:", result);
+        }
+    });
+
+    await loadTeamsIntoMatchForm();
+});
+</script>
+
+<script>
+  const addMatchModal = document.getElementById('addMatchModal');
+  const openBtn = document.getElementById('openAddMatchModal');
+
+  openBtn.addEventListener('click', () => {
+    addMatchModal.style.display = 'flex';
+  });
+
+  function closeAddMatchModal() {
+    addMatchModal.style.display = 'none';
+  }
+</script>
+
 
 </body>
 

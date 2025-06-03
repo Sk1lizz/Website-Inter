@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>8х8, Результаты 2025 года</title>
+    <link rel="stylesheet" href="./css/main.css" />
+</head>
+
+<body>
+    @@include('blocks/header.html')
+
+    <div class="result">
+        <div class="title">Результаты текущего года</div>
+
+
+        <div class="matches_result" id="matches_result"></div>
+        <!-- Матчи будут добавляться сюда -->
+    </div>
+    </div>
+
+    @@include('blocks/footer.html')
+    <script src="./js/index.bundle.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            const container = document.getElementById("matches_result");
+
+            try {
+                const res = await fetch("/api/get_matches_8x8.php");
+                if (!res.ok) throw new Error("Ошибка загрузки матчей");
+
+                const matches = await res.json();
+                if (!matches.length) {
+                    container.innerHTML = "<p>Нет матчей за текущий год</p>";
+                    return;
+                }
+
+                matches.forEach(match => {
+                    const div = document.createElement("div");
+                    div.className = "match";
+
+                    const score = `(${match.our_goals}:${match.opponent_goals})`;
+                    const scoreLine = `FC Inter Moscow 8х8 - ${match.opponent} ${score}`;
+                    const tournament = match.championship_name + (match.tour ? `, ${match.tour}` : "");
+
+                    div.innerHTML = `
+                            <p>${match.date}</p>
+                            <p>${tournament}</p>
+                            <p>${scoreLine}</p>
+                            ${match.match_result === "technical_win" ? `<p>Техническая победа</p>` : ""}
+                            ${match.goals ? `<p>Голы: ${match.goals}</p>` : ""}
+                            ${match.assists ? `<p>Голевые: ${match.assists}</p>` : ""}
+                        `;
+
+                    container.appendChild(div);
+                });
+            } catch (err) {
+                console.error("Ошибка:", err);
+                container.innerHTML = "<p>Ошибка при загрузке данных</p>";
+            }
+        });
+    </script>
+</body>
+
+</html>
