@@ -153,6 +153,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             document.getElementById("title").textContent = current.name;
         }
 
+        // Загружаем АЧИВКИ
         const successWrapper = document.querySelector(".card.success");
         const successList = document.querySelector(".success-list");
         const successCountEl = document.getElementById("success-count");
@@ -194,6 +195,39 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
 
         updateExperienceBar(calculateExperience(achievementPoints));
+
+        // Загружаем ДОСТИЖЕНИЯ (награды)
+        const achievementsCard = document.querySelector(".achievements-card");
+        const listEl = achievementsCard?.querySelector(".achievements-list");
+
+        try {
+            const achRes = await fetch(`/api/achievements.php?player_id=${player.id}`);
+            const text = await achRes.text();
+            const achievements = JSON.parse(text);
+
+            achievementsCard.style.display = 'block';
+            listEl.innerHTML = '';
+
+            if (Array.isArray(achievements) && achievements.length > 0) {
+                achievements.forEach(a => {
+                    const div = document.createElement('div');
+                    div.classList.add('career-item');
+                    div.innerHTML = `
+                        ${a.award_title}<span>${a.award_year}</span>
+                        <small>${a.team_name}</small>
+                    `;
+                    listEl.appendChild(div);
+                });
+            } else {
+                listEl.innerHTML = '<div class="empty-achievements">Нет достижений</div>';
+            }
+        } catch (err) {
+            console.error("Ошибка при загрузке достижений:", err);
+            if (achievementsCard && listEl) {
+                achievementsCard.style.display = 'block';
+                listEl.innerHTML = '<div class="error-msg">Не удалось загрузить достижения</div>';
+            }
+        }
 
     } catch (error) {
         console.error("Ошибка при загрузке данных игрока:", error);
