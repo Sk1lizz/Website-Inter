@@ -42,152 +42,115 @@ endif;
 
 <!DOCTYPE html>
 <html lang="ru">
-
-<meta charset="UTF-8">
-    <title>Админка - Статистика игроков</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 30px;
-            background-color: #f2f2f2;
-            color: #333;
-        }
-        h1, h2 {
-            color: #1a1a1a;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background: #fff;
-            box-shadow: 0 0 6px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-        }
-        th, td {
-            padding: 8px 12px;
-            border: 1px solid #ccc;
-            text-align: center;
-        }
-        th {
-            background-color: #004080;
-            color: #fff;
-        }
-        input[type="number"], input[type="text"], input[type="date"], select {
-            width: 95%;
-            padding: 6px;
-            margin: 2px 0;
-            box-sizing: border-box;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-        }
-        button {
-            padding: 6px 14px;
-            background-color: #004080;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #003366;
-        }
-        form label {
-            display: block;
-            margin: 8px 0 4px;
-        }
-        form input, form select {
-            display: block;
-            width: 100%;
-            margin-bottom: 10px;
-        }
-        #editPlayerModal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.4);
-            z-index: 10;
-        }
-        .modal-content {
-            background: white;
-            padding: 20px;
-            max-width: 500px;
-            margin: 100px auto;
-            border-radius: 8px;
-        }
-    </style>
-
+<head>
+  <meta charset="UTF-8">
+  <title>Админка - FC Inter Moscow</title>
+  <link rel="stylesheet" href="/css/main.css"/>
+</head>
 <body>
+  <div class="admin-panel">
+    <form method="post" action="logout.php" style="float:right;">
+      <button type="submit">Выйти</button>
+    </form>
 
-<form method="post" action="logout.php" style="float:right;">
-    <button type="submit">Выйти</button>
-</form>
     <h1>Выберите команду</h1>
     <select id="teamSelect"></select>
 
     <h2>Список игроков</h2>
-    <table id="playersTable" border="1">
-        <thead>
-            <tr>
-                <th>Имя</th>
-                <th>Матчи</th>
-                <th>Голы</th>
-                <th>Ассисты</th>
-                <th>Матчи без пропущенных</th>
-                <th>Пропущенные мячи</th>
-                <th>Тренировки</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
+    <table id="playersTable">
+      <thead>
+        <tr>
+          <th>Имя</th>
+          <th>Матчи</th>
+          <th>Голы</th>
+          <th>Ассисты</th>
+          <th>Матчи без пропущенных</th>
+          <th>Пропущенные мячи</th>
+          <th>Тренировки</th>
+          <th>Действия</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
     </table>
 
     <button id="saveStatsBtn">Сохранить изменения</button>
 
     <h2>Добавить игрока</h2>
     <form id="add-player-form">
-        <label>Выберите команду:
-            <select id="team-select" required></select>
-            <option value="">-- Выберите команду --</option>
-            </select>
-        </label>
-        <label>Фамилия и имя (полное имя): <input name="name" required placeholder="Иванов Иван"></label><br>
-        <label>Отчество: <input name="patronymic"></label><br>
-        <label>Игровой номер: <input name="number" type="number" required></label><br>
-        <label>Позиция:
-            <select name="position" required>
-                <option value="">-- Выберите позицию --</option>
-                <option value="Вратарь">Вратарь</option>
-                <option value="Защитник">Защитник</option>
-                <option value="Полузащитник">Полузащитник</option>
-                <option value="Нападающий">Нападающий</option>
-            </select>
-        </label><br>
-        <label>Дата рождения: <input name="birth_date" type="date" required></label><br>
-        <label>Дата присоединения: <input name="join_date" type="date" required></label><br>
-        <label>Рост (см): <input name="height_cm" type="number"></label><br>
-        <label>Вес (кг): <input name="weight_kg" type="number"></label><br>
-        <button type="submit">Добавить игрока</button>
-        </div>
+      <label>Выберите команду:
+        <select id="team-select" required></select>
+      </label>
+      <label>Фамилия и имя (полное имя): <input name="name" required placeholder="Иванов Иван"></label>
+      <label>Отчество: <input name="patronymic"></label>
+      <label>Игровой номер: <input name="number" type="number" required></label>
+      <label>Позиция:
+        <select name="position" required>
+          <option value="">-- Выберите позицию --</option>
+          <option value="Вратарь">Вратарь</option>
+          <option value="Защитник">Защитник</option>
+          <option value="Полузащитник">Полузащитник</option>
+          <option value="Нападающий">Нападающий</option>
+        </select>
+      </label>
+      <label>Дата рождения: <input name="birth_date" type="date" required></label>
+      <label>Дата присоединения: <input name="join_date" type="date" required></label>
+      <label>Рост (см): <input name="height_cm" type="number"></label>
+      <label>Вес (кг): <input name="weight_kg" type="number"></label>
+      <button type="submit">Добавить игрока</button>
     </form>
 
-    <div id="editPlayerModal" class="modal" style="display:none;">
-        <div class="modal-content">
-            <h2>Редактировать игрока</h2>
-            <form id="editPlayerForm">
-                <label>ФИО: <input type="text" name="name" required></label><br>
-                <label>Отчество: <input type="text" name="patronymic"></label><br>
-                <label>Дата рождения: <input type="date" name="birth_date" required></label><br>
-                <label>Номер: <input type="number" name="number" required></label><br>
-                <label>Позиция: <input type="text" name="position" required></label><br>
-                <label>Рост (см): <input type="number" name="height_cm"></label><br>
-                <label>Вес (кг): <input type="number" name="weight_kg"></label><br>
-                <label>Команда:
-                    <select name="team_id" id="editPlayerTeamSelect"></select>
-                </label><br>
-                <button type="submit">Сохранить</button>
-                <button type="button" onclick="closeEditPlayerModal()">Отмена</button>
-            </form>
-        </div>
+    <div class="admin-achievements">
+  <h2>Управление достижениями</h2>
+
+  <label for="team-select">Выберите команду:</label>
+  <select id="achv-team-select"></select>
+
+  <label for="player-select">Выберите игрока:</label>
+  <select id="achv-player-select"></select>
+
+  <h3>Текущие достижения</h3>
+  <table id="achievements-table"></table>
+
+  <h3>Добавить достижение</h3>
+  <form id="add-achievement-form">
+    <input type="text" name="award_year" placeholder="Год (например, 2023)" maxlength="4" required>
+    <input type="text" name="award_title" placeholder="Название награды" required>
+    <select name="team_name">
+      <option>FC Inter Moscow 8х8</option>
+      <option>FC Inter Moscow</option>
+      <option>FC Inter Moscow Pro</option>
+      <option>FC Inter Moscow U18</option>
+      <option>FC Inter Moscow U21</option>
+      <option>Primavera FC Inter Moscow</option>
+      <option>FC Inter Moscow forever</option>
+      <option>FC Inter Moscow-2</option>
+    </select>
+    <button type="submit">Добавить</button>
+  </form>
+</div>
+
+    <div id="editPlayerModal" style="display:none;">
+      <div class="modal-content">
+        <h2>Редактировать игрока</h2>
+        <form id="editPlayerForm">
+          <label>ФИО: <input type="text" name="name" required></label>
+          <label>Отчество: <input type="text" name="patronymic"></label>
+          <label>Дата рождения: <input type="date" name="birth_date" required></label>
+          <label>Номер: <input type="number" name="number" required></label>
+          <label>Позиция: <input type="text" name="position" required></label>
+          <label>Рост (см): <input type="number" name="height_cm"></label>
+          <label>Вес (кг): <input type="number" name="weight_kg"></label>
+          <label>Команда:
+            <select name="team_id" id="editPlayerTeamSelect"></select>
+          </label>
+          <button type="submit">Сохранить</button>
+          <button type="button" onclick="closeEditPlayerModal()">Отмена</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
 
         <script>
             const teamSelectTop = document.getElementById('teamSelect');
@@ -250,8 +213,9 @@ endif;
             }
 
             async function fetchPlayers(teamId) {
-                const res = await fetch(`api/get_players.php?team_id=${teamId}`)
+                const res = await fetch(`api/get_players.php?team_id=${teamId}`);
                 const players = await res.json();
+                players.sort((a, b) => a.name.localeCompare(b.name));
                 const tbody = document.querySelector('#playersTable tbody');
                 tbody.innerHTML = '';
 
@@ -425,7 +389,7 @@ endif;
                 form.weight_kg.value = player.weight_kg !== undefined && player.weight_kg !== null ? player.weight_kg : '';
                 form.team_id.value = player.team_id;
 
-                document.getElementById('editPlayerModal').style.display = 'block';
+                document.getElementById('editPlayerModal').style.display = 'flex';
             }
 
             function closeEditPlayerModal() {
@@ -464,6 +428,104 @@ endif;
                 }
             });</script>
 
+
+<script>
+async function loadTeamsAndPlayers() {
+    const teamSelect = document.getElementById('achv-team-select');
+    const playerSelect = document.getElementById('achv-player-select');
+
+    // Загружаем список команд
+    const teams = await fetch('api/get_teams.php').then(res => res.json());
+    teamSelect.innerHTML = teams.map(t => `<option value="${t.id}">${t.name}</option>`).join('');
+
+    // Обработчик выбора команды
+    teamSelect.addEventListener('change', async () => {
+        const teamId = teamSelect.value;
+
+    const players = await fetch(`api/get_players.php?team_id=${teamId}`).then(res => res.json());
+
+        playerSelect.innerHTML = players.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
+
+        // Если игроки есть — загружаем достижения первого
+        if (players.length > 0) {
+            loadAchievements(players[0].id);
+        } else {
+            document.getElementById('achievements-table').innerHTML = '<tr><td colspan="4">Нет игроков</td></tr>';
+        }
+
+        players.sort((a, b) => a.name.localeCompare(b.name));
+
+playerSelect.innerHTML = players.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
+
+if (players.length > 0) {
+    loadAchievements(players[0].id);
+} else {
+    document.getElementById('achievements-table').innerHTML = '<tr><td colspan="4">Нет игроков</td></tr>';
+}
+    });
+
+    // Обработчик выбора игрока
+    playerSelect.addEventListener('change', () => {
+        loadAchievements(playerSelect.value);
+    });
+
+    // Обработчик добавления достижения
+    document.getElementById('add-achievement-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const form = e.target;
+        const data = {
+            player_id: playerSelect.value,
+            award_year: form.award_year.value,
+            award_title: form.award_title.value,
+            team_name: form.team_name.value
+        };
+
+        await fetch('api/achievements.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+
+        form.reset();
+        loadAchievements(playerSelect.value);
+    });
+
+    // Автозагрузка первой команды при старте
+    if (teams.length > 0) {
+        teamSelect.value = teams[0].id;
+        teamSelect.dispatchEvent(new Event('change'));
+    }
+}
+
+// Загрузка достижений игрока
+async function loadAchievements(playerId) {
+    const table = document.getElementById('achievements-table');
+    const data = await fetch(`api/achievements.php?player_id=${playerId}`).then(res => res.json());
+
+    if (!data || !data.length) {
+        table.innerHTML = '<tr><td colspan="4">Нет достижений</td></tr>';
+        return;
+    }
+
+    table.innerHTML = data.map(d => `
+        <tr>
+            <td>${d.award_year}</td>
+            <td>${d.award_title}</td>
+            <td>${d.team_name}</td>
+            <td><button onclick="deleteAchievement(${d.id}, ${playerId})">Удалить</button></td>
+        </tr>
+    `).join('');
+}
+
+// Удаление достижения
+async function deleteAchievement(id, playerId) {
+    await fetch(`api/achievements.php?id=${id}`, { method: 'DELETE' });
+    loadAchievements(playerId);
+}
+
+// Запуск при загрузке страницы
+document.addEventListener('DOMContentLoaded', loadTeamsAndPlayers);
+</script>
 
 </body>
 

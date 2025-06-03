@@ -12,7 +12,7 @@ if (!$id) {
 }
 
 // Архивная команда — id = 4
-$stmt = $db->prepare("UPDATE players SET team_id = 4 WHERE id = ?");
+$stmt = $db->prepare("UPDATE players SET team_id = 3 WHERE id = ?");
 $stmt->bind_param("i", $id);
 
 if ($stmt->execute()) {
@@ -21,3 +21,4 @@ if ($stmt->execute()) {
     http_response_code(500);
     echo json_encode(['error' => 'Ошибка архивации']);
 }
+

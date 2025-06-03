@@ -1,0 +1,139 @@
+.admin-panel {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    padding: 20px;
+    color: #333;
+}
+
+.admin-panel h1,
+.admin-panel h2 {
+    color: #004080;
+}
+
+.admin-panel label {
+    display: block;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.admin-panel input,
+.admin-panel select {
+    width: 100%;
+    padding: 8px;
+    margin-top: 4px;
+    margin-bottom: 12px;
+    box-sizing: border-box;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.admin-panel table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: white;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.admin-panel th,
+.admin-panel td {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+.admin-panel th {
+    background-color: #004080;
+    color: white;
+}
+
+.admin-panel button {
+    padding: 10px 20px;
+    background-color: #004080;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.admin-panel button:hover {
+    background-color: #003060;
+}
+
+#editPlayerModal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10000;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+
+    background: white;
+    padding: 20px;
+    width: 90%;
+    max-width: 500px;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 0.3s ease-in-out;
+
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.admin-achievements {
+    background: #ffffff;
+    padding: 20px;
+    margin-top: 40px;
+    border-radius: 6px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.admin-achievements h2,
+.admin-achievements h3 {
+    color: #004080;
+}
+
+.admin-achievements table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    background-color: #fff;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.03);
+}
+
+.admin-achievements th,
+.admin-achievements td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+.admin-achievements select,
+.admin-achievements input[type=\"text\"] {
+    margin: 5px 0 15px;
+    width: 100%;
+    padding: 6px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
