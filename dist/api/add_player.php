@@ -31,6 +31,15 @@ $stmt->bind_param(
 if ($stmt->execute()) {
     $playerId = $stmt->insert_id;
 
+    // Вставка пустой строки в таблицу общей статистики
+$insertAll = $db->prepare("
+INSERT INTO player_statistics_all (
+    player_id, matches, goals, assists, zeromatch, lostgoals, zanetti_priz
+) VALUES (?, 0, 0, 0, 0, 0, 0)
+");
+$insertAll->bind_param("i", $playerId);
+$insertAll->execute();
+
     // Создать запись для текущего сезона
     $db->query("INSERT INTO player_statistics_2025 (player_id) VALUES ($playerId)");
 

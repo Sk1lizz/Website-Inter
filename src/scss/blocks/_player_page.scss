@@ -50,7 +50,7 @@
 
             /* Убираем padding у внутреннего блока */
             .achievements-card {
-                padding: 0 !important;
+                padding: 10 !important;
                 /* !important на случай, если другие стили переопределяют */
             }
         }
@@ -123,6 +123,8 @@
             margin-top: 0.3rem;
         }
     }
+
+
 
     .player-expensive {
         height: 100%;

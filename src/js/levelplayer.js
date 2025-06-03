@@ -1,35 +1,17 @@
 document.addEventListener("DOMContentLoaded", async () => {
     const playerId = new URLSearchParams(window.location.search).get("id");
+    if (!playerId) return console.error("ID игрока не указан в URL");
 
-    if (!playerId) {
-        console.error("ID игрока не указан в URL");
-        return;
-    }
-
-
+    // Хелперы
     function formatDate(dateStr, format = "full") {
         const d = new Date(dateStr);
-        if (format === "short") {
-            // Возвращаем только год
-            return d.getFullYear().toString();
-        } else if (format === "numeric") {
-            // Возвращаем в формате ДД.ММ.ГГГГ
-            const day = String(d.getDate()).padStart(2, '0');
-            const month = String(d.getMonth() + 1).padStart(2, '0');
-            const year = d.getFullYear();
-            return `${day}.${month}.${year}`;
-        } else {
-            return d.toLocaleDateString('ru-RU', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-            });
-        }
+        if (format === "short") return d.getFullYear().toString();
+        if (format === "numeric") return `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth() + 1).padStart(2, '0')}.${d.getFullYear()}`;
+        return d.toLocaleDateString('ru-RU', { year: 'numeric', month: 'long', day: 'numeric' });
     }
 
     function declension(num, forms) {
-        const mod10 = num % 10;
-        const mod100 = num % 100;
+        const mod10 = num % 10, mod100 = num % 100;
         if (mod100 >= 11 && mod100 <= 14) return forms[2];
         if (mod10 === 1) return forms[0];
         if (mod10 >= 2 && mod10 <= 4) return forms[1];
@@ -37,252 +19,165 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     function calculateAge(dateStr) {
-        const birthDate = new Date(dateStr);
-        const today = new Date();
+        const birthDate = new Date(dateStr), today = new Date();
         let age = today.getFullYear() - birthDate.getFullYear();
         const m = today.getMonth() - birthDate.getMonth();
-        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-            age--;
-        }
+        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) age--;
         return age;
     }
 
     try {
-        // Получаем данные игрока по id
         const playerRes = await fetch(`/api/get_player.php?id=${playerId}`);
         if (!playerRes.ok) throw new Error("Игрок не найден");
         const player = await playerRes.json();
-        if (!player || !player.id) throw new Error("Данные игрока неполные");
 
+        let years = 0, months = 0; // Глобально объявляем для расчета опыта
 
-        // Устанавливаем фото игрока
-        const playerPhoto = `/img/player/player_${player.id}.png`;
-        const playerImgEl = document.querySelector(".player-card img");
-        if (playerImgEl) {
-            playerImgEl.src = playerPhoto;
-            playerImgEl.alt = `${player.name} ${player.patronymic || ''}`.trim();
-            playerImgEl.onerror = () => {
-                playerImgEl.src = "/img/player/player_0.png"; // Заглушка
-            };
-        }
+        // Фото
+        const img = document.querySelector(".player-card img");
+        img.src = `/img/player/player_${player.id}.png`;
+        img.alt = `${player.name} ${player.patronymic || ''}`.trim();
+        img.onerror = () => { img.src = "/img/player/player_0.png"; };
 
-        // Получаем статистику текущего сезона
-        const seasonStatsRes = await fetch(`/api/player_statistics.php?id=${player.id}`)
-        if (!seasonStatsRes.ok) throw new Error("Ошибка при загрузке статистики сезона");
-        const seasonStats = await seasonStatsRes.json();
-
-        // Получаем общую статистику
-        const allStatsRes = await fetch(`/api/player_statistics_all.php?id=${player.id}`)
-        if (!allStatsRes.ok) throw new Error("Ошибка при загрузке общей статистики");
-        const allStatsRaw = await allStatsRes.json();
-        const allStats = (allStatsRaw && allStatsRaw.length > 0) ? allStatsRaw[0] : {};
-
-        // Обновляем основную информацию игрока
-        const nameEl = document.querySelector(".player-name");
+        // Основная инфа
         const infoEl = document.querySelector(".player-info");
+        const joinDate = new Date(player.join_date), now = new Date();
+        years = now.getFullYear() - joinDate.getFullYear();
+        months = now.getMonth() - joinDate.getMonth();
+        if (months < 0) { years--; months += 12; }
 
-        if (nameEl) {
-            nameEl.textContent = `${player.name} ${player.patronymic || ''}`.trim();
-        }
+        const teamDuration = [];
+        if (years > 0) teamDuration.push(`${years} ${declension(years, ['год', 'года', 'лет'])}`);
+        if (months > 0) teamDuration.push(`${months} ${declension(months, ['месяц', 'месяца', 'месяцев'])}`);
 
-        if (infoEl) {
-            // Расчёт времени в команде
-            const joinDate = new Date(player.join_date);
-            const now = new Date();
-            let years = now.getFullYear() - joinDate.getFullYear();
-            let months = now.getMonth() - joinDate.getMonth();
-            if (months < 0) {
-                years--;
-                months += 12;
-            }
-
-            const teamDuration = [];
-            if (years > 0) teamDuration.push(`${years} ${declension(years, ['год', 'года', 'лет'])}`);
-            if (months > 0) teamDuration.push(`${months} ${declension(months, ['месяц', 'месяца', 'месяцев'])}`);
-
-            infoEl.innerHTML = `
-              <p><strong>Номер:</strong> ${player.number}</p>
+        document.querySelector(".player-name").textContent = `${player.name} ${player.patronymic || ''}`.trim();
+        infoEl.innerHTML = `
+            <p><strong>Номер:</strong> ${player.number}</p>
             <p><strong>Позиция:</strong> ${player.position}</p>
-            <p><strong>Рост:</strong> ${player.height_cm || '-'} см</p>
-            <p><strong>Вес:</strong> ${player.weight_kg || '-'} кг</p>
+            <p><strong>Рост:</strong> ${player.height_cm || '-'}</p>
+            <p><strong>Вес:</strong> ${player.weight_kg || '-'}</p>
             <p><strong>Возраст:</strong> ${calculateAge(player.birth_date)}</p>
             <p><strong>Присоединился:</strong> ${formatDate(player.join_date, 'short')}</p>
-             <p><strong>Дата Рождения:</strong> ${formatDate(player.birth_date, 'numeric')}</p>
+            <p><strong>Дата Рождения:</strong> ${formatDate(player.birth_date, 'numeric')}</p>
             <p><strong>Время в команде:</strong> ${teamDuration.join(' ') || 'менее месяца'}</p>
         `;
-        }
 
-        // Вывод статистики сезона
+        // Статистика
+        const statsRes = await fetch(`/api/player_statistics_all.php?id=${player.id}`);
+        if (!statsRes.ok) throw new Error("Ошибка загрузки статистики");
+        const statsJson = await statsRes.json();
+        const seasonStats = statsJson.season || {};
+        const allStats = statsJson.all || {};
+
+        const useSeasonOnly = ['matches', 'goals', 'assists', 'zeromatch', 'lostgoals', 'zanetti_priz']
+            .every(key => !allStats[key] || Number(allStats[key]) === 0);
+
+        const safeStats = (stats) => ({
+            matches: Number(stats.matches) || 0,
+            goals: Number(stats.goals) || 0,
+            assists: Number(stats.assists) || 0,
+            zeromatch: Number(stats.zeromatch) || 0,
+            lostgoals: Number(stats.lostgoals) || 0
+        });
+
+        const season = safeStats(seasonStats);
+        const all = safeStats(allStats);
+
+        const totalStats = useSeasonOnly ? season : {
+            matches: season.matches + all.matches,
+            goals: season.goals + all.goals,
+            assists: season.assists + all.assists,
+            zeromatch: season.zeromatch + all.zeromatch,
+            lostgoals: season.lostgoals + all.lostgoals
+        };
+
         const seasonStatsGrid = document.querySelector(".season-stats");
-        if (seasonStatsGrid) {
-            seasonStatsGrid.innerHTML = `
-                <div><div class="number">${seasonStats.matches || 0}</div>Матчей</div>
-                <div><div class="number">${seasonStats.goals || 0}</div>Голов</div>
-                <div><div class="number">${seasonStats.assists || 0}</div>Ассистов</div>
-                <div><div class="number">${(seasonStats.goals || 0) + (seasonStats.assists || 0)}</div>Гол+пас</div>
-                <div><div class="number">${seasonStats.lostgoals || 0}</div>Голов пропущено</div>
-                <div><div class="number">${seasonStats.zeromatch || 0}</div>Матчей на 0</div>
-            `;
-        }
+        seasonStatsGrid.innerHTML = `
+            <div><div class="number">${seasonStats.matches || 0}</div>Матчей</div>
+            <div><div class="number">${seasonStats.goals || 0}</div>Голов</div>
+            <div><div class="number">${seasonStats.assists || 0}</div>Ассистов</div>
+            <div><div class="number">${(seasonStats.goals || 0) + (seasonStats.assists || 0)}</div>Гол+пас</div>
+            <div><div class="number">${seasonStats.lostgoals || 0}</div>Голов пропущено</div>
+            <div><div class="number">${seasonStats.zeromatch || 0}</div>Матчей на 0</div>
+        `;
 
-        // Вывод общей статистики
         const allStatsGrid = document.querySelector(".all-stats");
+        allStatsGrid.innerHTML = `
+            <div><div class="number number2 matches">${totalStats.matches}</div>Матчей</div>
+            <div><div class="number number2 goals">${totalStats.goals}</div>Голов</div>
+            <div><div class="number number2 assists">${totalStats.assists}</div>Ассистов</div>
+            <div><div class="number">${totalStats.goals + totalStats.assists}</div>Гол+пас</div>
+            <div><div class="number number2 lostgoals">${totalStats.lostgoals}</div>Голов пропущено</div>
+            <div><div class="number number2 zeromatch">${totalStats.zeromatch}</div>Матчей на 0</div>
+        `;
 
-        if (allStatsGrid) {
-            // Суммируем поля сезона и общей статистики
-            const useSeasonOnly = !allStats || !allStats.matches;
-
-            const totalStats = useSeasonOnly ? seasonStats : {
-                matches: (seasonStats.matches || 0) + (allStats.matches || 0),
-                goals: (seasonStats.goals || 0) + (allStats.goals || 0),
-                assists: (seasonStats.assists || 0) + (allStats.assists || 0),
-                zeromatch: (seasonStats.zeromatch || 0) + (allStats.zeromatch || 0),
-                lostgoals: (seasonStats.lostgoals || 0) + (allStats.lostgoals || 0),
-            };
-
-            document.querySelector(".all-stats").innerHTML = `
-  <div><div class="number number2 matches">${totalStats.matches}</div>Матчей</div>
-  <div><div class="number number2 goals">${totalStats.goals}</div>Голов</div>
-  <div><div class="number number2 assists">${totalStats.assists}</div>Ассистов</div>
-  <div><div class="number">${totalStats.goals + totalStats.assists}</div>Гол+пас</div>
-  <div><div class="number number2 lostgoals">${totalStats.lostgoals}</div>Голов пропущено</div>
-  <div><div class="number number2 zeromatch">${totalStats.zeromatch}</div>Матчей на 0</div>
-`;
-
-            // Функция для подсчёта опыта
-            function calculateExperience() {
-                const matches = sum('matches');
-                const goals = sum('goals');
-                const assists = sum('assists');
-                const zeroMatches = sum('zeromatch');
-
-                // Извлекаем время в команде из infoEl
-                let years = 0, months = 0;
-                if (infoEl) {
-                    const timeInTeamP = [...infoEl.querySelectorAll('p')].find(p => p.querySelector('strong')?.textContent.includes('Время в команде'));
-                    if (timeInTeamP) {
-                        const text = timeInTeamP.textContent;
-                        const matchYears = text.match(/(\d+)\s(год|года|лет)/);
-                        const matchMonths = text.match(/(\d+)\s(месяц|месяца|месяцев)/);
-                        if (matchYears) years = parseInt(matchYears[1]);
-                        if (matchMonths) months = parseInt(matchMonths[1]);
-                    }
-                }
-                const totalMonths = years * 12 + months;
-
-                // Формула опыта
-                const experience = totalMonths * 100 + matches * 50 + goals * 125 + assists * 100 + zeroMatches * 250;
-                return experience;
-            }
-
-            function updateExperienceBar(experience) {
-                const titles = [
-                    { limit: 500, name: 'Новичок' },
-                    { limit: 1000, name: 'Перспективный' },
-                    { limit: 2500, name: 'Футболист' },
-                    { limit: 5000, name: 'Опытный' },
-                    { limit: 7500, name: 'Старожил' },
-                    { limit: 10000, name: 'Мастер' },
-                    { limit: 12500, name: 'Герой' },
-                    { limit: 15000, name: 'Магистр' },
-                    { limit: 20000, name: 'Посвященный' },
-                    { limit: 25000, name: 'Ветеран' },
-                    { limit: 30000, name: 'Виртуоз' },
-                    { limit: 35000, name: 'Элита' },
-                    { limit: 45000, name: 'Чемпион' },
-                    { limit: 60000, name: 'Хранитель' },
-                    { limit: 75000, name: 'Вершитель' },
-                    { limit: 90000, name: 'Избранный' },
-                    { limit: Infinity, name: 'Легенда' }
-                ];
-
-                let currentLevelIndex = 0;
-                for (let i = 0; i < titles.length; i++) {
-                    if (experience <= titles[i].limit) {
-                        currentLevelIndex = i;
-                        break;
-                    }
-                }
-
-                const currentLevel = titles[currentLevelIndex];
-                const prevLimit = currentLevelIndex === 0 ? 0 : titles[currentLevelIndex - 1].limit;
-                const nextLimit = currentLevel.limit === Infinity ? currentLevel.limit : currentLevel.limit;
-
-                const expInLevel = experience - prevLimit;
-                const expRange = nextLimit - prevLimit;
-                const percent = nextLimit === Infinity ? 100 : Math.min(100, (expInLevel / expRange) * 100);
-
-                const barFill = document.getElementById('experience-bar-fill');
-                const barText = document.getElementById('experience-bar-text');
-                const titleEl = document.getElementById('title');
-
-                if (barFill) {
-                    barFill.style.width = percent + '%';
-                }
-
-                if (barText) {
-                    if (nextLimit === Infinity) {
-                        barText.textContent = `${experience} / ∞`;
-                    } else {
-                        barText.textContent = `${experience} / ${nextLimit}`;
-                    }
-                }
-
-                if (titleEl) {
-                    titleEl.textContent = currentLevel.name;
-                }
-            }
-
-            // Подсчитываем опыт и обновляем UI
-            const experience = calculateExperience();
-            updateExperienceBar(experience);
+        // Опыт
+        function calculateExperience() {
+            const matches = totalStats.matches, goals = totalStats.goals;
+            const assists = totalStats.assists, zeros = totalStats.zeromatch;
+            const totalMonths = years * 12 + months;
+            return totalMonths * 100 + matches * 50 + goals * 125 + assists * 100 + zeros * 250;
         }
 
-        const achievementsBlock = document.getElementById('achievements-block'); // Весь блок достижений
-        const achievementsCard = document.querySelector('.achievements-card');  // Внутренний контейнер
-        const listEl = document.querySelector('.achievements-list');
+        function updateExperienceBar(exp) {
+            const levels = [
+                { limit: 500, name: 'Новичок' }, { limit: 1000, name: 'Перспективный' },
+                { limit: 2500, name: 'Футболист' }, { limit: 5000, name: 'Опытный' },
+                { limit: 7500, name: 'Старожил' }, { limit: 10000, name: 'Мастер' },
+                { limit: 12500, name: 'Герой' }, { limit: 15000, name: 'Магистр' },
+                { limit: 20000, name: 'Посвященный' }, { limit: 25000, name: 'Ветеран' },
+                { limit: 30000, name: 'Виртуоз' }, { limit: 35000, name: 'Элита' },
+                { limit: 45000, name: 'Чемпион' }, { limit: 60000, name: 'Хранитель' },
+                { limit: 75000, name: 'Вершитель' }, { limit: 90000, name: 'Избранный' },
+                { limit: Infinity, name: 'Легенда' }
+            ];
+            const current = levels.find(l => exp <= l.limit) || levels.at(-1);
+            const prev = levels[levels.indexOf(current) - 1]?.limit || 0;
+            const percent = current.limit === Infinity ? 100 : Math.min(100, ((exp - prev) / (current.limit - prev)) * 100);
+
+            document.getElementById("experience-bar-fill").style.width = `${percent}%`;
+            document.getElementById("experience-bar-text").textContent = `${exp} / ${current.limit === Infinity ? '∞' : current.limit}`;
+            document.getElementById("title").textContent = current.name;
+        }
+
+        updateExperienceBar(calculateExperience());
+
+        // Достижения
+        const achievementsCard = document.querySelector(".achievements-card");
+        const listEl = achievementsCard?.querySelector(".achievements-list");
 
         try {
-            const achRes = await fetch(`/api/achievements.php?player_id=${player.id}`)
+            const achRes = await fetch(`/api/achievements.php?player_id=${player.id}`);
             if (!achRes.ok) throw new Error("Ошибка при получении достижений");
-
             const achievements = await achRes.json();
 
-            // Всегда показываем блок достижений (убираем проверку на achievementsBlock)
-            achievementsCard.style.display = 'block'; // Показываем внутренний контейнер
-            listEl.innerHTML = ''; // Очищаем список
+            if (achievementsCard && listEl) {
+                achievementsCard.style.display = 'block';
+                listEl.innerHTML = '';
 
-            if (achievements?.length) {
-                // Если есть достижения — рендерим их
-                achievements.forEach(a => {
-                    const div = document.createElement('div');
-                    div.classList.add('career-item');
-                    div.innerHTML = `
-                        ${a.award_title}<span>${a.award_year}</span>
-                        <small>${a.team_name}</small>
-                    `;
-                    listEl.appendChild(div);
-                });
-            } else {
-                // Если достижений нет — выводим сообщение
-                const emptyMsg = document.createElement('div');
-                emptyMsg.classList.add('empty-achievements');
-                emptyMsg.textContent = 'Нет достижений';
-                listEl.appendChild(emptyMsg);
+                if (achievements.length > 0) {
+                    achievements.forEach(a => {
+                        const div = document.createElement('div');
+                        div.classList.add('career-item');
+                        div.innerHTML = `
+                            ${a.award_title}<span>${a.award_year}</span>
+                            <small>${a.team_name}</small>
+                        `;
+                        listEl.appendChild(div);
+                    });
+                } else {
+                    listEl.innerHTML = '<div class="empty-achievements">Нет достижений</div>';
+                }
             }
-
         } catch (err) {
             console.error("Ошибка при загрузке достижений:", err);
-            // В случае ошибки показываем сообщение
-            achievementsCard.style.display = 'block';
-            listEl.innerHTML = '<div class="error-msg">Не удалось загрузить достижения</div>';
+            if (achievementsCard && listEl) {
+                achievementsCard.style.display = 'block';
+                listEl.innerHTML = '<div class="error-msg">Не удалось загрузить достижения</div>';
+            }
         }
-
 
     } catch (error) {
         console.error("Ошибка при загрузке данных игрока:", error);
     }
-
 });
-
-

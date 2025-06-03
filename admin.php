@@ -43,11 +43,79 @@ endif;
 <!DOCTYPE html>
 <html lang="ru">
 
-<head>
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
     <title>Админка - Статистика игроков</title>
-    <link rel="stylesheet" href="styles.css"> 
-</head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+            background-color: #f2f2f2;
+            color: #333;
+        }
+        h1, h2 {
+            color: #1a1a1a;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+            box-shadow: 0 0 6px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        th, td {
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            text-align: center;
+        }
+        th {
+            background-color: #004080;
+            color: #fff;
+        }
+        input[type="number"], input[type="text"], input[type="date"], select {
+            width: 95%;
+            padding: 6px;
+            margin: 2px 0;
+            box-sizing: border-box;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        button {
+            padding: 6px 14px;
+            background-color: #004080;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #003366;
+        }
+        form label {
+            display: block;
+            margin: 8px 0 4px;
+        }
+        form input, form select {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        #editPlayerModal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.4);
+            z-index: 10;
+        }
+        .modal-content {
+            background: white;
+            padding: 20px;
+            max-width: 500px;
+            margin: 100px auto;
+            border-radius: 8px;
+        }
+    </style>
 
 <body>
 
