@@ -2,7 +2,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     const playerId = new URLSearchParams(window.location.search).get("id");
     if (!playerId) return console.error("ID игрока не указан в URL");
 
-    // Хелперы
     function formatDate(dateStr, format = "full") {
         const d = new Date(dateStr);
         if (format === "short") return d.getFullYear().toString();
@@ -31,15 +30,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (!playerRes.ok) throw new Error("Игрок не найден");
         const player = await playerRes.json();
 
-        let years = 0, months = 0; // Глобально объявляем для расчета опыта
+        let years = 0, months = 0;
 
-        // Фото
         const img = document.querySelector(".player-card img");
         img.src = `/img/player/player_${player.id}.png`;
         img.alt = `${player.name} ${player.patronymic || ''}`.trim();
         img.onerror = () => { img.src = "/img/player/player_0.png"; };
 
-        // Основная инфа
         const infoEl = document.querySelector(".player-info");
         const joinDate = new Date(player.join_date), now = new Date();
         years = now.getFullYear() - joinDate.getFullYear();
@@ -62,7 +59,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             <p><strong>Время в команде:</strong> ${teamDuration.join(' ') || 'менее месяца'}</p>
         `;
 
-        // Статистика
         const statsRes = await fetch(`/api/player_statistics_all.php?id=${player.id}`);
         if (!statsRes.ok) throw new Error("Ошибка загрузки статистики");
         const statsJson = await statsRes.json();
@@ -91,8 +87,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             lostgoals: season.lostgoals + all.lostgoals
         };
 
-        const seasonStatsGrid = document.querySelector(".season-stats");
-        seasonStatsGrid.innerHTML = `
+        document.querySelector(".season-stats").innerHTML = `
             <div><div class="number">${seasonStats.matches || 0}</div>Матчей</div>
             <div><div class="number">${seasonStats.goals || 0}</div>Голов</div>
             <div><div class="number">${seasonStats.assists || 0}</div>Ассистов</div>
@@ -101,8 +96,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             <div><div class="number">${seasonStats.zeromatch || 0}</div>Матчей на 0</div>
         `;
 
-        const allStatsGrid = document.querySelector(".all-stats");
-        allStatsGrid.innerHTML = `
+        document.querySelector(".all-stats").innerHTML = `
             <div><div class="number number2 matches">${totalStats.matches}</div>Матчей</div>
             <div><div class="number number2 goals">${totalStats.goals}</div>Голов</div>
             <div><div class="number number2 assists">${totalStats.assists}</div>Ассистов</div>
@@ -111,24 +105,43 @@ document.addEventListener("DOMContentLoaded", async () => {
             <div><div class="number number2 zeromatch">${totalStats.zeromatch}</div>Матчей на 0</div>
         `;
 
-        // Опыт
-        function calculateExperience() {
-            const matches = totalStats.matches, goals = totalStats.goals;
-            const assists = totalStats.assists, zeros = totalStats.zeromatch;
+        function calculateExperience(achievementPoints = 0) {
+            const { matches, goals, assists, zeromatch } = totalStats;
             const totalMonths = years * 12 + months;
-            return totalMonths * 100 + matches * 50 + goals * 125 + assists * 100 + zeros * 250;
+            return totalMonths * 100 + matches * 50 + goals * 125 + assists * 100 + zeromatch * 250 + achievementPoints;
         }
 
         function updateExperienceBar(exp) {
             const levels = [
-                { limit: 500, name: 'Новичок' }, { limit: 1000, name: 'Перспективный' },
-                { limit: 2500, name: 'Футболист' }, { limit: 5000, name: 'Опытный' },
-                { limit: 7500, name: 'Старожил' }, { limit: 10000, name: 'Мастер' },
-                { limit: 12500, name: 'Герой' }, { limit: 15000, name: 'Магистр' },
-                { limit: 20000, name: 'Посвященный' }, { limit: 25000, name: 'Ветеран' },
-                { limit: 30000, name: 'Виртуоз' }, { limit: 35000, name: 'Элита' },
-                { limit: 45000, name: 'Чемпион' }, { limit: 60000, name: 'Хранитель' },
-                { limit: 75000, name: 'Вершитель' }, { limit: 90000, name: 'Избранный' },
+                { limit: 500, name: 'Новичок' },
+                { limit: 1000, name: 'Перспективный' },
+                { limit: 2500, name: 'Футболист' },
+                { limit: 5000, name: 'Опытный' },
+                { limit: 7500, name: 'Старожил' },
+                { limit: 10000, name: 'Мастер' },
+                { limit: 12500, name: 'Герой' },
+                { limit: 15000, name: 'Магистр' },
+                { limit: 20000, name: 'Посвященный' },
+                { limit: 25000, name: 'Ветеран' },
+                { limit: 30000, name: 'Виртуоз' },
+                { limit: 35000, name: 'Элита' },
+                { limit: 45000, name: 'Чемпион' },
+                { limit: 60000, name: 'Хранитель' },
+                { limit: 75000, name: 'Вершитель' },
+                { limit: 90000, name: 'Избранный' },
+                { limit: 110000, name: 'Мудрец' },
+                { limit: 130000, name: 'Наставник' },
+                { limit: 150000, name: 'Вдохновитель' },
+                { limit: 175000, name: 'Архонт' },
+                { limit: 200000, name: 'Маэстро' },
+                { limit: 225000, name: 'Хранитель огня' },
+                { limit: 250000, name: 'Лидер эпохи' },
+                { limit: 275000, name: 'Идеал' },
+                { limit: 300000, name: 'Миф' },
+                { limit: 350000, name: 'Символ клуба' },
+                { limit: 400000, name: 'Бессмертный' },
+                { limit: 450000, name: 'Наследие' },
+                { limit: 500000, name: 'Полубог' },
                 { limit: Infinity, name: 'Легенда' }
             ];
             const current = levels.find(l => exp <= l.limit) || levels.at(-1);
@@ -140,42 +153,47 @@ document.addEventListener("DOMContentLoaded", async () => {
             document.getElementById("title").textContent = current.name;
         }
 
-        updateExperienceBar(calculateExperience());
+        const successWrapper = document.querySelector(".card.success");
+        const successList = document.querySelector(".success-list");
+        const successCountEl = document.getElementById("success-count");
 
-        // Достижения
-        const achievementsCard = document.querySelector(".achievements-card");
-        const listEl = achievementsCard?.querySelector(".achievements-list");
+        const [successListRes, ownedRes] = await Promise.all([
+            fetch("/api/get_success_list.php"),
+            fetch(`/api/get_player_success.php?player_id=${player.id}`)
+        ]);
 
-        try {
-            const achRes = await fetch(`/api/achievements.php?player_id=${player.id}`);
-            if (!achRes.ok) throw new Error("Ошибка при получении достижений");
-            const achievements = await achRes.json();
+        const allSuccess = await successListRes.json();
+        const ownedIds = await ownedRes.json(); // массив id
+        const ownedSuccess = allSuccess.filter(s => ownedIds.includes(s.id));
+        const achievementPoints = ownedSuccess.reduce((sum, s) => sum + (s.points || 0), 0);
 
-            if (achievementsCard && listEl) {
-                achievementsCard.style.display = 'block';
-                listEl.innerHTML = '';
+        successWrapper.style.display = ownedSuccess.length > 0 ? 'block' : 'none';
+        successCountEl.textContent = `${ownedSuccess.length} / ${allSuccess.length} • ${achievementPoints} очков`;
+        successList.innerHTML = '';
 
-                if (achievements.length > 0) {
-                    achievements.forEach(a => {
-                        const div = document.createElement('div');
-                        div.classList.add('career-item');
-                        div.innerHTML = `
-                            ${a.award_title}<span>${a.award_year}</span>
-                            <small>${a.team_name}</small>
-                        `;
-                        listEl.appendChild(div);
-                    });
-                } else {
-                    listEl.innerHTML = '<div class="empty-achievements">Нет достижений</div>';
-                }
-            }
-        } catch (err) {
-            console.error("Ошибка при загрузке достижений:", err);
-            if (achievementsCard && listEl) {
-                achievementsCard.style.display = 'block';
-                listEl.innerHTML = '<div class="error-msg">Не удалось загрузить достижения</div>';
-            }
-        }
+        ownedSuccess.forEach(s => {
+            const iconPath = `/img/success/success-${s.id}.png`;
+            const fallback = `/img/success/success-0.png`;
+
+            const wrapper = document.createElement('div');
+            wrapper.className = 'success-item';
+            wrapper.style.marginBottom = '14px';
+            wrapper.style.paddingTop = '10px';
+
+            wrapper.innerHTML = `
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+                    <img src="${iconPath}" onerror="this.src='${fallback}'" width="50" height="50" style="border-radius: 6px; flex-shrink: 0;">
+                    <div style="flex: 1;">
+                        <div style="font-weight: bold;">${s.title}</div>
+                        <div style="color: #c5c2c2; font-size: 14px;">${s.description}</div>
+                    </div>
+                    <div style="color: #2D62B5; font-weight: bold; font-size: 14px;">${s.points} очков</div>
+                </div>
+            `;
+            successList.appendChild(wrapper);
+        });
+
+        updateExperienceBar(calculateExperience(achievementPoints));
 
     } catch (error) {
         console.error("Ошибка при загрузке данных игрока:", error);

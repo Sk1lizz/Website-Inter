@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/main.css" />
+    <title>Все ачивки</title>
+</head>
+
+<body>
+    @@include('blocks/header.html')
+    <div class="achievements-page">
+        <div class="achievements-wrapper">
+
+        </div>
+    </div>
+
+    @@include('blocks/footer.html')
+    <script src="./js/index.bundle.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            const container = document.querySelector('.achievements-wrapper');
+
+            try {
+                const [successRes, statsRes] = await Promise.all([
+                    fetch("/api/get_success_list.php"),
+                    fetch("/api/get_success_stats.php")
+                ]);
+
+                const allSuccess = await successRes.json();
+                const statsData = await statsRes.json();
+                const totalPlayers = statsData.total_players;
+                const counts = statsData.counts;
+
+                allSuccess.forEach(s => {
+                    const iconPath = `/img/success/success-${s.id}.png`;
+                    const fallback = `/img/success/success-0.png`;
+                    const count = counts[s.id] || 0;
+                    const percent = totalPlayers > 0 ? Math.round((count / totalPlayers) * 100) : 0;
+
+                    const block = document.createElement('div');
+                    block.className = 'achievement-item';
+
+                    block.innerHTML = `
+                            <img class="achievement-icon" src="${iconPath}" onerror="this.src='${fallback}'" />
+                            <div class="achievement-text">
+                                <div class="achievement-title">${s.title}</div>
+                                <div class="achievement-desc">${s.description}</div>
+                                <div class="achievement-percent">Есть у ${percent}% игроков</div>
+                            </div>
+                            <div class="achievement-points">${s.points} очков</div>
+                        `;
+                    container.appendChild(block);
+                });
+            } catch (e) {
+                console.error("Ошибка при загрузке ачивок:", e);
+                container.innerHTML = "<p>Не удалось загрузить достижения.</p>";
+            }
+        });
+    </script>
+</body>
+
+</html>

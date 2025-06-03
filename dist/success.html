@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>11x11, Результаты 2025 года</title>
     <link rel="stylesheet" href="./css/main.css" />
+    <title>Все ачивки</title>
 </head>
 
 <body>
@@ -78,107 +78,9 @@
 
 
 </header>
+    <div class="achievements-page">
+        <div class="achievements-wrapper">
 
-    <div class="result">
-        <div class="title">Результаты 2025 года</div>
-        <div class="matches_result">
-            <div class="match">
-                <p>12.01.2025</p>
-                <p>Плюшевая лига, 11 тур</p>
-                <p>FC Inter Moscow Pro - Арес (2:4) </p>
-                <p>Голы: Волконский, Волконский (пен)</p>
-            </div>
-
-            <div class="match">
-                <p>19.01.2025</p>
-                <p>Плюшевая лига, 12 тур</p>
-                <p>FC Inter Moscow Pro - Рикошет (1:5) </p>
-                <p>Гол: Тошев</p>
-            </div>
-
-            <div class="match">
-                <p>27.01.2025</p>
-                <p>Плюшевая лига, 13 тур</p>
-                <p>FC Inter Moscow Pro - Аргумент (0:6) </p>
-                <p></p>
-            </div>
-
-            <div class="match">
-                <p>27.01.2025</p>
-                <p>Плюшевая лига, 14 тур</p>
-                <p>FC Inter Moscow Pro - ПСК65 (1:1) </p>
-                <p>Гол: Шаропов (Самарин)</p>
-            </div>
-
-            <div class="match">
-                <p>08.02.2025</p>
-                <p>Плюшевая лига, 15 тур</p>
-                <p>FC Inter Moscow Pro - Аргумент (0:4) </p>
-                <p></p>
-            </div>
-
-            <div class="match">
-                <p>17.02.2025</p>
-                <p>Плюшевая лига, 16 тур</p>
-                <p>FC Inter Moscow Pro - Новатор (3:5) </p>
-                <p>Голы: Шаропов (пен), Корчагин (Корнилов'), Тошев (Якушин')</p>
-            </div>
-
-            <div class="match">
-                <p>23.02.2025</p>
-                <p>Плюшевая лига, 17 тур</p>
-                <p>FC Inter Moscow Pro - DM (1:6) </p>
-                <p>Гол: Тошев</p>
-            </div>
-
-            <div class="match">
-                <p>01.03.2025</p>
-                <p>Плюшевая лига, 18 тур</p>
-                <p>FC Inter Moscow Pro - Торпедо (3:6) </p>
-                <p>Голы: Корчагин-2 (Шеин', Самарин'), Шаропов (Корчагин')</p>
-            </div>
-
-            <div class="match">
-                <p>08.03.2025</p>
-                <p>Плюшевая лига, 19 тур</p>
-                <p>FC Inter Moscow Pro - Москва-2 (1:2) </p>
-                <p>Гол: Самарин (Белов)</p>
-            </div>
-
-            <div class="match">
-                <p>15.03.2025</p>
-                <p>Плюшевая лига, 20 тур</p>
-                <p>FC Inter Moscow Pro - Москва (0:3) </p>
-                <p></p>
-            </div>
-
-            <div class="match">
-                <p>23.03.2025</p>
-                <p>Плюшевая лига, 21 тур</p>
-                <p>FC Inter Moscow Pro - Мастер (3:1) </p>
-                <p>Голы: Макаров-2 (Корчагин', Матвеев'), Данишевский (Тошев')</p>
-            </div>
-
-            <div class="match">
-                <p>30.03.2025</p>
-                <p>Плюшевая лига, 22 тур</p>
-                <p>FC Inter Moscow Pro - Импульс (0:2) </p>
-                <p></p>
-            </div>
-
-            <div class="match">
-                <p>16.03.2025</p>
-                <p>Товарищеский матч</p>
-                <p>FC Inter Moscow 8х8 - ФК Одинцово (1:12) </p>
-                <p>Гол: Корчагин (Тошев)</p>
-            </div>
-
-            <div class="match">
-                <p>27.04.2025</p>
-                <p>Плюшевая лига, 1 тур</p>
-                <p>FC Inter Moscow Pro - Новатор (2:2) </p>
-                <p>Голы: Волконский (Самарин'), Кардаш</p>
-            </div>
         </div>
     </div>
 
@@ -258,6 +160,48 @@
 
 </footer>
     <script src="./js/index.bundle.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            const container = document.querySelector('.achievements-wrapper');
+
+            try {
+                const [successRes, statsRes] = await Promise.all([
+                    fetch("/api/get_success_list.php"),
+                    fetch("/api/get_success_stats.php")
+                ]);
+
+                const allSuccess = await successRes.json();
+                const statsData = await statsRes.json();
+                const totalPlayers = statsData.total_players;
+                const counts = statsData.counts;
+
+                allSuccess.forEach(s => {
+                    const iconPath = `/img/success/success-${s.id}.png`;
+                    const fallback = `/img/success/success-0.png`;
+                    const count = counts[s.id] || 0;
+                    const percent = totalPlayers > 0 ? Math.round((count / totalPlayers) * 100) : 0;
+
+                    const block = document.createElement('div');
+                    block.className = 'achievement-item';
+
+                    block.innerHTML = `
+                            <img class="achievement-icon" src="${iconPath}" onerror="this.src='${fallback}'" />
+                            <div class="achievement-text">
+                                <div class="achievement-title">${s.title}</div>
+                                <div class="achievement-desc">${s.description}</div>
+                                <div class="achievement-percent">Есть у ${percent}% игроков</div>
+                            </div>
+                            <div class="achievement-points">${s.points} очков</div>
+                        `;
+                    container.appendChild(block);
+                });
+            } catch (e) {
+                console.error("Ошибка при загрузке ачивок:", e);
+                container.innerHTML = "<p>Не удалось загрузить достижения.</p>";
+            }
+        });
+    </script>
 </body>
 
 </html>

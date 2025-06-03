@@ -123,6 +123,10 @@ endif;
     <form method="post" action="logout.php" style="float:right;">
       <button type="submit">Выйти</button>
     </form>
+    
+    <form action="success.php" method="get" style="display: inline-block; margin-top: 20px;">
+    <button type="submit">Ачивки</button>
+</form>
 
     <button id="openAddMatchModal" class="admin-button">➕ Добавить матч</button>
 

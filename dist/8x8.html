@@ -495,6 +495,42 @@
 
 
 
+                                                            <script>
+                                                                document.addEventListener("DOMContentLoaded", async () => {
+                                                                    let data = null;
 
+                                                                    try {
+                                                                        const res = await fetch("/api/statistics_8x8_2025.php");
+                                                                        if (!res.ok) throw new Error(`Ошибка ${res.status}`);
+                                                                        data = await res.json();
+                                                                        console.log("📊 Статистика 8x8 загружена:", data);
+                                                                    } catch (err) {
+                                                                        console.error("❌ Не удалось получить статистику:", err);
+                                                                        return; // прерываем выполнение, если data нет
+                                                                    }
+
+                                                                    if (!data) return;
+
+                                                                    const mapping = {
+                                                                        ".game .number": data.matches,
+                                                                        ".wins .number": data.wins,
+                                                                        ".draw .number": data.draws,
+                                                                        ".lose .number": data.losses,
+                                                                        ".goals .number": data.goals_for,
+                                                                        ".goals_conceded .number": data.goals_against,
+                                                                        ".difference .number": data.difference,
+                                                                        ".form .number": data.form,
+                                                                        ".wins_series .number": data.win_streak,
+                                                                        ".wins_lose .number": data.unbeaten_streak,
+                                                                        ".the_best_win .number": data.best_win,
+                                                                        ".the_best_lose .number": data.worst_loss
+                                                                    };
+
+                                                                    for (const selector in mapping) {
+                                                                        const el = document.querySelector(selector);
+                                                                        if (el) el.textContent = mapping[selector];
+                                                                    }
+                                                                });
+                                                            </script>
 
 </html>
