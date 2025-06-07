@@ -126,56 +126,18 @@ endif;
     
     <form action="success.php" method="get" style="display: inline-block; margin-top: 20px;">
     <button type="submit">Ачивки</button>
+     </form>
+
+    <form action="addmatch.php" method="get" style="display: inline-block; margin-top: 20px;">
+    <button type="submit">Добавить матч</button>
+    </form>
+
+    <form action="statisticsall.php" method="get" style="display: inline-block; margin-top: 20px;">
+    <button type="submit">Статистика общая</button>
 </form>
 
-    <button id="openAddMatchModal" class="admin-button">➕ Добавить матч</button>
 
-<div id="addMatchModal" class="modal-backdrop">
-  <div class="modal-content">
-    <h2>Добавить матч</h2>
-    <form id="addMatchForm">
-      <label>Команда:
-        <select id="matchTeamSelect" name="teams_id" required></select>
-      </label>
-      <label>Дата матча:
-        <input type="date" name="date" required>
-      </label>
-      <label>Год отдельно:
-        <input type="number" name="year" required>
-      </label>
-      <label>Название чемпионата:
-        <input type="text" name="championship_name" required>
-      </label>
-      <label>Тур:
-        <input type="text" name="tour">
-      </label>
-      <label>Соперник:
-        <input type="text" name="opponent" required>
-      </label>
-      <label>Наши голы:
-        <input type="number" name="our_goals" required>
-      </label>
-      <label>Голы соперника:
-        <input type="number" name="opponent_goals" required>
-      </label>
-      <label>Голы кто забивал (текстом):
-        <input type="text" name="goals">
-      </label>
-      <label>Голевые кто отдавал (текстом):
-        <input type="text" name="assists">
-      </label>
-      <label>Результат матча:
-        <select name="match_result" required>
-          <option value="W">Победа</option>
-          <option value="L">Поражение</option>
-          <option value="X">Ничья</option>
-        </select>
-      </label>
-      <button type="submit">Добавить матч</button>
-      <button type="button" onclick="closeAddMatchModal()">Отмена</button>
-    </form>
-  </div>
-</div>
+
 
     <h1>Выберите команду</h1>
     <select id="teamSelect"></select>
@@ -725,18 +687,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 </script>
 
-<script>
-  const addMatchModal = document.getElementById('addMatchModal');
-  const openBtn = document.getElementById('openAddMatchModal');
 
-  openBtn.addEventListener('click', () => {
-    addMatchModal.style.display = 'flex';
-  });
-
-  function closeAddMatchModal() {
-    addMatchModal.style.display = 'none';
-  }
-</script>
 
 
 </body>

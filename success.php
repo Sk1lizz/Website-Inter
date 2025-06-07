@@ -8,6 +8,24 @@ if (!isset($_SESSION['admin_logged_in'])) {
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+
+<div class="admin-panel">
+    <form method="post" action="logout.php" style="float:right;">
+      <button type="submit">Выйти</button>
+    </form>
+    
+    <form action="admin.php" method="get" style="display: inline-block; margin-top: 20px;">
+    <button type="submit">Статистика</button>
+
+    <form action="addmatch.php" method="get" style="display: inline-block; margin-top: 20px;">
+    <button type="submit">Добавить матч</button>
+</form>
+
+<form action="statisticsall.php" method="get" style="display: inline-block; margin-top: 20px;">
+    <button type="submit">Статистика общая</button>
+</form>
+
+
     <meta charset="UTF-8">
     <title>Достижения игроков</title>
     <style>
