@@ -117,6 +117,34 @@
     }
 }
 
+@media (min-width: 768px) and (max-width: 1024px) {
+    .wrapper_bloks {
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .schedule-grid {
+        grid-template-columns: 1fr; // вместо 3 в ряд
+    }
+
+    .about_the_team_wrapper {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .index_photo_block {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .menu {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
 @media (max-width: 768px) {
     .banner {
         height: 80svh;
@@ -418,9 +446,12 @@
         display: flex;
         height: 540px;
         margin: 10px 10px 10px 10px;
+        align-items: center;
+        flex-direction: column;
 
         .birthday_players {
             width: 100%;
+            max-width: 100%;
         }
 
         .player_in_team {

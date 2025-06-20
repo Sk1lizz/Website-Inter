@@ -29,8 +29,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         const playerRes = await fetch(`/api/get_player.php?id=${playerId}`);
         if (!playerRes.ok) throw new Error("Игрок не найден");
         const player = await playerRes.json();
-
         let years = 0, months = 0;
+
+        if (!player || !player.id) throw new Error("Данные игрока неполные");
+        document.title = `${player.name} ${player.patronymic || ''} | FC Inter Moscow`.trim();
 
         const img = document.querySelector(".player-card img");
         img.src = `/img/player/player_${player.id}.png`;

@@ -8,6 +8,14 @@
     <meta name="description"
         content="FC Inter Moscow - футбольная команда и тренировки для взрослых в Москве. Главная страница." />
     <link rel="stylesheet" href="./css/main.css" />
+
+    <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/img/favicon-32x32.png" sizes="32x32" type="image/png">
+    <link rel="icon" href="/img/favicon-16x16.png" sizes="16x16" type="image/png">
+    <link rel="apple-touch-icon" href="/img/apple-touch-icon.png" sizes="180x180">
+    <link rel="icon" sizes="192x192" href="/img/android-chrome-192x192.png">
+    <link rel="icon" sizes="512x512" href="/img/android-chrome-512x512.png">
+    <link rel="manifest" href="/site.webmanifest">
 </head>
 
 <body>
@@ -385,63 +393,52 @@
             return forms[2];
         }
 
-        fetch('/api/birthdays.php')
-            .then(res => res.json())
-            .then(data => {
-                const container = document.querySelector('.birthday_list');
-                container.innerHTML = '';
-
-                data.forEach(player => {
-                    const block = document.createElement('div');
-                    block.className = 'block_birthday_players';
-
-                    const daysLeft = Number(player.days_left); // <-- важно
-                    let dayText = '';
-
-                    if (daysLeft === 0) {
-                        dayText = '🎉 Сегодня!';
-                    } else if (daysLeft === 1) {
-                        dayText = 'Завтра';
-                    } else {
-                        dayText = `Через ${daysLeft} ${declension(daysLeft, ['день', 'дня', 'дней'])}`;
-                    }
-
-                    block.innerHTML = `
-                    <div class="name_player">${player.name}</div>
-                    <div class="data_title">${player.birthday}</div>
-                    <div class="timer">${dayText}</div>
-                `;
-
-                    container.appendChild(block);
-                });
-            })
-            .catch(err => console.error('Ошибка загрузки дней рождения:', err));
-    </script>
-
-    <script>
         document.addEventListener("DOMContentLoaded", function () {
             fetch('/api/birthdays.php')
                 .then(res => res.json())
                 .then(data => {
-                    const container = document.querySelector('.birthday_players');
-                    const playerBlocks = container.querySelectorAll('.block_birthday_players');
-                    playerBlocks.forEach(block => block.remove());
+                    console.log('Ответ API /api/birthdays.php:', data); // ← Добавь это!
+                    if (!Array.isArray(data)) {
+                        console.error("Ожидался массив, а получено:", data);
+                        return;
+                    }
+
+                    const container = document.querySelector('.birthday_list');
+                    const wrapper = document.querySelector('.birthday_players');
+
+                    // Удалим старые блоки
+                    container.innerHTML = '';
+                    const oldBlocks = wrapper.querySelectorAll('.block_birthday_players');
+                    oldBlocks.forEach(el => el.remove());
 
                     data.forEach(player => {
+                        const daysLeft = Number(player.days_left);
+                        let dayText = '';
+
+                        if (isNaN(daysLeft)) {
+                            dayText = 'Неизвестно';
+                        } else if (daysLeft === 0) {
+                            dayText = '🎉 Сегодня!';
+                        } else if (daysLeft === 1) {
+                            dayText = 'Завтра';
+                        } else {
+                            dayText = `Через ${daysLeft} ${declension(daysLeft, ['день', 'дня', 'дней'])}`;
+                        }
+
                         const block = document.createElement('div');
-                        block.classList.add('block_birthday_players');
+                        block.className = 'block_birthday_players';
                         block.innerHTML = `
-                              <div class="name_player">${player.name}</div>
-                              <div class="data_title">${player.birthday}</div>
-                              <div class="timer">Через ${player.days_left} дн.</div>
-                            `;
+                      <div class="name_player">${player.name}</div>
+                      <div class="data_title">${player.birthday ?? '—'}</div>
+                      <div class="timer">${dayText}</div>
+                    `;
+
                         container.appendChild(block);
                     });
                 })
                 .catch(err => console.error('Ошибка загрузки дней рождения:', err));
         });
     </script>
-
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const fillElement = document.querySelector(".banner .background");
@@ -456,7 +453,6 @@
             }
         });
     </script>
-
     <script>
         document.addEventListener("DOMContentLoaded", async () => {
             try {

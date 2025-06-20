@@ -1,18 +1,10 @@
 <?php
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 header('Content-Type: application/json');
 
-$host = 'VH303.spaceweb.ru';
-$user = 'skvantergm_fcint';
-$pass = '5688132zZ-';
-$dbname = 'skvantergm_fcint';
-
-$conn = new mysqli($host, $user, $pass, $dbname);
-if ($conn->connect_error) {
-    echo json_encode(['error' => 'DB connection error']);
-    exit;
-}
-
-$conn->set_charset("utf8");
+// Подключение к БД
+require_once __DIR__ . '/../db.php'; // путь правильный, если db.php в корне сайта
 
 $sql = "
     SELECT
@@ -27,11 +19,17 @@ $sql = "
             CURDATE()
         ) AS days_left
     FROM players
+    WHERE team_id IS NOT NULL AND team_id != 3 AND birth_date IS NOT NULL
     ORDER BY days_left ASC
     LIMIT 3
 ";
 
-$result = $conn->query($sql);
+$result = $db->query($sql); // ← используем только $db
+if (!$result) {
+    echo json_encode(['error' => 'SQL error', 'details' => $db->error]);
+    exit;
+}
+
 $players = [];
 
 while ($row = $result->fetch_assoc()) {
@@ -41,5 +39,4 @@ while ($row = $result->fetch_assoc()) {
 }
 
 echo json_encode($players);
-$conn->close();
-?>
+$db->close();
