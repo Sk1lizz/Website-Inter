@@ -148,6 +148,24 @@ if (!isset($_SESSION['auth'])) {
       #players-list > div { flex-direction: column; align-items: flex-start; }
     }
   </style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const list = document.getElementById('players-list');
+      const countDisplay = document.createElement('div');
+      countDisplay.id = 'present-count';
+      list.insertAdjacentElement('afterend', countDisplay);
+
+      const updateCount = () => {
+        const checkboxes = document.querySelectorAll('#players-list input[type="checkbox"]:checked');
+        countDisplay.textContent = `Отмечено присутствующих: ${checkboxes.length}`;
+      };
+
+      new MutationObserver(updateCount).observe(list, { childList: true, subtree: true });
+      list.addEventListener('change', updateCount);
+    });
+  </script>
+
 </head>
 <body>
 <h1>Учёт посещаемости тренировок</h1>
@@ -252,45 +270,76 @@ async function loadPlayers(teamId) {
 }
 
 async function loadAttendanceTable(teamId, month) {
-  const wrapper = document.getElementById('attendance-table-wrapper');
-  wrapper.innerHTML = 'Загрузка...';
-  try {
-    const res = await fetch(`/api/get_attendance_detailed.php?team_id=${teamId}&month=${month}`);
-    if (!res.ok) throw new Error("Ошибка запроса");
-    const { dates, players } = await res.json();
-    if (!dates.length || !players.length) {
-      wrapper.innerHTML = '<p>Нет данных за выбранный месяц.</p>';
-      return;
+    const wrapper = document.getElementById('attendance-table-wrapper');
+    wrapper.innerHTML = 'Загрузка...';
+
+    try {
+        const res = await fetch(`/api/get_attendance_detailed.php?team_id=${teamId}&month=${month}`);
+        if (!res.ok) throw new Error("Ошибка запроса");
+
+        const { dates, players } = await res.json();
+
+        if (!dates.length || !players.length) {
+            wrapper.innerHTML = '<p>Нет данных за выбранный месяц.</p>';
+            return;
+        }
+
+        // ✅ сортировка игроков по имени
+        players.sort((a, b) => a.name.localeCompare(b.name, 'ru', { sensitivity: 'base' }));
+
+        let html = '<table><thead><tr><th>Игрок</th>';
+        dates.forEach(dateStr => {
+            const d = new Date(dateStr);
+            const formatted = d.toLocaleDateString('ru-RU', { day: '2-digit', month: 'short' });
+            html += `<th>${formatted}</th>`;
+        });
+        html += '<th>Итого</th><th>%</th></tr></thead><tbody>';
+
+        // Для подсчёта суммарных посещений по каждой дате
+        const totalPerDate = {};
+        dates.forEach(date => totalPerDate[date] = 0);
+
+        // Игроки
+        players.forEach(p => {
+            let attended = 0;
+            let valid = 0;
+
+            html += `<tr><td style="text-align:left">${p.name}</td>`;
+
+            dates.forEach(date => {
+                const status = p.statuses[date];
+                const symbol = statusSymbols[status] || '';
+                const bg = statusColors[status] || '';
+
+                if (status === 1) {
+                    attended++;
+                    totalPerDate[date]++;
+                }
+                if (status === 1 || status === 0) valid++;
+
+                html += `<td style="background:${bg}">${symbol}</td>`;
+            });
+
+            const percent = valid ? Math.round((attended / valid) * 100) : 0;
+            const pcColor = percent >= 80 ? '#c8e6c9' : percent >= 50 ? '#fff9c4' : '#ffcdd2';
+
+            html += `<td>${attended}</td><td style="background:${pcColor}">${percent}%</td></tr>`;
+        });
+
+        // ✅ Добавим строку "Итого" по колонкам (сколько игроков были)
+        html += `<tr style="font-weight:bold; background:#f0f0f0"><td>Присутствовали</td>`;
+        dates.forEach(date => {
+            html += `<td>${totalPerDate[date]}</td>`;
+        });
+        html += `<td colspan="2"></td></tr>`;
+
+        html += '</tbody></table>';
+        wrapper.innerHTML = html;
+
+    } catch (e) {
+        console.error("Ошибка загрузки посещаемости:", e);
+        wrapper.innerHTML = '<p>Ошибка загрузки таблицы</p>';
     }
-
-    let html = '<table><thead><tr><th>Игрок</th>';
-dates.forEach(dateStr => {
-    const display = new Date(dateStr).toLocaleDateString('ru-RU', { day: '2-digit', month: 'short' });
-    html += `<th>${display}</th>`;
-});
-html += '<th>Итого</th><th>%</th></tr></thead><tbody>';
-
-players.forEach(p => {
-  let attended = 0, valid = 0;
-  html += `<tr><td style="text-align: left">${p.name}</td>`;
-  dates.forEach(dateStr => {
-  const status = p.statuses[dateStr]; // <-- строго строка в ISO формате
-  const symbol = statusSymbols[status] || '';
-  const bg = statusColors[status] || '';
-  if (status === 1) attended++;
-  if (status === 1 || status === 0) valid++;
-  html += `<td style="background:${bg}">${symbol}</td>`;
-});
-  const percent = valid ? Math.round((attended / valid) * 100) : 0;
-  const pcColor = percent >= 80 ? '#c8e6c9' : percent >= 50 ? '#fff9c4' : '#ffcdd2';
-  html += `<td>${attended}</td><td style="background:${pcColor}">${percent}%</td></tr>`;
-});
-
-    html += '</tbody></table>';
-    wrapper.innerHTML = html;
-  } catch (e) {
-    wrapper.innerHTML = '<p>Ошибка загрузки таблицы</p>';
-  }
 }
 
 // обработчики
@@ -310,5 +359,7 @@ monthSelect.addEventListener('change', () => {
   if (teamId && month) loadAttendanceTable(teamId, month);
 });
 </script>
+
+
 </body>
 </html>
