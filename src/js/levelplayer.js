@@ -108,7 +108,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         function calculateExperience(achievementPoints = 0) {
             const { matches, goals, assists, zeromatch } = totalStats;
             const totalMonths = years * 12 + months;
-            return totalMonths * 100 + matches * 50 + goals * 125 + assists * 100 + zeromatch * 250 + achievementPoints;
+            return totalMonths * 100 + matches * 50 + goals * 100 + assists * 100 + zeromatch * 250 + achievementPoints;
+
         }
 
         function updateExperienceBar(exp) {
@@ -128,10 +129,9 @@ document.addEventListener("DOMContentLoaded", async () => {
                 { limit: 45000, name: 'Чемпион' },
                 { limit: 60000, name: 'Хранитель' },
                 { limit: 75000, name: 'Вершитель' },
-                { limit: 90000, name: 'Избранный' },
-                { limit: 110000, name: 'Мудрец' },
-                { limit: 130000, name: 'Наставник' },
-                { limit: 150000, name: 'Вдохновитель' },
+                { limit: 100000, name: 'Избранный' },
+                { limit: 125000, name: 'Мудрец' },
+                { limit: 150000, name: 'Наставник' },
                 { limit: 175000, name: 'Архонт' },
                 { limit: 200000, name: 'Маэстро' },
                 { limit: 225000, name: 'Хранитель огня' },
@@ -151,6 +151,30 @@ document.addEventListener("DOMContentLoaded", async () => {
             document.getElementById("experience-bar-fill").style.width = `${percent}%`;
             document.getElementById("experience-bar-text").textContent = `${exp} / ${current.limit === Infinity ? '∞' : current.limit}`;
             document.getElementById("title").textContent = current.name;
+
+            const imgEl = document.querySelector(".player-card img");
+
+            // Если "Опытный" и выше → добавляем класс .gold-frame
+            if (current.limit >= 5000) {
+                imgEl.classList.add('gold-frame');
+            } else {
+                imgEl.classList.remove('gold-frame');
+            }
+
+
+
+            const playerStarEl = document.querySelector(".player-star");
+            const playerNameEl = document.querySelector(".player-name");
+
+            // Управляем звездочкой ⭐
+            if (current.limit >= 2500) {
+                playerStarEl.style.display = 'block';
+            } else {
+                playerStarEl.style.display = 'none';
+            }
+
+            // Всегда обновляем фамилию (чтобы не зависеть от прошлых innerHTML)
+            playerNameEl.textContent = `${player.name} ${player.patronymic || ''}`.trim();
         }
 
         // Загружаем АЧИВКИ
@@ -162,11 +186,13 @@ document.addEventListener("DOMContentLoaded", async () => {
             fetch("/api/get_success_list.php"),
             fetch(`/api/get_player_success.php?player_id=${player.id}`)
         ]);
-
+        let totalAchievementPoints = 0;
         const allSuccess = await successListRes.json();
         const ownedIds = await ownedRes.json(); // массив id
         const ownedSuccess = allSuccess.filter(s => ownedIds.includes(s.id));
         const achievementPoints = ownedSuccess.reduce((sum, s) => sum + (s.points || 0), 0);
+        totalAchievementPoints = achievementPoints;
+        updateExperienceBar(calculateExperience(totalAchievementPoints));
 
         successWrapper.style.display = ownedSuccess.length > 0 ? 'block' : 'none';
         successCountEl.textContent = `${ownedSuccess.length} / ${allSuccess.length} • ${achievementPoints} очков`;
@@ -204,6 +230,9 @@ document.addEventListener("DOMContentLoaded", async () => {
             const achRes = await fetch(`/api/achievements.php?player_id=${player.id}`);
             const text = await achRes.text();
             const achievements = JSON.parse(text);
+            const achievementsPoints = (achievements?.length || 0) * 1000;
+            totalAchievementPoints += achievementsPoints;
+            updateExperienceBar(calculateExperience(totalAchievementPoints));
 
             achievementsCard.style.display = 'block';
             listEl.innerHTML = '';

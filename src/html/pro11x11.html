@@ -366,13 +366,13 @@
                                                                                     let data = null;
 
                                                                                     try {
-                                                                                        const res = await fetch("/api/statistics_pro_2025.php");
+                                                                                        const res = await fetch("/api/statistics_pro_2025.php?team_id=2"); // добавил team_id=2
                                                                                         if (!res.ok) throw new Error(`Ошибка ${res.status}`);
                                                                                         data = await res.json();
-                                                                                        console.log("📊 Статистика 8x8 загружена:", data);
+                                                                                        console.log("📊 Статистика 11x11 загружена:", data); // правильный лог
                                                                                     } catch (err) {
                                                                                         console.error("❌ Не удалось получить статистику:", err);
-                                                                                        return; // прерываем выполнение, если data нет
+                                                                                        return;
                                                                                     }
 
                                                                                     if (!data) return;

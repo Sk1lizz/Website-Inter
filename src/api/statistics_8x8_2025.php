@@ -6,14 +6,14 @@ error_reporting(E_ALL);
 require_once 'db_connection.php';
 header('Content-Type: application/json');
 
-$teamId = 1;
+$teamId = 1; // 8x8
 $year = 2025;
 
 $sql = "
     SELECT date, our_goals, opponent_goals, match_result, opponent
     FROM result
     WHERE teams_id = ? AND year = ?
-    ORDER BY STR_TO_DATE(date, '%d.%m.%Y') ASC
+    ORDER BY date ASC
 ";
 
 $stmt = $conn->prepare($sql);
@@ -33,12 +33,14 @@ $currentUnbeatenStreak = 0;
 $maxUnbeatenStreak = 0;
 
 while ($row = $result->fetch_assoc()) {
+    // Обработка результата матча (на случай пробелов / строчных)
+    $row['match_result'] = strtoupper(trim($row['match_result']));
+
     $total++;
     $goalsFor += (int)$row['our_goals'];
     $goalsAgainst += (int)$row['opponent_goals'];
     $form[] = $row['match_result'];
 
-    // Победы, ничьи, поражения
     if ($row['match_result'] === 'W') {
         $wins++;
         $currentWinStreak++;
@@ -46,7 +48,6 @@ while ($row = $result->fetch_assoc()) {
         $currentUnbeatenStreak++;
         $maxUnbeatenStreak = max($maxUnbeatenStreak, $currentUnbeatenStreak);
 
-        // Проверка на крупную победу
         $diff = $row['our_goals'] - $row['opponent_goals'];
         if (!$bestWin || $diff > ($bestWin['our_goals'] - $bestWin['opponent_goals'])) {
             $bestWin = $row;
@@ -63,7 +64,6 @@ while ($row = $result->fetch_assoc()) {
         $currentWinStreak = 0;
         $currentUnbeatenStreak = 0;
 
-        // Проверка на крупное поражение
         $diff = $row['opponent_goals'] - $row['our_goals'];
         if (!$bestLoss || $diff > ($bestLoss['opponent_goals'] - $bestLoss['our_goals'])) {
             $bestLoss = $row;
