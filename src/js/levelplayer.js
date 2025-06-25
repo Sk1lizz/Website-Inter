@@ -29,6 +29,20 @@ document.addEventListener("DOMContentLoaded", async () => {
         const playerRes = await fetch(`/api/get_player.php?id=${playerId}`);
         if (!playerRes.ok) throw new Error("Игрок не найден");
         const player = await playerRes.json();
+
+        if (player.background_key && player.background_key.trim() !== "") {
+            const page = document.querySelector('.player_page');
+            if (page) {
+                page.style.backgroundImage = `url('/img/background_player/${player.background_key}.png')`;
+                page.style.backgroundSize = 'cover';
+                page.style.backgroundRepeat = 'no-repeat';
+                page.style.backgroundPosition = 'center';
+                page.style.backgroundAttachment = 'fixed'; // <- это фиксирует фон
+                page.style.backgroundColor = 'transparent';
+                page.style.minHeight = '100vh'; // гарантирует полную высоту экрана
+            }
+        }
+
         let years = 0, months = 0;
 
         if (!player || !player.id) throw new Error("Данные игрока неполные");
@@ -77,6 +91,49 @@ document.addEventListener("DOMContentLoaded", async () => {
             zeromatch: Number(stats.zeromatch) || 0,
             lostgoals: Number(stats.lostgoals) || 0
         });
+
+        // Подсчет месяцев в команде в текущем году
+        const joined = new Date(player.join_date);
+        // используем уже существующий now
+        // Подсчет ПОЛНЫХ месяцев в команде в текущем году
+        let monthsInThisYear = 0;
+        const joinYear = joined.getFullYear();
+        const joinMonth = joined.getMonth(); // 0 = январь
+        const currentYear = now.getFullYear();
+        const currentMonth = now.getMonth();
+        const currentDay = now.getDate();
+
+        // Если игрок присоединился до текущего года — считаем месяцы до текущего месяца
+        if (joinYear < currentYear) {
+            monthsInThisYear = currentMonth; // полные месяцы: январь...предыдущий
+        }
+        // Если в этом же году
+        else if (joinYear === currentYear) {
+            // Если месяц присоединения раньше текущего — разница
+            if (joinMonth < currentMonth) {
+                monthsInThisYear = currentMonth - joinMonth;
+            }
+            // Если в этом месяце — проверим, прошёл ли он полностью
+            else if (joinMonth === currentMonth && now.getDate() >= 28) {
+                monthsInThisYear = 1; // только если почти конец месяца
+            } else {
+                monthsInThisYear = 0;
+            }
+        }
+
+        monthsInThisYear = Math.max(0, monthsInThisYear); // защита от отрицательных значений
+
+        const yearExperience =
+            monthsInThisYear * 100 +
+            (seasonStats.matches || 0) * 50 +
+            (seasonStats.goals || 0) * 100 +
+            (seasonStats.assists || 0) * 100 +
+            (seasonStats.zeromatch || 0) * 250;
+
+        const yearExpEl = document.getElementById('year-exp');
+        if (yearExpEl) {
+            yearExpEl.textContent = yearExperience;
+        }
 
         const season = safeStats(seasonStats);
         const all = safeStats(allStats);
@@ -146,6 +203,8 @@ document.addEventListener("DOMContentLoaded", async () => {
                 { limit: 500000, name: 'Полубог' },
                 { limit: Infinity, name: 'Легенда' }
             ];
+
+
             const current = levels.find(l => exp <= l.limit) || levels.at(-1);
             const prev = levels[levels.indexOf(current) - 1]?.limit || 0;
             const percent = current.limit === Infinity ? 100 : Math.min(100, ((exp - prev) / (current.limit - prev)) * 100);
@@ -163,8 +222,6 @@ document.addEventListener("DOMContentLoaded", async () => {
                 imgEl.classList.remove('gold-frame');
             }
 
-
-
             const playerStarEl = document.querySelector(".player-star");
             const playerNameEl = document.querySelector(".player-name");
 
@@ -177,6 +234,51 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             // Всегда обновляем фамилию (чтобы не зависеть от прошлых innerHTML)
             playerNameEl.textContent = `${player.name} ${player.patronymic || ''}`.trim();
+
+            const levelPrizes = [
+                "Страница на сайте",
+                "Поздравление в соцсетях с Днем Рождения",
+                "Эмодзи звезда в профиле",
+                "Золотая рамка фотографии на сайте",
+                "Книга от руководителя команды",
+                "Интервью + пост в соцсетях",
+                "Фон профиля на выбор",
+                "Подписка на Okko на 1 месяц",
+                "Разбор игры с ТТД",
+                "Футболка гостевая/тренировочная",
+                "Telegram Premium подписка",
+                "Матч в роли капитана",
+                "Футболка гостевая/тренировочная",
+                "1 месяц тренировок или 3 мес без взносов (8x8)",
+                "Футболка-поло с логотипом",
+                "Зал Славы + футболка с золотым номером",
+                "Ветровка Kappa",
+                "В разработке"
+            ];
+
+
+            // ПРИЗЫ
+            const currentPrizeEl = document.getElementById("current-prize");
+            const currentPrizeImg = document.getElementById("current-prize-img");
+            const currentPrizeDesc = document.getElementById("current-prize-desc");
+
+            const nextPrizeImg = document.getElementById("next-prize-img");
+            const nextPrizeDesc = document.getElementById("next-prize-desc");
+
+            const currentIndex = levels.indexOf(current);
+            const next = levels[currentIndex + 1] || null;
+
+            // текущий
+            if (currentPrizeImg && currentPrizeDesc) {
+                currentPrizeImg.src = `/img/prize/prize-${currentIndex + 1}.png`;
+                currentPrizeDesc.textContent = levelPrizes[currentIndex] || "Без приза";
+            }
+
+            // следующий
+            if (nextPrizeImg && nextPrizeDesc) {
+                nextPrizeImg.src = `/img/prize/prize-${currentIndex + 2}.png`;
+                nextPrizeDesc.textContent = levelPrizes[currentIndex + 1] || "–";
+            }
         }
 
         // Загружаем АЧИВКИ

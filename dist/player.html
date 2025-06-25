@@ -12,7 +12,6 @@
     <link rel="apple-touch-icon" href="/img/apple-touch-icon.png" sizes="180x180">
     <link rel="icon" sizes="192x192" href="/img/android-chrome-192x192.png">
     <link rel="icon" sizes="512x512" href="/img/android-chrome-512x512.png">
-    <link rel="manifest" href="/site.webmanifest">
     <meta name="description" content="Футболист команды FC Inter Moscow" />
 </head>
 
@@ -114,7 +113,29 @@
                             <div class="experience-bar-fill" id="experience-bar-fill"></div>
                             <div class="experience-bar-text" id="experience-bar-text">0 / 500</div>
                         </div>
-                        <p><strong>Титул:</strong> <span id="title">Новичок</span></p>
+                        <p class="inline-stat"><strong>Титул:</strong> <span id="title">Новичок</span></p>
+                        <p class="inline-stat">
+                            <strong>Опыт в <span id="current-year-label">2025</span> году:</strong>
+                            <span id="year-exp">0</span> очков
+                        </p>
+                    </div>
+
+
+                    <div class="prize-block">
+                        <div class="prize-row">
+                            <img src="" alt="Текущий приз" id="current-prize-img">
+                            <div class="prize-text">
+                                <div class="label">Текущий приз</div>
+                                <p id="current-prize-desc">–</p>
+                            </div>
+                        </div>
+                        <div class="prize-row next">
+                            <img src="" alt="Следующий приз" id="next-prize-img">
+                            <div class="prize-text">
+                                <div class="label">Следующий приз</div>
+                                <p id="next-prize-desc">–</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -177,7 +198,8 @@
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <h3>Ачивки (<span id="success-count">0</span>)</h3>
                         <a href="/success.html"
-                            style="font-size: 14px; color: #007BFF; text-decoration: underline;">Посмотреть все</a>
+                            style="font-size: 14px; color: #007BFF; text-decoration: underline;">Посмотреть
+                            все</a>
                     </div>
                     <div class="success-list"></div>
                 </div>
@@ -263,6 +285,8 @@
 </footer>
     <script src=" ./js/index.bundle.js"></script>
     <script src="/js/levelplayer.bundle.js"></script>
+
+
 
 </body>
 

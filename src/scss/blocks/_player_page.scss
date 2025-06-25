@@ -221,6 +221,53 @@
             }
         }
     }
+
+    .prize-block {
+        background: #1a1a1a;
+        border-radius: 12px;
+        padding: 1rem;
+        margin-bottom: 15px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        width: 100%;
+
+        .prize-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
+            img {
+                width: 56px;
+                height: 56px;
+                object-fit: contain;
+                border-radius: 8px;
+            }
+
+            .prize-text {
+                display: flex;
+                flex-direction: column;
+
+                .label {
+                    font-size: 13px;
+                    font-weight: bold;
+                    color: #fff;
+                    margin-bottom: 4px;
+                }
+
+                p {
+                    font-size: 13px;
+                    color: #ccc;
+                    margin: 0;
+                }
+            }
+
+            &.next {
+                opacity: 0.5;
+            }
+        }
+    }
+
 }
 
 

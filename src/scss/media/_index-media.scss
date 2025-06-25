@@ -117,34 +117,6 @@
     }
 }
 
-@media (min-width: 768px) and (max-width: 1024px) {
-    .wrapper_bloks {
-        flex-wrap: wrap;
-        gap: 12px;
-    }
-
-    .schedule-grid {
-        grid-template-columns: 1fr; // вместо 3 в ряд
-    }
-
-    .about_the_team_wrapper {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-    }
-
-    .index_photo_block {
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-
-    .menu {
-        flex-direction: column;
-        align-items: center;
-    }
-}
-
 @media (max-width: 768px) {
     .banner {
         height: 80svh;

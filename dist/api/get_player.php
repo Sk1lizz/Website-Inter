@@ -11,7 +11,15 @@ if (!$id) {
     exit;
 }
 
-$stmt = $db->prepare("SELECT * FROM players WHERE id = ?");
+// получаем игрока и фон
+$stmt = $db->prepare("
+    SELECT 
+        p.*, 
+        b.background_key 
+    FROM players p
+    LEFT JOIN player_backgrounds b ON p.id = b.player_id
+    WHERE p.id = ?
+");
 $stmt->bind_param("i", $id);
 $stmt->execute();
 $res = $stmt->get_result();

@@ -134,6 +134,10 @@ endif;
 
     <form action="statisticsall.php" method="get" style="display: inline-block; margin-top: 20px;">
     <button type="submit">Статистика общая</button>
+    </form>
+    
+    <form action="background.php" method="get" style="display: inline-block; margin-top: 20px;">
+    <button type="submit">Фон</button>
 </form>
 
 
