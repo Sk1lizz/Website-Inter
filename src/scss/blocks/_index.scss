@@ -48,6 +48,11 @@
             clip-path: inset(0 0 100% 0);
         }
 
+        h1 {
+            font-size: 2svh;
+            margin-top: 10px;
+        }
+
         .button_wrapper {
             display: flex;
             height: 75px;
@@ -430,6 +435,25 @@
             justify-content: center;
             margin-left: 50px;
             padding-right: 40px;
+            color: inherit;
+
+            a {
+                color: inherit;
+                text-decoration: none;
+                font-weight: inherit;
+                cursor: default;
+                border-bottom: none;
+            }
+
+            h2 {
+                justify-content: left;
+                text-align: left;
+            }
+
+            p {
+                padding-bottom: 10px;
+                text-align: left;
+            }
 
             .title {
                 font-size: 3svh;
@@ -470,6 +494,11 @@
                     font-family: PLAY-REGULAR;
                 }
             }
+        }
+
+        .index_text_block a:hover {
+            text-decoration: none;
+            color: inherit;
         }
 
         .index_photo_block {

@@ -287,13 +287,13 @@ async function loadAttendanceTable(teamId, month) {
         // ✅ сортировка игроков по имени
         players.sort((a, b) => a.name.localeCompare(b.name, 'ru', { sensitivity: 'base' }));
 
-        let html = '<table><thead><tr><th>Игрок</th>';
-        dates.forEach(dateStr => {
-            const d = new Date(dateStr);
-            const formatted = d.toLocaleDateString('ru-RU', { day: '2-digit', month: 'short' });
-            html += `<th>${formatted}</th>`;
-        });
-        html += '<th>Итого</th><th>%</th></tr></thead><tbody>';
+       let html = '<table><thead><tr><th>Игрок</th>';
+dates.forEach(dateStr => {
+  const d = new Date(dateStr);
+  const formatted = d.toLocaleDateString('ru-RU', { day: '2-digit', month: 'short' });
+  html += `<th>${formatted}</th>`;
+});
+html += '<th>Итого</th><th>%</th><th>Редактировать</th></tr></thead><tbody>';
 
         // Для подсчёта суммарных посещений по каждой дате
         const totalPerDate = {};
@@ -323,7 +323,9 @@ async function loadAttendanceTable(teamId, month) {
             const percent = valid ? Math.round((attended / valid) * 100) : 0;
             const pcColor = percent >= 80 ? '#c8e6c9' : percent >= 50 ? '#fff9c4' : '#ffcdd2';
 
-            html += `<td>${attended}</td><td style="background:${pcColor}">${percent}%</td></tr>`;
+            html += `<td>${attended}</td><td style="background:${pcColor}">${percent}%</td>`;
+            console.log('DEBUG p:', p);
+html += `<td><button class="edit-btn" data-player='${JSON.stringify(p)}'>Редактировать</button></td>`;
         });
 
         // ✅ Добавим строку "Итого" по колонкам (сколько игроков были)
@@ -335,6 +337,36 @@ async function loadAttendanceTable(teamId, month) {
 
         html += '</tbody></table>';
         wrapper.innerHTML = html;
+
+        document.querySelectorAll('.edit-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const player = JSON.parse(btn.dataset.player);
+    const editFields = document.getElementById('edit-fields');
+    const modal = document.getElementById('edit-modal');
+    editFields.innerHTML = '';
+    document.getElementById('edit-player-id').value = player.id;
+    document.getElementById('edit-team-id').value = teamSelect.value;
+    document.getElementById('edit-month').value = monthSelect.value;
+
+    dates.forEach(date => {
+      const value = player.statuses[date] ?? 0;
+      const field = document.createElement('div');
+      field.innerHTML = `
+        <label>${date}: 
+          <select name="status[${date}]">
+            <option value="0" ${value===0?'selected':''}>– Не был</option>
+            <option value="1" ${value===1?'selected':''}>+ Присутствовал</option>
+            <option value="2" ${value===2?'selected':''}>О Отпуск</option>
+            <option value="3" ${value===3?'selected':''}>Т Травма</option>
+            <option value="4" ${value===4?'selected':''}>Б Болел</option>
+          </select>
+        </label>`;
+      editFields.appendChild(field);
+    });
+
+    modal.style.display = 'block';
+  });
+});
 
     } catch (e) {
         console.error("Ошибка загрузки посещаемости:", e);
@@ -360,6 +392,37 @@ monthSelect.addEventListener('change', () => {
 });
 </script>
 
+<div id="edit-modal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);
+  background:white; padding:20px; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.3); z-index:1000;">
+  <h3>Редактировать посещаемость</h3>
+  <form id="edit-form">
+    <div id="edit-fields"></div>
+    <input type="hidden" name="player_id" id="edit-player-id">
+    <input type="hidden" name="team_id" id="edit-team-id">
+    <input type="hidden" name="month" id="edit-month">
+    <button type="submit">Сохранить</button>
+    <button type="button" onclick="document.getElementById('edit-modal').style.display='none'">Отмена</button>
+  </form>
+</div>
+
+<script>
+document.getElementById('edit-form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const form = new FormData(e.target);
+  const res = await fetch('/api/update_attendance.php', {
+    method: 'POST',
+    body: form
+  });
+  const text = await res.text();
+  alert(text);
+  document.getElementById('edit-modal').style.display = 'none';
+
+  const teamId = document.getElementById('teamSelect').value;
+  const month = document.getElementById('monthSelect').value;
+  if (teamId && month) loadAttendanceTable(teamId, month);
+  console.log('Submitting:', Object.fromEntries(form.entries()));
+});
+</script>
 
 </body>
 </html>

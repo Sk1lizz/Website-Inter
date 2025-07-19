@@ -140,6 +140,14 @@ endif;
     <button type="submit">Фон</button>
 </form>
 
+<form action="freenumbers.php" method="get" style="display: inline-block; margin-top: 20px;">
+    <button type="submit">Номера</button>
+</form>
+
+<form action="training.php" method="get" style="display: inline-block; margin-top: 20px;">
+    <button type="submit">Посещаемость</button>
+</form>
+
 
 
 

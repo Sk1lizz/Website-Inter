@@ -52,6 +52,7 @@ $res = $stmt->get_result();
 
 while ($row = $res->fetch_assoc()) {
     $players[$row['id']] = [
+        'id' => $row['id'],
         'name' => $row['name'],
         'statuses' => array_fill_keys($trainings, null)
     ];
