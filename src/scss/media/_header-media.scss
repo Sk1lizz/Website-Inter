@@ -56,7 +56,9 @@
         height: 160px;
 
         .header_wrapper {
-            width: 670px;
+            width: 100%;
+            padding-left: 10px;
+            padding-right: 10px;
 
             .top_parth {
                 .logo_wrapper {
@@ -116,7 +118,13 @@
             padding: 10px 20px;
 
             .top_parth {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
                 .logo_wrapper {
+                    padding-right: 30%;
+
                     .logo_image {
                         img {
                             height: 40px;
@@ -143,6 +151,7 @@
 
                 .menu_toggle {
                     display: flex;
+                    align-items: center;
 
                     .icon {
                         span {
@@ -224,5 +233,15 @@
                 }
             }
         }
+
+        .lk-mobile-button {
+            display: flex;
+        }
+    }
+}
+
+@media (max-width: 463px) {
+    #official-subtext {
+        display: none;
     }
 }

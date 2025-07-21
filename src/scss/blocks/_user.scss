@@ -1,0 +1,343 @@
+.user_page {
+    max-width: 100%;
+    min-height: 100vh;
+    padding: 40px 16px;
+    background-color: $gray_black; // фон тёмный
+    color: $light;
+    font-family: 'Play', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: PLAY-REGULAR;
+
+    h1,
+    h2,
+    h3,
+    h4 {
+        color: $gold;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+
+    h1 {
+        justify-content: center;
+        text-align: center;
+        font-size: 24px;
+        padding-bottom: 10px;
+    }
+
+    /* Верхние кнопки */
+    .top-buttons {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin: 20px;
+        flex-wrap: wrap;
+
+        button {
+            background-color: $dark_light;
+            color: $light;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 18px;
+            font-weight: bold;
+            font-family: 'Play', sans-serif;
+            cursor: pointer;
+            transition: background 0.2s ease;
+
+            &:hover {
+                background-color: $dark_medium;
+            }
+        }
+    }
+
+    /* Карточки */
+    .card,
+    .player-card,
+    .achievements-card,
+    .career-card {
+        background: $gray_light_25;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    }
+
+    .player-name {
+        font-size: 26px;
+        font-weight: bold;
+        color: $gold;
+        margin-top: 10px;
+    }
+
+    .player-info {
+        p {
+            margin: 6px 0;
+            font-size: 14px;
+            color: $gray_light;
+        }
+
+        strong {
+            color: $gold;
+        }
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 14px;
+        margin-top: 10px;
+        font-size: 14px;
+
+        .number,
+        .number2 {
+            font-size: 22px;
+            font-weight: bold;
+            color: $green;
+            margin-bottom: 4px;
+        }
+    }
+
+    /* Experience Bar */
+    .experience-bar-container {
+        background: $gray_light;
+        height: 20px;
+        border-radius: 10px;
+        overflow: hidden;
+        margin-top: 10px;
+    }
+
+    .experience-bar-fill {
+        background-color: $gold;
+        height: 100%;
+        width: 0;
+        transition: width 0.3s ease;
+    }
+
+    .experience-bar-text {
+        font-size: 14px;
+        margin-top: 6px;
+        text-align: center;
+        color: $light;
+    }
+
+    /* Таблицы */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 12px;
+        font-size: 14px;
+
+        th,
+        td {
+            border: 1px solid $gray_light_50;
+            padding: 10px;
+        }
+
+        th {
+            background-color: $blue_medium;
+            color: $light;
+        }
+
+        tr:nth-child(even) {
+            background-color: $gray_light_25;
+        }
+    }
+
+    /* Достижения */
+    .success-item {
+        margin-bottom: 14px;
+        padding-top: 10px;
+        border-bottom: 1px solid $gray_light_50;
+
+        img {
+            border-radius: 6px;
+        }
+
+        div {
+            color: $gray_light;
+        }
+
+        strong {
+            color: $light;
+        }
+    }
+
+    #monthSelect {
+        margin-bottom: 14px;
+        padding: 10px 12px;
+        font-size: 16px;
+        border: none;
+        border-radius: 8px;
+        background-color: $light;
+        color: $black;
+        font-family: 'Play', sans-serif;
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+    }
+
+    .header-buttons {
+        display: flex;
+        gap: 12px;
+        justify-content: flex-end;
+        flex-wrap: wrap;
+        margin-bottom: 20px;
+
+        button {
+            font-size: 14px;
+            padding: 10px 18px;
+            border-radius: 20px;
+            border: 1px solid $gold;
+            background: $dark_light;
+            color: $light;
+            font-family: 'Play', sans-serif;
+            transition: all 0.3s ease;
+            cursor: pointer;
+
+            &:hover {
+                background: $dark_medium;
+                color: $gold;
+                border-color: $light;
+            }
+        }
+    }
+
+    .attendance-table {
+
+        th,
+        td {
+            border: 1px solid $gray_light_50;
+            background-color: $gray_light_25;
+        }
+
+        th {
+            background-color: $dark_medium;
+            color: $light;
+        }
+    }
+
+    .block {
+        background: $gray_light_25;
+        border-radius: 12px;
+        padding: 24px;
+        margin: 20px auto;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+        max-width: 800px;
+
+        p {
+            margin: 8px 0;
+            padding-bottom: 6px;
+            border-bottom: 1px solid $gray_light_50;
+        }
+
+        h2 {
+            margin-top: 0;
+            font-size: 20px;
+            color: $gold;
+            border-bottom: 2px solid $gold;
+            padding-bottom: 8px;
+            margin-bottom: 16px;
+        }
+    }
+
+    .card h2 {
+        font-size: 20px;
+        color: $gold;
+        border-bottom: 2px solid $gold;
+        padding-bottom: 6px;
+        margin-bottom: 12px;
+    }
+
+    .card p {
+        margin: 6px 0;
+        padding-bottom: 6px;
+        border-bottom: 1px solid $gray_light_50;
+    }
+
+    .top-wrapper {
+        max-width: 1100px;
+        margin: 20px auto;
+        padding: 0 16px;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .dashboard-grid {
+        width: 100%;
+        max-width: 1200px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+    }
+
+    .left-column,
+    .right-column {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+        .dashboard-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .left-column,
+        .right-column {
+            width: 100%;
+        }
+
+        .top-buttons {
+            justify-content: center;
+        }
+
+        .stats-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+
+    @media (max-width: 600px) {
+
+        .attendance-table th,
+        .attendance-table td {
+            font-size: 12px;
+            padding: 6px;
+        }
+
+        #monthSelect {
+            margin-bottom: 14px;
+            padding: 10px 12px;
+            font-size: 16px;
+            border: 1px solid $gray_light_50;
+            border-radius: 8px;
+            color: $black;
+            font-family: 'Play', sans-serif;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+        }
+
+        .header-buttons {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .header-buttons button {
+            width: 100%;
+        }
+
+        .header-buttons form {
+            width: 100%;
+        }
+    }
+
+    .highlight-fine td {
+        background-color: #f98987 !important;
+        /* $pink */
+        color: black;
+        font-weight: bold;
+    }
+}

@@ -148,6 +148,13 @@ endif;
     <button type="submit">Посещаемость</button>
 </form>
 
+<form action="payments.php" method="get" style="display: inline-block; margin-top: 20px;">
+    <button type="submit">Взносы</button>
+</form>
+
+<form action="fines.php" method="get" style="display: inline-block; margin-top: 20px;">
+    <button type="submit">Штрафы</button>
+</form>
 
 
 
@@ -404,12 +411,13 @@ endif;
 });
 
                 if (res.ok) {
-                    alert('Игрок добавлен!');
-                    form.reset();
-                    fetchPlayers(currentTeamId);
-                } else {
-                    alert('Ошибка при добавлении игрока');
-                }
+        const json = await res.json();
+        alert(`Игрок добавлен!\nЛогин: ${json.login}\nПароль: ${json.password}`);
+        form.reset();
+        fetchPlayers(currentTeamId);
+    } else {
+        alert('Ошибка при добавлении игрока');
+    }
             });
 
         </script>

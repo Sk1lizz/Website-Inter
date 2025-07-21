@@ -80,17 +80,10 @@ header {
                 .social {
                     display: flex;
                     margin-left: 20px;
+                    gap: 10px;
 
                     a {
                         height: 3.7svh;
-
-                        &:first-child {
-                            margin-right: 10px;
-                        }
-
-                        &:last-child {
-                            margin-left: 10px;
-                        }
 
                         img {
                             height: 100%;
@@ -145,6 +138,12 @@ header {
                     }
                 }
             }
+        }
+
+        .top-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .bottom_parth {
@@ -217,6 +216,28 @@ header {
             }
         }
     }
+
+    .lk-mobile-button {
+        width: 40px;
+        height: 40px;
+        border-radius: 4px;
+        justify-content: center;
+        align-items: center;
+        text-decoration: none;
+        margin-right: 10px;
+        display: none;
+    }
+
+    .lk-mobile-button img {
+        width: 22px;
+        height: 22px;
+        object-fit: contain;
+    }
+
+    .lk-desktop {
+        display: inline-block;
+    }
+
 }
 
 @import "media/_header-media.scss";
