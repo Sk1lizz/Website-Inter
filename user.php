@@ -129,6 +129,7 @@ if (!isset($_SESSION['player_id'])) {
     }
     .login-box .error { color: red; margin-bottom: 10px; }
     </style>
+     <meta name="viewport" content="width=device-width, initial-scale=1">
     </head><body>
     <div class="login-box">
         <h2>Личный кабинет</h2>';
@@ -160,6 +161,13 @@ $deadlineStr = formatRussianDay($deadline);
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
+     <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/img/favicon-32x32.png" sizes="32x32" type="image/png">
+    <link rel="icon" href="/img/favicon-16x16.png" sizes="16x16" type="image/png">
+    <link rel="apple-touch-icon" href="/img/apple-touch-icon.png" sizes="180x180">
+    <link rel="icon" sizes="192x192" href="/img/android-chrome-192x192.png">
+    <link rel="icon" sizes="512x512" href="/img/android-chrome-512x512.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Кабинет игрока</title>
   <link rel="stylesheet" href="css/main.css">
 </head>
@@ -237,6 +245,8 @@ $deadlineStr = formatRussianDay($deadline);
             <tbody></tbody>
         </table>
         <p><strong>Процент посещаемости:</strong> <span id="percent">0%</span></p>
+<p id="feedback" style="font-weight:bold; color:#FFFFFF;"></p>
+        
       </div>
     </div>
   </div>
@@ -269,29 +279,38 @@ function fillMonthSelector(data) {
 function renderAttendance(data, selectedMonth) {
     const tbody = document.querySelector('#attendanceTable tbody');
     const percentEl = document.getElementById('percent');
+    const feedbackEl = document.getElementById('feedback');
     tbody.innerHTML = '';
 
     const filtered = data.filter(d => d.training_date.startsWith(selectedMonth));
-    let total = filtered.length;
-    let present = filtered.filter(d => d.status == 1).length;
+    
+    // Подсчёт только по статусам 0 и 1
+    const countable = filtered.filter(d => d.status === 0 || d.status === 1);
+    const present = countable.filter(d => d.status === 1).length;
+    const total = countable.length;
 
     for (const row of filtered) {
         const date = new Date(row.training_date).toLocaleDateString('ru-RU');
         const status = STATUS_MAP[row.status] || '—';
         const className = `status-${row.status}`;
-        tbody.innerHTML += `
-            <tr>
-                <td>${date}</td>
-                <td class="${className}">${status}</td>
-            </tr>`;
+        tbody.innerHTML += `<tr><td>${date}</td><td class="${className}">${status}</td></tr>`;
     }
 
-    percentEl.textContent = total ? Math.round((present / total) * 100) + '%' : '0%';
+    const percent = total ? Math.round((present / total) * 100) : 0;
+    percentEl.textContent = percent + '%';
+
+    // Добавляем фразу
+    let message = '';
+    if (percent < 50) message = 'Надо поднажать';
+    else if (percent < 75) message = 'Неплохо!';
+    else message = 'Превосходно!';
+    feedbackEl.textContent = message;
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
     const data = await fetchAttendance();
     if (!data.length) return;
+
     fillMonthSelector(data);
     const currentMonth = new Date().toISOString().slice(0, 7);
     document.getElementById('monthSelect').value = currentMonth;

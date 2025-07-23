@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Последний матч</title>
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+</head>
+
+<body>
+    @@include('blocks/header.html')
+
+    <div class="banner match-banner">
+        <div class="fill"></div>
+        <div class="background"></div>
+        <div class="content">
+            <div class="text">Отчёт о матче</div>
+            <h1>FC Inter Moscow</h1>
+        </div>
+    </div>
+
+    @@include('blocks/footer.html')
+</body>
+<script src="./js/index.bundle.js"></script>
+<script>document.addEventListener("DOMContentLoaded", async () => {
+        const container = document.querySelector(".matches");
+
+        const params = new URLSearchParams(window.location.search);
+        const matchId = params.get("id");
+
+        if (!matchId) {
+            container.innerHTML = "<p>Не указан ID матча</p>";
+            return;
+        }
+
+        try {
+            const res = await fetch(`/api/get_match_details.php?id=${matchId}`);
+            const data = await res.json();
+
+            if (data.error) {
+                container.innerHTML = `<p>${data.error}</p>`;
+                return;
+            }
+
+            const { match, players } = data;
+
+            container.innerHTML = `
+            <h1>${match.our_team} ${match.our_goals}:${match.opponent_goals} ${match.opponent}</h1>
+            <p><strong>Дата:</strong> ${match.date}</p>
+            <p><strong>Чемпионат:</strong> ${match.championship_name}</p>
+            <p><strong>Тур:</strong> ${match.tour}</p>
+            <p><strong>Результат:</strong> ${match.match_result}</p>
+            <p><strong>Голы:</strong> ${match.goals || '—'}</p>
+            <p><strong>Голевые:</strong> ${match.assists || '—'}</p>
+            <h2>Игроки матча</h2>
+            <table>
+                <tr><th>Игрок</th><th>Голы</th><th>Ассисты</th><th>Пропущено</th><th>На 0</th></tr>
+                ${players.map(p => `
+                    <tr>
+                        <td>${p.name}</td>
+                        <td>${p.goals}</td>
+                        <td>${p.assists}</td>
+                        <td>${p.goals_conceded}</td>
+                        <td>${p.clean_sheet == 1 ? '✅' : ''}</td>
+                    </tr>
+                `).join('')}
+            </table>
+        `;
+        } catch (err) {
+            console.error(err);
+            container.innerHTML = "<p>Ошибка загрузки данных</p>";
+        }
+    });
+</script>
+
+</html>

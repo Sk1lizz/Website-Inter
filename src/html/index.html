@@ -120,6 +120,7 @@
                         <div class="team_name_2">Новатор</div>
                     </div>
                     <div class="goals">Голы: Волконский (Самарин'), Кардаш</div>
+                    <a class="match-details-link" href="#">Подробнее</a>
                 </div>
             </div>
 
@@ -133,6 +134,7 @@
                         <div class="team_name_2">Школа Футбола</div>
                     </div>
                     <div class="goals">Голы: Хакимов-3(Тапчан, Бубнов)</div>
+                    <a class="match-details-link" href="#">Подробнее</a>
                 </div>
             </div>
         </div>
@@ -434,29 +436,35 @@
                 if (last8x8) {
                     const block = document.querySelector(".last_match_8x8 .fill");
                     block.innerHTML = `
-                    <div class="data">${last8x8.date}</div>
-                    <div class="title_last_matches">${last8x8.championship_name}, ${last8x8.tour}</div>
-                    <div class="text_block">
-                        <div class="team_name_1">FC Inter Moscow 8x8</div>
-                        <div class="match_score">${last8x8.our_goals}:${last8x8.opponent_goals}</div>
-                        <div class="team_name_2">${last8x8.opponent}</div>
-                    </div>
-                    <div class="goals">${last8x8.goals ? `Голы: ${last8x8.goals}` : ''}</div>
-                `;
+    <div class="data">${last8x8.date}</div>
+    <div class="title_last_matches">${last8x8.championship_name}, ${last8x8.tour}</div>
+    <div class="text_block">
+        <div class="team_name_1">FC Inter Moscow 8x8</div>
+        <div class="match_score">${last8x8.our_goals}:${last8x8.opponent_goals}</div>
+        <div class="team_name_2">${last8x8.opponent}</div>
+    </div>
+    <div class="goals">
+        ${last8x8.goals ? `Голы: ${last8x8.goals}<br>` : ''}
+        <a class="match-details-link" href="/matches.html?id=${last8x8.id}">Подробнее</a>
+    </div>
+`;
                 }
 
                 if (lastPro) {
                     const block = document.querySelector(".last_match_pro .fill");
                     block.innerHTML = `
-                    <div class="data">${lastPro.date}</div>
-                    <div class="title_last_matches">${lastPro.championship_name}, ${lastPro.tour}</div>
-                    <div class="text_block">
-                        <div class="team_name_1">FC Inter Moscow Pro</div>
-                        <div class="match_score">${lastPro.our_goals}:${lastPro.opponent_goals}</div>
-                        <div class="team_name_2">${lastPro.opponent}</div>
-                    </div>
-                    <div class="goals">${lastPro.goals ? `Голы: ${lastPro.goals}` : ''}</div>
-                `;
+        <div class="data">${lastPro.date}</div>
+        <div class="title_last_matches">${lastPro.championship_name}, ${lastPro.tour}</div>
+        <div class="text_block">
+            <div class="team_name_1">FC Inter Moscow Pro</div>
+            <div class="match_score">${lastPro.our_goals}:${lastPro.opponent_goals}</div>
+            <div class="team_name_2">${lastPro.opponent}</div>
+        </div>
+        <div class="goals">
+            ${lastPro.goals ? `Голы: ${lastPro.goals}<br>` : ''}
+            <a class="match-details-link" href="/matches.html?id=${lastPro.id}">Подробнее</a>
+        </div>
+    `;
                 }
 
             } catch (err) {

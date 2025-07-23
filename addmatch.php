@@ -22,7 +22,7 @@ if (!isset($_SESSION['admin_logged_in'])) {
  }
  
  .admin-panel {
-     max-width: 600px;
+     max-width: 700px;
      margin: 40px auto;
      padding: 25px;
      border: 2px solid #333;
@@ -104,7 +104,41 @@ if (!isset($_SESSION['admin_logged_in'])) {
      }
  }
  
- 
+.player-card {
+    margin: 10px 0;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background: #fff;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+
+.player-row {
+    display: grid;
+    grid-template-columns: 200px repeat(6, auto);
+    align-items: center;
+    gap: 10px;
+}
+
+.player-name {
+    font-weight: bold;
+    color: #333;
+    white-space: nowrap;
+}
+
+.player-row label {
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.player-row input[type="number"] {
+    width: 50px;
+    padding: 4px;
+}
+
+
      </style>
 
     <title>Добавить матч</title>
@@ -171,6 +205,7 @@ if (!isset($_SESSION['admin_logged_in'])) {
                 <option value="X">Ничья</option>
             </select>
         </label>
+        <div id="playerStatsContainer"></div>
         <button type="submit">Добавить матч</button>
     </form>
 
@@ -179,16 +214,6 @@ if (!isset($_SESSION['admin_logged_in'])) {
 </div> 
 
 <script>
-
-
-// Закрытие модалки
-function closeAddMatchModal() {
-    document.getElementById("addMatchModal").style.display = "none";
-    document.getElementById("matchMessage").innerHTML = ""; // очистка сообщений
-    document.getElementById("addMatchForm").reset(); // сброс формы
-}
-
-// Загрузка команд
 async function loadTeamsIntoMatchForm() {
     try {
         const res = await fetch("/api/get_teams.php");
@@ -203,53 +228,146 @@ async function loadTeamsIntoMatchForm() {
             option.textContent = team.name;
             matchTeamSelect.appendChild(option);
         });
+
+        if (teams.length > 0) {
+            matchTeamSelect.value = teams[0].id;
+            loadPlayersForSelectedTeam(teams[0].id);
+        }
     } catch (err) {
         alert(err.message);
         console.error(err);
     }
 }
 
-// Отправка формы матча
+async function loadPlayersForSelectedTeam(teamId) {
+    const container = document.getElementById("playerStatsContainer");
+    container.innerHTML = "<h3>Участники матча:</h3>";
+
+    try {
+        const res = await fetch(`/api/get_players.php?team_id=${teamId}`);
+        if (!res.ok) throw new Error("Ошибка загрузки игроков");
+
+        const players = await res.json();
+        players.forEach(p => {
+            const div = document.createElement("div");
+
+div.className = "player-card";
+div.innerHTML = `
+    <div class="player-row">
+        <div class="player-name">${p.name}</div>
+        <label><input type="checkbox" name="players[${p.id}][played]"> Играл</label>
+        <label><input type="checkbox" name="players[${p.id}][late]"> Опоздание</label>
+        <label>Голы: <input type="number" name="players[${p.id}][goals]" value="0" min="0"></label>
+        <label>Ассисты: <input type="number" name="players[${p.id}][assists]" value="0" min="0"></label>
+        <label>Пропущено: <input type="number" name="players[${p.id}][goals_conceded]" value="0" min="0"></label>
+        <label>На 0: <input type="checkbox" name="players[${p.id}][clean_sheet]"></label>
+    </div>
+`;
+
+container.appendChild(div);
+        });
+    } catch (err) {
+        console.error(err);
+        container.innerHTML = "<p style='color:red;'>Ошибка загрузки игроков</p>";
+    }
+}
+
+document.getElementById("matchTeamSelect").addEventListener("change", function () {
+    const teamId = this.value;
+    loadPlayersForSelectedTeam(teamId);
+});
+
 document.getElementById("addMatchForm").addEventListener("submit", async (e) => {
     e.preventDefault();
-    const formData = new FormData(e.target);
+
+    const form = e.target;
+    const formData = new FormData(form);
     const data = {};
     formData.forEach((value, key) => data[key] = value);
 
+    const matchTeamSelect = document.getElementById("matchTeamSelect");
     data.teams_id = matchTeamSelect.value;
     data.our_team = matchTeamSelect.options[matchTeamSelect.selectedIndex]?.textContent || '';
 
+    const messageDiv = document.getElementById("matchMessage");
+
     try {
+        // === 1. Сохраняем матч ===
         const res = await fetch("/api/matches.php", {
             method: "POST",
-            headers: {"Content-Type": "application/json"},
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data)
         });
 
         const result = await res.json();
-        const messageDiv = document.getElementById("matchMessage");
-
-        if (res.ok && result?.success) {
-            messageDiv.className = "success-message";
-            messageDiv.textContent = `✅ Матч добавлен! ID: ${result.match_id}`;
-            console.log("📋 Полученные данные:", result.received_data);
-            document.getElementById("addMatchForm").reset();
-        } else {
-            messageDiv.className = "error-message";
-            messageDiv.textContent = `❌ Ошибка при добавлении матча: ${result?.error || "неизвестная"}`;
-            console.error("🪵 Сервер вернул:", result);
+        if (!res.ok || !result?.success) {
+            throw new Error(result?.error || "Ошибка при добавлении матча");
         }
+
+        const matchId = result.match_id;
+        const year = data.year;
+
+        // === 2. Собираем данные по игрокам ===
+        const players = {};
+        const playerDivs = document.querySelectorAll("#playerStatsContainer > div");
+        playerDivs.forEach(div => {
+            const checkbox = div.querySelector("input[type='checkbox'][name*='played']");
+            const match = checkbox.name.match(/players\[(\d+)\]/);
+            if (!match) return;
+            const playerId = match[1];
+
+            players[playerId] = {
+  played: checkbox.checked,
+  goals: +div.querySelector(`input[name="players[${playerId}][goals]"]`).value || 0,
+  assists: +div.querySelector(`input[name="players[${playerId}][assists]"]`).value || 0,
+  goals_conceded: +div.querySelector(`input[name="players[${playerId}][goals_conceded]"]`).value || 0,
+  clean_sheet: div.querySelector(`input[name="players[${playerId}][clean_sheet]"]`).checked
+};
+
+        });
+
+        // Если игрок опоздал, добавим штраф
+const late = div.querySelector(`input[name="players[${playerId}][late]"]`).checked;
+if (late) {
+  await fetch("/api/add_fine.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      player_id: parseInt(playerId),
+      amount: 250,
+      reason: "Опоздание на игру",
+      date: data.date // дата матча
+    })
+  });
+}
+
+        // === 3. Отправляем игроков ===
+        const playerRes = await fetch("/api/match_players.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ match_id: matchId, year, players })
+        });
+
+        if (!playerRes.ok) {
+            const err = await playerRes.json();
+            throw new Error("Матч добавлен, но ошибка при сохранении игроков: " + (err.error || "неизвестная"));
+        }
+
+        messageDiv.className = "success-message";
+        messageDiv.textContent = `✅ Матч и игроки добавлены! ID: ${matchId}`;
+        form.reset();
+        document.getElementById("playerStatsContainer").innerHTML = "";
+
     } catch (err) {
-        console.error("Ошибка при отправке матча:", err);
-        const messageDiv = document.getElementById("matchMessage");
+        console.error(err);
         messageDiv.className = "error-message";
-        messageDiv.textContent = "❌ Ошибка при отправке запроса!";
+        messageDiv.textContent = "❌ " + err.message;
     }
 });
 
-// При загрузке страницы — загружаем команды
 document.addEventListener("DOMContentLoaded", loadTeamsIntoMatchForm);
 </script>
+
 
 </body>
 </html>

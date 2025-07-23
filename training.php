@@ -64,6 +64,14 @@ if (!isset($_SESSION['auth'])) {
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
+   <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/img/favicon-32x32.png" sizes="32x32" type="image/png">
+    <link rel="icon" href="/img/favicon-16x16.png" sizes="16x16" type="image/png">
+    <link rel="apple-touch-icon" href="/img/apple-touch-icon.png" sizes="180x180">
+    <link rel="icon" sizes="192x192" href="/img/android-chrome-192x192.png">
+    <link rel="icon" sizes="512x512" href="/img/android-chrome-512x512.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
   <title>Учёт посещаемости тренировок</title>
   <style>
     body {
@@ -170,7 +178,7 @@ if (!isset($_SESSION['auth'])) {
 <body>
 <h1>Учёт посещаемости тренировок</h1>
 
-<form method="POST" action="/api/submit_training.php">
+<form method="POST" action="/api/submit_training.php" id="training-form">
   <label>Команда:
     <select name="team_id" id="teamSelect" required>
       <option value="">-- Выберите команду --</option>
@@ -227,23 +235,30 @@ function createPlayerRow(player) {
   const select = document.createElement('select');
   select.name = `status[${player.id}]`;
   select.innerHTML = `
-    <option value="0" selected>Не был</option>
-    <option value="2">Отпуск</option>
-    <option value="3">Травма</option>
-    <option value="4">Болел</option>
+      <option value="0" selected>Не был</option>
+  <option value="2">Отпуск</option>
+  <option value="3">Травма</option>
+  <option value="4">Болел</option>
+  <option value="late_notice">Не был, предупреждение < 3 ч.</option>
+  <option value="absent">Неявка</option>
   `;
 
   checkbox.addEventListener('change', () => {
     if (checkbox.checked) {
-      select.innerHTML = '<option value="1" selected>Присутствовал</option>';
+      select.innerHTML = `
+      <option value="1" selected>Присутствовал</option>
+      <option value="опоздание">Опоздание</option>
+    `;
       select.disabled = false;
     } else {
       select.disabled = false;
       select.innerHTML = `
-        <option value="0" selected>Не был</option>
-        <option value="2">Отпуск</option>
-        <option value="3">Травма</option>
-        <option value="4">Болел</option>
+         <option value="0" selected>Не был</option>
+      <option value="2">Отпуск</option>
+      <option value="3">Травма</option>
+      <option value="4">Болел</option>
+      <option value="late_notice">Не был, предупреждение < 3 ч.</option>
+      <option value="absent">Неявка</option>
       `;
     }
   });
@@ -421,6 +436,72 @@ document.getElementById('edit-form').addEventListener('submit', async e => {
   const month = document.getElementById('monthSelect').value;
   if (teamId && month) loadAttendanceTable(teamId, month);
   console.log('Submitting:', Object.fromEntries(form.entries()));
+});
+</script>
+
+<script>
+document.getElementById('training-form').addEventListener('submit', async function (e) {
+  e.preventDefault();
+
+  const form = new FormData(this);
+  const playerIds = form.getAll('players[]');
+
+  for (const id of playerIds) {
+    const selectVal = form.get(`status[${id}]`);
+   if (selectVal === 'опоздание') {
+  await fetch('/api/add_fine.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      player_id: parseInt(id),
+      amount: 250,
+      reason: 'Опоздание на тренировку',
+      date: document.querySelector('input[name="training_date"]').value
+    })
+  });
+  form.set(`status[${id}]`, '1'); // присутстововал
+}
+
+if (selectVal === 'late_notice') {
+  await fetch('/api/add_fine.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      player_id: parseInt(id),
+      amount: 500,
+      reason: 'Предупреждение о неявке на тренировку менее чем за 3 часа',
+      date: document.querySelector('input[name="training_date"]').value
+    })
+  });
+  form.set(`status[${id}]`, '0'); // не был
+}
+
+if (selectVal === 'absent') {
+  await fetch('/api/add_fine.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      player_id: parseInt(id),
+      amount: 750,
+      reason: 'Неявка на тренировку',
+      date: document.querySelector('input[name="training_date"]').value
+    })
+  });
+  form.set(`status[${id}]`, '0'); // не был
+}
+
+  }
+
+  // Отправляем форму на сервер
+  fetch('/api/submit_training.php', {
+    method: 'POST',
+    body: form
+  })
+  .then(res => res.text())
+  .then(resp => {
+    alert('Тренировка сохранена');
+    location.reload();
+  });
 });
 </script>
 

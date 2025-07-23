@@ -167,6 +167,21 @@
     margin-top: 30px;
     flex-direction: column;
 
+    a.match-details-link,
+    a.match-details-link:visited,
+    a.match-details-link:active {
+        font-family: play-regular;
+        font-size: 16px;
+        color: $light !important; // или #ffffff
+        text-decoration: none;
+        display: inline-block;
+        margin-top: 5px;
+    }
+
+    a.match-details-link:hover {
+        text-decoration: underline;
+    }
+
     .last_matches_container {
         width: 85%;
         margin: 0 auto;
@@ -259,7 +274,7 @@
                 .goals {
                     text-align: center;
                     font-size: 16px;
-                    padding: 10px;
+                    padding: 0px, 10px, 10px, 10px;
                     color: $light;
                     font-family: play-regular;
                 }
@@ -342,7 +357,7 @@
                 }
 
                 .goals {
-                    padding: 10px;
+                    padding: 0px, 10px, 10px, 10px;
                     text-align: center;
                     font-size: 16px;
                     color: $light;
@@ -877,7 +892,6 @@
 .scrolling-wrapper::-webkit-scrollbar {
     overflow-x: hidden;
 }
-
 
 
 @import "media/_index-media.scss";
