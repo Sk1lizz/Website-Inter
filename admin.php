@@ -157,6 +157,10 @@ endif;
     <button type="submit">Штрафы</button>
 </form>
 
+<form action="holiday.php" method="get" style="display: inline-block; margin-top: 20px;">
+    <button type="submit">Отпуск</button>
+</form>
+
 
 
     <h1>Выберите команду</h1>

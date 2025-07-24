@@ -30,6 +30,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (!playerRes.ok) throw new Error("Игрок не найден");
         const player = await playerRes.json();
 
+        const bg = document.querySelector('.bg-fixed');
+        if (bg && player.background_key && player.background_key.trim() !== "") {
+            bg.style.backgroundImage = `url('/img/background_player/${player.background_key}.png')`;
+        }
+
         if (player.background_key && player.background_key.trim() !== "") {
             const page = document.querySelector('.player_page');
             if (page) {

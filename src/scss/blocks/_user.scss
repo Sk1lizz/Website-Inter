@@ -321,16 +321,52 @@
         }
 
         .header-buttons {
-            flex-direction: column;
-            align-items: stretch;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            /* 2 колонки */
+            gap: 10px 12px;
+            margin-bottom: 20px;
+            width: 100%;
+            max-width: 360px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        .header-buttons button {
+        .header-buttons a,
+        .header-buttons button,
+        .header-buttons form {
             width: 100%;
         }
 
         .header-buttons form {
+            margin: 0;
+        }
+
+        .header-buttons a,
+        .header-buttons button,
+        .header-buttons form button {
+            display: block;
             width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            border-radius: 20px;
+            border: 1px solid $gold;
+            background: $dark_light;
+            color: $light;
+            font-family: 'Play', sans-serif;
+            text-align: center;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            /* <-- предотвращает перенос */
+        }
+
+        .header-buttons a:hover,
+        .header-buttons button:hover,
+        .header-buttons form button:hover {
+            background: $dark_medium;
+            color: $gold;
+            border-color: $light;
         }
     }
 
@@ -422,4 +458,239 @@
             color: $black;
         }
     }
+}
+
+.user_password-modal,
+.vacation-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(20, 20, 20, 0.95);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    margin: 0 auto;
+    /* <-- это важно для безопасного центрирования */
+}
+
+.user_password-modal .modal-content,
+.vacation-modal-overlay .modal-content {
+    background: $dark_medium;
+    padding: 24px;
+    border-radius: 12px;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    color: $light;
+    font-family: 'Play', sans-serif;
+    text-align: center;
+    margin: 0 auto;
+    /* <-- это важно для безопасного центрирования */
+
+    h3 {
+        margin-top: 0;
+        margin-bottom: 20px;
+        color: $gold;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 6px;
+        font-weight: bold;
+        color: $gray_light;
+        text-align: left;
+    }
+
+    input,
+    select {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 16px;
+        border-radius: 8px;
+        border: 1px solid $gray_light_50;
+        background: $gray_light_25;
+        color: $light;
+        font-size: 14px;
+    }
+
+    .modal-buttons {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+
+        button {
+            flex: 1;
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s ease;
+
+            &:first-child {
+                background-color: $gold;
+                color: $black;
+
+                &:hover {
+                    background-color: lighten($gold, 5%);
+                }
+            }
+
+            &:last-child {
+                background-color: $gray_light_50;
+                color: $black;
+
+                &:hover {
+                    background-color: $gray_light;
+                }
+            }
+        }
+    }
+}
+
+#openVacationModal {
+    font-size: 14px;
+    padding: 10px 18px;
+    border-radius: 20px;
+    border: 1px solid $gold;
+    background: #1c3d7d;
+    color: $light;
+    font-family: 'Play', sans-serif;
+    transition: all 0.3s ease;
+    cursor: pointer;
+
+    &:hover {
+        background: $dark_medium;
+        color: $gold;
+        border-color: $light;
+    }
+}
+
+#bmi-bar {
+    position: relative;
+    height: 24px;
+    background: #eee;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    margin: 15px 0 40px 0;
+    overflow: visible;
+}
+
+#bmi-bar .bmi-fill {
+    position: absolute;
+    inset: 0;
+    background: $gold;
+    border-radius: 20px;
+}
+
+#bmi-bar .bmi-range {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    background: linear-gradient(to right, $gold, $dark_light_50, $gold);
+    /* голубой цвет */
+    border-radius: 20px;
+    z-index: 1;
+}
+
+#bmi-bar .bmi-marker {
+    position: absolute;
+    top: 0;
+    width: 10px;
+    height: 100%;
+    background: $green;
+    border-radius: 20px;
+    transform: translateX(-50%);
+    z-index: 2;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
+    /* для контраста */
+}
+
+#bmi-bar .bmi-label {
+    position: absolute;
+    top: 110%;
+    font-size: 12px;
+    color: $gray;
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: 50px;
+    text-overflow: ellipsis;
+}
+
+#bmi-bar .bmi-label.left {
+    left: 0;
+}
+
+#bmi-bar .bmi-label.right {
+    right: 0;
+}
+
+#bmi-bar .bmi-label.mid1,
+#bmi-bar .bmi-label.mid2 {
+    transform: translateX(-50%);
+    color: $green;
+    font-weight: bold;
+}
+
+#changeWeightButton {
+    font-size: 14px;
+    padding: 10px 18px;
+    border-radius: 20px;
+    border: 1px solid #FDC500;
+    background: #1c3d7d;
+    color: #f3f6fb;
+    font-family: 'Play', sans-serif;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+#changeWeightButton:hover {
+    background: #00296B;
+    color: #FDC500;
+    border-color: #f3f6fb;
+}
+
+#viewPublicProfile {
+    font-size: 14px;
+    padding: 10px 18px;
+    border-radius: 20px;
+    border: 1px solid $gold;
+    background: $dark_light;
+    color: $light;
+    font-family: 'Play', sans-serif;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    line-height: 1.4;
+    vertical-align: middle;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+#viewPublicProfile:hover {
+    background: $dark_medium;
+    color: $gold;
+    border-color: $light;
+}
+
+#changeHeightButton {
+    font-size: 14px;
+    padding: 10px 18px;
+    border-radius: 20px;
+    border: 1px solid #FDC500;
+    background: #1c3d7d;
+    color: #f3f6fb;
+    font-family: 'Play', sans-serif;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+#changeHeightButton:hover {
+    background: #00296B;
+    color: #FDC500;
+    border-color: #f3f6fb;
 }

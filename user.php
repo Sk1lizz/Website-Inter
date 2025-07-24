@@ -157,6 +157,38 @@ $includeFines = $fineTotal >= 299;
 $totalToPay = $amount + ($includeFines ? $fineTotal : 0);
 $deadlineStr = formatRussianDay($deadline);
 
+// === Данные физической формы игрока ===
+$stmt = $db->prepare("SELECT height_cm, weight_kg FROM players WHERE id = ?");
+$stmt->bind_param("i", $_SESSION['player_id']);
+$stmt->execute();
+$phys = $stmt->get_result()->fetch_assoc();
+
+$height_cm = (float)($phys['height_cm'] ?? 0);
+$weight_kg = (float)($phys['weight_kg'] ?? 0);
+
+$height_m = $height_cm / 100;
+$bmi = $height_m > 0 ? round($weight_kg / ($height_m * $height_m), 1) : 0;
+$ideal_weight = $height_m > 0 ? round(22 * $height_m * $height_m, 1) : 0;
+
+$bmi_feedback = '';
+if ($bmi < 18.5) $bmi_feedback = 'Недостаток веса';
+elseif ($bmi < 25) $bmi_feedback = 'Норма';
+elseif ($bmi < 30) $bmi_feedback = 'Избыточный вес';
+else $bmi_feedback = 'Ожирение';
+
+// Границы шкалы
+$min_weight = round($ideal_weight * 0.8, 1);
+$max_weight = round($ideal_weight * 1.2, 1);
+
+// Динамические границы зоны нормы ±7%
+$range_from = round($ideal_weight * 0.93, 1);
+$range_to   = round($ideal_weight * 1.07, 1);
+
+// Позиции в процентах
+$range_from_percent = 100 * ($range_from - $min_weight) / ($max_weight - $min_weight);
+$range_to_percent   = 100 * ($range_to - $min_weight) / ($max_weight - $min_weight);
+$weight_percent     = 100 * ($weight_kg - $min_weight) / ($max_weight - $min_weight);
+
 $stmt = $db->prepare("SELECT background_key, can_change_background FROM player_backgrounds WHERE player_id = ?");
 $stmt->bind_param("i", $_SESSION['player_id']);
 $stmt->execute();
@@ -184,6 +216,7 @@ $canChangeBackground = (int)$bg['can_change_background'];
 <div class="user_page">
   <div class="top-wrapper">
     <div class="header-buttons">
+      <a href="/player.html?id=<?= (int)$_SESSION['player_id'] ?>" id="viewPublicProfile" target="_blank">Я на сайте</a>
       <?php if ($canChangeBackground === 1): ?>
   <button type="button" onclick="document.getElementById('user_bg-modal_background').style.display='flex'">Сменить фон</button>
 <?php endif; ?>
@@ -219,6 +252,34 @@ $canChangeBackground = (int)$bg['can_change_background'];
           </tbody></table>
         <?php endif; ?>
       </div>
+
+      <div class="card">
+  <h2>Моя форма</h2>
+  <p><strong>Индекс массы тела (BMI):</strong> <?= $bmi ?> (<?= $bmi_feedback ?>)</p>
+  <p><strong>Мой вес:</strong> <?= $weight_kg ?> кг</p>
+  <p><strong>Мой рост:</strong> <?= $height_cm ?> см</p>
+  <p><strong>Мой идеальный вес:</strong> <?= $ideal_weight ?> кг</p>
+
+  <?php
+    $weight_percent = $ideal_weight > 0 ? min(100, max(0, round(($weight_kg - $min_weight) / ($max_weight - $min_weight) * 100))) : 50;
+  ?>
+ <div id="bmi-bar">
+  <div class="bmi-fill"></div>
+  <!-- Синяя зона идеального веса -->
+  <div class="bmi-range" style="left: <?= (float)$range_from_percent ?>%; width: <?= (float)($range_to_percent - $range_from_percent) ?>%;"></div>
+  <!-- Маркер текущего веса -->
+  <div class="bmi-marker" style="left: <?= (float)$weight_percent ?>%;"></div>
+  <!-- Подписи -->
+  <div class="bmi-label left"><?= $min_weight ?> кг</div>
+  <div class="bmi-label right"><?= $max_weight ?> кг</div>
+  <div class="bmi-label mid1" style="left: <?= (float)$range_from_percent ?>%;"><?= (float)$range_from ?> кг</div>
+  <div class="bmi-label mid2" style="left: <?= (float)$range_to_percent ?>%;"><?= (float)$range_to ?> кг</div>
+</div>
+  <button id="changeWeightButton" onclick="document.getElementById('modal_weight').style.display='flex'">Изменить вес</button>
+<button id="changeHeightButton" onclick="document.getElementById('modal_height').style.display='flex'">Изменить рост</button>
+
+</div>
+
     </div>
 
     <!-- Справа -->
@@ -233,9 +294,17 @@ $canChangeBackground = (int)$bg['can_change_background'];
         <p><strong>Процент посещаемости:</strong> <span id="percent">0%</span></p>
         <p id="feedback" style="font-weight:bold;"></p>
       </div>
+
+      <div class="card">
+  <h2>Мой отпуск</h2>
+  <p id="vacationInfo">Загрузка информации об отпуске...</p>
+  <button id="openVacationModal">Запланировать отпуск</button>
+</div>
     </div>
   </div>
 </div>
+
+
 
 
 <script>
@@ -359,6 +428,173 @@ function setBackground(key) {
   });
 }
 </script>
+
+<script>
+function closeVacationModal() {
+  document.getElementById('vacationModal').style.display = 'none';
+}
+
+document.getElementById('openVacationModal').addEventListener('click', () => {
+  document.getElementById('vacationModal').style.display = 'flex';
+});
+
+async function loadVacationStatus() {
+  const res = await fetch(`/api/player_vacation_status.php?player_id=${PLAYER_ID}`);
+  const data = await res.json();
+
+  const info = document.getElementById('vacationInfo');
+  const openBtn = document.getElementById('openVacationModal');
+
+  if (data.already_on_vacation) {
+    info.textContent = "Вы уже брали отпуск в этом году.";
+    openBtn.disabled = true;
+    openBtn.style.opacity = 0.5;
+    return;
+  }
+
+  info.textContent = "Отпуск доступен для планирования.";
+  openBtn.disabled = false;
+
+  const monthSelect = document.getElementById('vacationMonth');
+  const slotsInfo = document.getElementById('vacationSlotsInfo');
+  monthSelect.innerHTML = '';
+  
+const today = new Date();
+today.setHours(0, 0, 0, 0); // убираем время, чтобы сравнение шло только по датам
+
+const now = new Date();
+let monthsAdded = 0;
+let i = 0;
+
+while (monthsAdded < 2 && i < 6) {
+  const d = new Date(now.getFullYear(), now.getMonth() + i, 1);
+  const daysBefore = (d - now) / (1000 * 60 * 60 * 24);
+
+  if (daysBefore >= 10) {
+    const yyyyMM = `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}`;
+    const label = d.toLocaleString('ru-RU', { month: 'long', year: 'numeric' });
+
+    const option = document.createElement('option');
+    option.value = yyyyMM;
+    option.textContent = label;
+    monthSelect.appendChild(option);
+    monthsAdded++;
+  }
+
+  i++;
+}
+
+  if (monthSelect.options.length === 0) {
+    monthSelect.innerHTML = '<option>Нет доступных месяцев</option>';
+    document.getElementById('confirmVacationBtn').disabled = true;
+  } else {
+    updateSlots();
+  }
+
+  monthSelect.addEventListener('change', updateSlots);
+
+  async function updateSlots() {
+    const month = monthSelect.value;
+    const res = await fetch(`/api/get_holiday_slots.php?team_id=${TEAM_ID}&month=${month}`);
+    const data = await res.json();
+    const used = data.count ?? 0;
+
+    slotsInfo.textContent = `Свободных слотов: ${Math.max(0, 3 - used)} из 3`;
+
+    const btn = document.getElementById('confirmVacationBtn');
+    btn.disabled = used >= 3;
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const confirmBtn = document.getElementById('confirmVacationBtn');
+  if (confirmBtn) {
+    confirmBtn.addEventListener('click', async () => {
+      const month = document.getElementById('vacationMonth').value;
+      if (!month) return;
+
+      const res = await fetch('/api/set_holiday.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ player_id: PLAYER_ID, month })
+      });
+
+      const result = await res.json();
+      if (result.success) {
+        alert("Отпуск успешно запланирован!");
+        location.reload();
+      } else {
+        alert("Ошибка: " + (result.message || 'неизвестно'));
+      }
+    });
+  }
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  window.TEAM_ID = <?= (int)$_SESSION['team_id'] ?>;
+  loadVacationStatus();
+});
+</script>
+
+<div id="changePasswordModal" class="user_password-modal">
+  <div class="modal-content">
+    <h3>Смена пароля</h3>
+    <form method="POST" action="change_password.php">
+      <label>Старый пароль:</label>
+      <input type="password" name="old_password" required>
+
+      <label>Новый пароль:</label>
+      <input type="password" name="new_password" required>
+
+      <div class="modal-buttons">
+        <button type="submit">Сменить</button>
+        <button type="button" onclick="document.getElementById('changePasswordModal').style.display='none'">Отмена</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div id="vacationModal" class="user_password-modal">
+  <div class="modal-content">
+    <h3>Запланировать отпуск</h3>
+    <p style="margin-bottom: 10px;">Вы можете уйти в отпуск 1 раз в год на срок не более 1 месяца, при свободных слотах под отпуск.</p>
+    <label for="vacationMonth">Месяц отпуска:</label>
+    <select id="vacationMonth"></select>
+    <p id="vacationSlotsInfo" style="margin: 10px 0;"></p>
+    <div class="modal-buttons">
+      <button id="confirmVacationBtn">Подтвердить</button>
+      <button onclick="closeVacationModal()">Отмена</button>
+    </div>
+  </div>
+</div>
+
+<div id="modal_weight" class="user_password-modal">
+  <div class="modal-content">
+    <h3>Изменить вес</h3>
+    <form method="POST" action="/api/update_weight.php">
+      <label>Новый вес (кг):</label>
+      <input type="number" name="weight" min="40" max="200" step="0.1" required>
+      <div class="modal-buttons">
+        <button type="submit">Сохранить</button>
+        <button type="button" onclick="document.getElementById('modal_weight').style.display='none'">Отмена</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div id="modal_height" class="user_password-modal">
+  <div class="modal-content">
+    <h3>Изменить рост</h3>
+    <form method="POST" action="/api/update_weight.php">
+      <label>Новый рост (см):</label>
+      <input type="number" name="height" min="100" max="250" step="1" required>
+      <div class="modal-buttons">
+        <button type="submit">Сохранить</button>
+        <button type="button" onclick="document.getElementById('modal_height').style.display='none'">Отмена</button>
+      </div>
+    </form>
+  </div>
+</div>
 
 </body>
 </html>

@@ -213,7 +213,7 @@ if (!isset($_SESSION['auth'])) {
 const statusSymbols = { 1: '+', 0: '–', 2: 'О', 3: 'Т', 4: 'Б' };
 const statusColors = { 1: '#d4f4d2', 0: '#f9d6d5', 2: '#fdf3c0', 3: '#e0d4f5', 4: '#cfe7f7' };
 
-function createPlayerRow(player) {
+function createPlayerRow(player, isOnHoliday = false) {
   const wrapper = document.createElement('div');
   wrapper.style.marginBottom = '5px';
 
@@ -234,31 +234,37 @@ function createPlayerRow(player) {
 
   const select = document.createElement('select');
   select.name = `status[${player.id}]`;
-  select.innerHTML = `
-      <option value="0" selected>Не был</option>
-  <option value="2">Отпуск</option>
-  <option value="3">Травма</option>
-  <option value="4">Болел</option>
-  <option value="late_notice">Не был, предупреждение < 3 ч.</option>
-  <option value="absent">Неявка</option>
-  `;
 
-  checkbox.addEventListener('change', () => {
-    if (checkbox.checked) {
-      select.innerHTML = `
-      <option value="1" selected>Присутствовал</option>
-      <option value="опоздание">Опоздание</option>
-    `;
-      select.disabled = false;
-    } else {
-      select.disabled = false;
-      select.innerHTML = `
-         <option value="0" selected>Не был</option>
+  if (isOnHoliday) {
+    select.innerHTML = `<option value="2" selected>Отпуск</option>`;
+    checkbox.disabled = true;
+    checkbox.checked = false;
+    select.disabled = true;
+  } else {
+    select.innerHTML = `
+      <option value="0" selected>Не был</option>
       <option value="2">Отпуск</option>
       <option value="3">Травма</option>
       <option value="4">Болел</option>
       <option value="late_notice">Не был, предупреждение < 3 ч.</option>
       <option value="absent">Неявка</option>
+    `;
+  }
+
+  checkbox.addEventListener('change', () => {
+    if (checkbox.checked) {
+      select.innerHTML = `
+        <option value="1" selected>Присутствовал</option>
+        <option value="опоздание">Опоздание</option>
+      `;
+    } else {
+      select.innerHTML = `
+        <option value="0" selected>Не был</option>
+        <option value="2">Отпуск</option>
+        <option value="3">Травма</option>
+        <option value="4">Болел</option>
+        <option value="late_notice">Не был, предупреждение < 3 ч.</option>
+        <option value="absent">Неявка</option>
       `;
     }
   });
@@ -270,16 +276,45 @@ function createPlayerRow(player) {
   return wrapper;
 }
 
+const dateInput = document.querySelector('input[name="training_date"]');
+
+dateInput.addEventListener('change', () => {
+  const teamId = teamSelect.value;
+  const date = dateInput.value;
+  if (teamId && date) loadPlayers(teamId);
+});
+
 async function loadPlayers(teamId) {
   const listDiv = document.getElementById('players-list');
   listDiv.innerHTML = 'Загрузка...';
+
+  const dateInput = document.querySelector('input[name="training_date"]');
+  const date = dateInput?.value;
+  if (!date) {
+    listDiv.innerHTML = '<p>Пожалуйста, выберите дату.</p>';
+    return;
+  }
+
   try {
-    const res = await fetch('/api/get_players.php?team_id=' + teamId);
-    let players = await res.json();
-    players.sort((a, b) => a.name.localeCompare(b.name, 'ru', { sensitivity: 'base' }));
-    listDiv.innerHTML = '';
-    players.forEach(player => listDiv.appendChild(createPlayerRow(player)));
+    const [playersRes, holidayRes] = await Promise.all([
+  fetch('/api/get_players.php?team_id=' + teamId),
+  fetch(`/api/get_holiday_for_training.php?team_id=${teamId}&date=${date}`)
+]);
+
+const players = await playersRes.json();
+const holidayIds = await holidayRes.json(); // ← теперь данные поступают
+
+players.sort((a, b) => a.name.localeCompare(b.name, 'ru', { sensitivity: 'base' }));
+listDiv.innerHTML = '';
+
+players.forEach(player => {
+  const isOnHoliday = holidayIds.includes(player.id);
+  const row = createPlayerRow(player, isOnHoliday);
+  listDiv.appendChild(row);
+});
+
   } catch (e) {
+    console.error('Ошибка загрузки игроков:', e);
     listDiv.innerHTML = '<p>Ошибка загрузки игроков</p>';
   }
 }

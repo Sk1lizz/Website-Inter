@@ -4,6 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/img/favicon-32x32.png" sizes="32x32" type="image/png">
+    <link rel="icon" href="/img/favicon-16x16.png" sizes="16x16" type="image/png">
+    <link rel="apple-touch-icon" href="/img/apple-touch-icon.png" sizes="180x180">
+    <link rel="icon" sizes="192x192" href="/img/android-chrome-192x192.png">
+    <link rel="icon" sizes="512x512" href="/img/android-chrome-512x512.png">
+
     <link rel="stylesheet" href="./css/main.css" />
     <title>Все ачивки</title>
 </head>
@@ -171,35 +179,55 @@
 
                 const allSuccess = await successRes.json();
                 const statsData = await statsRes.json();
+
                 const totalPlayers = statsData.total_players;
                 const counts = statsData.counts;
 
-                allSuccess.forEach(s => {
+                // Если нужно вручную исключать игроков, например: const adjustedTotal = totalPlayers - 2;
+                const adjustedTotal = totalPlayers;
+
+                const achievementBlocks = allSuccess.map(s => {
                     const iconPath = `/img/success/success-${s.id}.png`;
                     const fallback = `/img/success/success-0.png`;
                     const count = counts[s.id] || 0;
-                    const percent = totalPlayers > 0 ? Math.round((count / totalPlayers) * 100) : 0;
 
-                    const block = document.createElement('div');
-                    block.className = 'achievement-item';
+                    const rawPercent = adjustedTotal > 0 ? (count / adjustedTotal) * 100 : 0;
+                    const percent = Math.min(100, Math.round(rawPercent));
 
-                    block.innerHTML = `
-                            <img class="achievement-icon" src="${iconPath}" onerror="this.src='${fallback}'" />
-                            <div class="achievement-text">
-                                <div class="achievement-title">${s.title}</div>
-                                <div class="achievement-desc">${s.description}</div>
-                                <div class="achievement-percent">Есть у ${percent}% игроков</div>
-                            </div>
-                            <div class="achievement-points">${s.points} очков</div>
-                        `;
-                    container.appendChild(block);
+                    return {
+                        percent,
+                        html: `
+                    <div class="achievement-item">
+                        <img class="achievement-icon" src="${iconPath}" onerror="this.src='${fallback}'" />
+                        <div class="achievement-text">
+                            <div class="achievement-title">${s.title}</div>
+                            <div class="achievement-desc">${s.description}</div>
+                            <div class="achievement-percent">Есть у ${percent}% игроков</div>
+                        </div>
+                        <div class="achievement-points">${s.points} очков</div>
+                    </div>
+                `
+                    };
                 });
+
+                // Сортируем по убыванию процента
+                achievementBlocks.sort((a, b) => b.percent - a.percent);
+
+                // Отрисовываем в DOM
+                achievementBlocks.forEach(item => {
+                    const div = document.createElement('div');
+                    div.innerHTML = item.html;
+                    container.appendChild(div.firstElementChild);
+                });
+
             } catch (e) {
                 console.error("Ошибка при загрузке ачивок:", e);
                 container.innerHTML = "<p>Не удалось загрузить достижения.</p>";
             }
         });
     </script>
+
+
 </body>
 
 </html>
