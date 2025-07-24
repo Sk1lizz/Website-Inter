@@ -156,49 +156,46 @@ $fineTotal = getTotalFineAmount($fines);
 $includeFines = $fineTotal >= 299;
 $totalToPay = $amount + ($includeFines ? $fineTotal : 0);
 $deadlineStr = formatRussianDay($deadline);
+
+$stmt = $db->prepare("SELECT background_key, can_change_background FROM player_backgrounds WHERE player_id = ?");
+$stmt->bind_param("i", $_SESSION['player_id']);
+$stmt->execute();
+$bg = $stmt->get_result()->fetch_assoc() ?? ['background_key' => '', 'can_change_background' => 0];
+$currentBgKey = $bg['background_key'];
+$canChangeBackground = (int)$bg['can_change_background'];
+
 ?>
 <!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-     <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
+   <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
     <link rel="icon" href="/img/favicon-32x32.png" sizes="32x32" type="image/png">
     <link rel="icon" href="/img/favicon-16x16.png" sizes="16x16" type="image/png">
     <link rel="apple-touch-icon" href="/img/apple-touch-icon.png" sizes="180x180">
     <link rel="icon" sizes="192x192" href="/img/android-chrome-192x192.png">
     <link rel="icon" sizes="512x512" href="/img/android-chrome-512x512.png">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+
   <title>Кабинет игрока</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
-
 <div class="user_page">
   <div class="top-wrapper">
     <div class="header-buttons">
-      <button type="button" onclick="document.getElementById('changePasswordModal').style.display='block'">
-        Сменить пароль
-      </button>
-      <form method="POST" style="margin: 0;">
-        <button type="submit" name="logout">Выйти</button>
-      </form>
+      <?php if ($canChangeBackground === 1): ?>
+  <button type="button" onclick="document.getElementById('user_bg-modal_background').style.display='flex'">Сменить фон</button>
+<?php endif; ?>
+      <button type="button" onclick="document.getElementById('changePasswordModal').style.display='block'">Сменить пароль</button>
+      <form method="POST" style="margin: 0;"><button type="submit" name="logout">Выйти</button></form>
     </div>
-  </div>
-
-  <div id="changePasswordModal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%);
-      background:white; padding:20px; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.3); z-index:1000;">
-    <h3>Смена пароля</h3>
-    <form method="POST" action="change_password.php">
-      <label>Старый пароль:<br><input type="password" name="old_password" required></label><br><br>
-      <label>Новый пароль:<br><input type="password" name="new_password" required></label><br><br>
-      <button type="submit">Сменить</button>
-      <button type="button" onclick="document.getElementById('changePasswordModal').style.display='none'">Отмена</button>
-    </form>
   </div>
 
   <h1 style="text-align:center">Добро пожаловать, <?= htmlspecialchars($_SESSION['player_name']) ?>!</h1>
 
   <div class="dashboard-grid">
+    <!-- Слева -->
     <div class="left-column">
       <div class="card">
         <h2>Месячный взнос</h2>
@@ -207,50 +204,39 @@ $deadlineStr = formatRussianDay($deadline);
         <p><strong>Итого к оплате:</strong> <?= number_format($totalToPay, 2, '.', ' ') ?> ₽</p>
         <p><strong>Дедлайн:</strong> <?= $deadlineStr ?></p>
       </div>
-
       <div class="card">
         <h2>Штрафы в этом месяце</h2>
-        <?php if (count($fines) === 0): ?>
-          <p>Так держать — штрафов нет!</p>
+        <?php if (count($fines) === 0): ?><p>Так держать — штрафов нет!</p>
         <?php else: ?>
-          <table class="attendance-table">
-            <thead><tr><th>Дата</th><th>Причина</th><th>Сумма</th></tr></thead>
-            <tbody>
-              <?php foreach ($fines as $fine): 
-                $highlight = ((int)$fine['amount'] >= 299) ? 'highlight-fine' : '';
-              ?>
-                <tr class="<?= $highlight ?>">
-                  <td><?= date('d.m.Y', strtotime($fine['date'])) ?></td>
-                  <td><?= htmlspecialchars($fine['reason']) ?></td>
-                  <td><?= $fine['amount'] ?> ₽</td>
-                </tr>
-              <?php endforeach; ?>
-            </tbody>
-          </table>
+          <table class="attendance-table"><thead><tr><th>Дата</th><th>Причина</th><th>Сумма</th></tr></thead><tbody>
+          <?php foreach ($fines as $fine): $highlight = ((int)$fine['amount'] >= 299) ? 'highlight-fine' : ''; ?>
+            <tr class="<?= $highlight ?>">
+              <td><?= date('d.m.Y', strtotime($fine['date'])) ?></td>
+              <td><?= htmlspecialchars($fine['reason']) ?></td>
+              <td><?= $fine['amount'] ?> ₽</td>
+            </tr>
+          <?php endforeach; ?>
+          </tbody></table>
         <?php endif; ?>
-        <p style="margin-top:10px; font-size: 13px; color: var(--gray-light);">
-          Штрафы суммой менее 299 ₽ сгорают в конце месяца.
-        </p>
       </div>
     </div>
 
+    <!-- Справа -->
     <div class="right-column">
       <div class="card">
         <h2>Моя посещаемость</h2>
         <script>const PLAYER_ID = <?= (int)$_SESSION['player_id'] ?>;</script>
-
         <select id="monthSelect"></select>
         <table class="attendance-table" id="attendanceTable">
-            <thead><tr><th>Дата</th><th>Статус</th></tr></thead>
-            <tbody></tbody>
+            <thead><tr><th>Дата</th><th>Статус</th></tr></thead><tbody></tbody>
         </table>
         <p><strong>Процент посещаемости:</strong> <span id="percent">0%</span></p>
-<p id="feedback" style="font-weight:bold; color:#FFFFFF;"></p>
-        
+        <p id="feedback" style="font-weight:bold;"></p>
       </div>
     </div>
   </div>
 </div>
+
 
 <script>
 const STATUS_MAP = {
@@ -320,6 +306,58 @@ document.addEventListener("DOMContentLoaded", async () => {
         renderAttendance(data, e.target.value);
     });
 });
+
+
+</script>
+
+<?php if ($canChangeBackground === 1): ?>
+<div id="user_bg-modal_background" class="user_bg-modal_background">
+  <div class="modal-content">
+    <h3>Выберите фон</h3>
+    <div class="background-options">
+      <div class="bg-option" onclick="setBackground('')">
+        <div class="no-image"></div>
+        <small>Без фона</small>
+      </div>
+      <?php
+      $backgrounds = [
+          '1' => 'Полосы рваные',
+          '2' => 'Стена',
+          '3' => 'Соты',
+          '4' => 'Золото',
+          '5' => 'Дракон',
+          '6' => 'Кремль',
+          '7' => 'Инь и Янь',
+          '8' => 'Самурай'
+      ];
+      foreach ($backgrounds as $key => $label): ?>
+        <div class="bg-option" onclick="setBackground('<?= $key ?>')">
+          <img src="/img/background_player/mini<?= $key ?>.PNG" alt="фон <?= $key ?>">
+          <small><?= $label ?></small>
+        </div>
+      <?php endforeach; ?>
+    </div>
+    <button onclick="document.getElementById('user_bg-modal_background').style.display='none'">Отмена</button>
+  </div>
+</div>
+<?php endif; ?>
+
+
+<script>
+function setBackground(key) {
+  fetch('/api/player_set_background.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ background_key: key })
+  }).then(res => res.json()).then(data => {
+    if (data.success) {
+      alert("Фон обновлён");
+      location.reload();
+    } else {
+      alert("Ошибка: " + (data.message || "неизвестно"));
+    }
+  });
+}
 </script>
 
 </body>

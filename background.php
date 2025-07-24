@@ -62,6 +62,24 @@ if (!isset($_SESSION['admin_logged_in'])) {
             border-radius: 4px;
             border: 1px solid #ccc;
         }
+
+         .can-change-checkbox {
+             margin: 0;
+    display: inline-block !important;
+    appearance: auto !important;
+    transform: scale(1.2);
+    margin-right: 4px;
+    vertical-align: middle;
+}
+
+    td > div {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+}
+
     </style>
 </head>
 <body>
@@ -85,7 +103,11 @@ if (!isset($_SESSION['admin_logged_in'])) {
         { key: "1", name: "Полосы рваные" },
         { key: "2", name: "Стена" },
         { key: "3", name: "Соты" },
-        { key: "4", name: "Золото" }
+        { key: "4", name: "Золото" },
+         { key: "5", name: "Дракон" },
+    { key: "6", name: "Кремль" },
+    { key: "7", name: "Инь и Янь" },
+    { key: "8", name: "Самурай" }
     ];
 
     async function loadPlayers() {
@@ -97,24 +119,39 @@ if (!isset($_SESSION['admin_logged_in'])) {
 
             players.forEach(player => {
                 const currentBg = player.background_key || "";
-                const tr = document.createElement('tr');
+                const canChange = player.can_change_background === 1 || player.can_change_background === "1";
 
-                const select = `
+                const bgSelect = `
                     <select class="background-select" data-player-id="${player.id}">
                         ${availableBackgrounds.map(bg => `
                             <option value="${bg.key}" ${bg.key === currentBg ? 'selected' : ''}>
                                 ${bg.name}
                             </option>`).join('')}
                     </select>
+                `;
+
+                const checkbox = `
+    <input type="checkbox" class="can-change-checkbox" data-player-id="${player.id}" ${canChange ? 'checked' : ''}>
+    <span style="font-size: 13px;">Игрок может менять фон</span>
+`;
+
+                const button = `
                     <button class="save-background" data-player-id="${player.id}">Сохранить</button>
                 `;
 
-                tr.innerHTML = `
-                    <td>${player.id}</td>
-                    <td>${player.name}</td>
-                    <td>${select}</td>
-                `;
-
+                const tr = document.createElement('tr');
+tr.innerHTML = `
+    <td>${player.id}</td>
+    <td>${player.name}</td>
+    <td>
+        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+            ${bgSelect}
+            <input type="checkbox" class="can-change-checkbox" data-player-id="${player.id}" ${canChange ? 'checked' : ''}>
+            <span style="font-size: 13px;">Игрок может менять фон</span>
+            ${button}
+        </div>
+    </td>
+`;
                 tbody.appendChild(tr);
             });
 
@@ -123,16 +160,16 @@ if (!isset($_SESSION['admin_logged_in'])) {
         }
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
-        loadPlayers();
-    });
+    document.addEventListener('DOMContentLoaded', loadPlayers);
 
     document.addEventListener('click', async (e) => {
         if (e.target.classList.contains('save-background')) {
             const playerId = e.target.dataset.playerId;
             const select = document.querySelector(`select[data-player-id="${playerId}"]`);
+            const checkbox = document.querySelector(`input.can-change-checkbox[data-player-id="${playerId}"]`);
             const key = select.value;
             const name = select.selectedOptions[0].textContent;
+            const canChange = checkbox.checked ? 1 : 0;
 
             try {
                 const res = await fetch('/api/set_player_background.php', {
@@ -141,18 +178,19 @@ if (!isset($_SESSION['admin_logged_in'])) {
                     body: JSON.stringify({
                         player_id: playerId,
                         background_key: key,
-                        background_name: name
+                        background_name: name,
+                        can_change_background: canChange
                     })
                 });
 
                 const result = await res.json();
                 if (result.success) {
-                    alert("Фон сохранён");
+                    alert("Фон и доступ успешно сохранены");
                 } else {
                     alert("Ошибка: " + (result.message || "неизвестно"));
                 }
             } catch (err) {
-                console.error("Ошибка:", err);
+                console.error("Ошибка при сохранении фона:", err);
                 alert("Ошибка при сохранении фона");
             }
         }
