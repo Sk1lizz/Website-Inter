@@ -1,81 +1,317 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Последний матч</title>
-    <link rel="stylesheet" href="./css/main.css" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="manifest" href="/site.webmanifest">
+    <meta charset="UTF-8" />
+    <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/img/favicon-32x32.png" sizes="32x32" type="image/png">
+    <link rel="icon" href="/img/favicon-16x16.png" sizes="16x16" type="image/png">
+    <link rel="apple-touch-icon" href="/img/apple-touch-icon.png" sizes="180x180">
+    <link rel="icon" sizes="192x192" href="/img/android-chrome-192x192.png">
+    <link rel="icon" sizes="512x512" href="/img/android-chrome-512x512.png">
+    <title>Отчёт о матче</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/main.css" />
+    <style>
+        body {
+            background: url('/img/background_field.jpg') center top / cover no-repeat fixed;
+            font-family: PLAY-REGULAR, Arial, sans-serif;
+            color: #fff;
+        }
+
+        .match-banner {
+            width: 100%;
+            height: 600px;
+            background: url('/img/coach_background.jpg') center/cover no-repeat;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            z-index: 1;
+            position: relative;
+            padding-top: 50px;
+            font-family: PLAY-REGULAR;
+        }
+
+        .match-banner .match-date {
+            font-size: 18px;
+            margin-bottom: 20px;
+            padding: 4px 12px;
+            border-radius: 8px;
+            display: inline-block;
+        }
+
+        .match-banner .match-center {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 60px;
+            margin-bottom: 20px;
+            flex-wrap: nowrap;
+        }
+
+        .match-banner .team {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            min-width: 280px;
+            height: 60px;
+            white-space: nowrap;
+            text-align: center;
+            font-family: PLAY-Bold;
+        }
+
+        .match-banner .score {
+            font-size: 42px;
+            background: rgba(255, 255, 255, 0.8);
+            color: black;
+            padding: 10px 24px;
+            border-radius: 10px;
+            font-weight: bold;
+            min-width: 100px;
+            text-align: center;
+        }
+
+        .match-banner .info {
+            font-size: 16px;
+            margin-top: 10px;
+            line-height: 1.6;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 8px 20px;
+            display: inline-block;
+            border-radius: 8px;
+        }
+
+        .match-content {
+            position: relative;
+            z-index: 2;
+            max-width: 960px;
+            margin: -100px auto 30px auto;
+            background-color: #1b1b1b;
+            /* $gray_black */
+            padding: 30px;
+            border-radius: 12px;
+            font-family: PLAY-REGULAR, Arial, sans-serif;
+            color: #fff;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 0;
+            border-collapse: collapse;
+            text-align: center;
+            font-family: PLAY-REGULAR, Arial, sans-serif;
+            color: #fff;
+            background-color: #1b1b1b;
+            /* $gray_black */
+        }
+
+        table thead {
+            display: none;
+            /* скрываем заголовки */
+        }
+
+        table td {
+            padding: 14px 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            /* мягкая вертикальная разделительная линия */
+            font-size: 16px;
+        }
+
+        table tr:last-child td {
+            border-bottom: none;
+        }
+
+
+
+        .team-title {
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #fff;
+            font-family: PLAY-REGULAR, Arial, sans-serif;
+        }
+
+        table td.number {
+            width: 40px;
+            text-align: center;
+        }
+
+        table td.name {
+            text-align: left;
+            padding-left: 16px;
+        }
+
+        table td.icon {
+            text-align: center;
+            width: 60px;
+        }
+
+        table img {
+            height: 18px;
+            vertical-align: middle;
+            margin-right: 4px;
+        }
+
+        @media (max-width: 768px) {
+            .match-banner {
+                height: 600px;
+                padding: 40px 10px 20px 10px;
+            }
+
+            .match-banner .match-center {
+                flex-direction: column;
+                align-items: center;
+                gap: 12px;
+            }
+
+            .match-banner .match-date {
+                font-size: 14px;
+                margin-bottom: 20px;
+                padding: 4px 12px;
+                border-radius: 8px;
+                display: inline-block;
+            }
+
+            .match-banner .team {
+                font-size: 26px;
+                width: auto;
+                max-width: 90vw;
+                padding: 8px 12px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                margin: 4px 0;
+                text-align: center;
+            }
+
+            .match-banner .score {
+                font-size: 32px;
+                padding: 8px 16px;
+                margin: 4px 0;
+            }
+
+            .match-banner .info {
+                font-size: 14px;
+                padding: 6px 10px;
+                margin-top: 10px;
+            }
+
+            .match-content {
+                margin: 0 10px 30px 10px;
+                padding: 20px 15px;
+                border-radius: 10px;
+            }
+
+            .team-title {
+                font-size: 18px;
+                margin-bottom: 16px;
+            }
+
+            table td {
+                font-size: 14px;
+                padding: 10px 6px;
+            }
+
+            table td.name {
+                text-align: left;
+                padding-left: 10px;
+            }
+
+            table td.icon {
+                width: auto;
+            }
+
+            table img {
+                height: 16px;
+            }
+        }
+    </style>
 </head>
 
 <body>
     @@include('blocks/header.html')
 
-    <div class="banner match-banner">
-        <div class="fill"></div>
-        <div class="background"></div>
-        <div class="content">
-            <div class="text">Отчёт о матче</div>
-            <h1>FC Inter Moscow</h1>
-        </div>
-    </div>
+    <div id="matchBanner" class="match-banner">Загрузка...</div>
+
+    <div class="match-content" id="matchContent">Загрузка...</div>
 
     @@include('blocks/footer.html')
-</body>
-<script src="./js/index.bundle.js"></script>
-<script>document.addEventListener("DOMContentLoaded", async () => {
-        const container = document.querySelector(".matches");
 
-        const params = new URLSearchParams(window.location.search);
-        const matchId = params.get("id");
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            const matchId = new URLSearchParams(window.location.search).get("id");
+            const matchContent = document.getElementById("matchContent");
+            const matchBanner = document.getElementById("matchBanner");
 
-        if (!matchId) {
-            container.innerHTML = "<p>Не указан ID матча</p>";
-            return;
-        }
-
-        try {
-            const res = await fetch(`/api/get_match_details.php?id=${matchId}`);
-            const data = await res.json();
-
-            if (data.error) {
-                container.innerHTML = `<p>${data.error}</p>`;
+            if (!matchId) {
+                matchContent.innerHTML = "<p class='error'>❌ Не указан ID матча</p>";
                 return;
             }
 
-            const { match, players } = data;
+            try {
+                const res = await fetch(`/api/get_match_details.php?id=${matchId}`);
+                const data = await res.json();
 
-            container.innerHTML = `
-            <h1>${match.our_team} ${match.our_goals}:${match.opponent_goals} ${match.opponent}</h1>
-            <p><strong>Дата:</strong> ${match.date}</p>
-            <p><strong>Чемпионат:</strong> ${match.championship_name}</p>
-            <p><strong>Тур:</strong> ${match.tour}</p>
-            <p><strong>Результат:</strong> ${match.match_result}</p>
-            <p><strong>Голы:</strong> ${match.goals || '—'}</p>
-            <p><strong>Голевые:</strong> ${match.assists || '—'}</p>
-            <h2>Игроки матча</h2>
-            <table>
-                <tr><th>Игрок</th><th>Голы</th><th>Ассисты</th><th>Пропущено</th><th>На 0</th></tr>
-                ${players.map(p => `
-                    <tr>
-                        <td>${p.name}</td>
-                        <td>${p.goals}</td>
-                        <td>${p.assists}</td>
-                        <td>${p.goals_conceded}</td>
-                        <td>${p.clean_sheet == 1 ? '✅' : ''}</td>
-                    </tr>
-                `).join('')}
-            </table>
+                if (data.error) {
+                    matchContent.innerHTML = `<p class="error">❌ ${data.error}</p>`;
+                    return;
+                }
+
+                const match = data.match;
+                const players = data.players;
+                document.title = `Отчёт о матче: ${match.our_team} - ${match.opponent}`;
+
+                const ourTeam = match.our_team || 'INTER';
+                const opponent = match.opponent || 'СОПЕРНИК';
+
+                matchBanner.innerHTML = `
+          <div class="match-date">${match.date}</div>
+
+          <div class="match-center">
+            <div class="team">${ourTeam}</div>
+            <div class="score">${match.our_goals}:${match.opponent_goals}</div>
+            <div class="team">${opponent}</div>
+          </div>
+
+          <div class="info">
+            🏆 ${match.championship_name}, Тур ${match.tour} <br>
+            Голы: ${match.goals || '—'} &nbsp;&nbsp;&nbsp; Ассисты: ${match.assists || '—'}
+          </div>
         `;
-        } catch (err) {
-            console.error(err);
-            container.innerHTML = "<p>Ошибка загрузки данных</p>";
-        }
-    });
-</script>
+
+                matchContent.innerHTML = `
+  <div class="team-title">Заявка нашей команды</div>
+  <table>
+    <tbody>
+      ${players.map(p => `
+        <tr>
+          <td class="number">${p.number ?? ''}</td>
+          <td class="name">${p.name}</td>
+          <td class="icon">${p.goals > 0 ? `<img src="/img/icon/goal.svg" alt="G" title="Гол" />×${p.goals}` : ''}</td>
+          <td class="icon">${p.assists > 0 ? `<img src="/img/icon/form.svg" alt="A" title="Ассист" />×${p.assists}` : ''}</td>
+          <td class="icon">${p.goals_conceded > 0 ? p.goals_conceded : ''}</td>
+        </tr>
+      `).join('')}
+    </tbody>
+  </table>
+`;
+
+            } catch (err) {
+                console.error(err);
+                matchContent.innerHTML = "<p class='error'>❌ Ошибка загрузки данных</p>";
+            }
+        });
+    </script>
+</body>
 
 </html>

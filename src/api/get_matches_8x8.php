@@ -10,6 +10,7 @@ $year = date("Y");
 
 $sql = "
     SELECT 
+    id, 
         date, 
         championship_name, 
         tour, 

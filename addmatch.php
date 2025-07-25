@@ -309,36 +309,37 @@ document.getElementById("addMatchForm").addEventListener("submit", async (e) => 
 
         // === 2. Собираем данные по игрокам ===
         const players = {};
-        const playerDivs = document.querySelectorAll("#playerStatsContainer > div");
-        playerDivs.forEach(div => {
-            const checkbox = div.querySelector("input[type='checkbox'][name*='played']");
-            const match = checkbox.name.match(/players\[(\d+)\]/);
-            if (!match) return;
-            const playerId = match[1];
+const playerDivs = document.querySelectorAll("#playerStatsContainer > div");
 
-            players[playerId] = {
-  played: checkbox.checked,
-  goals: +div.querySelector(`input[name="players[${playerId}][goals]"]`).value || 0,
-  assists: +div.querySelector(`input[name="players[${playerId}][assists]"]`).value || 0,
-  goals_conceded: +div.querySelector(`input[name="players[${playerId}][goals_conceded]"]`).value || 0,
-  clean_sheet: div.querySelector(`input[name="players[${playerId}][clean_sheet]"]`).checked
-};
+for (const div of playerDivs) {
+    const checkbox = div.querySelector("input[type='checkbox'][name*='played']");
+    const match = checkbox?.name.match(/players\[(\d+)\]/);
+    if (!match) continue;
 
+    const playerId = match[1];
+    if (!checkbox.checked) continue;
+
+    players[playerId] = {
+        played: checkbox.checked,
+        goals: +div.querySelector(`input[name="players[${playerId}][goals]"]`)?.value || 0,
+        assists: +div.querySelector(`input[name="players[${playerId}][assists]"]`)?.value || 0,
+        goals_conceded: +div.querySelector(`input[name="players[${playerId}][goals_conceded]"]`)?.value || 0,
+        clean_sheet: !!div.querySelector(`input[name="players[${playerId}][clean_sheet]"]`)?.checked
+    };
+
+    const lateCheckbox = div.querySelector(`input[name="players[${playerId}][late]"]`);
+    if (lateCheckbox?.checked) {
+        await fetch("/api/add_fine.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                player_id: parseInt(playerId),
+                amount: 250,
+                reason: "Опоздание на игру",
+                date: data.date
+            })
         });
-
-        // Если игрок опоздал, добавим штраф
-const late = div.querySelector(`input[name="players[${playerId}][late]"]`).checked;
-if (late) {
-  await fetch("/api/add_fine.php", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      player_id: parseInt(playerId),
-      amount: 250,
-      reason: "Опоздание на игру",
-      date: data.date // дата матча
-    })
-  });
+    }
 }
 
         // === 3. Отправляем игроков ===
