@@ -22,7 +22,7 @@ foreach ($input['players'] as $player_id => $info) {
     $goals = intval($info['goals'] ?? 0);
     $assists = intval($info['assists'] ?? 0);
     $goals_conceded = intval($info['goals_conceded'] ?? 0);
-    $clean_sheet = isset($info['clean_sheet']) ? 1 : 0;
+    $clean_sheet = !empty($info['clean_sheet']) ? 1 : 0;
 
     // Вставка в match_players
     $stmt = $db->prepare("INSERT INTO match_players (match_id, player_id, played, goals, assists, clean_sheet, goals_conceded) VALUES (?, ?, ?, ?, ?, ?, ?)");

@@ -161,6 +161,15 @@ endif;
     <button type="submit">Отпуск</button>
 </form>
 
+<form action="birthday.html" method="get" style="display: inline-block; margin-top: 20px;">
+    <button type="submit">ДР картинка</button>
+</form>
+
+<form action="squadlist8x8.html" method="get" style="display: inline-block; margin-top: 20px;">
+    <button type="submit">Заявка</button>
+</form>
+
+
 
 
     <h1>Выберите команду</h1>

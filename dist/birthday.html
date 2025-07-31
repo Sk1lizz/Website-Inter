@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Генератор Squad List</title>
+    <link href="https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Play', sans-serif;
+            text-align: center;
+            background-color: #222;
+            color: white;
+        }
+
+        canvas {
+            border: 1px solid #ccc;
+            margin-top: 10px;
+            background: white;
+            max-width: 100%;
+        }
+
+        input,
+        button {
+            margin: 5px;
+            padding: 5px;
+            font-size: 16px;
+        }
+
+        label {
+            display: block;
+            margin: 10px auto;
+            text-align: left;
+            max-width: 500px;
+        }
+
+        #playersContainer {
+            margin: 20px auto;
+            max-width: 500px;
+            text-align: left;
+        }
+
+        .playerRow {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 5px;
+        }
+
+        .playerRow input {
+            flex: 1;
+        }
+
+        a#download {
+            display: block;
+            margin-top: 10px;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Генератор Squad List</h1>
+
+    <label>Дата: <input type="text" id="dateText" placeholder="27.01.2024"></label>
+    <label>Чемпионат: <input type="text" id="tournamentText" placeholder="MFL-2"></label>
+    <label>Тур: <input type="text" id="roundText" placeholder="8"></label>
+    <label>Стадион: <input type="text" id="stadiumText" placeholder="Kosino Stadium"></label>
+
+    <div id="playersContainer"></div>
+    <button id="addPlayerBtn">+ Добавить игрока</button><br>
+    <button id="save">Скачать изображение</button>
+
+    <canvas id="canvas" width="768" height="768"></canvas>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const downloadBtn = document.getElementById('save');
+
+        const bg = new Image();
+        bg.src = 'img/squadlist8x8.png'; // Заменить на свой путь
+
+        const playersContainer = document.getElementById('playersContainer');
+        const addPlayerBtn = document.getElementById('addPlayerBtn');
+
+        const addPlayerRow = (number = '', name = '') => {
+            const div = document.createElement('div');
+            div.className = 'playerRow';
+            div.innerHTML = `
+        <input type="text" placeholder="№" value="${number}">
+        <input type="text" placeholder="Фамилия" value="${name}">
+      `;
+            playersContainer.appendChild(div);
+
+            // Обновлять при вводе
+            div.querySelectorAll('input').forEach(input => {
+                input.addEventListener('input', draw);
+            });
+        };
+
+        for (let i = 0; i < 8; i++) addPlayerRow();
+
+        addPlayerBtn.addEventListener('click', () => addPlayerRow());
+
+        const draw = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Отрисовать фон по центру, сохраняя пропорции
+            const imgAspect = bg.width / bg.height;
+            const canvasAspect = canvas.width / canvas.height;
+            let drawWidth, drawHeight;
+
+            if (imgAspect > canvasAspect) {
+                drawWidth = canvas.width;
+                drawHeight = drawWidth / imgAspect;
+            } else {
+                drawHeight = canvas.height;
+                drawWidth = drawHeight * imgAspect;
+            }
+
+            const offsetX = (canvas.width - drawWidth) / 2;
+            const offsetY = (canvas.height - drawHeight) / 2;
+            ctx.drawImage(bg, offsetX, offsetY, drawWidth, drawHeight);
+
+            const date = document.getElementById('dateText').value;
+            const tournament = document.getElementById('tournamentText').value;
+            const round = document.getElementById('roundText').value;
+            const stadium = document.getElementById('stadiumText').value;
+
+            // Верх
+            ctx.save();
+            ctx.translate(130, 85);
+            ctx.rotate(-0.1);
+            ctx.font = 'bold 20px "Play"';
+            ctx.fillStyle = 'black';
+            ctx.textAlign = 'left';
+            ctx.fillText(date, 0, 0);
+            ctx.fillText(tournament, 0, 25);
+            ctx.fillText(`${round} ROUND`, 0, 50);
+            ctx.restore();
+
+            // Игроки
+            const rows = playersContainer.querySelectorAll('.playerRow');
+            ctx.font = '16px "Play"';
+            ctx.fillStyle = 'black';
+
+            rows.forEach((row, index) => {
+                const inputs = row.querySelectorAll('input');
+                const number = inputs[0].value.trim();
+                const name = inputs[1].value.trim();
+                if (number && name) {
+                    ctx.save();
+                    ctx.translate(130, 140 + index * 28);
+                    ctx.rotate(-0.05);
+                    ctx.fillText(`${number}   ${name.toUpperCase()}`, 0, 0);
+                    ctx.restore();
+                }
+            });
+
+            // Низ — стадион
+            ctx.save();
+            ctx.translate(130, 730);
+            ctx.rotate(-0.1);
+            ctx.font = 'bold 14px "Play"';
+            ctx.fillText(stadium.toUpperCase(), 0, 0);
+            ctx.restore();
+        };
+
+        // Отображение в реальном времени
+        document.querySelectorAll('#dateText, #tournamentText, #roundText, #stadiumText')
+            .forEach(el => el.addEventListener('input', draw));
+
+        // Скачивание
+        downloadBtn.addEventListener('click', () => {
+            draw();
+            const link = document.createElement('a');
+            link.download = 'squadlist.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        });
+
+        bg.onload = draw;
+    </script>
+</body>
+
+</html>

@@ -220,6 +220,7 @@ $canChangeBackground = (int)$bg['can_change_background'];
       <?php if ($canChangeBackground === 1): ?>
   <button type="button" onclick="document.getElementById('user_bg-modal_background').style.display='flex'">Сменить фон</button>
 <?php endif; ?>
+<button type="button" onclick="window.location.href='https://vk.com/doc-76009640_688177966?hash=maRXB3qNFqzzzsM0TMOJlYGHVEDhQ3csNNTKibnl5Eg&dl=sXOp85lfDplpUbrVfKKhzRNZIdoSZ3Vox00ksRmmnwk'">Новичку</button>
       <button type="button" onclick="document.getElementById('changePasswordModal').style.display='block'">Сменить пароль</button>
       <form method="POST" style="margin: 0;"><button type="submit" name="logout">Выйти</button></form>
     </div>
@@ -236,6 +237,8 @@ $canChangeBackground = (int)$bg['can_change_background'];
         <p><strong>Штрафы за месяц:</strong> <?= $fineTotal ?> ₽</p>
         <p><strong>Итого к оплате:</strong> <?= number_format($totalToPay, 2, '.', ' ') ?> ₽</p>
         <p><strong>Дедлайн:</strong> <?= $deadlineStr ?></p>
+         <p><strong>Реквизиты Pro: 4276 4000 6388 7252</strong></p>
+          <p><strong>Реквизиты 8х8: 5536 9137 8962 1493</strong></p>
       </div>
       <div class="card">
         <h2>Штрафы в этом месяце</h2>
@@ -280,13 +283,30 @@ $canChangeBackground = (int)$bg['can_change_background'];
 
 </div>
 
+<div class="card">
+  <h2>Моё здоровье</h2>
+  <p><strong>Дата последнего ЭКГ:</strong> <span id="lastEkgDate">Данные не указаны</span></p>
+  <p><strong>Времени с последнего ЭКГ:</strong> <span id="ekgElapsed">—</span></p>
+  <p><strong>Рекомендация:</strong> <span id="ekgRecommendation">—</span></p>
+
+  <button id="editHealthButton" onclick="document.getElementById('editHealthModal').style.display='flex'">Редактировать</button>
+</div>
+
     </div>
 
     <!-- Справа -->
     <div class="right-column">
       <div class="card">
         <h2>Моя посещаемость</h2>
-        <script>const PLAYER_ID = <?= (int)$_SESSION['player_id'] ?>;</script>
+        <script>
+  const PLAYER_ID = <?= (int)$_SESSION['player_id'] ?>;
+  const TEAM_ID = <?= (int)$_SESSION['team_id'] ?>;
+
+  document.addEventListener("DOMContentLoaded", () => {
+    loadHealth();           // ЗАГРУЗИТЬ ЗДОРОВЬЕ
+    loadVacationStatus();   // (если используется)
+  });
+</script>
         <select id="monthSelect"></select>
         <table class="attendance-table" id="attendanceTable">
             <thead><tr><th>Дата</th><th>Статус</th></tr></thead><tbody></tbody>
@@ -294,6 +314,17 @@ $canChangeBackground = (int)$bg['can_change_background'];
         <p><strong>Процент посещаемости:</strong> <span id="percent">0%</span></p>
         <p id="feedback" style="font-weight:bold;"></p>
       </div>
+
+      <div class="card">
+  <h2>Матчи за месяц</h2>
+  <table class="attendance-table" id="matchStatsTable">
+    <thead>
+      <tr><th>Дата</th><th>Играл</th><th>Г</th><th>А</th><th>ПМ</th></tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+  <p><strong>Процент участия:</strong> <span id="matchParticipation">0%</span></p>
+</div>
 
       <div class="card">
   <h2>Мой отпуск</h2>
@@ -536,6 +567,98 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 
+<script>
+  async function fetchMatchStats() {
+    const res = await fetch(`/api/get_match_stats.php?player_id=${PLAYER_ID}&team_id=${TEAM_ID}`);
+    return await res.json();
+}
+
+function renderMatchStats(data) {
+    const tbody = document.querySelector('#matchStatsTable tbody');
+    tbody.innerHTML = '';
+
+    let playedCount = 0;
+    for (const match of data) {
+        if (match.played) playedCount++;
+
+        tbody.innerHTML += `
+  <tr>
+    <td>${new Date(match.date).toLocaleDateString('ru-RU')}</td>
+    <td>${match.played ? 'Да' : 'Нет'}</td>
+    <td class="match-icon">${match.goals > 0 ? `<img src="/img/icon/goal.svg" title="Гол">×${match.goals}` : ''}</td>
+    <td class="match-icon">${match.assists > 0 ? `<img src="/img/icon/assist.svg" title="Ассист">×${match.assists}` : ''}</td>
+    <td class="match-icon">${match.goals_conceded > 0 ? `<img src="/img/icon/form.svg" title="Пропущено">×${match.goals_conceded}` : ''}</td>
+  </tr>`;
+    }
+
+    const percent = data.length ? Math.round((playedCount / data.length) * 100) : 0;
+    document.getElementById('matchParticipation').textContent = `${percent}%`;
+}
+
+document.addEventListener("DOMContentLoaded", async () => {
+    const matchStats = await fetchMatchStats();
+    renderMatchStats(matchStats);
+});
+
+</script>
+
+<script>
+  async function loadHealth() {
+  const res = await fetch(`/api/get_health.php?player_id=${PLAYER_ID}`);
+  const data = await res.json();
+
+  const lastEkg = new Date(data.last_ekg_date);
+  const hasCondition = data.has_heart_condition == 1; // строго сравнение с числом
+  const today = new Date();
+
+  const diffMonths = (today.getFullYear() - lastEkg.getFullYear()) * 12 + (today.getMonth() - lastEkg.getMonth());
+
+  document.getElementById('lastEkgDate').textContent = lastEkg.toLocaleDateString('ru-RU');
+  document.getElementById('ekgElapsed').textContent = `${diffMonths} мес.`;
+
+  const spanRec = document.getElementById('ekgRecommendation');
+  spanRec.className = 'health-recommendation'; // сброс классов
+
+  const maxMonths = hasCondition ? 6 : 12;
+
+  if (diffMonths >= maxMonths) {
+    spanRec.textContent = 'Вам нужно провериться — обследование просрочено';
+    spanRec.classList.add('danger');
+  } else if (diffMonths >= maxMonths - 2) {
+    spanRec.textContent = 'Пора записаться на плановую проверку';
+    spanRec.classList.add('warning');
+  } else {
+    spanRec.textContent = 'Всё в порядке';
+    spanRec.classList.add('ok');
+  }
+}
+
+document.getElementById('healthForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const form = e.target;
+  const data = {
+    player_id: PLAYER_ID,
+    last_ekg_date: form.last_ekg_date.value,
+    has_heart_condition: form.has_heart_condition.checked ? 1 : 0
+  };
+
+  const res = await fetch('/api/set_health.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  });
+
+  const result = await res.json();
+  if (result.success) {
+    alert('Информация обновлена');
+    document.getElementById('editHealthModal').style.display = 'none';
+    loadHealth();
+  } else {
+    alert('Ошибка: ' + (result.message || 'неизвестно'));
+  }
+});
+</script>
+
 <div id="changePasswordModal" class="user_password-modal">
   <div class="modal-content">
     <h3>Смена пароля</h3>
@@ -595,6 +718,61 @@ document.addEventListener("DOMContentLoaded", () => {
     </form>
   </div>
 </div>
+
+<div id="editHealthModal" class="user_password-modal">
+  <div class="modal-content">
+    <h3>Обновить данные ЭКГ</h3>
+    <form id="healthForm">
+      <label>Дата последнего ЭКГ:</label>
+      <input type="date" name="last_ekg_date" required>
+
+     <div class="checkbox-wrapper">
+  <label>
+    <input type="checkbox" name="has_heart_condition">
+    У меня есть сердечно-сосудистые заболевания
+  </label>
+</div>
+
+      <div class="modal-buttons">
+        <button type="submit">Сохранить</button>
+        <button type="button" onclick="document.getElementById('editHealthModal').style.display='none'">Отмена</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('healthForm');
+  if (!form) return;
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault(); // 🛑 предотвращает стандартную отправку
+
+    const data = {
+      player_id: PLAYER_ID,
+      last_ekg_date: form.last_ekg_date.value,
+      has_heart_condition: form.has_heart_condition.checked ? 1 : 0
+    };
+
+    const res = await fetch('/api/set_health.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+
+    const result = await res.json();
+    if (result.success) {
+      alert('Информация обновлена');
+      document.getElementById('editHealthModal').style.display = 'none';
+      loadHealth();
+    } else {
+      alert('Ошибка: ' + (result.message || 'неизвестно'));
+    }
+  });
+});
+</script>
+
 
 </body>
 </html>

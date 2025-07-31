@@ -309,9 +309,12 @@
                 .wrapper_awards {
                     justify-content: center;
                     display: flex;
-                    margin-left: 20%;
-                    margin-right: 20%;
+                    gap: 20px;
                     padding-bottom: 60px;
+                    flex-wrap: wrap;
+                    width: 100%;
+                    max-width: 1200px;
+                    margin: 0 auto; // Центрируем без процентов
 
                     .block_awards {
                         width: 20%;
@@ -325,6 +328,8 @@
                         font-family: PLAY-BOLD;
                         color: $light;
                         text-align: center;
+                        flex: 1 1 150px; // адаптивная ширина
+                        max-width: 200px;
 
                         .text {
                             font-family: PLAY-REGULAR;

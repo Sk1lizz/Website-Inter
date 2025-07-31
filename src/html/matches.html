@@ -298,8 +298,8 @@
           <td class="number">${p.number ?? ''}</td>
           <td class="name">${p.name}</td>
           <td class="icon">${p.goals > 0 ? `<img src="/img/icon/goal.svg" alt="G" title="Гол" />×${p.goals}` : ''}</td>
-          <td class="icon">${p.assists > 0 ? `<img src="/img/icon/form.svg" alt="A" title="Ассист" />×${p.assists}` : ''}</td>
-          <td class="icon">${p.goals_conceded > 0 ? p.goals_conceded : ''}</td>
+          <td class="icon">${p.assists > 0 ? `<img src="/img/icon/assist.svg" alt="A" title="Ассист" />×${p.assists}` : ''}</td>
+          <td class="icon">${p.goals_conceded > 0 ? `<img src="/img/icon/form.svg" alt="A" title="Пропущены" />×${p.goals_conceded}` : ''}</td>
         </tr>
       `).join('')}
     </tbody>

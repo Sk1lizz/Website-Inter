@@ -490,6 +490,34 @@
     margin: 0 auto;
     /* <-- это важно для безопасного центрирования */
 
+    input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        margin-right: 8px;
+        accent-color: $gold;
+        cursor: pointer;
+        appearance: auto;
+        /* гарантирует отображение системной галочки */
+    }
+
+    /* Контейнер для текста и чекбокса */
+    .checkbox-wrapper {
+        display: flex;
+        align-items: center;
+        margin-top: 8px;
+        margin-bottom: 16px;
+        color: $light;
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    .checkbox-wrapper label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+    }
+
     h3 {
         margin-top: 0;
         margin-bottom: 20px;
@@ -549,6 +577,15 @@
             }
         }
     }
+
+
+}
+
+td.match-icon img {
+    width: 18px;
+    height: 18px;
+    vertical-align: middle;
+    margin-right: 4px;
 }
 
 #openVacationModal {
@@ -556,7 +593,7 @@
     padding: 10px 18px;
     border-radius: 20px;
     border: 1px solid $gold;
-    background: #1c3d7d;
+    background: $dark_light;
     color: $light;
     font-family: 'Play', sans-serif;
     transition: all 0.3s ease;
@@ -640,7 +677,7 @@
     padding: 10px 18px;
     border-radius: 20px;
     border: 1px solid #FDC500;
-    background: #1c3d7d;
+    background: $dark_light;
     color: #f3f6fb;
     font-family: 'Play', sans-serif;
     transition: all 0.3s ease;
@@ -648,7 +685,7 @@
 }
 
 #changeWeightButton:hover {
-    background: #00296B;
+    background: $dark_light;
     color: #FDC500;
     border-color: #f3f6fb;
 }
@@ -682,7 +719,7 @@
     padding: 10px 18px;
     border-radius: 20px;
     border: 1px solid #FDC500;
-    background: #1c3d7d;
+    background: $dark_light;
     color: #f3f6fb;
     font-family: 'Play', sans-serif;
     transition: all 0.3s ease;
@@ -693,4 +730,24 @@
     background: #00296B;
     color: #FDC500;
     border-color: #f3f6fb;
+}
+
+#editHealthButton {
+    font-size: 14px;
+    padding: 10px 18px;
+    border-radius: 20px;
+    border: 1px solid $gold;
+    background: $dark_light;
+    color: $light;
+    font-family: 'Play', sans-serif;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    display: inline-block;
+    margin-top: 10px;
+}
+
+#editHealthButton:hover {
+    background: $dark_medium;
+    color: $gold;
+    border-color: $light;
 }

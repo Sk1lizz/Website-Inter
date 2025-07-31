@@ -48,7 +48,22 @@ if ($existingId) {
 // === 3. Обрабатываем игроков ===
 foreach ($playerIds as $playerId) {
     $playerId = (int)$playerId;
-    $status = isset($statuses[$playerId]) ? (int)$statuses[$playerId] : 0;
+
+    // Преобразуем дату в формат YYYYMM
+    $monthKey = (int)date("Ym", strtotime($trainingDate));
+
+    // Если статус явно передан — используем его
+    if (isset($statuses[$playerId])) {
+        $status = (int)$statuses[$playerId];
+    } else {
+        // Если статус не передан — проверим, был ли отпуск
+        $holidayCheck = $db->prepare("SELECT 1 FROM player_holidays WHERE player_id = ? AND month = ?");
+        $holidayCheck->bind_param("ii", $playerId, $monthKey);
+        $holidayCheck->execute();
+        $holidayCheck->store_result();
+        $status = $holidayCheck->num_rows > 0 ? 2 : 0; // 2 — отпуск, иначе 0
+        $holidayCheck->close();
+    }
 
     // Добавляем запись о посещении
     $att = $db->prepare("INSERT INTO training_attendance (training_id, player_id, status) VALUES (?, ?, ?)");
