@@ -118,6 +118,7 @@ endif;
   <meta charset="UTF-8">
   <title>Админка - FC Inter Moscow</title>
   <link rel="stylesheet" href="/css/main.css"/>
+   <link rel="icon" href="/img/yelowaicon.png" type="image/x-icon">
 </head>
 <body>
   <div class="admin-panel">
@@ -169,6 +170,9 @@ endif;
     <button type="submit">Заявка</button>
 </form>
 
+<form action="editormatches.php" method="get" style="display: inline-block; margin-top: 20px;">
+    <button type="submit">Матчи</button>
+</form>
 
 
 

@@ -221,6 +221,7 @@ $canChangeBackground = (int)$bg['can_change_background'];
   <button type="button" onclick="document.getElementById('user_bg-modal_background').style.display='flex'">Сменить фон</button>
 <?php endif; ?>
 <button type="button" onclick="window.location.href='https://vk.com/doc-76009640_688177966?hash=maRXB3qNFqzzzsM0TMOJlYGHVEDhQ3csNNTKibnl5Eg&dl=sXOp85lfDplpUbrVfKKhzRNZIdoSZ3Vox00ksRmmnwk'">Новичку</button>
+<button type="button" onclick="window.location.href='https://disk.yandex.ru/i/FUx5Aw-fO06Tvg'">Договор</button>
       <button type="button" onclick="document.getElementById('changePasswordModal').style.display='block'">Сменить пароль</button>
       <form method="POST" style="margin: 0;"><button type="submit" name="logout">Выйти</button></form>
     </div>
@@ -319,7 +320,7 @@ $canChangeBackground = (int)$bg['can_change_background'];
   <h2>Матчи за месяц</h2>
   <table class="attendance-table" id="matchStatsTable">
     <thead>
-      <tr><th>Дата</th><th>Играл</th><th>Г</th><th>А</th><th>ПМ</th></tr>
+      <tr><th>Дата</th><th>Играл</th><th>Г</th><th>А</th><th>ПМ</th><th>Рейтинг</th><th>Оценка</th></tr>
     </thead>
     <tbody></tbody>
   </table>
@@ -574,25 +575,74 @@ document.addEventListener("DOMContentLoaded", () => {
 }
 
 function renderMatchStats(data) {
-    const tbody = document.querySelector('#matchStatsTable tbody');
-    tbody.innerHTML = '';
+  const tbody = document.querySelector('#matchStatsTable tbody');
+  tbody.innerHTML = '';
 
-    let playedCount = 0;
-    for (const match of data) {
-        if (match.played) playedCount++;
+  const now = new Date();
+  const thisMonth = now.getMonth(); // август = 7
+  const thisYear = now.getFullYear(); // 2025
 
-        tbody.innerHTML += `
+  // Матчи текущего месяца
+  const currentMonthMatches = data.filter(match => {
+    const date = new Date(match.date);
+    return date.getFullYear() === thisYear && date.getMonth() === thisMonth;
+  });
+
+  // Последний день предыдущего месяца
+const lastDayPrevMonth = new Date(thisYear, thisMonth, 0);
+const lastSaturday = new Date(lastDayPrevMonth.getTime());
+while (lastSaturday.getDay() !== 6) {
+  lastSaturday.setDate(lastSaturday.getDate() - 1);
+}
+let lastSaturdayStr = lastSaturday.toISOString().slice(0, 10);
+
+console.log('lastSaturday:', lastSaturday.toDateString());      // должно быть: Sat Jul 26 2025
+console.log('lastSaturdayStr:', lastSaturdayStr);               // должно быть: 2025-07-26
+
+  // Находим матч, состоявшийся в эту дату или позже (в прошлом месяце)
+  let lastPrevMonthMatch = null;
+  for (let i = data.length - 1; i >= 0; i--) {
+    const match = data[i];
+    const dateStr = match.date.slice(0, 10); // в формате YYYY-MM-DD
+    const matchDate = new Date(dateStr);
+
+    console.log('Проверка матча:', match.date.slice(0, 10), '>=', lastSaturdayStr, '?');
+    if (match.date.slice(0, 10) >= lastSaturdayStr && match.date.slice(0, 7) < now.toISOString().slice(0, 7)) {
+  lastPrevMonthMatch = match;
+  break;
+}
+  }
+
+  const finalMatches = lastPrevMonthMatch
+    ? [lastPrevMonthMatch, ...currentMonthMatches]
+    : currentMonthMatches;
+
+  let playedCount = 0;
+  for (const match of finalMatches) {
+    if (match.played) playedCount++;
+
+   tbody.innerHTML += `
   <tr>
     <td>${new Date(match.date).toLocaleDateString('ru-RU')}</td>
     <td>${match.played ? 'Да' : 'Нет'}</td>
     <td class="match-icon">${match.goals > 0 ? `<img src="/img/icon/goal.svg" title="Гол">×${match.goals}` : ''}</td>
     <td class="match-icon">${match.assists > 0 ? `<img src="/img/icon/assist.svg" title="Ассист">×${match.assists}` : ''}</td>
     <td class="match-icon">${match.goals_conceded > 0 ? `<img src="/img/icon/form.svg" title="Пропущено">×${match.goals_conceded}` : ''}</td>
+    <td>${match.average_rating !== null ? match.average_rating.toFixed(1) : '-'}</td>
+    <td>
+  ${match.played && match.can_rate 
+    ? `<button class="match-rate-btn" data-match-id="${match.id}" onclick="openRatingModal(${match.id})">Оценка</button>` 
+    : ''}
+</td>
   </tr>`;
-    }
+  }
+  
 
-    const percent = data.length ? Math.round((playedCount / data.length) * 100) : 0;
-    document.getElementById('matchParticipation').textContent = `${percent}%`;
+  const percent = finalMatches.length
+    ? Math.round((playedCount / finalMatches.length) * 100)
+    : 0;
+
+  document.getElementById('matchParticipation').textContent = `${percent}%`;
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -657,6 +707,78 @@ document.getElementById('healthForm').addEventListener('submit', async (e) => {
     alert('Ошибка: ' + (result.message || 'неизвестно'));
   }
 });
+</script>
+
+<script>
+  async function openRatingModal(matchId) {
+  const res = await fetch(`/api/get_match_players.php?match_id=${matchId}`);
+  const players = await res.json();
+
+  const list = document.getElementById('playerRatingList');
+  list.innerHTML = '';
+
+  players.forEach(player => {
+  if (player.id === PLAYER_ID) return;
+  if (player.position === 'Тренер') return;
+
+  const wrapper = document.createElement('div');
+  wrapper.classList.add('player-rating-item');
+  wrapper.innerHTML = `
+    <label>${player.name}:</label>
+    <input type="range" min="3.0" max="10.0" step="0.1" value="7.0" 
+           name="rating_${player.id}" oninput="this.nextElementSibling.textContent = this.value">
+    <span class="rating-value">7.0</span>
+  `;
+  list.appendChild(wrapper);
+});
+
+  document.getElementById('rateMatchModal').style.display = 'flex';
+
+  // Подготовка формы
+  const form = document.getElementById('ratingForm');
+  form.onsubmit = async (e) => {
+    e.preventDefault();
+
+    const data = {
+      match_id: matchId,
+      ratings: []
+    };
+
+    players.forEach(player => {
+      const input = form.querySelector(`[name="rating_${player.id}"]`);
+      if (input && player.id !== PLAYER_ID && player.position !== 'Тренер') {
+        data.ratings.push({
+          target_player_id: player.id,
+          rating: parseFloat(input.value)
+        });
+      }
+    });
+
+    const saveRes = await fetch('/api/save_ratings.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+
+    const result = await saveRes.json();
+
+if (result.success) {
+  alert('Оценки сохранены!');
+  document.getElementById('rateMatchModal').style.display = 'none';
+
+  // Делаем кнопку неактивной после голосования
+  const rateBtn = document.querySelector(`.match-rate-btn[data-match-id="${matchId}"]`);
+  if (rateBtn) {
+    rateBtn.disabled = true;
+    rateBtn.textContent = 'Оценено';
+    rateBtn.classList.add('disabled-rating-btn');
+  }
+} else {
+  alert('Ошибка сохранения');
+}
+  };
+}
+
 </script>
 
 <div id="changePasswordModal" class="user_password-modal">
@@ -736,6 +858,19 @@ document.getElementById('healthForm').addEventListener('submit', async (e) => {
       <div class="modal-buttons">
         <button type="submit">Сохранить</button>
         <button type="button" onclick="document.getElementById('editHealthModal').style.display='none'">Отмена</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div id="rateMatchModal" class="user_password-modal">
+  <div class="modal-content" id="rateMatchModalContent">
+    <h3>Оцените игроков</h3>
+    <form id="ratingForm">
+      <div id="playerRatingList"></div>
+      <div class="modal-buttons">
+        <button type="submit" style="font-size: 14px; padding: 8px;">Сохранить</button>
+        <button type="button" onclick="document.getElementById('rateMatchModal').style.display='none'" style="font-size: 14px; padding: 8px;">Отмена</button>
       </div>
     </form>
   </div>
