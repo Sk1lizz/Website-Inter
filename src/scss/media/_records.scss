@@ -423,6 +423,18 @@
             }
         }
 
+        .container-statistic--club100 {
+            .blocks_matches {
+                height: auto;
+            }
+        }
+
+        .container-statistic--club100 .blocks_matches .block {
+            flex: 0 1 calc(33.333% - 20px);
+            max-width: calc(33.333% - 20px);
+            height: auto;
+        }
+
         .blocks_goals {
             display: flex;
             height: 100%;
@@ -974,6 +986,17 @@
             }
         }
 
+        .container-statistic--club100 {
+            .blocks_matches {
+                height: auto;
+            }
+        }
+
+        .container-statistic--club100 .blocks_matches .block {
+            flex: 0 1 calc(50% - 20px);
+            max-width: calc(50% - 20px);
+        }
+
         .blocks_goals {
             display: flex;
             height: 100%;
@@ -1512,6 +1535,59 @@
                     }
                 }
             }
+        }
+
+        .container-statistic--club100 {
+            .blocks_matches {
+                flex-wrap: nowrap;
+                justify-content: start;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                padding-bottom: 10px;
+                padding-left: 10px;
+                scroll-padding-left: 10px; // важно для scroll snap
+                scroll-snap-type: x mandatory;
+
+                // Скрываем скроллбар во всех браузерах
+                scrollbar-width: none;
+                /* Firefox */
+                -ms-overflow-style: none;
+                /* IE и Edge */
+                margin-bottom: 0px;
+                padding-bottom: 0px;
+
+                .block:first-child {
+                    margin-left: 0;
+                }
+
+
+                ::-webkit-scrollbar {
+                    display: none;
+                    /* Chrome, Safari и Opera */
+                }
+
+                .block {
+                    flex: 0 0 auto !important;
+                    width: 45% !important;
+                    max-width: none !important;
+                    min-width: 45% !important;
+                    height: auto;
+                    margin-right: 10px;
+                    scroll-snap-align: start;
+
+                    .text {
+                        text-align: center;
+                        justify-content: center;
+                    }
+                }
+
+            }
+        }
+
+        .container-statistic--club100 .blocks_matches .block {
+            flex: 0 1 100%;
+            max-width: 100%;
+            height: auto;
         }
 
         .blocks_goals {
