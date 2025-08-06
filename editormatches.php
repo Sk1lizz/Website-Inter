@@ -208,22 +208,27 @@ async function openModal(match) {
   document.getElementById('match_date').value = match.date;
   document.getElementById('match_result').value = match.match_result;
 
-  const res = await fetch(`/api/get_match_players.php?match_id=${match.id}`);
+ const res = await fetch(`/api/get_match_players_with_ratings.php?match_id=${match.id}`);
   const players = await res.json();
 
   const container = document.getElementById('playersList');
   container.innerHTML = '';
   players.forEach(p => {
-    const div = document.createElement('div');
-    div.innerHTML = `
-      <label><input type="checkbox" class="player-checkbox" value="${p.id}" checked> ${p.name}</label><br>
-      Голы: <input type="number" class="goals-input" data-player="${p.id}" value="${p.goals || 0}">
-      Ассисты: <input type="number" class="assists-input" data-player="${p.id}" value="${p.assists || 0}">
-      Пропущено: <input type="number" class="conceded-input" data-player="${p.id}" value="${p.goals_conceded || 0}">
-      <hr>
-    `;
-    container.appendChild(div);
-  });
+  const div = document.createElement('div');
+  const formattedRating = (!isNaN(p.rating) && p.rating !== null)
+    ? parseFloat(p.rating).toFixed(2)
+    : '-';
+
+  div.innerHTML = `
+    <label><input type="checkbox" class="player-checkbox" value="${p.id}" checked> ${p.name}</label><br>
+    Голы: <input type="number" class="goals-input" data-player="${p.id}" value="${p.goals || 0}">
+    Ассисты: <input type="number" class="assists-input" data-player="${p.id}" value="${p.assists || 0}">
+    Пропущено: <input type="number" class="conceded-input" data-player="${p.id}" value="${p.goals_conceded || 0}">
+    Рейтинг: <span style="color: var(--gold); font-weight: bold">${formattedRating}</span>
+    <hr>
+  `;
+  container.appendChild(div);
+});
 }
 
 async function loadMatches(teamId, year) {

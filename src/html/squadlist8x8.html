@@ -63,7 +63,7 @@
 
     <label>Дата: <input type="text" id="dateText" placeholder="27.01.2024"></label>
     <label>Чемпионат: <input type="text" id="tournamentText" placeholder="MFL-2"></label>
-    <label>Тур: <input type="text" id="roundText" placeholder="8"></label>
+    <label>Тур: <input type="text" id="roundText" placeholder="1/2 финала, тур 8, матч за бронзу и т.п."></label>
     <label>Стадион: <input type="text" id="stadiumText" placeholder="Kosino Stadium"></label>
 
     <div id="playersContainer"></div>
@@ -95,29 +95,26 @@
             const round = document.getElementById('roundText').value;
             const stadium = document.getElementById('stadiumText').value;
 
-            // Верх
+            // Заголовок (дата, турнир, тур)
             ctx.save();
             ctx.translate(410, 125);
             ctx.rotate(-0.15);
             ctx.font = 'bold 20px "Montserrat"';
             ctx.fillStyle = 'black';
             ctx.textAlign = 'center';
-            ctx.fillText(date, 0, 0);
-            ctx.fillText(tournament, 0, 25);
-            if (round) {
-                ctx.fillText(`${round} ROUND`, 0, 50);
-            }
+            if (date) ctx.fillText(date, 0, 0);
+            if (tournament) ctx.fillText(tournament, 0, 25);
+            if (round) ctx.fillText(round, 0, 50); // Просто выводим то, что введено
             ctx.restore();
 
             // Игроки
             ctx.save();
-            ctx.translate(250, 300); // Стартовая точка списка
-            ctx.rotate(-0.15);       // Поворот всего блока
+            ctx.translate(250, 300);
+            ctx.rotate(-0.15);
 
             ctx.textAlign = 'left';
             const lineHeight = 24;
-
-            const rows = playersContainer.querySelectorAll('.playerRow'); // <== ВОТ ЭТОГО НЕ ХВАТАЛО!
+            const rows = playersContainer.querySelectorAll('.playerRow');
 
             rows.forEach((row, index) => {
                 const inputs = row.querySelectorAll('input');
@@ -126,12 +123,8 @@
 
                 if (number && name) {
                     const y = index * lineHeight;
-
-                    // Номер — жирный
                     ctx.font = 'bold 20px "Montserrat"';
                     ctx.fillText(number, 0, y);
-
-                    // Имя — обычный
                     ctx.font = '20px "Montserrat"';
                     ctx.fillText(name.toUpperCase(), 40, y);
                 }
@@ -153,21 +146,16 @@
             const div = document.createElement('div');
             div.className = 'playerRow';
             div.innerHTML = `
-                <input type="text" placeholder="№" value="${number}">
-                <input type="text" placeholder="Фамилия" value="${name}">
-            `;
+        <input type="text" placeholder="№" value="${number}">
+        <input type="text" placeholder="Фамилия" value="${name}">
+      `;
             playersContainer.appendChild(div);
-
-            div.querySelectorAll('input').forEach(input => {
-                input.addEventListener('input', draw);
-            });
+            div.querySelectorAll('input').forEach(input => input.addEventListener('input', draw));
         };
 
         for (let i = 0; i < 8; i++) addPlayerRow();
 
-        addPlayerBtn.addEventListener('click', () => {
-            addPlayerRow();
-        });
+        addPlayerBtn.addEventListener('click', () => addPlayerRow());
 
         document.querySelectorAll('#dateText, #tournamentText, #roundText, #stadiumText')
             .forEach(el => el.addEventListener('input', draw));

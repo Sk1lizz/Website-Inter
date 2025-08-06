@@ -45,19 +45,14 @@ function formatRussianDay($date) {
     return $date->format('d.m.Y') . ' (' . ($days[$dayEn] ?? $dayEn) . ')';
 }
 
-function getMonthlyFines($db, $playerId) {
-    $year = date('Y');
-    $month = date('m');
-
+function getAllFines($db, $playerId) {
     $stmt = $db->prepare("
         SELECT reason, amount, date 
         FROM fines 
-        WHERE player_id = ? 
-        AND YEAR(date) = ? 
-        AND MONTH(date) = ?
+        WHERE player_id = ?
         ORDER BY date DESC
     ");
-    $stmt->bind_param("iss", $playerId, $year, $month);
+    $stmt->bind_param("i", $playerId);
     $stmt->execute();
     return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 }
@@ -151,7 +146,7 @@ if (isset($_POST['logout'])) {
 // === Данные ===
 $amount = getPaymentAmount($db, $_SESSION['player_id']);
 $deadline = getPaymentDeadline($_SESSION['team_id']);
-$fines = getMonthlyFines($db, $_SESSION['player_id']);
+$fines = getAllFines($db, $_SESSION['player_id']);
 $fineTotal = getTotalFineAmount($fines);
 $includeFines = $fineTotal >= 299;
 $totalToPay = $amount + ($includeFines ? $fineTotal : 0);
@@ -242,7 +237,7 @@ $canChangeBackground = (int)$bg['can_change_background'];
           <p><strong>Реквизиты 8х8: 5536 9137 8962 1493</strong></p>
       </div>
       <div class="card">
-        <h2>Штрафы в этом месяце</h2>
+        <h2>Все штрафы</h2>
         <?php if (count($fines) === 0): ?><p>Так держать — штрафов нет!</p>
         <?php else: ?>
           <table class="attendance-table"><thead><tr><th>Дата</th><th>Причина</th><th>Сумма</th></tr></thead><tbody>
