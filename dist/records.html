@@ -11,7 +11,6 @@
     <link rel="apple-touch-icon" href="/img/apple-touch-icon.png" sizes="180x180">
     <link rel="icon" sizes="192x192" href="/img/android-chrome-192x192.png">
     <link rel="icon" sizes="512x512" href="/img/android-chrome-512x512.png">
-    <link rel="manifest" href="/site.webmanifest">
 
 </head>
 
@@ -86,31 +85,31 @@
 
     <div class="wrapper_records">
         <div class="container-statistic">
-            <div class="title-statistic">FC Inter Moscow 2013-2023</div>
+            <div class="title-statistic">FC Inter Moscow за все время</div>
             <div class="blocks_matches">
                 <div class="block">
                     <div class="title_block_matches">Матчей</div>
-                    <div class="value">902</div>
+                    <div class="value" id="total-matches">–</div>
                 </div>
                 <div class="block">
                     <div class="title_block_wins">Победы</div>
-                    <div class="value2">383</div>
+                    <div class="value2" id="total-wins">–</div>
                 </div>
                 <div class="block">
                     <div class="title_block_draw">Ничьи</div>
-                    <div class="value3">95</div>
+                    <div class="value3" id="total-draws">–</div>
                 </div>
                 <div class="block">
                     <div class="title_block_lose">Поражения</div>
-                    <div class="value4">429</div>
+                    <div class="value4" id="total-losses">–</div>
                 </div>
-                <div class="big_block">
+                <div class="big_block" id="big-results">
                     <div class="title_block_big_block">Самая крупная победа:</div>
-                    <div class="text">Академия ОФ U-14 (0:21) Primavera U-14 (2014)</div>
+                    <div class="text" id="biggest-win">–</div>
                     <div class="title_block_big_block">Самое крупное поражение:</div>
-                    <div class="text">Белая Гвардия (18-4) FC Inter Moscow (2014)</div>
-                    <div class="text">Primavera U-16 (3:17) Wolwes (2014)</div>
-                    <div class="text">FC Inter Moscow-2 (1:15) МА Р.И.Т.М. (2015) </div>
+                    <div class="text" id="biggest-loss-1">–</div>
+                    <div class="text" id="biggest-loss-2">–</div>
+                    <div class="text" id="biggest-loss-3">–</div>
                 </div>
             </div>
 
@@ -121,7 +120,7 @@
                         <div class="img">
                             <img src="../img/icon/goal.svg" alt="">
                         </div>
-                        <div class="value">3279</div>
+                        <div class="value" id="total-goals-scored">–</div>
                     </div>
                 </div>
                 <div class="block">
@@ -130,7 +129,7 @@
                         <div class="img">
                             <img src="../img/icon/goal_lose.svg" alt="">
                         </div>
-                        <div class="value2">3223</div>
+                        <div class="value2" id="total-goals-conceded">–</div>
                     </div>
                 </div>
                 <div class="block">
@@ -139,7 +138,7 @@
                         <div class="img">
                             <img src="../img/icon/wins_seria.svg" alt="">
                         </div>
-                        <div class="value3">+56</div>
+                        <div class="value3" id="total-goal-diff">–</div>
                     </div>
                 </div>
             </div>
@@ -149,26 +148,25 @@
                 <div class="blocks_matches">
                     <div class="block">
                         <div class="title_block_matches">Матчей</div>
-                        <div class="value">834</div>
+                        <div class="value" id="clean-matches">–</div>
                     </div>
                     <div class="block">
                         <div class="title_block_wins">Победы</div>
-                        <div class="value2">347</div>
+                        <div class="value2" id="clean-wins">–</div>
                     </div>
                     <div class="block">
                         <div class="title_block_draw">Ничьи</div>
-                        <div class="value3">91</div>
+                        <div class="value3" id="clean-draws">–</div>
                     </div>
                     <div class="block">
                         <div class="title_block_lose">Поражения</div>
-                        <div class="value4">401</div>
+                        <div class="value4" id="clean-losses">–</div>
                     </div>
-                    <div class="big_block">
+                    <div class="big_block" id="streaks">
                         <div class="title_block_big_block">Самая длинная серия побед:</div>
-                        <div class="text">8 матчей FC Inter Moscow U18 (2022)</div>
+                        <div class="text" id="longest-win-streak">–</div>
                         <div class="title_block_big_block">Самая длинная серия поражений:</div>
-                        <div class="text">7 матчей FC Inter Moscow (2015)</div>
-                        <div class="text">7 матчей FC Inter Moscow 98-00 (2015)</div>
+                        <div class="text" id="longest-loss-streak">–</div>
                     </div>
                 </div>
             </div>
@@ -180,7 +178,7 @@
                         <div class="img">
                             <img src="../img/icon/goal.svg" alt="">
                         </div>
-                        <div class="value">2778</div>
+                        <div class="value" id="clean-goals-scored">–</div>
                     </div>
                 </div>
                 <div class="block">
@@ -189,7 +187,7 @@
                         <div class="img">
                             <img src="../img/icon/goal_lose.svg" alt="">
                         </div>
-                        <div class="value2">2816</div>
+                        <div class="value2" id="clean-goals-conceded">–</div>
                     </div>
                 </div>
                 <div class="block">
@@ -198,7 +196,7 @@
                         <div class="img">
                             <img src="../img/icon/wins_seria.svg" alt="">
                         </div>
-                        <div class="value3">-38</div>
+                        <div class="value3" id="clean-goal-diff">–</div>
                     </div>
                 </div>
             </div>
@@ -207,28 +205,28 @@
                 <div class="blocks_matches">
                     <div class="block_2">
                         <div class="title_block_matches">Наибольшее количество матчей за полный год</div>
-                        <div class="value">71</div>
-                        <div class="text">FC Inter Moscow 8x8 (2017)</div>
+                        <div class="value" id="max-matches-count">–</div>
+                        <div class="text" id="max-matches-team">–</div>
                     </div>
                     <div class="block_2">
                         <div class="title_block_matches">Наибольшее количество побед за полный год</div>
-                        <div class="value">35</div>
-                        <div class="text">FC Inter Moscow 8x8 (2017)</div>
+                        <div class="value" id="max-wins-count">–</div>
+                        <div class="text" id="max-wins-team">–</div>
                     </div>
                     <div class="block_2">
                         <div class="title_block_matches">Наименьшее количество поражений за полный год</div>
-                        <div class="value">12</div>
-                        <div class="text">FC Inter Moscow 8x8 (2020)</div>
+                        <div class="value" id="min-losses-count">–</div>
+                        <div class="text" id="min-losses-team">–</div>
                     </div>
                     <div class="block_2">
                         <div class="title_block_matches">Наибольшее количество забитых голов за полный год</div>
-                        <div class="value">237</div>
-                        <div class="text">FC Inter Moscow 8x8 (2021)</div>
+                        <div class="value" id="max-goals-count">–</div>
+                        <div class="text" id="max-goals-team">–</div>
                     </div>
                     <div class="block_2">
                         <div class="title_block_matches">Наименьшее количество пропущенных за полный год</div>
-                        <div class="value">94</div>
-                        <div class="text">FC Inter Moscow U18 (2020)</div>
+                        <div class="value" id="min-conceded-count">–</div>
+                        <div class="text" id="min-conceded-team">–</div>
                     </div>
                 </div>
             </div>
@@ -237,28 +235,28 @@
                 <div class="blocks_matches">
                     <div class="block_3">
                         <div class="title_block_matches">Наименьшее количество матчей за полный год</div>
-                        <div class="value">28</div>
-                        <div class="text">FC Inter Moscow U18 (2020)</div>
+                        <div class="value" id="min-matches-count">–</div>
+                        <div class="text" id="min-matches-team">–</div>
                     </div>
                     <div class="block_3">
                         <div class="title_block_matches">Наименьшее количество побед за полный год</div>
-                        <div class="value">7</div>
-                        <div class="text">FC Inter Moscow U18 (2020)</div>
+                        <div class="value" id="min-wins-count">–</div>
+                        <div class="text" id="min-wins-team">–</div>
                     </div>
                     <div class="block_3">
                         <div class="title_block_matches">Наибольшее количество поражений за полный год</div>
-                        <div class="value">41</div>
-                        <div class="text">FC Inter Moscow 8x8 (2014)</div>
+                        <div class="value" id="max-losses-count">–</div>
+                        <div class="text" id="max-losses-team">–</div>
                     </div>
                     <div class="block_3">
                         <div class="title_block_matches">Наименьшее количество забитых голов за полный год</div>
-                        <div class="value">68</div>
-                        <div class="text">FC Inter Moscow U18 (2020)</div>
+                        <div class="value" id="min-goals-count">–</div>
+                        <div class="text" id="min-goals-team">–</div>
                     </div>
                     <div class="block_3">
                         <div class="title_block_matches">Наибольшее количество пропущенных за полный год</div>
-                        <div class="value">269</div>
-                        <div class="text">FC Inter Moscow (2014)</div>
+                        <div class="value" id="max-conceded-count">–</div>
+                        <div class="text" id="max-conceded-team">–</div>
                     </div>
                 </div>
             </div>
@@ -424,19 +422,21 @@
                 async function loadTopPlayersByMatches() {
                     const players = await safeFetch('/api/get_players_records.php?type=matches');
                     const top = players.slice(0, 5);
+                    const container = document.getElementById('top-matches');
+                    if (!container) return;
 
                     const blocks = top.map(p => `
-                        <div class="block_5">
-                            <div class="title_block_matches">Матчей за все время</div>
-                            <div class="value">${p.matches}</div>
-                            <div class="text">${p.name}</div>
-                        </div>
-                    `).join('');
+                    <div class="block_5">
+                        <div class="title_block_matches">Матчей за все время</div>
+                        <div class="value">${p.matches}</div>
+                        <div class="text">${p.name}</div>
+                    </div>
+                `).join('');
 
-                    document.getElementById('top-matches').innerHTML = `
-                        <div class="title">Количество проведенных матчей</div>
-                        <div class="blocks_matches">${blocks}</div>
-                    `;
+                    container.innerHTML = `
+                    <div class="title">Количество проведенных матчей</div>
+                    <div class="blocks_matches">${blocks}</div>
+                `;
                 }
 
                 async function loadClub100(type, containerId, label, extraField = '') {
@@ -444,26 +444,129 @@
                     if (!Array.isArray(players)) return;
 
                     const blocks = players.map(p => `
-                        <div class="block">
-                            <div class="title_block_matches">${label}</div>
-                            <div class="value">${p[type]}</div>
-                            <div class="text">${p.name}${extraField ? `<br>(${p[extraField]} ${extraField})` : ''}</div>
-                        </div>
-                    `).join('');
+                    <div class="block">
+                        <div class="title_block_matches">${label}</div>
+                        <div class="value">${p[type]}</div>
+                        <div class="text">${p.name}${extraField ? `<br>(${p[extraField]} ${extraField})` : ''}</div>
+                    </div>
+                `).join('');
 
                     document.getElementById(containerId).innerHTML = `
-                        <div class="blocks_matches">${blocks}</div>
-                    `;
+                    <div class="blocks_matches">${blocks}</div>
+                `;
                 }
 
-                // Загрузка данных
-                loadTopPlayersByMatches();
-                loadClub100('matches', 'club-100-matches', 'Матчей');
-                loadClub100('goals', 'club-100-goals', 'Голов');
-                loadClub100('assists', 'club-100-assists', 'Ассистов');
+                function formatDiff(diff) {
+                    return (diff > 0 ? '+' : '') + diff;
+                }
+
+                async function fetchOverallStats() {
+                    try {
+                        const res = await fetch('/api/get_statistics.php');
+                        if (!res.ok) throw new Error("Ошибка загрузки статистики");
+                        const data = await res.json();
+
+                        const total = data.all;
+                        const clean = data.without_mini;
+
+                        // Общая статистика
+                        document.getElementById('total-matches').textContent = total.total_matches;
+                        document.getElementById('total-wins').textContent = total.wins;
+                        document.getElementById('total-draws').textContent = total.draws;
+                        document.getElementById('total-losses').textContent = total.losses;
+                        document.getElementById('total-goals-scored').textContent = total.goals_scored;
+                        document.getElementById('total-goals-conceded').textContent = total.goals_conceded;
+                        document.getElementById('total-goal-diff').textContent = formatDiff(total.goal_difference);
+
+                        // Без мини-футбола
+                        document.getElementById('clean-matches').textContent = clean.total_matches;
+                        document.getElementById('clean-wins').textContent = clean.wins;
+                        document.getElementById('clean-draws').textContent = clean.draws;
+                        document.getElementById('clean-losses').textContent = clean.losses;
+                        document.getElementById('clean-goals-scored').textContent = clean.goals_scored;
+                        document.getElementById('clean-goals-conceded').textContent = clean.goals_conceded;
+                        document.getElementById('clean-goal-diff').textContent = formatDiff(clean.goal_difference);
+
+                    } catch (error) {
+                        console.error("Ошибка загрузки общей статистики:", error);
+                    }
+                }
+
+                async function fetchBigResults() {
+                    try {
+                        const res = await fetch('/api/get_big_results.php');
+                        if (!res.ok) throw new Error("Ошибка при получении крупных результатов");
+                        const data = await res.json();
+
+                        // Крупнейшая победа
+                        document.getElementById('biggest-win').textContent = data.biggest_win || '–';
+
+                        // Крупнейшие поражения
+                        (data.biggest_losses || []).forEach((loss, i) => {
+                            const el = document.getElementById(`biggest-loss-${i + 1}`);
+                            if (el) el.textContent = loss;
+                        });
+
+                        // ✅ Самая длинная серия побед/поражений
+                        const winStreak = data.streaks?.longest_win_streak;
+                        const lossStreak = data.streaks?.longest_loss_streak;
+
+                        if (winStreak) {
+                            const winEl = document.getElementById('longest-win-streak');
+                            if (winEl) winEl.textContent = `${winStreak.count} матчей ${winStreak.team} (${winStreak.year})`;
+                        }
+
+                        if (lossStreak) {
+                            const lossEl = document.getElementById('longest-loss-streak');
+                            if (lossEl) lossEl.textContent = `${lossStreak.count} матчей ${lossStreak.team} (${lossStreak.year})`;
+                        }
+
+                    } catch (err) {
+                        console.error("Ошибка загрузки больших результатов:", err);
+                    }
+                }
+
+                function setRecord(idPrefix, record, countKey) {
+                    if (!record) return;
+                    document.getElementById(`${idPrefix}-count`).textContent = record[countKey];
+                    document.getElementById(`${idPrefix}-team`).textContent = `${record.our_team} (${record.y})`;
+                }
+
+                async function fetchYearlyRecords() {
+                    try {
+                        const res = await fetch('/api/get_big_results.php');
+                        if (!res.ok) throw new Error("Ошибка при получении рекордов по годам");
+                        const data = await res.json();
+                        const records = data.year_records;
+
+                        setRecord("max-matches", records.max_matches, "matches");
+                        setRecord("max-wins", records.max_wins, "wins");
+                        setRecord("min-losses", records.min_losses, "losses");
+                        setRecord("max-goals", records.max_goals, "goals_scored");
+                        setRecord("min-conceded", records.min_conceded, "goals_conceded");
+
+                        setRecord("min-matches", records.min_matches, "matches");
+                        setRecord("min-wins", records.min_wins, "wins");
+                        setRecord("max-losses", records.max_losses, "losses");
+                        setRecord("min-goals", records.min_goals, "goals_scored");
+                        setRecord("max-conceded", records.max_conceded, "goals_conceded");
+
+                    } catch (err) {
+                        console.error("Ошибка загрузки рекордов по годам:", err);
+                    }
+                }
+
+                document.addEventListener("DOMContentLoaded", () => {
+                    fetchOverallStats();
+                    fetchBigResults();
+                    fetchYearlyRecords();
+
+                    loadTopPlayersByMatches();
+                    loadClub100('matches', 'club-100-matches', 'Матчей');
+                    loadClub100('goals', 'club-100-goals', 'Голов');
+                    loadClub100('assists', 'club-100-assists', 'Ассистов');
+                });
             </script>
-
-
 
 </body>
 
