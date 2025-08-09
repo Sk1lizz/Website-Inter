@@ -230,6 +230,16 @@ if (!isset($_SESSION['admin_logged_in'])):
 </div>
 <!-- .tenure-grid ЗАКРЫТА, дальше идут остальные секции -->
 
+<h3>Дни рождения в этом месяце</h3>
+<div class="table-wrap">
+  <table id="tbl-birthdays-month">
+    <thead><tr>
+      <th>Игрок</th><th>Команда</th><th>Дата</th><th>Исполняется</th>
+    </tr></thead>
+    <tbody><tr><td colspan="4">Загрузка…</td></tr></tbody>
+  </table>
+</div>
+
 <!-- Полоса «Юбилей сегодня» -->
 <div class="today-strip" id="today-strip" style="display:none;">
   <span class="today-title">ЮБИЛЕЙ СЕГОДНЯ:</span>
@@ -715,6 +725,51 @@ if (!isset($_SESSION['admin_logged_in'])):
   tenureThresholdSel?.addEventListener('change', loadTenureJubilees);
   document.addEventListener('DOMContentLoaded', loadTenureJubilees);
 </script>
+
+<script>
+  // ====== Дни рождения в этом месяце (команды #1 и #2) ======
+  const BIRTHDAYS_API = 'api/get_birthdays_month.php';
+  const tblBirthMonthBody = document.querySelector('#tbl-birthdays-month tbody');
+
+  function fmtAge(n){
+    const mod10 = n % 10, mod100 = n % 100;
+    if (mod10 === 1 && mod100 !== 11) return `${n} год`;
+    if ([2,3,4].includes(mod10) && ![12,13,14].includes(mod100)) return `${n} года`;
+    return `${n} лет`;
+  }
+
+  async function loadBirthdaysThisMonth(){
+    if (!tblBirthMonthBody) return;
+    tblBirthMonthBody.innerHTML = `<tr><td colspan="4">Загрузка…</td></tr>`;
+    try{
+      const month = new Date().getMonth()+1; // 1..12
+      const team_ids = TEAM_IDS.join(',');
+      const r = await fetch(`${BIRTHDAYS_API}?month=${month}&team_ids=${encodeURIComponent(team_ids)}`);
+      if (!r.ok) throw 0;
+      const data = await r.json();
+
+      if (!Array.isArray(data) || !data.length){
+        tblBirthMonthBody.innerHTML = `<tr><td colspan="4">В этом месяце дней рождений нет</td></tr>`;
+        return;
+      }
+
+      tblBirthMonthBody.innerHTML = data.map(p => `
+        <tr>
+          <td>${p.name}</td>
+          <td>#${p.team_id}</td>
+          <td>${p.this_year_birthday}</td>
+          <td>${fmtAge(p.age_turning)}</td>
+        </tr>
+      `).join('');
+    } catch(e){
+      console.error(e);
+      tblBirthMonthBody.innerHTML = `<tr><td colspan="4">Ошибка загрузки</td></tr>`;
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', loadBirthdaysThisMonth);
+</script>
+
 
 
 </body>
