@@ -1,0 +1,96 @@
+<header class="admin-header-container">
+
+    <style>
+        /* Обертка для header */
+        .admin-header-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #ccc;
+            padding: 10px 20px;
+            transition: transform 0.3s ease;
+        }
+
+        /* Flex-блок с кнопками */
+        .admin-header {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        .admin-header form {
+            margin: 0;
+        }
+
+        .admin-header button {
+            background-color: #004080;
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            font-size: 14px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .admin-header button:hover {
+            background-color: #003060;
+        }
+
+        /* Отступ у основного контента */
+        body,
+        .admin-panel {
+            padding-top: 80px;
+        }
+
+        @media (max-width: 768px) {
+
+            body,
+            .admin-panel {
+                padding-top: 120px;
+            }
+        }
+    </style>
+
+    <div class="admin-header">
+        <form action="admin.php" method="get"><button type="submit">Главная</button></form>
+        <form action="success.php" method="get"><button type="submit">Ачивки</button></form>
+        <form action="addmatch.php" method="get"><button type="submit">Добавить матч</button></form>
+        <form action="seasonstatistics.php" method="get"><button type="submit">Сезон стата</button></form>
+        <form action="statisticsall.php" method="get"><button type="submit">Статистика общая</button></form>
+        <form action="background.php" method="get"><button type="submit">Фон</button></form>
+        <form action="freenumbers.php" method="get"><button type="submit">Номера</button></form>
+        <form action="training.php" method="get"><button type="submit">Посещаемость</button></form>
+        <form action="payments.php" method="get"><button type="submit">Взносы</button></form>
+        <form action="fines.php" method="get"><button type="submit">Штрафы</button></form>
+        <form action="holiday.php" method="get"><button type="submit">Отпуск</button></form>
+        <form action="birthday.html" method="get"><button type="submit">ДР картинка</button></form>
+        <form action="squadlist8x8.html" method="get"><button type="submit">Заявка</button></form>
+        <form action="editormatches.php" method="get"><button type="submit">Матчи</button></form>
+        <form method="post" action="logout.php"><button type="submit">Выйти</button></form>
+    </div>
+
+    <script>
+        let lastScrollTop = 0;
+        const header = document.querySelector("header");
+
+        window.addEventListener("scroll", function () {
+            const currentScroll = window.scrollY || document.documentElement.scrollTop;
+
+            if (currentScroll > lastScrollTop) {
+                // Скроллим вниз — прячем
+                header.style.transform = "translateY(-100%)";
+            } else {
+                // Скроллим вверх — показываем
+                header.style.transform = "translateY(0)";
+            }
+
+            lastScrollTop = currentScroll <= 0 ? 0 : currentScroll; // для iOS
+        });
+    </script>
+
+</header>

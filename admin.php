@@ -1,11 +1,9 @@
 <?php
 session_start();
 
-// Установите логин/пароль
 define('ADMIN_LOGIN', 'admin');
 define('ADMIN_PASS', 'fcinter2025');
 
-// Обработка формы входа
 if (isset($_POST['auth_login'], $_POST['auth_pass'])) {
     if ($_POST['auth_login'] === ADMIN_LOGIN && $_POST['auth_pass'] === ADMIN_PASS) {
         $_SESSION['admin_logged_in'] = true;
@@ -16,101 +14,59 @@ if (isset($_POST['auth_login'], $_POST['auth_pass'])) {
     }
 }
 
-// Если не вошли — показать форму
 if (!isset($_SESSION['admin_logged_in'])):
 ?>
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <title>Вход в админку</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f4f8;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-
-        .login-container {
-            background-color: white;
-            padding: 30px 40px;
-            border-radius: 10px;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 400px;
-        }
-
-        h2 {
-            color: #004080;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 10px;
-            font-weight: bold;
-            color: #333;
-        }
-
-        input[type="text"],
-        input[type="password"] {
-            width: 100%;
-            padding: 10px;
-            font-size: 14px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            box-sizing: border-box;
-            margin-bottom: 20px;
-        }
-
-        button {
-            width: 100%;
-            background-color: #004080;
-            color: white;
-            border: none;
-            padding: 12px;
-            font-size: 15px;
-            border-radius: 6px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #003060;
-        }
-
-        .error {
-            color: red;
-            text-align: center;
-            margin-bottom: 15px;
-        }
-    </style>
-     <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8">
+  <title>Вход в админку</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f4f8;
+      display: flex; justify-content: center; align-items: center;
+      min-height: 100vh; margin: 0;
+    }
+    .login-container {
+      background-color: white;
+      padding: 30px 40px;
+      border-radius: 10px;
+      box-shadow: 0 6px 20px rgba(0,0,0,.1);
+      width: 100%; max-width: 400px;
+    }
+    h2 { color:#004080; text-align:center; margin:0 0 20px }
+    label { display:block; margin-bottom:10px; font-weight:bold; color:#333 }
+    input[type="text"], input[type="password"]{
+      width:100%; padding:10px; font-size:14px;
+      border:1px solid #ccc; border-radius:6px; margin-top:6px; box-sizing:border-box;
+    }
+    button{
+      width:100%; background:#004080; color:#fff; border:none;
+      padding:12px; font-size:15px; border-radius:6px; cursor:pointer; margin-top:12px;
+    }
+    button:hover{ background:#003060 }
+    .error{ color:red; text-align:center; margin-bottom:15px; }
+  </style>
 </head>
 <body>
-    <div class="login-container">
-        <h2>Авторизация</h2>
-        <?php if (!empty($error)) echo "<p class='error'>$error</p>"; ?>
-        <form method="post">
-            <label>Логин:
-                <input name="auth_login" type="text" required>
-            </label>
-            <label>Пароль:
-                <input name="auth_pass" type="password" required>
-            </label>
-            <button type="submit">Войти</button>
-        </form>
-    </div>
+  <div class="login-container">
+    <h2>Авторизация</h2>
+    <?php if (!empty($error)) echo "<p class='error'>$error</p>"; ?>
+    <form method="post">
+      <label>Логин:
+        <input name="auth_login" type="text" required>
+      </label>
+      <label>Пароль:
+        <input name="auth_pass" type="password" required>
+      </label>
+      <button type="submit">Войти</button>
+    </form>
+  </div>
 </body>
 </html>
-<?php
-exit;
-endif;
-?>
+<?php exit; endif; ?>
 
 <!DOCTYPE html>
 <html lang="ru">
@@ -118,616 +74,648 @@ endif;
   <meta charset="UTF-8">
   <title>Админка - FC Inter Moscow</title>
   <link rel="stylesheet" href="/css/main.css"/>
-   <link rel="icon" href="/img/yelowaicon.png" type="image/x-icon">
+  <link rel="icon" href="/img/yelowaicon.png" type="image/x-icon">
+  <style>
+    /* небольшой отступ под шапкой */
+    .admin-panel { margin-top: 16px; }
+
+    /* сетка страницы */
+    .page-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    /* карточки */
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0,0,0,.06);
+      padding: 16px;
+    }
+    .card h2 { margin-top: 0 }
+
+    /* правая колонка — расстояния между карточками */
+    .right-col {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    /* блок «Ближайшие юбилеи» */
+    .jubilees .controls {
+      display: flex; gap: 12px; align-items: center; margin-bottom: 12px;
+    }
+    .jubilees table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 18px;
+    }
+    .jubilees th, .jubilees td {
+      padding: 8px 10px;
+      border-bottom: 1px solid #eee;
+      text-align: left;
+      font-size: 14px;
+    }
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: #f0f4f8;
+      font-size: 12px;
+    }
+    .badge.success { background: #e8f8ef; color: #1e7a43; font-weight: 600; }
+
+    /* Полоса «Юбилей сегодня» */
+    .today-strip {
+      display: flex; gap: 8px; align-items: center;
+      padding: 10px; border-radius: 10px; background: #fff;
+      box-shadow: 0 6px 20px rgba(0,0,0,.06);
+      margin-bottom: 16px; overflow-x: auto;
+    }
+    .today-chip {
+      white-space: nowrap;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 13px;
+      border: 1px solid #e5e7eb;
+      background: #f9fafb;
+      cursor: default;
+    }
+    .today-chip.matches { border-color:#cce4ff; background:#f2f8ff; }
+    .today-chip.goals   { border-color:#d7f3e3; background:#f1fbf5; }
+    .today-chip.assists { border-color:#ffe9c2; background:#fff8ea; }
+
+    .today-title { font-weight:700; color:#0b3d91; margin-right: 4px; flex: 0 0 auto; }
+
+    @media (max-width: 960px){
+      .page-grid { grid-template-columns: 1fr; }
+    }
+
+    .tenure-grid{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:16px;
+}
+.table-wrap{ overflow-x:auto; }
+.tenure-grid table{ width:100%; border-collapse:collapse; }
+.tenure-grid th, .tenure-grid td{ padding:8px 10px; font-size:14px; white-space:nowrap; }
+
+/* мобилка */
+@media (max-width: 820px){
+  .tenure-grid{ grid-template-columns: 1fr; }
+  .tenure-grid th, .tenure-grid td{ font-size:13px; }
+  .tenure-grid h4{ margin-top:8px; }
+}
+
+.tenure-grid > h4 { grid-column: 1 / -1; }
+
+  </style>
 </head>
+
 <body>
-  <div class="admin-panel">
-    <form method="post" action="logout.php" style="float:right;">
-      <button type="submit">Выйти</button>
-    </form>
-    
-    <form action="success.php" method="get" style="display: inline-block; margin-top: 20px;">
-    <button type="submit">Ачивки</button>
-     </form>
+<div class="admin-panel">
+  <?php include 'headeradmin.html'; ?>
 
-    <form action="addmatch.php" method="get" style="display: inline-block; margin-top: 20px;">
-    <button type="submit">Добавить матч</button>
-    </form>
-
-    <form action="statisticsall.php" method="get" style="display: inline-block; margin-top: 20px;">
-    <button type="submit">Статистика общая</button>
-    </form>
-    
-    <form action="background.php" method="get" style="display: inline-block; margin-top: 20px;">
-    <button type="submit">Фон</button>
-</form>
-
-<form action="freenumbers.php" method="get" style="display: inline-block; margin-top: 20px;">
-    <button type="submit">Номера</button>
-</form>
-
-<form action="training.php" method="get" style="display: inline-block; margin-top: 20px;">
-    <button type="submit">Посещаемость</button>
-</form>
-
-<form action="payments.php" method="get" style="display: inline-block; margin-top: 20px;">
-    <button type="submit">Взносы</button>
-</form>
-
-<form action="fines.php" method="get" style="display: inline-block; margin-top: 20px;">
-    <button type="submit">Штрафы</button>
-</form>
-
-<form action="holiday.php" method="get" style="display: inline-block; margin-top: 20px;">
-    <button type="submit">Отпуск</button>
-</form>
-
-<form action="birthday.html" method="get" style="display: inline-block; margin-top: 20px;">
-    <button type="submit">ДР картинка</button>
-</form>
-
-<form action="squadlist8x8.html" method="get" style="display: inline-block; margin-top: 20px;">
-    <button type="submit">Заявка</button>
-</form>
-
-<form action="editormatches.php" method="get" style="display: inline-block; margin-top: 20px;">
-    <button type="submit">Матчи</button>
-</form>
-
-
-
-    <h1>Выберите команду</h1>
-    <select id="teamSelect"></select>
-    <section>
-    <h2>Список игроков</h2>
-    <table id="playersTable">
-      <thead>
-        <tr>
-          <th>Имя</th>
-          <th>Матчи</th>
-          <th>Голы</th>
-          <th>Ассисты</th>
-          <th>Матчи без пропущенных</th>
-          <th>Пропущенные мячи</th>
-          <th>Тренировки</th>
-          <th>Действия</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-
-    <button id="saveStatsBtn">Сохранить изменения</button>
-    </section>
-    <section>
-    <h2>Добавить игрока</h2>
-    <form id="add-player-form">
-      <label>Выберите команду:
-        <select id="team-select" required></select>
-      </label>
-      <label>Фамилия и имя (полное имя): <input name="name" required placeholder="Иванов Иван"></label>
-      <label>Отчество: <input name="patronymic"></label>
-      <label>Игровой номер: <input name="number" type="number" required></label>
-      <label>Позиция:
-        <select name="position" required>
-          <option value="">-- Выберите позицию --</option>
-          <option value="Вратарь">Вратарь</option>
-          <option value="Защитник">Защитник</option>
-          <option value="Полузащитник">Полузащитник</option>
-          <option value="Нападающий">Нападающий</option>
-        </select>
-      </label>
-      <label>Дата рождения: <input name="birth_date" type="date" required></label>
-      <label>Дата присоединения: <input name="join_date" type="date" required></label>
-      <label>Рост (см): <input name="height_cm" type="number"></label>
-      <label>Вес (кг): <input name="weight_kg" type="number"></label>
-      <button type="submit">Добавить игрока</button>
-    </form>
-    </section>
-
-    <section class="admin-achievements">
-  <h2>Управление достижениями</h2>
-
-  <label for="team-select">Выберите команду:</label>
-  <select id="achv-team-select"></select>
-
-  <label for="player-select">Выберите игрока:</label>
-  <select id="achv-player-select"></select>
-
-  <h3>Текущие достижения</h3>
-  <table id="achievements-table"></table>
-
-  <h3>Добавить достижение</h3>
-  <form id="add-achievement-form">
-    <input type="text" name="award_year" placeholder="Год (например, 2023)" maxlength="4" required>
-    <input type="text" name="award_title" placeholder="Название награды" required>
-    <select name="team_name">
-      <option>FC Inter Moscow 8х8</option>
-      <option>FC Inter Moscow</option>
-      <option>FC Inter Moscow Pro</option>
-      <option>FC Inter Moscow U18</option>
-      <option>FC Inter Moscow U21</option>
-      <option>Primavera FC Inter Moscow</option>
-      <option>FC Inter Moscow forever</option>
-      <option>FC Inter Moscow-2</option>
+  <div class="page-grid">
+    <!-- ЛЕВАЯ КОЛОНКА -->
+    <section class="card jubilees" id="jubilees">
+        <h3>Юбилеи по времени в команде</h3>
+<div class="controls">
+  <label>Показать ближайшие в днях:
+    <select id="tenure-threshold">
+      <option value="7">≤ 7 дней</option>
+      <option value="14" selected>≤ 14 дней</option>
+      <option value="30">≤ 30 дней</option>
     </select>
-    <button type="submit">Добавить</button>
-  </form>
-</section>
+  </label>
+</div>
 
-    <div id="editPlayerModal" style="display:none;">
-      <div class="modal-content">
-        <h2>Редактировать игрока</h2>
-        <form id="editPlayerForm">
-          <label>ФИО: <input type="text" name="name" required></label>
-          <label>Отчество: <input type="text" name="patronymic"></label>
-          <label>Дата рождения: <input type="date" name="birth_date" required></label>
-          <label>Номер: <input type="number" name="number" required></label>
-          <label>Позиция: <input type="text" name="position" required></label>
-          <label>Рост (см): <input type="number" name="height_cm"></label>
-          <label>Вес (кг): <input type="number" name="weight_kg"></label>
-          <label>Команда:
-            <select name="team_id" id="editPlayerTeamSelect"></select>
-          </label>
-          <button type="submit">Сохранить</button>
-          <button type="button" onclick="closeEditPlayerModal()">Отмена</button>
-        </form>
-      </div>
+<!-- ВАЖНО: две явные колонки внутри сетки -->
+<div class="tenure-grid">
+  <div>
+    <h4 style="margin-top:0">Скоро 5/10/15 лет</h4>
+    <div class="table-wrap">
+      <table id="tbl-tenure-upcoming">
+        <thead><tr>
+          <th>Игрок</th><th>Команда</th><th>Стаж</th><th>Юбилей</th><th>Через</th>
+        </tr></thead>
+        <tbody><tr><td colspan="5">Загрузка…</td></tr></tbody>
+      </table>
+    </div>
+
+    <h4>5+ лет в клубе</h4>
+    <div class="table-wrap">
+      <table id="tbl-tenure-5plus">
+        <thead><tr>
+          <th>Игрок</th><th>Команда</th><th>Стаж</th><th>С нами с</th>
+        </tr></thead>
+        <tbody><tr><td colspan="4">Загрузка…</td></tr></tbody>
+      </table>
     </div>
   </div>
 
-</body>
-</html>
+  <div>
+    <h4 style="margin-top:0">Юбилей в этом месяце</h4>
+    <div class="table-wrap">
+      <table id="tbl-tenure-this-month">
+        <thead><tr>
+          <th>Игрок</th><th>Команда</th><th>Дата</th><th>Стаж</th>
+        </tr></thead>
+        <tbody><tr><td colspan="4">Загрузка…</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<!-- .tenure-grid ЗАКРЫТА, дальше идут остальные секции -->
 
-        <script>
-            const teamSelectTop = document.getElementById('teamSelect');
-            const teamSelectForm = document.getElementById('team-select');
+<!-- Полоса «Юбилей сегодня» -->
+<div class="today-strip" id="today-strip" style="display:none;">
+  <span class="today-title">ЮБИЛЕЙ СЕГОДНЯ:</span>
+</div>
 
+      <h2>Ближайшие юбилеи</h2>
+      <div class="controls">
+        <label>Порог близости:
+          <select id="near-threshold">
+            <option value="3">≤ 3</option>
+            <option value="5" selected>≤ 5</option>
+            <option value="10">≤ 10</option>
+          </select>
+        </label>
+        <span class="badge">Команды: #1 и #2</span>
+      </div>
 
-            async function loadTeams() {
-                const res = await fetch('api/get_teams.php');
-                if (!res.ok) {
-                    alert('Ошибка загрузки команд');
-                    return;
-                }
-                const teams = await res.json();
+      <h3>Матчи</h3>
+      <table id="tbl-matches">
+        <thead><tr>
+          <th>Игрок</th><th>Команда</th><th>Текущее</th><th>След. юбилей</th><th>Осталось</th><th></th>
+        </tr></thead>
+        <tbody><tr><td colspan="6">Загрузка…</td></tr></tbody>
+      </table>
 
-                // Очистить селекты и добавить option по умолчанию
-                [teamSelectTop, teamSelectForm].forEach(select => {
-                    select.innerHTML = '<option value="">-- Выберите команду --</option>';
-                });
+      <h3>Голы</h3>
+      <table id="tbl-goals">
+        <thead><tr>
+          <th>Игрок</th><th>Команда</th><th>Текущее</th><th>След. юбилей</th><th>Осталось</th><th></th>
+        </tr></thead>
+        <tbody><tr><td colspan="6">Загрузка…</td></tr></tbody>
+      </table>
 
-                teams.forEach(team => {
-                    const option1 = document.createElement('option');
-                    option1.value = team.id;
-                    option1.textContent = team.name;
-                    teamSelectTop.appendChild(option1);
+      <h3>Ассисты</h3>
+      <table id="tbl-assists">
+        <thead><tr>
+          <th>Игрок</th><th>Команда</th><th>Текущее</th><th>След. юбилей</th><th>Осталось</th><th></th>
+        </tr></thead>
+        <tbody><tr><td colspan="6">Загрузка…</td></tr></tbody>
+      </table>
+    </section>
 
-                    const option2 = document.createElement('option');
-                    option2.value = team.id;
-                    option2.textContent = team.name;
-                    teamSelectForm.appendChild(option2);
-                });
-            }
+    <!-- ПРАВАЯ КОЛОНКА -->
+    <div class="right-col">
+      <!-- Добавить игрока -->
+      <section class="card">
+        <h2>Добавить игрока</h2>
+        <form id="add-player-form">
+          <label>Выберите команду:
+            <select id="team-select" required></select>
+          </label>
+          <label>Фамилия и имя (полное имя): <input name="name" required placeholder="Иванов Иван"></label>
+          <label>Отчество: <input name="patronymic"></label>
+          <label>Игровой номер: <input name="number" type="number" required></label>
+          <label>Позиция:
+            <select name="position" required>
+              <option value="">-- Выберите позицию --</option>
+              <option value="Вратарь">Вратарь</option>
+              <option value="Защитник">Защитник</option>
+              <option value="Полузащитник">Полузащитник</option>
+              <option value="Нападающий">Нападающий</option>
+            </select>
+          </label>
+          <label>Дата рождения: <input name="birth_date" type="date" required></label>
+          <label>Дата присоединения: <input name="join_date" type="date" required></label>
+          <label>Рост (см): <input name="height_cm" type="number"></label>
+          <label>Вес (кг): <input name="weight_kg" type="number"></label>
+          <button type="submit">Добавить игрока</button>
+        </form>
+      </section>
 
-            let currentTeamId = null;
+      <!-- Управление достижениями -->
+      <section class="card admin-achievements">
+        <h2>Управление достижениями</h2>
 
-            function onTeamChange(newTeamId) {
-                currentTeamId = newTeamId;
+        <label for="achv-team-select">Выберите команду:</label>
+        <select id="achv-team-select"></select>
 
-                // Синхронизируем оба селектора
-                teamSelectTop.value = newTeamId;
-                teamSelectForm.value = newTeamId;
+        <label for="achv-player-select">Выберите игрока:</label>
+        <select id="achv-player-select"></select>
 
-                if (newTeamId) {
-                    fetchPlayers(newTeamId);
-                } else {
-                    clearPlayersTable();
-                }
-            }
+        <h3>Текущие достижения</h3>
+        <table id="achievements-table"></table>
 
-            teamSelectTop.addEventListener('change', e => {
-                onTeamChange(e.target.value);
-            });
-
-            teamSelectForm.addEventListener('change', e => {
-                onTeamChange(e.target.value);
-            });
-
-            function clearPlayersTable() {
-                const tbody = document.querySelector('#playersTable tbody');
-                tbody.innerHTML = '';
-            }
-
-            async function fetchPlayers(teamId) {
-                const res = await fetch(`api/get_players.php?team_id=${teamId}`);
-                const players = await res.json();
-                players.sort((a, b) => a.name.localeCompare(b.name));
-                const tbody = document.querySelector('#playersTable tbody');
-                tbody.innerHTML = '';
-
-                players.forEach(p => {
-                    const row = document.createElement('tr');
-                    row.dataset.playerId = p.id;
-
-                    row.innerHTML = `
-        <td>${p.name}</td>
-        <td><input type="number" name="matches" value="${p.stats.matches}" min="0"></td>
-        <td><input type="number" name="goals" value="${p.stats.goals}" min="0"></td>
-        <td><input type="number" name="assists" value="${p.stats.assists}" min="0"></td>
-        <td><input type="number" name="zeromatch" value="${p.stats.zeromatch}" min="0"></td>
-        <td><input type="number" name="lostgoals" value="${p.stats.lostgoals}" min="0"></td>
-        <td><input type="number" name="zanetti_priz" value="${p.stats.zanetti_priz}" min="0"></td>
-        <td>
-           <button class="edit-btn" data-player-id="${p.id}">Редактировать</button>
-            <button class="delete-btn" data-player-id="${p.id}">Удалить</button>
-        </td>
-    `;
-
-                    tbody.appendChild(row);
-                });
-            }
-
-            loadTeams().then(() => {
-                // Если есть команды — выбираем первую по умолчанию
-                if (teamSelectTop.options.length > 1) {
-                    onTeamChange(teamSelectTop.options[1].value);
-                }
-            });
-
-            document.querySelector('#playersTable tbody').addEventListener('click', async (e) => {
-                // Удаление игрока
-                if (e.target.classList.contains('delete-btn')) {
-                    const playerId = e.target.dataset.playerId;
-                    const confirmed = confirm('Вы точно хотите удалить игрока?');
-                    if (!confirmed) return;
-
-                    try {
-                        const res = await fetch(`api/archive_player.php?id=${playerId}`, {
-                            method: 'PUT',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ new_team_id: 3 })
-                        });
-
-                        if (res.ok) {
-                            alert('Игрок перемещён в архив.');
-                            fetchPlayers(currentTeamId);
-                        } else {
-                            alert('Ошибка при удалении игрока');
-                        }
-                    } catch (err) {
-                        alert('Ошибка сети');
-                        console.error(err);
-                    }
-                }
-
-                // Редактирование игрока
-                if (e.target.classList.contains('edit-btn')) {
-                    const playerId = e.target.dataset.playerId;
-                    openEditPlayerModal(playerId);
-                }
-            });
-
-        </script>
-
-        <script>
-            const form = document.getElementById('add-player-form');
-
-            form.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                if (!currentTeamId) {
-                    return alert('Выберите команду');
-                }
-
-                const formData = new FormData(form);
-                const data = Object.fromEntries(formData.entries());
-                data.team_id = currentTeamId;
-
-                const res = await fetch('api/add_player.php', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data)
-});
-
-                if (res.ok) {
-        const json = await res.json();
-        alert(`Игрок добавлен!\nЛогин: ${json.login}\nПароль: ${json.password}`);
-        form.reset();
-        fetchPlayers(currentTeamId);
-    } else {
-        alert('Ошибка при добавлении игрока');
-    }
-            });
-
-        </script>
-
-        <script>
-            document.getElementById('saveStatsBtn').addEventListener('click', async () => {
-                const rows = document.querySelectorAll('#playersTable tbody tr');
-                const updates = [];
-
-                rows.forEach(row => {
-                    const playerId = row.dataset.playerId;
-                    const stats = {
-                        matches: Number(row.querySelector('input[name="matches"]').value),
-                        goals: Number(row.querySelector('input[name="goals"]').value),
-                        assists: Number(row.querySelector('input[name="assists"]').value),
-                        zeromatch: Number(row.querySelector('input[name="zeromatch"]').value),
-                        lostgoals: Number(row.querySelector('input[name="lostgoals"]').value),
-                        zanetti_priz: Number(row.querySelector('input[name="zanetti_priz"]').value)
-                    };
-                    updates.push({ playerId, stats });
-                });
-
-                try {
-                    const res = await fetch('api/update_statistics.php', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ updates })
-});
-
-                    if (res.ok) {
-                        alert('Статистика успешно обновлена!');
-                    } else {
-                        alert('Ошибка при обновлении статистики');
-                    }
-                } catch (err) {
-                    alert('Ошибка сети или сервера');
-                    console.error(err);
-                }
-            });
-        </script>
-
-        <script>let editingPlayerId = null;
-
-            async function openEditPlayerModal(playerId) {
-                editingPlayerId = playerId;
-
-                // Загружаем данные игрока с сервера
-                console.log('Загружаем данные игрока с ID:', playerId);
-                const res = await fetch(`api/get_player.php?id=${playerId}`);
-                if (!res.ok) {
-                    alert('Ошибка загрузки данных игрока');
-                    return;
-                }
-                const player = await res.json();
-                console.log('Данные игрока:', player);
-
-                // Загружаем команды
-                const teamSelect = document.getElementById('editPlayerTeamSelect');
-                teamSelect.innerHTML = '';
-                const teamsRes = await fetch('api/get_teams.php');
-                const teams = await teamsRes.json();
-
-                teams.forEach(team => {
-                    const opt = document.createElement('option');
-                    opt.value = team.id;
-                    opt.textContent = team.name;
-                    teamSelect.appendChild(opt);
-                });
-
-                // Заполняем форму
-                const form = document.getElementById('editPlayerForm');
-                form.name.value = player.name;
-                form.patronymic.value = player.patronymic || '';
-                form.birth_date.value = player.birth_date ? player.birth_date.substring(0, 10) : '';
-                form.number.value = player.number !== undefined && player.number !== null ? player.number : '';
-                form.position.value = player.position || '';
-                form.height_cm.value = player.height_cm !== undefined && player.height_cm !== null ? player.height_cm : '';
-                form.weight_kg.value = player.weight_kg !== undefined && player.weight_kg !== null ? player.weight_kg : '';
-                form.team_id.value = player.team_id;
-
-                document.getElementById('editPlayerModal').style.display = 'flex';
-            }
-
-            function closeEditPlayerModal() {
-                document.getElementById('editPlayerModal').style.display = 'none';
-                editingPlayerId = null;
-            }</script>
-
-        <script>document.getElementById('editPlayerForm').addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const form = e.target;
-                if (!editingPlayerId) return;
-
-                const updatedData = {
-                    name: form.name.value,
-                    patronymic: form.patronymic.value,
-                    birth_date: form.birth_date.value,
-                    number: +form.number.value,
-                    position: form.position.value,
-                    height_cm: form.height_cm.value || null,
-                    weight_kg: form.weight_kg.value || null,
-                    team_id: +form.team_id.value
-                };
-
-                const res = await fetch(`api/update_player.php?id=${editingPlayerId}`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(updatedData)
-                });
-
-                if (res.ok) {
-                    alert('Игрок обновлен');
-                    closeEditPlayerModal();
-                    await fetchPlayers(currentTeamId);
-                } else {
-                    alert('Ошибка при обновлении игрока');
-                }
-            });</script>
-
+        <h3>Добавить достижение</h3>
+        <form id="add-achievement-form">
+          <input type="text" name="award_year" placeholder="Год (например, 2023)" maxlength="4" required>
+          <input type="text" name="award_title" placeholder="Название награды" required>
+          <select name="team_name">
+            <option>FC Inter Moscow 8х8</option>
+            <option>FC Inter Moscow</option>
+            <option>FC Inter Moscow Pro</option>
+            <option>FC Inter Moscow U18</option>
+            <option>FC Inter Moscow U21</option>
+            <option>Primavera FC Inter Moscow</option>
+            <option>FC Inter Moscow forever</option>
+            <option>FC Inter Moscow-2</option>
+          </select>
+          <button type="submit">Добавить</button>
+        </form>
+      </section>
+    </div>
+  </div>
+</div>
 
 <script>
-async function loadTeamsAndPlayers() {
+  const teamSelectForm = document.getElementById('team-select');
+  const addPlayerForm = document.getElementById('add-player-form');
+
+  async function loadTeamsForPlayerForm() {
+    const res = await fetch('api/get_teams.php');
+    const teams = await res.json();
+
+    teamSelectForm.innerHTML = '<option value="">-- Выберите команду --</option>';
+    teams.forEach(team => {
+      const option = document.createElement('option');
+      option.value = team.id;
+      option.textContent = team.name;
+      teamSelectForm.appendChild(option);
+    });
+  }
+
+  addPlayerForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const formData = new FormData(addPlayerForm);
+    const data = Object.fromEntries(formData.entries());
+    data.team_id = teamSelectForm.value;
+
+    const res = await fetch('api/add_player.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+
+    if (res.ok) {
+      const json = await res.json();
+      alert(`Игрок добавлен!\nЛогин: ${json.login}\nПароль: ${json.password}`);
+      addPlayerForm.reset();
+    } else {
+      alert('Ошибка при добавлении игрока');
+    }
+  });
+
+  loadTeamsForPlayerForm();
+</script>
+
+<script>
+  async function loadTeamsAndPlayers() {
     const teamSelect = document.getElementById('achv-team-select');
     const playerSelect = document.getElementById('achv-player-select');
 
-    // Загружаем список команд
     const teams = await fetch('api/get_teams.php').then(res => res.json());
     teamSelect.innerHTML = teams.map(t => `<option value="${t.id}">${t.name}</option>`).join('');
 
-    // Обработчик выбора команды
     teamSelect.addEventListener('change', async () => {
-        const teamId = teamSelect.value;
+      const teamId = teamSelect.value;
+      const players = await fetch(`api/get_players.php?team_id=${teamId}`).then(res => res.json());
 
-    const players = await fetch(`api/get_players.php?team_id=${teamId}`).then(res => res.json());
+      players.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+      playerSelect.innerHTML = players.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
 
-        playerSelect.innerHTML = players.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
-
-        // Если игроки есть — загружаем достижения первого
-        if (players.length > 0) {
-            loadAchievements(players[0].id);
-        } else {
-            document.getElementById('achievements-table').innerHTML = '<tr><td colspan="4">Нет игроков</td></tr>';
-        }
-
-        players.sort((a, b) => a.name.localeCompare(b.name));
-
-playerSelect.innerHTML = players.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
-
-if (players.length > 0) {
-    loadAchievements(players[0].id);
-} else {
-    document.getElementById('achievements-table').innerHTML = '<tr><td colspan="4">Нет игроков</td></tr>';
-}
+      if (players.length > 0) {
+        loadAchievements(players[0].id);
+      } else {
+        document.getElementById('achievements-table').innerHTML = '<tr><td colspan="4">Нет игроков</td></tr>';
+      }
     });
 
-    // Обработчик выбора игрока
     playerSelect.addEventListener('change', () => {
-        loadAchievements(playerSelect.value);
+      loadAchievements(playerSelect.value);
     });
 
-    // Обработчик добавления достижения
     document.getElementById('add-achievement-form').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const form = e.target;
-        const data = {
-            player_id: playerSelect.value,
-            award_year: form.award_year.value,
-            award_title: form.award_title.value,
-            team_name: form.team_name.value
-        };
+      e.preventDefault();
+      const form = e.target;
+      const data = {
+        player_id: playerSelect.value,
+        award_year: form.award_year.value,
+        award_title: form.award_title.value,
+        team_name: form.team_name.value
+      };
 
-        await fetch('api/achievements.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
-        });
+      await fetch('api/achievements.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
 
-        form.reset();
-        loadAchievements(playerSelect.value);
+      form.reset();
+      loadAchievements(playerSelect.value);
     });
 
-    // Автозагрузка первой команды при старте
     if (teams.length > 0) {
-        teamSelect.value = teams[0].id;
-        teamSelect.dispatchEvent(new Event('change'));
+      teamSelect.value = teams[0].id;
+      teamSelect.dispatchEvent(new Event('change'));
     }
-}
+  }
 
-// Загрузка достижений игрока
-async function loadAchievements(playerId) {
+  async function loadAchievements(playerId) {
     const table = document.getElementById('achievements-table');
     const data = await fetch(`api/achievements.php?player_id=${playerId}`).then(res => res.json());
 
     if (!data || !data.length) {
-        table.innerHTML = '<tr><td colspan="4">Нет достижений</td></tr>';
-        return;
+      table.innerHTML = '<tr><td colspan="4">Нет достижений</td></tr>';
+      return;
     }
 
     table.innerHTML = data.map(d => `
-        <tr>
-            <td>${d.award_year}</td>
-            <td>${d.award_title}</td>
-            <td>${d.team_name}</td>
-            <td><button onclick="deleteAchievement(${d.id}, ${playerId})">Удалить</button></td>
-        </tr>
+      <tr>
+        <td>${d.award_year}</td>
+        <td>${d.award_title}</td>
+        <td>${d.team_name}</td>
+        <td><button onclick="deleteAchievement(${d.id}, ${playerId})">Удалить</button></td>
+      </tr>
     `).join('');
-}
+  }
 
-// Удаление достижения
-async function deleteAchievement(id, playerId) {
+  async function deleteAchievement(id, playerId) {
     await fetch(`api/achievements.php?id=${id}`, { method: 'DELETE' });
     loadAchievements(playerId);
-}
+  }
 
-// Запуск при загрузке страницы
-document.addEventListener('DOMContentLoaded', loadTeamsAndPlayers);
+  document.addEventListener('DOMContentLoaded', loadTeamsAndPlayers);
 </script>
 
 <script>
-const addMatchForm = document.getElementById("addMatchForm");
-const matchTeamSelect = document.getElementById("matchTeamSelect");
+  // ====== Ближайшие юбилеи (адаптация под api/get_players.php + fallback top-5) ======
+  const TEAM_IDS = [1, 2];
+  const PLAYERS_API = 'api/get_players.php';
+  let   STATS_API   = 'api/player_statistics_all.php';
 
-document.addEventListener("DOMContentLoaded", async () => {
-    async function l(url, options = {}) {
+  const tblMatches   = document.querySelector('#tbl-matches tbody');
+  const tblGoals     = document.querySelector('#tbl-goals tbody');
+  const tblAssists   = document.querySelector('#tbl-assists tbody');
+  const thresholdSel = document.getElementById('near-threshold');
+  const todayStrip   = document.getElementById('today-strip');
+
+  // Проверим, где лежит player_statistics_all.php
+  async function resolveStatsApi(){
+    try {
+      const r = await fetch(`${STATS_API}?id=0`);
+      if (r.ok) return STATS_API;
+    } catch(e){}
+    STATS_API = '/player_statistics_all.php';
+    return STATS_API;
+  }
+
+  function nextHundred(n){
+    const v = Number(n)||0;
+    const up = Math.ceil(v/100)*100;
+    return up === 0 ? 100 : up;
+  }
+  function pickCombined(obj, key){
+    const season = Number(obj?.season?.[key]) || 0;
+    const all    = Number(obj?.all?.[key])    || 0;
+    const comb   = obj?.combined?.[key];
+    const nComb  = Number(comb);
+    return Number.isFinite(nComb) ? nComb : season + all;
+  }
+  function addTodayChip(type, player, team, value){
+    const chip = document.createElement('span');
+    chip.className = `today-chip ${type}`;
+    const label = type === 'matches' ? 'матчей' : (type === 'goals' ? 'голов' : 'ассистов');
+    chip.textContent = `${player} (${team}) — ${value} ${label}`;
+    todayStrip.appendChild(chip);
+  }
+  function toRows(items){
+    items.sort((a,b)=> a.left - b.left || a.next - b.next || a.player.localeCompare(b.player));
+    return items.map(it=>`
+      <tr>
+        <td>${it.player}</td>
+        <td>${it.team}</td>
+        <td>${it.current}</td>
+        <td>${it.next}</td>
+        <td>${it.left}</td>
+        <td>${it.left === 0 ? '<span class="badge success">ЮБИЛЕЙ!</span>' : ''}</td>
+      </tr>
+    `).join('');
+  }
+  function withEmpty(rowsHtml, note){
+    return rowsHtml || `<tr><td colspan="6">Нет данных${note ? ` — ${note}` : ''}</td></tr>`;
+  }
+
+  async function fetchPlayers(teamId){
+    const r = await fetch(`${PLAYERS_API}?team_id=${teamId}`);
+    if (!r.ok) throw new Error('players fetch failed');
+    const arr = await r.json(); // [{id, name, stats:{...}}]
+    return (Array.isArray(arr) ? arr : []).map(p => ({
+      id: p.id,
+      name: p.name || 'Без имени',
+      team: `#${teamId}`
+    }));
+  }
+
+  async function loadJubilees(){
+    const near = Number(thresholdSel.value);
+    tblMatches.innerHTML = `<tr><td colspan="6">Загрузка…</td></tr>`;
+    tblGoals.innerHTML   = `<tr><td colspan="6">Загрузка…</td></tr>`;
+    tblAssists.innerHTML = `<tr><td colspan="6">Загрузка…</td></tr>`;
+    todayStrip.style.display = 'none';
+    todayStrip.innerHTML = `<span class="today-title">ЮБИЛЕЙ СЕГОДНЯ:</span>`;
+
+    try {
+      await resolveStatsApi();
+      // Игроки двух команд параллельно
+      const players = (await Promise.all(TEAM_IDS.map(fetchPlayers))).flat();
+
+      // Тянем суммарную стату по каждому игроку
+      const stats = await Promise.all(players.map(async p => {
         try {
-            const res = await fetch(url, options);
-            if (!res.ok) throw new Error(`Ошибка ${res.status} при загрузке ${url}`);
-            return await res.json();
-        } catch (err) {
-            alert(err.message);
-            console.error(err);
-            return null;
+          const r = await fetch(`${STATS_API}?id=${encodeURIComponent(p.id)}`);
+          if (!r.ok) throw 0;
+          const data = await r.json();
+          return {
+            ...p,
+            matches: pickCombined(data, 'matches'),
+            goals:   pickCombined(data, 'goals'),
+            assists: pickCombined(data, 'assists')
+          };
+        } catch {
+          return null;
         }
+      }));
+
+      const clean = stats.filter(Boolean);
+
+      const rowsM = [], rowsG = [], rowsA = [];
+      const poolM = [], poolG = [], poolA = [];
+      let hasToday = false;
+
+      for (const s of clean){
+        // МАТЧИ
+        const nextM = nextHundred(s.matches);
+        const leftM = Math.max(0, nextM - s.matches);
+        poolM.push({ player:s.name, team:s.team, current:s.matches, next:nextM, left:leftM });
+        if (leftM > 0 && leftM <= near) rowsM.push(poolM.at(-1));
+        if (leftM === 0) { addTodayChip('matches', s.name, s.team, nextM); hasToday = true; }
+
+        // ГОЛЫ
+        const nextG = nextHundred(s.goals);
+        const leftG = Math.max(0, nextG - s.goals);
+        poolG.push({ player:s.name, team:s.team, current:s.goals, next:nextG, left:leftG });
+        if (leftM > 0 && leftM <= near) rowsG.push(poolG.at(-1));
+        if (leftG === 0) { addTodayChip('goals', s.name, s.team, nextG); hasToday = true; }
+
+        // АССИСТЫ
+        const nextA = nextHundred(s.assists);
+        const leftA = Math.max(0, nextA - s.assists);
+        poolA.push({ player:s.name, team:s.team, current:s.assists, next:nextA, left:leftA });
+        if (leftM > 0 && leftM <= near) rowsA.push(poolA.at(-1));
+        if (leftA === 0) { addTodayChip('assists', s.name, s.team, nextA); hasToday = true; }
+      }
+
+      // Если никто не попал в порог — показываем топ‑5 ближайших
+      const note = `попробуйте увеличить порог`;
+      const top5 = (arr)=> arr.sort((a,b)=> a.left - b.left).slice(0,5);
+
+      tblMatches.innerHTML = withEmpty(toRows(rowsM), rowsM.length ? '' : note);
+      if (!rowsM.length && poolM.length) tblMatches.innerHTML = toRows(top5(poolM));
+
+      tblGoals.innerHTML   = withEmpty(toRows(rowsG), rowsG.length ? '' : note);
+      if (!rowsG.length && poolG.length) tblGoals.innerHTML = toRows(top5(poolG));
+
+      tblAssists.innerHTML = withEmpty(toRows(rowsA), rowsA.length ? '' : note);
+      if (!rowsA.length && poolA.length) tblAssists.innerHTML = toRows(top5(poolA));
+
+      if (hasToday) todayStrip.style.display = 'flex';
+    } catch (e){
+      console.error(e);
+      const err = `<tr><td colspan="6">Ошибка загрузки данных</td></tr>`;
+      tblMatches.innerHTML = err; tblGoals.innerHTML = err; tblAssists.innerHTML = err;
     }
+  }
 
-    async function loadTeamsIntoMatchForm() {
-        const teams = await l("/api/get_teams.php");
-        if (teams) {
-            matchTeamSelect.innerHTML = "";
-            teams.forEach(team => {
-                const option = document.createElement("option");
-                option.value = team.id;
-                option.textContent = team.name;
-                matchTeamSelect.appendChild(option);
-            });
-            matchTeamSelect.value = matchTeamSelect.options[0]?.value || '';
-        }
+  thresholdSel?.addEventListener('change', loadJubilees);
+  document.addEventListener('DOMContentLoaded', loadJubilees);
+</script>
+
+<script>
+  // ====== Юбилеи по времени в команде (5/10/15, этот месяц, 5+ лет) ======
+  const TENURE_API = 'api/get_player_jubilees.php';
+  const tenureUpcomingBody = document.querySelector('#tbl-tenure-upcoming tbody');
+  const tenureMonthBody    = document.querySelector('#tbl-tenure-this-month tbody');
+  const tenure5plusBody    = document.querySelector('#tbl-tenure-5plus tbody');
+  const tenureThresholdSel = document.getElementById('tenure-threshold');
+
+  function fmtDays(n){ return n === 0 ? 'сегодня' : `через ${n} дн.`; }
+  function fmtYears(y){ return `${y} ${y % 10 === 1 && y % 100 !== 11 ? 'год' : ( [2,3,4].includes(y%10) && ![12,13,14].includes(y%100) ? 'года' : 'лет')}`; }
+
+  async function fetchTenure(teamId){
+    const r = await fetch(`${TENURE_API}?team_id=${teamId}`);
+    if (!r.ok) throw new Error('tenure fetch failed');
+    const arr = await r.json();
+    return (Array.isArray(arr) ? arr : []).map(p => ({
+      team: `#${teamId}`,
+      ...p
+    }));
+  }
+
+  function renderUpcoming(rows){
+    if (!rows.length){
+      tenureUpcomingBody.innerHTML = `<tr><td colspan="5">Нет ближайших юбилеев — попробуйте увеличить порог дней</td></tr>`;
+      return;
     }
+    rows.sort((a,b)=> (a.days_until_next_jubilee??1e9) - (b.days_until_next_jubilee??1e9) || a.name.localeCompare(b.name));
+    tenureUpcomingBody.innerHTML = rows.map(r => `
+      <tr>
+        <td>${r.name}</td>
+        <td>${r.team}</td>
+        <td>${fmtYears(r.years_in_team)}</td>
+        <td>${r.next_jubilee_year ? r.next_jubilee_year + ' лет' : '—'} (${r.next_jubilee ?? '—'})</td>
+        <td>${r.days_until_next_jubilee != null ? fmtDays(r.days_until_next_jubilee) : '—'}</td>
+      </tr>
+    `).join('');
+  }
 
-    addMatchForm.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        const formData = new FormData(addMatchForm);
-        const data = {};
-        formData.forEach((value, key) => data[key] = value);
+  function renderThisMonth(rows){
+    if (!rows.length){
+      tenureMonthBody.innerHTML = `<tr><td colspan="4">В этом месяце юбилеев нет</td></tr>`;
+      return;
+    }
+    rows.sort((a,b)=> a.anniversary_date_this_year.localeCompare(b.anniversary_date_this_year));
+    tenureMonthBody.innerHTML = rows.map(r => `
+      <tr>
+        <td>${r.name}</td>
+        <td>${r.team}</td>
+        <td>${r.anniversary_date_this_year}</td>
+        <td>${fmtYears(r.years_in_team)}</td>
+      </tr>
+    `).join('');
+  }
 
-        // Явно передаём ID и название команды
-        data.teams_id = matchTeamSelect.value;
-        data.our_team = matchTeamSelect.options[matchTeamSelect.selectedIndex]?.textContent || '';
+  function render5plus(rows){
+    if (!rows.length){
+      tenure5plusBody.innerHTML = `<tr><td colspan="4">Пока нет игроков со стажем 5+ лет</td></tr>`;
+      return;
+    }
+    rows.sort((a,b)=> b.years_in_team - a.years_in_team || a.name.localeCompare(b.name));
+    tenure5plusBody.innerHTML = rows.map(r => `
+      <tr>
+        <td>${r.name}</td>
+        <td>${r.team}</td>
+        <td>${fmtYears(r.years_in_team)}</td>
+        <td>${r.join_date}</td>
+      </tr>
+    `).join('');
+  }
 
-        console.log("📤 Данные для отправки:", data); // ← лог перед отправкой
+  async function loadTenureJubilees(){
+    const dayThreshold = Number(tenureThresholdSel.value);
+    tenureUpcomingBody.innerHTML = `<tr><td colspan="5">Загрузка…</td></tr>`;
+    tenureMonthBody.innerHTML    = `<tr><td colspan="4">Загрузка…</td></tr>`;
+    tenure5plusBody.innerHTML    = `<tr><td colspan="4">Загрузка…</td></tr>`;
 
-        const res = await fetch("/api/matches.php", {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(data)
-        });
+    try{
+      const data = (await Promise.all(TEAM_IDS.map(fetchTenure))).flat();
 
-        let result;
-        try {
-            result = await res.json();
-            console.log("📦 Ответ от сервера:", result);
-        } catch (err) {
-            console.error("❌ Не удалось распарсить JSON-ответ:", err);
-        }
+      // 1) ближайшие 5/10/15 (по days_until_next_jubilee и next_jubilee_year в {5,10,15})
+      const upcoming = data.filter(r =>
+        r.next_jubilee_year && [5,10,15].includes(Number(r.next_jubilee_year)) &&
+        r.days_until_next_jubilee != null && r.days_until_next_jubilee <= dayThreshold
+      );
+      renderUpcoming(upcoming);
 
-        if (res.ok && result?.success) {
-            alert("✅ Матч добавлен! ID: " + result.match_id);
-            console.log("📋 Полученные данные:", result.received_data);
-            addMatchForm.reset();
-        } else {
-            alert("❌ Ошибка при добавлении матча: " + (result?.error || "неизвестная"));
-            console.error("🪵 Сервер вернул:", result);
-        }
-    });
+      // 2) юбилей в этом месяце (по is_anniversary_month)
+      const thisMonth = data.filter(r => r.is_anniversary_month && r.years_in_team >= 1);
+      renderThisMonth(thisMonth);
 
-    await loadTeamsIntoMatchForm();
-});
+      // 3) 5+ лет в клубе
+      const fivePlus = data.filter(r => r.has_5_plus);
+      render5plus(fivePlus);
+
+    } catch(e){
+      console.error(e);
+      const err5 = `<tr><td colspan="5">Ошибка загрузки</td></tr>`;
+      const err4 = `<tr><td colspan="4">Ошибка загрузки</td></tr>`;
+      tenureUpcomingBody.innerHTML = err5;
+      tenureMonthBody.innerHTML    = err4;
+      tenure5plusBody.innerHTML    = err4;
+    }
+  }
+
+  tenureThresholdSel?.addEventListener('change', loadTenureJubilees);
+  document.addEventListener('DOMContentLoaded', loadTenureJubilees);
 </script>
 
 
-
-
 </body>
-
 </html>

@@ -148,21 +148,7 @@ if (!isset($_SESSION['admin_logged_in'])) {
 <body>
 <div class="admin-panel">
 
-    <form method="post" action="logout.php" style="float:right;">
-        <button type="submit">Выйти</button>
-    </form>
-
-    <form action="admin.php" method="get" style="display: inline-block; margin-top: 20px;">
-        <button type="submit">Статистика</button>
-    </form>
-
-    <form action="success.php" method="get" style="display: inline-block; margin-top: 20px;">
-        <button type="submit">Ачивки</button>
-    </form>
-
-    <form action="statisticsall.php" method="get" style="display: inline-block; margin-top: 20px;">
-    <button type="submit">Статистика общая</button>
-</form>
+   <?php include 'headeradmin.html'; ?>
 
 
     <h2>Добавить матч</h2>

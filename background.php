@@ -80,10 +80,35 @@ if (!isset($_SESSION['admin_logged_in'])) {
     white-space: nowrap;
 }
 
+  .admin-header-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #ccc;
+    padding: 10px 20px;
+    transition: transform 0.3s ease;
+  }
+
+  body {
+    padding-top: 100px !important; /* гарантирует отступ под фиксированный header */
+  }
+
+  @media (max-width: 768px) {
+    body {
+      padding-top: 140px !important;
+    }
+  }
+
     </style>
 </head>
-<body>
 
+
+
+<body>
+    <?php include 'headeradmin.html'; ?>
 <h1>Назначение фона игрокам</h1>
 
 <table class="styled-table">
@@ -107,7 +132,11 @@ if (!isset($_SESSION['admin_logged_in'])) {
          { key: "5", name: "Дракон" },
     { key: "6", name: "Кремль" },
     { key: "7", name: "Инь и Янь" },
-    { key: "8", name: "Самурай" }
+    { key: "8", name: "Самурай" },
+     { key: "9", name: "Дождь город" },
+      { key: "10", name: "Волна" },
+       { key: "11", name: "Джунгли" },
+        { key: "12", name: "Переулок" }
     ];
 
     async function loadPlayers() {

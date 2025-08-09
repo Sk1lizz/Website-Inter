@@ -424,7 +424,11 @@ document.addEventListener("DOMContentLoaded", async () => {
           '5' => 'Дракон',
           '6' => 'Кремль',
           '7' => 'Инь и Янь',
-          '8' => 'Самурай'
+          '8' => 'Самурай',
+          '9' => 'Город, дождь',
+          '10' => 'Волна',
+          '11' => 'Джунгли',
+          '12' => 'Переулок',
       ];
       foreach ($backgrounds as $key => $label): ?>
         <div class="bg-option" onclick="setBackground('<?= $key ?>')">
