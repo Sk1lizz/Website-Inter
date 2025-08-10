@@ -17,6 +17,7 @@ $teams = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
     <meta charset="UTF-8">
     <title>Управление взносами</title>
     <link rel="stylesheet" href="/css/main.css">
+    <link rel="icon" href="/img/yelowaicon.png" type="image/x-icon">
     <style>
         body {
             padding: 20px;
@@ -105,17 +106,7 @@ button:hover {
 </head>
 <body>
 
-<div class="buttons-wrapper">
-    <form method="post" action="logout.php"><button type="submit">Выйти</button></form>
-    <form action="success.php" method="get"><button type="submit">Ачивки</button></form>
-    <form action="addmatch.php" method="get"><button type="submit">Добавить матч</button></form>
-    <form action="statisticsall.php" method="get"><button type="submit">Статистика общая</button></form>
-    <form action="background.php" method="get"><button type="submit">Фон</button></form>
-    <form action="freenumbers.php" method="get"><button type="submit">Номера</button></form>
-    <form action="training.php" method="get"><button type="submit">Посещаемость</button></form>
-    <form action="fines.php" method="get"><button type="submit">Штрафы</button></form>
-    <form action="admin.php" method="get"><button type="submit">Назад</button></form>
-</div>
+<?php include 'headeradmin.html'; ?>
 
 
 <h2>Взносы по командам</h2>
@@ -134,10 +125,12 @@ button:hover {
   <button onclick="saveAllPayments()">Сохранить всех</button>
 </div>
 
-<table class="styled-table" id="payments-table">
+<table class="styled-table" id="paymentsTable">
     <thead>
         <tr>
             <th>Игрок</th>
+            <th>Рассчитанный взнос</th>
+            <th>Возвраты</th>
             <th>Сумма (₽)</th>
             <th>Действия</th>
         </tr>
@@ -162,29 +155,47 @@ button:hover {
 <div id="history-result" style="margin-top: 10px;"></div>
 
 <script>
-    document.getElementById('team-select').addEventListener('change', function () {
-        const teamId = this.value;
-        if (!teamId) return;
+    document.getElementById('team-select').addEventListener('change', async function () {
+    const teamId = this.value;
+    if (!teamId) return;
 
-        fetch(`api/get_players_by_team.php?team_id=${teamId}`)
-            .then(res => res.json())
-            .then(players => {
-                const container = document.getElementById('players-container');
-                container.innerHTML = '';
-                players.forEach(player => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${player.name} ${player.patronymic || ''}</td>
-                        <td><input type="number" value="${player.payment || ''}" placeholder="₽"></td>
-                        <td>
-                            <button onclick="savePayment(${player.id}, this)">Сохранить</button>
-                            <button onclick="markAsPaid(${player.id}, this)">Оплачен</button>
-                        </td>
-                    `;
-                    container.appendChild(row);
-                });
-            });
+    const [players, calculated] = await Promise.all([
+        fetch(`api/get_players_by_team.php?team_id=${teamId}`).then(res => res.json()),
+        fetch(`api/get_payments_with_attendance.php?team_id=${teamId}`).then(res => res.json())
+    ]);
+
+    const container = document.getElementById('players-container');
+    container.innerHTML = '';
+
+    players.forEach(player => {
+        const calc = calculated.find(c => c.player_id == player.id);
+        const calcText = calc
+            ? `${calc.final_amount} ₽ (посещаемость ${calc.attendance_percent}%)`
+            : '—';
+        const returnsCount = calc ? calc.returns_count : 0;
+
+        const row = document.createElement('tr');
+row.setAttribute('data-id', player.id);
+row.setAttribute('data-attendance', calc.attendance_percent);
+row.setAttribute('data-base', calc.base_amount);
+row.innerHTML = `
+    <td>${player.name} ${player.patronymic || ''}</td>
+    <td class="calc-cell">${calcText}</td>
+    <td>
+        <input type="number" value="${returnsCount}" min="0" style="width:60px"
+               onchange="updateReturnsCount(${player.id}, this.value)">
+    </td>
+    <td><input type="number" value="${player.payment || ''}" placeholder="₽"></td>
+    <td>
+        <button onclick="savePayment(${player.id}, this)">Сохранить</button>
+        <button onclick="markAsPaid(${player.id}, this)">Оплачен</button>
+    </td>
+`;
+
+        container.appendChild(row);
     });
+});
+
 
     function savePayment(playerId, btn) {
         const amount = btn.closest('tr').querySelector('input').value;
@@ -287,18 +298,65 @@ button:hover {
 }
 
 function applyAmountToAll() {
-    const addValue = parseFloat(document.getElementById('mass-add-amount').value);
-    if (isNaN(addValue) || addValue <= 0) {
-        alert('Введите корректную сумму для начисления');
-        return;
-    }
+    const rows = document.querySelectorAll('#players-container tr');
 
-    const inputs = document.querySelectorAll('#players-container input[type="number"]');
-    inputs.forEach(input => {
-        const current = parseFloat(input.value) || 0;
-        input.value = current + addValue;
+    rows.forEach(row => {
+        // Находим колонку с рассчитанным взносом (2-я колонка)
+        const calcCell = row.querySelector('td:nth-child(2)');
+        if (!calcCell) return;
+
+        // Извлекаем число из строки "3950 ₽ (посещаемость 80%)"
+        const match = calcCell.textContent.match(/(\d+)\s*₽/);
+        if (match) {
+            const amount = parseFloat(match[1]) || 0;
+
+            // Берём текущее значение поля и прибавляем рассчитанную сумму
+            const input = row.querySelector('input[type="number"]');
+            if (input) {
+                const current = parseFloat(input.value) || 0;
+                input.value = current + amount;
+            }
+        }
     });
 }
+
+ function updateReturnsCount(playerId, value) {
+        const returns = parseInt(value) || 0;
+
+        fetch('api/update_returns_count.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ player_id: playerId, returns_count: returns })
+        })
+        .then(res => res.json())
+        .then(resp => {
+            if (resp.success) {
+                const row = document.querySelector(`#players-container tr[data-id="${playerId}"]`);
+                if (row) {
+                    const attendanceText = row.getAttribute('data-attendance') || '0';
+                    const baseAmount = parseFloat(row.getAttribute('data-base')) || 0;
+                    let finalAmount = baseAmount;
+
+                    if (returns > 0) {
+                        const bonusPercent = 0.2 * returns;
+                        finalAmount = baseAmount * (1 + bonusPercent);
+                        const minBonus = 200 * returns;
+                        const diff = finalAmount - baseAmount;
+                        if (diff < minBonus) {
+                            finalAmount = baseAmount + minBonus;
+                        }
+                        finalAmount = Math.ceil(finalAmount / 50) * 50;
+                    }
+
+                    row.querySelector('.calc-cell').textContent = `${finalAmount} ₽ (посещаемость ${attendanceText}%)`;
+                }
+            } else {
+                alert('Ошибка при сохранении количества возвратов');
+            }
+        })
+        .catch(() => alert('Ошибка соединения с сервером'));
+    }
+
 </script>
 
 </body>
