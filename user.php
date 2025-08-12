@@ -207,20 +207,12 @@ $canChangeBackground = (int)$bg['can_change_background'];
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="css/main.css">
 </head>
+
+ <?php include 'headerlk.html'; ?>
+
 <body>
 <div class="user_page">
-  <div class="top-wrapper">
-    <div class="header-buttons">
-      <a href="/player.html?id=<?= (int)$_SESSION['player_id'] ?>" id="viewPublicProfile" target="_blank">Я на сайте</a>
-      <?php if ($canChangeBackground === 1): ?>
-  <button type="button" onclick="document.getElementById('user_bg-modal_background').style.display='flex'">Сменить фон</button>
-<?php endif; ?>
-<button type="button" onclick="window.location.href='https://vk.com/doc-76009640_688177966?hash=maRXB3qNFqzzzsM0TMOJlYGHVEDhQ3csNNTKibnl5Eg&dl=sXOp85lfDplpUbrVfKKhzRNZIdoSZ3Vox00ksRmmnwk'">Новичку</button>
-<button type="button" onclick="window.location.href='https://disk.yandex.ru/i/FUx5Aw-fO06Tvg'">Договор</button>
-      <button type="button" onclick="document.getElementById('changePasswordModal').style.display='block'">Сменить пароль</button>
-      <form method="POST" style="margin: 0;"><button type="submit" name="logout">Выйти</button></form>
-    </div>
-  </div>
+  
 
   <h1 style="text-align:center">Добро пожаловать, <?= htmlspecialchars($_SESSION['player_name']) ?>!</h1>
 
@@ -907,6 +899,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 
+<script src="./js/index.bundle.js"></script>
 
 </body>
 </html>

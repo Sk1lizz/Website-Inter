@@ -1,0 +1,75 @@
+<header>
+    <div class="header_wrapper">
+        <div class="top_parth">
+            <a class="logo_wrapper" href="../index.html">
+                <div class="logo_image"><img src="../img/logo.png" alt="INTER MOSCOW"></div>
+                <div class="logo_text">
+                    <div>INTER MOSCOW</div>
+                    <div id="official-subtext">Личный кабинет</div>
+                </div>
+            </a>
+
+            <div class="social_view_wrapper">
+                <div class="social">
+                    <a href="https://vk.com/fcintermoscow"><img src="../img/VK_Logo.png"></a>
+                    <a href="https://www.youtube.com/@fcintermoscow7572"><img src="../img/youtube_logo.png"></a>
+                    <a href="https://t.me/fcintermoscow"><img src="../img/telegram.png"></a>
+                </div>
+            </div>
+
+            <div class="menu_toggle">
+                <div class="icon" id="icon">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="bottom_parth">
+            <ul class="menu">
+                <!-- Я на сайте -->
+                <li>
+                    <a href="/player.html?id=<?= (int)$_SESSION['player_id'] ?>" class="viewPublicProfile"
+                        target="_blank">Я на
+                        сайте</a>
+                </li>
+
+                <!-- Сменить фон -->
+                <?php if ($canChangeBackground === 1): ?>
+                <li>
+                    <a href="javascript:void(0)"
+                        onclick="document.getElementById('user_bg-modal_background').style.display='flex'">Сменить
+                        фон</a>
+                </li>
+                <?php endif; ?>
+
+                <!-- Новичку -->
+                <li>
+                    <a href="https://vk.com/doc-76009640_688177966?hash=maRXB3qNFqzzzsM0TMOJlYGHVEDhQ3csNNTKibnl5Eg&dl=sXOp85lfDplpUbrVfKKhzRNZIdoSZ3Vox00ksRmmnwk"
+                        target="_blank">Новичку</a>
+                </li>
+
+                <!-- Договор -->
+                <li>
+                    <a href="https://disk.yandex.ru/i/FUx5Aw-fO06Tvg" target="_blank">Договор</a>
+                </li>
+
+                <!-- Сменить пароль -->
+                <li>
+                    <a href="javascript:void(0)"
+                        onclick="document.getElementById('changePasswordModal').style.display='block'">Сменить
+                        пароль</a>
+                </li>
+
+                <!-- Выход -->
+                <li>
+                    <form method="POST" style="display:inline;">
+                        <a href="#" onclick="this.closest('form').submit(); return false;">Выйти</a>
+                        <input type="hidden" name="logout">
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </div>
+</header>

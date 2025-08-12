@@ -1,7 +1,7 @@
 .user_page {
     max-width: 100%;
     min-height: 100vh;
-    padding: 40px 16px;
+    padding: 200px 16px 40px 16px;
     background-color: $gray_black; // фон тёмный
     color: $light;
     font-family: 'Play', sans-serif;
@@ -888,4 +888,16 @@ button.match-rate-btn:hover {
     color: #aaa !important;
     cursor: default;
     pointer-events: none;
+}
+
+@media (max-width: 1024px) {
+    .user_page {
+        padding: 180px 16px 40px 16px;
+    }
+}
+
+@media (max-width: 768px) {
+    .user_page {
+        padding: 90px 16px 40px 16px;
+    }
 }

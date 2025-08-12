@@ -185,6 +185,12 @@ $years = range(date("Y"), 2023);
           <option value="X">Ничья</option>
         </select>
 
+        <label>Описание голов (текст):</label>
+<textarea id="goals" rows="2" style="width:100%;"></textarea>
+
+<label>Описание ассистов (текст):</label>
+<textarea id="assists" rows="2" style="width:100%;"></textarea>
+
         <div id="playersList" style="margin-top: 20px;"></div>
 
         <button type="submit">Сохранить</button>
@@ -207,6 +213,8 @@ async function openModal(match) {
   document.getElementById('opponent_goals').value = match.opponent_goals;
   document.getElementById('match_date').value = match.date;
   document.getElementById('match_result').value = match.match_result;
+  document.getElementById('goals').value = match.goals || '';
+document.getElementById('assists').value = match.assists || '';
 
  const res = await fetch(`/api/get_match_players_with_ratings.php?match_id=${match.id}`);
   const players = await res.json();
@@ -291,13 +299,15 @@ document.getElementById('editForm').addEventListener('submit', async function(e)
 
   const payload = {
     id: matchId,
-    championship_name: document.getElementById('championship_name').value,
-    opponent: document.getElementById('opponent').value,
-    our_goals: parseInt(document.getElementById('our_goals').value) || 0,
-    opponent_goals: parseInt(document.getElementById('opponent_goals').value) || 0,
-    date: document.getElementById('match_date').value,
-    result: document.getElementById('match_result').value,
-    players
+  championship_name: document.getElementById('championship_name').value,
+  opponent: document.getElementById('opponent').value,
+  our_goals: parseInt(document.getElementById('our_goals').value) || 0,
+  opponent_goals: parseInt(document.getElementById('opponent_goals').value) || 0,
+  match_date: document.getElementById('match_date').value,
+  result: document.getElementById('match_result').value,
+  goals: document.getElementById('goals').value,         // <-- было goals_text
+  assists: document.getElementById('assists').value,     // <-- было assists_text
+  players
   };
 
   const res = await fetch('/api/update_match.php', {
