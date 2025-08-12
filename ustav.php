@@ -1,28 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/img/favicon-32x32.png" sizes="32x32" type="image/png">
+    <link rel="icon" href="/img/favicon-16x16.png" sizes="16x16" type="image/png">
+    <link rel="apple-touch-icon" href="/img/apple-touch-icon.png" sizes="180x180">
+    <link rel="icon" sizes="192x192" href="/img/android-chrome-192x192.png">
+    <link rel="icon" sizes="512x512" href="/img/android-chrome-512x512.png">
     <title>Устав</title>
     <link rel="stylesheet" href="./css/main.css" />
 </head>
 
-<script>
-    const password = prompt("Введите пароль для доступа к странице:");
-
-    if (password === "inter_1908") {
-        // Пароль верный, разрешаем доступ к содержимому страницы
-        document.body.innerHTML = "<h1>Доступ разрешен</h1><p>Тут ваше содержимое страницы</p>";
-    } else {
-        // Пароль неверный, перенаправляем на другую страницу или блокируем доступ
-        alert("Неверный пароль. Доступ запрещен.");
-        window.location.href = "https://www.fcintermoscow.com/"; // Замените ссылкой на другую страницу
-    }
-</script>
-
 <body>
-    @@include('blocks/header.html')
+    <?php
+    session_start();
+    require_once 'db.php';
+
+    // Проверка авторизации
+    if (!isset($_SESSION['player_id'])) {
+        header("Location: user.php"); // Перенаправление на страницу входа, если не авторизован
+        exit;
+    }
+
+    // Данные игрока (опционально, для отображения имени)
+    $playerId = (int)$_SESSION['player_id'];
+    $stmt = $db->prepare("SELECT name FROM players WHERE id = ?");
+    $stmt->bind_param("i", $playerId);
+    $stmt->execute();
+    $player = $stmt->get_result()->fetch_assoc();
+    $playerName = htmlspecialchars($player['name'] ?? 'Игрок');
+    ?>
+
+    <?php include 'headerlk.html'; ?>
+    
     <div class="ustav">
 
         <h1>Свод правил и требований FC Inter Moscow</h1>
@@ -1069,7 +1082,7 @@
 
     </div>
 
-    @@include('blocks/footer.html')
+
     <script src="./js/index.bundle.js"></script>
 </body>
 

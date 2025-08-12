@@ -92,7 +92,12 @@ if (!isset($_SESSION['player_id'])) {
         }
     }
 
-    echo '<!DOCTYPE html><html lang="ru"><head><meta charset="UTF-8"><title>Вход</title>
+    echo '<!DOCTYPE html><html lang="ru"><head><meta charset="UTF-8">  <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/img/favicon-32x32.png" sizes="32x32" type="image/png">
+    <link rel="icon" href="/img/favicon-16x16.png" sizes="16x16" type="image/png">
+    <link rel="apple-touch-icon" href="/img/apple-touch-icon.png" sizes="180x180">
+    <link rel="icon" sizes="192x192" href="/img/android-chrome-192x192.png">
+    <link rel="icon" sizes="512x512" href="/img/android-chrome-512x512.png"> <title>Вход</title>
     <style>
     body { background: #f3f6fb; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
     .login-box {
@@ -219,6 +224,12 @@ $canChangeBackground = (int)$bg['can_change_background'];
   <div class="dashboard-grid">
     <!-- Слева -->
     <div class="left-column">
+
+    <div class="card" id="advStatsCard">
+  <h2>Продвинутая статистика</h2>
+  <div id="advStatsBody">Загрузка…</div>
+</div>
+
       <div class="card">
         <h2>Месячный взнос</h2>
         <p><strong>Взнос за месяц:</strong> <?= number_format($amount, 2, '.', ' ') ?> ₽</p>
@@ -457,8 +468,14 @@ function closeVacationModal() {
   document.getElementById('vacationModal').style.display = 'none';
 }
 
-document.getElementById('openVacationModal').addEventListener('click', () => {
-  document.getElementById('vacationModal').style.display = 'flex';
+document.addEventListener('DOMContentLoaded', () => {
+  const btnOpenVac = document.getElementById('openVacationModal');
+  if (btnOpenVac) {
+    btnOpenVac.addEventListener('click', () => {
+      const m = document.getElementById('vacationModal');
+      if (m) m.style.display = 'flex';
+    });
+  }
 });
 
 async function loadVacationStatus() {
@@ -674,30 +691,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 }
 
-document.getElementById('healthForm').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const form = e.target;
-  const data = {
-    player_id: PLAYER_ID,
-    last_ekg_date: form.last_ekg_date.value,
-    has_heart_condition: form.has_heart_condition.checked ? 1 : 0
-  };
-
-  const res = await fetch('/api/set_health.php', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data)
-  });
-
-  const result = await res.json();
-  if (result.success) {
-    alert('Информация обновлена');
-    document.getElementById('editHealthModal').style.display = 'none';
-    loadHealth();
-  } else {
-    alert('Ошибка: ' + (result.message || 'неизвестно'));
-  }
-});
 </script>
 
 <script>
@@ -870,35 +863,85 @@ if (result.success) {
 <script>
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('healthForm');
-  if (!form) return;
-
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault(); // 🛑 предотвращает стандартную отправку
-
-    const data = {
-      player_id: PLAYER_ID,
-      last_ekg_date: form.last_ekg_date.value,
-      has_heart_condition: form.has_heart_condition.checked ? 1 : 0
-    };
-
-    const res = await fetch('/api/set_health.php', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
+  if (form) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = {
+        player_id: PLAYER_ID,
+        last_ekg_date: form.last_ekg_date.value,
+        has_heart_condition: form.has_heart_condition.checked ? 1 : 0
+      };
+      const res = await fetch('/api/set_health.php', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify(data)
+      });
+      const out = await res.json();
+      if (out.success) {
+        alert('Информация обновлена');
+        document.getElementById('editHealthModal').style.display='none';
+        loadHealth();
+      } else {
+        alert('Ошибка: ' + (out.message || 'неизвестно'));
+      }
     });
+  }
 
-    const result = await res.json();
-    if (result.success) {
-      alert('Информация обновлена');
-      document.getElementById('editHealthModal').style.display = 'none';
-      loadHealth();
-    } else {
-      alert('Ошибка: ' + (result.message || 'неизвестно'));
-    }
-  });
+  const btnVacation = document.getElementById('openVacationModal');
+  if (btnVacation) {
+    btnVacation.addEventListener('click', () => {
+      document.getElementById('vacationModal').style.display='flex';
+    });
+  }
 });
 </script>
 
+
+<script>
+async function loadAdvancedStats() {
+  const box = document.getElementById('advStatsBody');
+  if (!box) return;
+  try {
+    const res = await fetch('/api/get_advanced_stats.php', { credentials: 'same-origin' });
+    const txt = await res.text();
+    let json = null;
+    try { json = JSON.parse(txt); } catch (_) {}
+    if (!res.ok || !json || json.success === false) {
+      console.error('API error:', res.status, txt);
+      box.textContent = 'Не удалось загрузить статистику';
+      return;
+    }
+
+    const d = json.data, t = d.totals, r = d.ranks, isGK = !!d.is_gk;
+    const rows = [
+      `<tr><td>Матчи</td><td>${t.matches}</td><td>${t.avg_goals_per_match !== null ? t.avg_goals_per_match : '—'}</td><td>${r.team.matches}</td><td>${r.all_time.matches}</td></tr>`,
+      `<tr><td>Голы</td><td>${t.goals}</td><td>${t.avg_goals_per_match}</td><td>${r.team.goals}</td><td>${r.all_time.goals}</td></tr>`,
+      `<tr><td>Ассисты</td><td>${t.assists}</td><td>${t.avg_assists_per_match}</td><td>${r.team.assists}</td><td>${r.all_time.assists}</td></tr>`,
+      `<tr><td>Матчи на ноль</td><td>${t.zeromatch}</td><td>${t.avg_zeromatch_per_match}</td><td>${isGK && r.team.zeromatch !== '-' ? r.team.zeromatch : '—'}</td><td>${isGK && r.all_time.zeromatch !== '-' ? r.all_time.zeromatch : '—'}</td></tr>`
+    ];
+    if (isGK) {
+      rows.push(`<tr><td>Голов пропущено</td><td>${t.lostgoals}</td><td>${t.avg_conceded_per_match ?? '—'}</td><td>${r.team.lostgoals !== '-' ? r.team.lostgoals : '—'}</td><td>${r.all_time.lostgoals !== '-' ? r.all_time.lostgoals : '—'}</td></tr>`);
+    }
+
+    box.innerHTML = `
+      <table class="attendance-table">
+        <thead><tr>
+          <th>Показатель</th><th>Количество</th><th>В среднем за матч</th><th>Место в команде</th><th>Место за всё время</th>
+        </tr></thead>
+        <tbody>${rows.join('')}</tbody>
+      </table>
+      ${isGK && (t.avg_conceded_per_match === null || t.matches < 15) ? '<p style="margin-top:8px;font-size:12px;color:#666;">* «Средне пропущено/матч» и ранги показываются для вратарей с ≥ 15 матчей.</p>' : ''}
+    `;
+  } catch (e) {
+    console.error(e);
+    box.textContent = 'Не удалось загрузить статистику';
+  }
+}
+document.addEventListener('DOMContentLoaded', loadAdvancedStats);
+</script>
+
+
+<div id="some-missing-id" style="display:none"></div>
 <script src="./js/index.bundle.js"></script>
 
 </body>
