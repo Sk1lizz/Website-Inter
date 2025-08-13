@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Результаты</title>
+    <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/img/favicon-32x32.png" sizes="32x32" type="image/png">
+    <link rel="icon" href="/img/favicon-16x16.png" sizes="16x16" type="image/png">
+    <link rel="apple-touch-icon" href="/img/apple-touch-icon.png" sizes="180x180">
+    <link rel="icon" sizes="192x192" href="/img/android-chrome-192x192.png">
+    <link rel="icon" sizes="512x512" href="/img/android-chrome-512x512.png">
+    <link rel="stylesheet" href="./css/main.css" />
+</head>
+
+<body>
+    @@include('blocks/header.html')
+
+    <div class="result" style="padding: 180px 20px 40px">
+        <div class="title" id="pageTitle">Результаты</div>
+        <div class="matches_result" id="matches_result"></div>
+    </div>
+
+    @@include('blocks/footer.html')
+
+    <script>
+        (function () {
+            // Гард от двойного выполнения (если скрипт подключится повторно через include/бандл)
+            if (window.__RESULT_SCRIPT_RAN__) return;
+            window.__RESULT_SCRIPT_RAN__ = true;
+
+            document.addEventListener("DOMContentLoaded", init);
+
+            async function init() {
+                const container = document.getElementById("matches_result");
+                const params = new URLSearchParams(location.search);
+
+                // team_id: берём аккуратно, чтобы мусор не превращался в 0 незаметно
+                const teamIdParam = params.get("team_id");
+                const teamId = (teamIdParam && !isNaN(teamIdParam)) ? Number(teamIdParam) : 0;
+
+                const teamFromUrl = decodeURIComponent(params.get("team") || "").trim();
+                const yearParam = params.get("year");
+                const year = (yearParam && !isNaN(yearParam)) ? Number(yearParam) : new Date().getFullYear();
+
+                // Мапа имён по team_id (для заголовка)
+                const TEAM_NAMES = {
+                    1: "FC Inter Moscow 8x8",
+                    2: "FC Inter Moscow Pro",
+                    4: "FC Inter Moscow Forever",
+                    5: "FC Inter Moscow-2",
+                    6: "Primavera Inter",
+                    7: "FC Inter Moscow 01-02", // синхронизировано
+                    8: "FC Inter Moscow 98-00",
+                    9: "MFC Inter Moscow",
+                    10: "FC Inter Moscow U18",
+                    11: "FC Inter Moscow U21"
+                };
+
+                const teamName = TEAM_NAMES[teamId] || teamFromUrl || "FC Inter Moscow";
+                const pageTitle = `${teamName} — Результаты ${year} года`;
+                document.title = pageTitle;
+                const titleEl = document.getElementById("pageTitle");
+                if (titleEl) titleEl.textContent = pageTitle;
+
+                if (!teamId) {
+                    container.innerHTML = "<p>Не передан параметр команды (team_id).</p>";
+                    return;
+                }
+
+                // Относительный путь (важно, если сайт в подпапке)
+                const apiUrl = new URL("./api/get_matches.php", window.location.href);
+                apiUrl.searchParams.set("team_id", String(teamId));
+                apiUrl.searchParams.set("year", String(year));
+
+                try {
+                    const res = await fetch(apiUrl.toString(), { headers: { "Accept": "application/json" } });
+                    const contentType = res.headers.get("content-type") || "";
+                    const raw = await res.text();
+
+                    if (!res.ok) {
+                        console.error("API HTTP error:", res.status, res.statusText, raw);
+                        container.innerHTML = `<p>Ошибка загрузки данных (HTTP ${res.status}).</p>`;
+                        return;
+                    }
+
+                    let data;
+                    if (contentType.includes("application/json")) {
+                        try {
+                            data = JSON.parse(raw);
+                        } catch (e) {
+                            console.error("JSON parse error, raw:", raw);
+                            container.innerHTML = "<p>Ошибка: сервер вернул некорректный JSON.</p>";
+                            return;
+                        }
+                    } else {
+                        // Сервер отдал HTML/текст — покажем в консоли, а на странице — дружелюбную ошибку.
+                        console.error("Ответ сервера не JSON. Raw:", raw);
+                        container.innerHTML = "<p>Ошибка: сервер вернул не JSON. Проверьте путь к API и .htaccess (исключение /api/ из rewrite).</p>";
+                        return;
+                    }
+
+                    renderMatches(data, { container, teamName });
+                } catch (err) {
+                    console.error("Fetch error:", err);
+                    container.innerHTML = "<p>Ошибка при загрузке данных.</p>";
+                }
+            }
+
+            function renderMatches(matches, { container, teamName }) {
+                if (!Array.isArray(matches) || matches.length === 0) {
+                    container.innerHTML = "<p>Матчей за выбранный год не найдено.</p>";
+                    return;
+                }
+
+                const fmtDate = (d) => {
+                    const [Y, M, D] = (d || "").split("-");
+                    return (Y && M && D) ? `${D}.${M}.${Y}` : (d || "");
+                };
+
+                const frag = document.createDocumentFragment();
+
+                matches.forEach(m => {
+                    const div = document.createElement("div");
+                    div.className = "match";
+
+                    const haveScore = (m.our_goals != null && m.opponent_goals != null);
+                    const score = haveScore ? `(${m.our_goals}:${m.opponent_goals})` : "";
+
+                    const left = (m.our_team || teamName).trim();
+                    const right = (m.opponent || "").trim();
+                    const scoreLine = `${left} — ${right} ${score}`.trim();
+                    const tournament = [m.championship_name, m.tour].filter(Boolean).join(", ");
+
+                    div.innerHTML = `
+          <p>${fmtDate(m.date)}</p>
+          <p>${tournament}</p>
+          <p>${scoreLine}</p>
+          ${(m.match_result === "technical_win" || m.match_result === "TW") ? `<p>Техническая победа</p>` : ""}
+          ${m.goals ? `<p>Голы: ${m.goals}</p>` : ""}
+          ${m.assists ? `<p>Голевые: ${m.assists}</p>` : ""}
+        `;
+                    frag.appendChild(div);
+                });
+
+                container.innerHTML = "";
+                container.appendChild(frag);
+            }
+        })();
+    </script>
+</body>
+
+</html>
