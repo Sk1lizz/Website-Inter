@@ -805,6 +805,7 @@ button.match-rate-btn:hover {
     color: $gold;
 }
 
+
 .user_password-modal input[type="range"] {
     width: 150px;
     height: 6px;
@@ -900,4 +901,24 @@ button.match-rate-btn:hover {
     .user_page {
         padding: 90px 16px 40px 16px;
     }
+}
+
+#rateTrainingButton {
+    font-size: 14px;
+    padding: 10px 18px;
+    border-radius: 20px;
+    border: 1px solid $gold;
+    background: $dark_light;
+    color: $light;
+    font-family: 'Play', sans-serif;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    display: inline-block;
+    margin-top: 10px;
+}
+
+#rateTrainingButton:hover {
+    background: $dark_medium;
+    color: $gold;
+    border-color: $light;
 }

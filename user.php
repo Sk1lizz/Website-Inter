@@ -308,10 +308,18 @@ $canChangeBackground = (int)$bg['can_change_background'];
 </script>
         <select id="monthSelect"></select>
         <table class="attendance-table" id="attendanceTable">
-            <thead><tr><th>Дата</th><th>Статус</th></tr></thead><tbody></tbody>
-        </table>
+  <thead>
+    <tr><th>Дата</th><th>Статус</th><th>Рейтинг</th></tr>
+  </thead>
+  <tbody></tbody>
+</table>
         <p><strong>Процент посещаемости:</strong> <span id="percent">0%</span></p>
         <p id="feedback" style="font-weight:bold;"></p>
+        <p><strong>Средний тренировочный рейтинг за месяц:</strong> <span id="monthlyTrainAvg">—</span></p>
+        <div id="rateTrainingWrap" style="margin-top:10px;">
+  <button id="rateTrainingButton" onclick="openRateTrainingModal()">Оценить предыдущую тренировку</button>
+  <p id="rateTrainingHint" style="margin-top:6px; font-size:12px; color:#666;"></p>
+</div>
       </div>
 
       <div class="card">
@@ -362,34 +370,54 @@ function fillMonthSelector(data) {
 }
 
 function renderAttendance(data, selectedMonth) {
-    const tbody = document.querySelector('#attendanceTable tbody');
-    const percentEl = document.getElementById('percent');
-    const feedbackEl = document.getElementById('feedback');
-    tbody.innerHTML = '';
+  const tbody = document.querySelector('#attendanceTable tbody');
+  const percentEl = document.getElementById('percent');
+  const feedbackEl = document.getElementById('feedback');
+  const monthlyAvgEl = document.getElementById('monthlyTrainAvg');
 
-    const filtered = data.filter(d => d.training_date.startsWith(selectedMonth));
-    
-    // Подсчёт только по статусам 0 и 1
-    const countable = filtered.filter(d => d.status === 0 || d.status === 1);
-    const present = countable.filter(d => d.status === 1).length;
-    const total = countable.length;
+  tbody.innerHTML = '';
 
-    for (const row of filtered) {
-        const date = new Date(row.training_date).toLocaleDateString('ru-RU');
-        const status = STATUS_MAP[row.status] || '—';
-        const className = `status-${row.status}`;
-        tbody.innerHTML += `<tr><td>${date}</td><td class="${className}">${status}</td></tr>`;
-    }
+  const filtered = data.filter(d => d.training_date.startsWith(selectedMonth));
 
-    const percent = total ? Math.round((present / total) * 100) : 0;
-    percentEl.textContent = percent + '%';
+  // присутствие/процент
+  const countable = filtered.filter(d => d.status === 0 || d.status === 1);
+  const present = countable.filter(d => d.status === 1).length;
+  const total = countable.length;
 
-    // Добавляем фразу
-    let message = '';
-    if (percent < 50) message = 'Надо поднажать';
-    else if (percent < 75) message = 'Неплохо!';
-    else message = 'Превосходно!';
-    feedbackEl.textContent = message;
+  // рендер строк
+  for (const row of filtered) {
+    const date = new Date(row.training_date).toLocaleDateString('ru-RU');
+    const status = STATUS_MAP[row.status] || '—';
+    const className = `status-${row.status}`;
+
+    const ratingCell = (row.status === 1 && row.rating != null)
+      ? Number(row.rating).toFixed(1)
+      : '—';
+
+    tbody.innerHTML += `<tr>
+      <td>${date}</td>
+      <td class="${className}">${status}</td>
+      <td style="text-align:center;">${ratingCell}</td>
+    </tr>`;
+  }
+
+  // процент
+  const percent = total ? Math.round((present / total) * 100) : 0;
+  percentEl.textContent = percent + '%';
+  feedbackEl.textContent = percent < 50 ? 'Надо поднажать' : (percent < 75 ? 'Неплохо!' : 'Превосходно!');
+
+  // СРЕДНИЙ тренировочный рейтинг за месяц: только присутствия с НЕ NULL rating
+  const monthRatings = filtered
+    .filter(r => r.status === 1 && r.rating != null)
+    .map(r => Number(r.rating));
+
+  const monthAvg = monthRatings.length
+    ? (monthRatings.reduce((a,b)=>a+b, 0) / monthRatings.length)
+    : null;
+
+  if (monthlyAvgEl) {
+    monthlyAvgEl.textContent = monthAvg !== null ? monthAvg.toFixed(1) : '—';
+  }
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -860,6 +888,41 @@ if (result.success) {
   </div>
 </div>
 
+<div id="rateTrainingModal" class="user_password-modal">
+  <div class="modal-content">
+    <h3>Оценить тренировку <span id="rateTrainDate"></span></h3>
+
+    <div class="player-rating-item">
+      <label>Интенсивность (насколько было тяжело)</label>
+      <input type="range" min="1" max="5" step="1" value="3" id="rt_intensity" oninput="document.getElementById('rt_intensity_v').textContent=this.value">
+      <span class="rating-value" id="rt_intensity_v">3</span>
+    </div>
+
+    <div class="player-rating-item">
+      <label>Усталость после тренировки</label>
+      <input type="range" min="1" max="5" step="1" value="3" id="rt_fatigue" oninput="document.getElementById('rt_fatigue_v').textContent=this.value">
+      <span class="rating-value" id="rt_fatigue_v">3</span>
+    </div>
+
+    <div class="player-rating-item">
+      <label>Настроение во время тренировки</label>
+      <input type="range" min="1" max="5" step="1" value="3" id="rt_mood" oninput="document.getElementById('rt_mood_v').textContent=this.value">
+      <span class="rating-value" id="rt_mood_v">3</span>
+    </div>
+
+    <div class="player-rating-item">
+      <label>Удовольствие от процесса</label>
+      <input type="range" min="1" max="5" step="1" value="3" id="rt_enjoyment" oninput="document.getElementById('rt_enjoyment_v').textContent=this.value">
+      <span class="rating-value" id="rt_enjoyment_v">3</span>
+    </div>
+
+    <div class="modal-buttons">
+      <button id="rt_submitBtn">Сохранить</button>
+      <button type="button" onclick="document.getElementById('rateTrainingModal').style.display='none'">Отмена</button>
+    </div>
+  </div>
+</div>
+
 <script>
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('healthForm');
@@ -901,11 +964,14 @@ document.addEventListener('DOMContentLoaded', () => {
 async function loadAdvancedStats() {
   const box = document.getElementById('advStatsBody');
   if (!box) return;
+
   try {
     const res = await fetch('/api/get_advanced_stats.php', { credentials: 'same-origin' });
     const txt = await res.text();
+
     let json = null;
     try { json = JSON.parse(txt); } catch (_) {}
+
     if (!res.ok || !json || json.success === false) {
       console.error('API error:', res.status, txt);
       box.textContent = 'Не удалось загрузить статистику';
@@ -913,6 +979,7 @@ async function loadAdvancedStats() {
     }
 
     const d = json.data, t = d.totals, r = d.ranks, isGK = !!d.is_gk;
+
     const rows = [
       `<tr><td>Матчи</td><td>${t.matches}</td><td>${t.avg_goals_per_match !== null ? t.avg_goals_per_match : '—'}</td><td>${r.team.matches}</td><td>${r.all_time.matches}</td></tr>`,
       `<tr><td>Голы</td><td>${t.goals}</td><td>${t.avg_goals_per_match}</td><td>${r.team.goals}</td><td>${r.all_time.goals}</td></tr>`,
@@ -920,7 +987,9 @@ async function loadAdvancedStats() {
       `<tr><td>Матчи на ноль</td><td>${t.zeromatch}</td><td>${t.avg_zeromatch_per_match}</td><td>${isGK && r.team.zeromatch !== '-' ? r.team.zeromatch : '—'}</td><td>${isGK && r.all_time.zeromatch !== '-' ? r.all_time.zeromatch : '—'}</td></tr>`
     ];
     if (isGK) {
-      rows.push(`<tr><td>Голов пропущено</td><td>${t.lostgoals}</td><td>${t.avg_conceded_per_match ?? '—'}</td><td>${r.team.lostgoals !== '-' ? r.team.lostgoals : '—'}</td><td>${r.all_time.lostgoals !== '-' ? r.all_time.lostgoals : '—'}</td></tr>`);
+      rows.push(
+        `<tr><td>Голов пропущено</td><td>${t.lostgoals}</td><td>${t.avg_conceded_per_match ?? '—'}</td><td>${r.team.lostgoals !== '-' ? r.team.lostgoals : '—'}</td><td>${r.all_time.lostgoals !== '-' ? r.all_time.lostgoals : '—'}</td></tr>`
+      );
     }
 
     box.innerHTML = `
@@ -930,14 +999,148 @@ async function loadAdvancedStats() {
         </tr></thead>
         <tbody>${rows.join('')}</tbody>
       </table>
-      ${isGK && (t.avg_conceded_per_match === null || t.matches < 15) ? '<p style="margin-top:8px;font-size:12px;color:#666;">* «Средне пропущено/матч» и ранги показываются для вратарей с ≥ 15 матчей.</p>' : ''}
+      ${isGK && (t.avg_conceded_per_match === null || t.matches < 15)
+        ? '<p style="margin-top:8px;font-size:12px;color:#666;">* «Средне пропущено/матч» и ранги показываются для вратарей с ≥ 15 матчей.</p>'
+        : ''}
+      <div id="adv-extra-ratings" style="margin-top:10px;">
+        <p><strong>Мой тренировочный рейтинг (средний):</strong> <span id="advTrainAvg">—</span></p>
+        <p><strong>Мой игровой рейтинг:</strong> <span id="advMatchAvg">—</span></p>
+      </div>
     `;
+
+    // Догружаем два средних параллельно
+    const [trainRes, matchRes] = await Promise.all([
+      fetch(`/api/get_training_rating_avg.php?player_id=${PLAYER_ID}`, { credentials: 'same-origin' }),
+      fetch(`/api/get_match_rating_avg.php?player_id=${PLAYER_ID}`, { credentials: 'same-origin' })
+    ]);
+
+    let trainJson = null, matchJson = null;
+    try { trainJson = await trainRes.json(); } catch { trainJson = { success: false }; }
+    try { matchJson = await matchRes.json(); } catch { matchJson = { success: false }; }
+
+    const trainAvgEl = document.getElementById('advTrainAvg');
+    const matchAvgEl = document.getElementById('advMatchAvg');
+
+    if (trainAvgEl) {
+  // сначала пробуем avg_all_time (как отдаёт ваш API без month),
+  // если его нет — используем avg
+  const v =
+    (trainJson && trainJson.success && trainJson.avg_all_time != null)
+      ? Number(trainJson.avg_all_time)
+      : (trainJson && trainJson.success && trainJson.avg != null)
+       ? Number(trainJson.avg)
+        : null;
+   trainAvgEl.textContent = (v != null && !isNaN(v)) ? v.toFixed(2) : '—';
+ }
+
+    if (matchAvgEl) {
+  const v = (matchJson && matchJson.success && matchJson.avg != null)
+     ? Number(matchJson.avg)   // сервер уже присылает округлённое значение
+     : null;
+   matchAvgEl.textContent = (v != null && !isNaN(v)) ? v.toFixed(2) : '—';
+}
+
   } catch (e) {
     console.error(e);
-    box.textContent = 'Не удалось загрузить статистику';
+    const box = document.getElementById('advStatsBody');
+    if (box) box.textContent = 'Не удалось загрузить статистику';
   }
 }
 document.addEventListener('DOMContentLoaded', loadAdvancedStats);
+</script>
+
+<script>
+let RT_TRAINING_ID = null;
+
+async function fetchPreviousTrainForRating() {
+  try {
+    const res = await fetch('/api/get_previous_training.php', { credentials:'same-origin' });
+    const text = await res.text();
+    try {
+      return JSON.parse(text);
+    } catch(e) {
+      console.error('API non-JSON:', text.slice(0,500));
+      return { success:false };
+    }
+  } catch(e) {
+    console.error(e);
+    return { success:false };
+  }
+}
+
+function setupRateTraining() {
+  const btn  = document.getElementById('rateTrainingButton');
+  const hint = document.getElementById('rateTrainingHint');
+  if (!btn) return;
+  btn.disabled = true;
+
+  fetchPreviousTrainForRating().then(data => {
+    if (!data || data.success !== true) {
+      hint.textContent = 'Не удалось проверить возможность оценки.';
+      btn.style.opacity = 0.6;
+      return;
+    }
+    if (!data.can_rate) {
+      hint.textContent = 'Нет тренировок для оценки.';
+      btn.disabled = true; btn.style.opacity = 0.6;
+      return;
+    }
+    RT_TRAINING_ID = data.training.id;
+    const d = new Date(data.training.date + 'T00:00:00');
+    hint.textContent = `Доступна тренировка от ${d.toLocaleDateString('ru-RU')}.`;
+    btn.disabled = false; btn.style.opacity = 1;
+
+    btn.onclick = () => {
+      document.getElementById('rateTrainDate').textContent = d.toLocaleDateString('ru-RU');
+      ['intensity','fatigue','mood','enjoyment'].forEach(k=>{
+        const input = document.getElementById('rt_'+k);
+        input.value = 3;
+        document.getElementById('rt_'+k+'_v').textContent = '3';
+      });
+      document.getElementById('rateTrainingModal').style.display='flex';
+    };
+  });
+
+  const submit = document.getElementById('rt_submitBtn');
+  if (submit) {
+    submit.onclick = async () => {
+      if (!RT_TRAINING_ID) return;
+      submit.disabled = true;
+      const payload = {
+        training_id: RT_TRAINING_ID,
+        intensity:  parseInt(document.getElementById('rt_intensity').value,10),
+        fatigue:    parseInt(document.getElementById('rt_fatigue').value,10),
+        mood:       parseInt(document.getElementById('rt_mood').value,10),
+        enjoyment:  parseInt(document.getElementById('rt_enjoyment').value,10)
+      };
+      try {
+        const res = await fetch('/api/save_training_rating.php', {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          credentials:'same-origin',
+          body: JSON.stringify(payload)
+        });
+        const text = await res.text();
+        let out; try { out = JSON.parse(text); } catch{ out = {success:false, message:'bad_json'}; }
+        if (out.success) {
+          alert('Спасибо! Оценка сохранена.');
+          document.getElementById('rateTrainingModal').style.display='none';
+          btn.disabled = true; btn.textContent='Оценка сохранена'; btn.style.opacity=0.6;
+          hint.textContent = 'Эта тренировка уже оценена.';
+        } else {
+          alert('Ошибка: ' + (out.message || 'не удалось сохранить'));
+        }
+      } catch(e) {
+        console.error(e);
+        alert('Сеть/сервер: не удалось сохранить');
+      } finally {
+        submit.disabled = false;
+      }
+    };
+  }
+}
+
+document.addEventListener('DOMContentLoaded', setupRateTraining);
 </script>
 
 

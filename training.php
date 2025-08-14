@@ -155,6 +155,22 @@ if (!isset($_SESSION['auth'])) {
       select, input[type="date"] { width: 100%; max-width: none; }
       #players-list > div { flex-direction: column; align-items: flex-start; }
     }
+
+   
+  .btn-details {
+    padding: 8px 12px;
+    background: #083c7e;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .2s ease;
+  }
+  .btn-details:hover {
+    background: #0a4da5;
+  }
+
   </style>
 
 <script>
@@ -207,6 +223,28 @@ if (!isset($_SESSION['auth'])) {
   </select>
 </label>
 
+<!-- Аналитика оценок -->
+<div id="ratings-analytics" style="margin-top:20px;">
+  <h2 style="color:#083c7e;">Оценки тренировок — аналитика</h2>
+
+  <div id="ratings-summary" style="background:#fff; border-radius:8px; padding:16px; box-shadow:0 2px 10px rgba(0,0,0,0.05);">
+    <p>Выберите команду и месяц — сводка появится здесь.</p>
+  </div>
+
+  <div id="ratings-trainings" style="margin-top:16px;"></div>
+</div>
+
+<!-- Модалка с деталями оценок -->
+<div id="ratings-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:2000; align-items:center; justify-content:center;">
+  <div style="background:#fff; width:95%; max-width:700px; border-radius:10px; padding:18px; box-shadow:0 10px 30px rgba(0,0,0,0.2);">
+    <h3 style="margin-top:0; color:#083c7e;">Детали оценок</h3>
+    <div id="ratings-modal-body">Загрузка…</div>
+    <div style="text-align:right; margin-top:12px;">
+      <button id="close-ratings-modal" style="padding:8px 14px; background:#083c7e; color:#fff; border:none; border-radius:6px; cursor:pointer;">Закрыть</button>
+    </div>
+  </div>
+</div>
+
 <div id="attendance-table-wrapper"></div>
 
 <script>
@@ -216,6 +254,10 @@ const statusColors = { 1: '#d4f4d2', 0: '#f9d6d5', 2: '#fdf3c0', 3: '#e0d4f5', 4
 function createPlayerRow(player, isOnHoliday = false) {
   const wrapper = document.createElement('div');
   wrapper.style.marginBottom = '5px';
+  wrapper.style.display = 'grid';
+  wrapper.style.gridTemplateColumns = 'auto 1fr auto';
+  wrapper.style.alignItems = 'center';
+  wrapper.style.gap = '10px';
 
   const checkbox = document.createElement('input');
   checkbox.type = 'checkbox';
@@ -235,6 +277,30 @@ function createPlayerRow(player, isOnHoliday = false) {
   const select = document.createElement('select');
   select.name = `status[${player.id}]`;
 
+  // Блок с ползунком рейтинга (3..10 шаг 0.5), по умолчанию скрыт
+  const ratingWrap = document.createElement('div');
+  ratingWrap.style.display = 'none'; // появится только при присутствии
+  ratingWrap.style.gridColumn = '1 / -1'; // во всю ширину строки
+
+  ratingWrap.innerHTML = `
+    <div style="display:flex; align-items:center; gap:10px;">
+      <span style="min-width:160px; font-size:13px; color:#333;">Оценка игрока (3.0 – 10.0):</span>
+      <input type="range" min="3" max="10" step="0.5"
+             name="rating[${player.id}]"
+             value="7.0"
+             style="width:220px;"
+      >
+      <span class="rating-value" style="width:40px; text-align:center; font-weight:600;">7.0</span>
+    </div>
+  `;
+
+  const ratingInput = ratingWrap.querySelector('input[type="range"]');
+  const ratingValue = ratingWrap.querySelector('.rating-value');
+  ratingInput.addEventListener('input', () => {
+    ratingValue.textContent = ratingInput.value;
+  });
+
+  // Инициализация вариантов селекта
   if (isOnHoliday) {
     select.innerHTML = `<option value="2" selected>Отпуск</option>`;
     checkbox.disabled = true;
@@ -251,12 +317,17 @@ function createPlayerRow(player, isOnHoliday = false) {
     `;
   }
 
-  checkbox.addEventListener('change', () => {
-    if (checkbox.checked) {
+  // Функция переключения UI под присутствие
+  const setPresenceUI = (isPresent) => {
+    if (isPresent) {
       select.innerHTML = `
         <option value="1" selected>Присутствовал</option>
         <option value="опоздание">Опоздание</option>
       `;
+      ratingWrap.style.display = '';
+      // если ранее сбросили — вернём дефолт
+      if (!ratingInput.value) ratingInput.value = '7.0';
+      ratingValue.textContent = ratingInput.value;
     } else {
       select.innerHTML = `
         <option value="0" selected>Не был</option>
@@ -266,13 +337,32 @@ function createPlayerRow(player, isOnHoliday = false) {
         <option value="late_notice">Не был, предупреждение < 3 ч.</option>
         <option value="absent">Неявка</option>
       `;
+      ratingWrap.style.display = 'none';
+      ratingInput.value = ''; // очистим, чтобы на сервер не ушёл мусор
+      ratingValue.textContent = '';
+    }
+  };
+
+  // Смена чекбокса — управляет "присутствовал/не был"
+  checkbox.addEventListener('change', () => setPresenceUI(checkbox.checked));
+
+  // Если пользователь вручную поменяет селект, тоже ловим
+  select.addEventListener('change', () => {
+    const val = select.value;
+    if (val === '1' || val === 'опоздание') {
+      // при «опоздании» мы всё равно сохраняем как присутствовал (вы уже мапите это в JS)
+      setPresenceUI(true);
+    } else {
+      setPresenceUI(false);
+      // для штрафных вариантов ваш код ниже всё равно заменит значение на 0/1 и добавит штраф
     }
   });
 
   wrapper.appendChild(checkbox);
   wrapper.appendChild(label);
-  wrapper.appendChild(hiddenPlayerId);
   wrapper.appendChild(select);
+  wrapper.appendChild(hiddenPlayerId);
+  wrapper.appendChild(ratingWrap);
   return wrapper;
 }
 
@@ -320,125 +410,153 @@ players.forEach(player => {
 }
 
 async function loadAttendanceTable(teamId, month) {
-    const wrapper = document.getElementById('attendance-table-wrapper');
-    wrapper.innerHTML = 'Загрузка...';
+  const wrapper = document.getElementById('attendance-table-wrapper');
+  const ratingsSummaryBox = document.getElementById('ratings-summary');
+  const ratingsTrainingsBox = document.getElementById('ratings-trainings');
 
-    try {
-        const res = await fetch(`/api/get_attendance_detailed.php?team_id=${teamId}&month=${month}`);
-        if (!res.ok) throw new Error("Ошибка запроса");
+  if (!teamId) {
+    wrapper.innerHTML = '<p>Сначала выберите команду.</p>';
+    ratingsSummaryBox.innerHTML = '<p>Выберите команду и месяц.</p>';
+    ratingsTrainingsBox.innerHTML = '';
+    return;
+  }
+  if (!month) {
+    wrapper.innerHTML = '<p>Сначала выберите месяц.</p>';
+    return;
+  }
 
-        const { dates, players } = await res.json();
+  // год + нормализуем месяц к двузначному (на случай, если API этого хочет)
+  const year = new Date().getFullYear();
+  const mm = String(month).padStart(2, '0');
 
-        if (!dates.length || !players.length) {
-            wrapper.innerHTML = '<p>Нет данных за выбранный месяц.</p>';
-            return;
+  wrapper.innerHTML = 'Загрузка...';
+  console.log('[attendance] fetch', { teamId, month: mm, year });
+
+  try {
+    const res = await fetch(`/api/get_attendance_detailed.php?team_id=${teamId}&month=${mm}&year=${year}`);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const payload = await res.json();
+    const { dates = [], players = [] } = payload || {};
+
+    if (!dates.length || !players.length) {
+      wrapper.innerHTML = '<p>Нет данных за выбранный месяц.</p>';
+      return;
+    }
+
+    // сортировка по имени
+    players.sort((a, b) => a.name.localeCompare(b.name, 'ru', { sensitivity: 'base' }));
+
+    let html = '<table><thead><tr><th>Игрок</th>';
+    dates.forEach(dateStr => {
+      const d = new Date(dateStr);
+      const formatted = d.toLocaleDateString('ru-RU', { day: '2-digit', month: 'short' });
+      html += `<th>${formatted}</th>`;
+    });
+    html += '<th>Итого</th><th>%</th><th>Редактировать</th></tr></thead><tbody>';
+
+    const totalPerDate = {};
+    dates.forEach(date => totalPerDate[date] = 0);
+
+    players.forEach(p => {
+      let attended = 0;
+      let valid = 0;
+
+      html += `<tr><td style="text-align:left">${p.name}</td>`;
+
+      dates.forEach(date => {
+        const status = p.statuses[date];
+        const symbol = statusSymbols[status] || '';
+        const bg = statusColors[status] || '';
+
+        if (status === 1) {
+          attended++;
+          totalPerDate[date]++;
         }
+        if (status === 1 || status === 0) valid++;
 
-        // ✅ сортировка игроков по имени
-        players.sort((a, b) => a.name.localeCompare(b.name, 'ru', { sensitivity: 'base' }));
+        html += `<td style="background:${bg}">${symbol}</td>`;
+      });
 
-       let html = '<table><thead><tr><th>Игрок</th>';
-dates.forEach(dateStr => {
-  const d = new Date(dateStr);
-  const formatted = d.toLocaleDateString('ru-RU', { day: '2-digit', month: 'short' });
-  html += `<th>${formatted}</th>`;
-});
-html += '<th>Итого</th><th>%</th><th>Редактировать</th></tr></thead><tbody>';
+      const percent = valid ? Math.round((attended / valid) * 100) : 0;
+      const pcColor = percent >= 80 ? '#c8e6c9' : percent >= 50 ? '#fff9c4' : '#ffcdd2';
 
-        // Для подсчёта суммарных посещений по каждой дате
-        const totalPerDate = {};
-        dates.forEach(date => totalPerDate[date] = 0);
-
-        // Игроки
-        players.forEach(p => {
-            let attended = 0;
-            let valid = 0;
-
-            html += `<tr><td style="text-align:left">${p.name}</td>`;
-
-            dates.forEach(date => {
-                const status = p.statuses[date];
-                const symbol = statusSymbols[status] || '';
-                const bg = statusColors[status] || '';
-
-                if (status === 1) {
-                    attended++;
-                    totalPerDate[date]++;
-                }
-                if (status === 1 || status === 0) valid++;
-
-                html += `<td style="background:${bg}">${symbol}</td>`;
-            });
-
-            const percent = valid ? Math.round((attended / valid) * 100) : 0;
-            const pcColor = percent >= 80 ? '#c8e6c9' : percent >= 50 ? '#fff9c4' : '#ffcdd2';
-
-            html += `<td>${attended}</td><td style="background:${pcColor}">${percent}%</td>`;
-            console.log('DEBUG p:', p);
-html += `<td><button class="edit-btn" data-player='${JSON.stringify(p)}'>Редактировать</button></td>`;
-        });
-
-        // ✅ Добавим строку "Итого" по колонкам (сколько игроков были)
-        html += `<tr style="font-weight:bold; background:#f0f0f0"><td>Присутствовали</td>`;
-        dates.forEach(date => {
-            html += `<td>${totalPerDate[date]}</td>`;
-        });
-        html += `<td colspan="2"></td></tr>`;
-
-        html += '</tbody></table>';
-        wrapper.innerHTML = html;
-
-        document.querySelectorAll('.edit-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const player = JSON.parse(btn.dataset.player);
-    const editFields = document.getElementById('edit-fields');
-    const modal = document.getElementById('edit-modal');
-    editFields.innerHTML = '';
-    document.getElementById('edit-player-id').value = player.id;
-    document.getElementById('edit-team-id').value = teamSelect.value;
-    document.getElementById('edit-month').value = monthSelect.value;
-
-    dates.forEach(date => {
-      const value = player.statuses[date] ?? 0;
-      const field = document.createElement('div');
-      field.innerHTML = `
-        <label>${date}: 
-          <select name="status[${date}]">
-            <option value="0" ${value===0?'selected':''}>– Не был</option>
-            <option value="1" ${value===1?'selected':''}>+ Присутствовал</option>
-            <option value="2" ${value===2?'selected':''}>О Отпуск</option>
-            <option value="3" ${value===3?'selected':''}>Т Травма</option>
-            <option value="4" ${value===4?'selected':''}>Б Болел</option>
-          </select>
-        </label>`;
-      editFields.appendChild(field);
+      html += `<td>${attended}</td><td style="background:${pcColor}">${percent}%</td>`;
+      html += `<td><button class="edit-btn" data-player='${JSON.stringify(p)}'>Редактировать</button></td>`;
     });
 
-    modal.style.display = 'block';
-  });
-});
+    html += `<tr style="font-weight:bold; background:#f0f0f0"><td>Присутствовали</td>`;
+    dates.forEach(date => { html += `<td>${totalPerDate[date]}</td>`; });
+    html += `<td colspan="2"></td></tr>`;
+    html += '</tbody></table>';
 
-    } catch (e) {
-        console.error("Ошибка загрузки посещаемости:", e);
-        wrapper.innerHTML = '<p>Ошибка загрузки таблицы</p>';
-    }
+    wrapper.innerHTML = html;
+
+    document.querySelectorAll('.edit-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const player = JSON.parse(btn.dataset.player);
+        const editFields = document.getElementById('edit-fields');
+        const modal = document.getElementById('edit-modal');
+        editFields.innerHTML = '';
+        document.getElementById('edit-player-id').value = player.id;
+        document.getElementById('edit-team-id').value = teamSelect.value;
+        document.getElementById('edit-month').value = monthSelect.value;
+
+        dates.forEach(date => {
+          const value = player.statuses[date] ?? 0;
+          const field = document.createElement('div');
+          field.innerHTML = `
+            <label>${date}: 
+              <select name="status[${date}]">
+                <option value="0" ${value===0?'selected':''}>– Не был</option>
+                <option value="1" ${value===1?'selected':''}>+ Присутствовал</option>
+                <option value="2" ${value===2?'selected':''}>О Отпуск</option>
+                <option value="3" ${value===3?'selected':''}>Т Травма</option>
+                <option value="4" ${value===4?'selected':''}>Б Болел</option>
+              </select>
+            </label>`;
+          editFields.appendChild(field);
+        });
+
+        modal.style.display = 'block';
+      });
+    });
+
+  } catch (e) {
+    console.error('Ошибка загрузки посещаемости:', e);
+    wrapper.innerHTML = '<p>Ошибка загрузки таблицы</p>';
+  }
 }
 
 // обработчики
 const teamSelect = document.getElementById('teamSelect');
 const monthSelect = document.getElementById('monthSelect');
 
+// единая функция перерисовки
+function refreshTablesAndAnalytics() {
+  const teamId = teamSelect.value;
+  const month  = monthSelect.value;
+  // посещаемость
+  loadAttendanceTable(teamId, month);
+  // аналитика оценок
+  loadRatingsAnalytics();
+}
+
+// если меняется команда: подгружаем игроков на выбранную дату + перерисовываем
 teamSelect.addEventListener('change', () => {
   const teamId = teamSelect.value;
-  const month = monthSelect.value;
-  if (teamId) loadPlayers(teamId);
-  if (teamId && month) loadAttendanceTable(teamId, month);
+  const date = document.querySelector('input[name="training_date"]')?.value;
+  if (teamId && date) loadPlayers(teamId);
+  refreshTablesAndAnalytics();
 });
 
-monthSelect.addEventListener('change', () => {
-  const teamId = teamSelect.value;
-  const month = monthSelect.value;
-  if (teamId && month) loadAttendanceTable(teamId, month);
+// если меняется месяц: просто перерисовываем
+monthSelect.addEventListener('change', refreshTablesAndAnalytics);
+
+// на всякий: если что-то уже выбрано (например, после автофилла), перерисуем при старте
+document.addEventListener('DOMContentLoaded', () => {
+  if (teamSelect.value && monthSelect.value) {
+    refreshTablesAndAnalytics();
+  }
 });
 </script>
 
@@ -538,6 +656,153 @@ if (selectVal === 'absent') {
     location.reload();
   });
 });
+</script>
+
+<script>
+async function loadRatingsAnalytics() {
+  const teamId = teamSelect.value;
+  const month  = monthSelect.value;
+  if (!teamId || !month) {
+    document.getElementById('ratings-summary').innerHTML = '<p>Выберите команду и месяц.</p>';
+    document.getElementById('ratings-trainings').innerHTML = '';
+    return;
+  }
+  // Текущий год (можете заменить/добавить селект года при желании)
+  const year = new Date().getFullYear();
+
+  try {
+    const res = await fetch(`/api/ratings_summary.php?team_id=${teamId}&month=${month}&year=${year}`);
+    const data = await res.json();
+    if (!data.success) throw new Error('API error');
+
+    // Сводка
+    const s = data.summary;
+    const summaryHtml = `
+      <div style="display:flex; flex-wrap:wrap; gap:12px;">
+        <div style="flex:1; min-width:200px;">
+          <strong>Количество оценённых тренировок:</strong> ${data.summary.trainings_rated}<br>
+          <strong>Всего оценок (голосов):</strong> ${data.summary.ratings_count}
+        </div>
+        <div style="flex:2; min-width:280px;">
+          <strong>Средние:</strong>
+          <ul style="margin:6px 0 0 16px; padding:0;">
+            <li>Интенсивность: <b>${s.avg_intensity ?? '—'}</b></li>
+            <li>Усталость: <b>${s.avg_fatigue ?? '—'}</b></li>
+            <li>Настроение: <b>${s.avg_mood ?? '—'}</b></li>
+            <li>Удовольствие: <b>${s.avg_enjoyment ?? '—'}</b></li>
+            <li>Итого (среднее из 4): <b>${s.avg_overall ?? '—'}</b></li>
+          </ul>
+        </div>
+      </div>
+    `;
+    document.getElementById('ratings-summary').innerHTML = summaryHtml;
+
+    // Таблица по тренировкам
+    const rows = data.trainings.map(t => {
+      const overall = (t.avg_intensity!=null && t.avg_fatigue!=null && t.avg_mood!=null && t.avg_enjoyment!=null)
+        ? (((t.avg_intensity + t.avg_fatigue + t.avg_mood + t.avg_enjoyment)/4).toFixed(2))
+        : '—';
+      return `
+        <tr>
+          <td>${new Date(t.training_date).toLocaleDateString('ru-RU')}</td>
+          <td>${t.raters}</td>
+          <td>${t.avg_intensity ?? '—'}</td>
+          <td>${t.avg_fatigue ?? '—'}</td>
+          <td>${t.avg_mood ?? '—'}</td>
+          <td>${t.avg_enjoyment ?? '—'}</td>
+          <td><b>${overall}</b></td>
+          <td><button class="btn-details" data-training="${t.training_id}">Подробнее</button></td>
+        </tr>`;
+    }).join('');
+
+    const tableHtml = `
+      <table>
+        <thead>
+          <tr>
+            <th>Дата</th>
+            <th>Оценивших</th>
+            <th>Интенсивность</th>
+            <th>Усталость</th>
+            <th>Настроение</th>
+            <th>Удовольствие</th>
+            <th>Средняя</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>${rows || '<tr><td colspan="8" style="text-align:center;">Нет тренировок</td></tr>'}</tbody>
+      </table>`;
+    document.getElementById('ratings-trainings').innerHTML = tableHtml;
+
+    // Хэндлер «Подробнее»
+    document.querySelectorAll('.btn-details').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const trainingId = btn.dataset.training;
+        openRatingsModal(trainingId);
+      });
+    });
+
+  } catch (e) {
+    console.error(e);
+    document.getElementById('ratings-summary').innerHTML = '<p>Ошибка загрузки сводки</p>';
+    document.getElementById('ratings-trainings').innerHTML = '';
+  }
+}
+
+async function openRatingsModal(trainingId) {
+  const modal = document.getElementById('ratings-modal');
+  const body  = document.getElementById('ratings-modal-body');
+  body.innerHTML = 'Загрузка...';
+  modal.style.display = 'flex';
+
+  try {
+    const res = await fetch(`/api/ratings_details.php?training_id=${trainingId}`);
+    const data = await res.json();
+    if (!data.success) throw new Error('API error');
+
+    if (!data.ratings.length) {
+      body.innerHTML = '<p>Оценок нет.</p>';
+      return;
+    }
+
+    const rows = data.ratings.map(r => `
+      <tr>
+        <td style="text-align:left;">${r.player_name}</td>
+        <td>${r.intensity}</td>
+        <td>${r.fatigue}</td>
+        <td>${r.mood}</td>
+        <td>${r.enjoyment}</td>
+        <td>${new Date(r.created_at).toLocaleString('ru-RU')}</td>
+      </tr>
+    `).join('');
+
+    body.innerHTML = `
+      <table>
+        <thead>
+          <tr>
+            <th>Игрок</th>
+            <th>Интенс.</th>
+            <th>Устал.</th>
+            <th>Настроение</th>
+            <th>Удовольствие</th>
+            <th>Когда</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    `;
+  } catch (e) {
+    console.error(e);
+    body.innerHTML = '<p>Ошибка загрузки.</p>';
+  }
+}
+
+document.getElementById('close-ratings-modal').addEventListener('click', () => {
+  document.getElementById('ratings-modal').style.display = 'none';
+});
+
+// Подвяжем к существующим селекторам
+teamSelect.addEventListener('change', loadRatingsAnalytics);
+monthSelect.addEventListener('change', loadRatingsAnalytics);
 </script>
 
 </body>

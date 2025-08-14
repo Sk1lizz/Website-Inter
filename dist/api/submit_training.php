@@ -5,10 +5,11 @@ error_reporting(E_ALL);
 require_once __DIR__ . '/../db.php';
 
 // Получение данных
-$teamId = $_POST['team_id'] ?? null;
+$teamId       = $_POST['team_id'] ?? null;
 $trainingDate = $_POST['training_date'] ?? null;
-$playerIds = $_POST['players'] ?? [];
-$statuses = $_POST['status'] ?? [];
+$playerIds    = $_POST['players'] ?? [];
+$statuses     = $_POST['status'] ?? [];
+$ratings      = $_POST['rating'] ?? [];   // NEW: оценки с ползунка 3..10 (шаг 0.5)
 
 if (!$teamId || !$trainingDate || empty($playerIds)) {
     die("Ошибка: не все поля заполнены.");
@@ -28,7 +29,7 @@ if ($existingId) {
     $trainingId = $existingId;
     $isDuplicate = true;
 
-    // Удалим старые записи о посещении
+    // Удалим старые записи о посещении (рейтинг тоже удалится)
     $del = $db->prepare("DELETE FROM training_attendance WHERE training_id = ?");
     $del->bind_param("i", $trainingId);
     $del->execute();
@@ -46,6 +47,12 @@ if ($existingId) {
 }
 
 // === 3. Обрабатываем игроков ===
+// Подготовим INSERT с rating
+$att = $db->prepare("INSERT INTO training_attendance (training_id, player_id, status, rating) VALUES (?, ?, ?, ?)");
+if (!$att) {
+    die("Ошибка подготовки запроса (training_attendance): " . $db->error);
+}
+
 foreach ($playerIds as $playerId) {
     $playerId = (int)$playerId;
 
@@ -54,6 +61,7 @@ foreach ($playerIds as $playerId) {
 
     // Если статус явно передан — используем его
     if (isset($statuses[$playerId])) {
+        // ваши JS-хуки переводят спец-значения в 1/0 перед отправкой формы
         $status = (int)$statuses[$playerId];
     } else {
         // Если статус не передан — проверим, был ли отпуск
@@ -65,12 +73,19 @@ foreach ($playerIds as $playerId) {
         $holidayCheck->close();
     }
 
-    // Добавляем запись о посещении
-    $att = $db->prepare("INSERT INTO training_attendance (training_id, player_id, status) VALUES (?, ?, ?)");
-    if (!$att) {
-        die("Ошибка подготовки запроса (training_attendance): " . $db->error);
+    // === NEW: рейтинг — только при присутствии (status=1)
+    $rating = null;
+    if ($status === 1 && isset($ratings[$playerId]) && $ratings[$playerId] !== '') {
+        $val = (float)$ratings[$playerId];
+        // Валидация диапазона 3..10 и «квантование» до 0.5
+        if ($val >= 3.0 && $val <= 10.0) {
+            $rating = round($val * 2) / 2.0; // 7.25 -> 7.5, 7.74 -> 7.5, и т.п.
+        }
     }
-    $att->bind_param("iii", $trainingId, $playerId, $status);
+
+    // Вставка attendance с рейтингом (NULL, если не присутствовал/нет валидной оценки)
+    // Важно: при $rating === null mysqli нормально пошлёт NULL при bind_param('d', $rating)
+    $att->bind_param("iiid", $trainingId, $playerId, $status, $rating);
     if (!$att->execute()) {
         die("Ошибка при выполнении запроса (training_attendance): " . $att->error);
     }
