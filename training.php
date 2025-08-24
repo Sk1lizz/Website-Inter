@@ -234,6 +234,13 @@ if (!isset($_SESSION['auth'])) {
   <div id="ratings-trainings" style="margin-top:16px;"></div>
 </div>
 
+<div id="attendance-analytics" style="margin-top:20px;">
+  <h2 style="color:#083c7e;">Посещаемость — аналитика</h2>
+  <div id="attendance-summary" style="background:#fff; border-radius:8px; padding:16px; box-shadow:0 2px 10px rgba(0,0,0,0.05);">
+    <p>Выберите команду — сводка появится здесь.</p>
+  </div>
+</div>
+
 <!-- Модалка с деталями оценок -->
 <div id="ratings-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:2000; align-items:center; justify-content:center;">
   <div style="background:#fff; width:95%; max-width:700px; border-radius:10px; padding:18px; box-shadow:0 10px 30px rgba(0,0,0,0.2);">
@@ -318,45 +325,46 @@ function createPlayerRow(player, isOnHoliday = false) {
   }
 
   // Функция переключения UI под присутствие
-  const setPresenceUI = (isPresent) => {
-    if (isPresent) {
-      select.innerHTML = `
-        <option value="1" selected>Присутствовал</option>
-        <option value="опоздание">Опоздание</option>
-      `;
-      ratingWrap.style.display = '';
-      // если ранее сбросили — вернём дефолт
-      if (!ratingInput.value) ratingInput.value = '7.0';
-      ratingValue.textContent = ratingInput.value;
-    } else {
-      select.innerHTML = `
-        <option value="0" selected>Не был</option>
-        <option value="2">Отпуск</option>
-        <option value="3">Травма</option>
-        <option value="4">Болел</option>
-        <option value="late_notice">Не был, предупреждение < 3 ч.</option>
-        <option value="absent">Неявка</option>
-      `;
-      ratingWrap.style.display = 'none';
-      ratingInput.value = ''; // очистим, чтобы на сервер не ушёл мусор
-      ratingValue.textContent = '';
-    }
-  };
+  const setPresenceUI = (isPresent, selectedValue) => {
+  if (isPresent) {
+    select.innerHTML = `
+      <option value="1">Присутствовал</option>
+      <option value="опоздание">Опоздание</option>
+    `;
+    // ВАЖНО: сохраняем выбор, по умолчанию — «Присутствовал»
+    select.value = selectedValue === 'опоздание' ? 'опоздание' : '1';
+    ratingWrap.style.display = '';
+    if (!ratingInput.value) ratingInput.value = '7.0';
+    ratingValue.textContent = ratingInput.value;
+  } else {
+    select.innerHTML = `
+      <option value="0">Не был</option>
+      <option value="2">Отпуск</option>
+      <option value="3">Травма</option>
+      <option value="4">Болел</option>
+      <option value="late_notice">Не был, предупреждение < 3 ч.</option>
+      <option value="absent">Неявка</option>
+    `;
+    // Если ранее что-то было выбрано — оставим дефолт «Не был»
+    select.value = '0';
+    ratingWrap.style.display = 'none';
+    ratingInput.value = '';
+    ratingValue.textContent = '';
+  }
+};
 
-  // Смена чекбокса — управляет "присутствовал/не был"
-  checkbox.addEventListener('change', () => setPresenceUI(checkbox.checked));
+// Если меняется чекбокс — передаём текущий выбранный пункт, чтобы его не потерять:
+checkbox.addEventListener('change', () => setPresenceUI(checkbox.checked, select.value));
 
-  // Если пользователь вручную поменяет селект, тоже ловим
-  select.addEventListener('change', () => {
-    const val = select.value;
-    if (val === '1' || val === 'опоздание') {
-      // при «опоздании» мы всё равно сохраняем как присутствовал (вы уже мапите это в JS)
-      setPresenceUI(true);
-    } else {
-      setPresenceUI(false);
-      // для штрафных вариантов ваш код ниже всё равно заменит значение на 0/1 и добавит штраф
-    }
-  });
+// Если меняется селект — явно прокидываем новое значение:
+select.addEventListener('change', () => {
+  const val = select.value;
+  if (val === '1' || val === 'опоздание') {
+    setPresenceUI(true, val);   // сохраняем «опоздание», если выбрано
+  } else {
+    setPresenceUI(false, val);
+  }
+});
 
   wrapper.appendChild(checkbox);
   wrapper.appendChild(label);
@@ -535,10 +543,9 @@ const monthSelect = document.getElementById('monthSelect');
 function refreshTablesAndAnalytics() {
   const teamId = teamSelect.value;
   const month  = monthSelect.value;
-  // посещаемость
-  loadAttendanceTable(teamId, month);
-  // аналитика оценок
-  loadRatingsAnalytics();
+  loadAttendanceTable(teamId, month); // посещаемость по датам
+  loadRatingsAnalytics();             // оценки
+  loadAttendanceAnalytics();          // проценты
 }
 
 // если меняется команда: подгружаем игроков на выбранную дату + перерисовываем
@@ -748,6 +755,46 @@ async function loadRatingsAnalytics() {
   }
 }
 
+async function loadAttendanceAnalytics() {
+  const teamId = teamSelect.value;
+  if (!teamId) {
+    document.getElementById('attendance-summary').innerHTML = '<p>Выберите команду.</p>';
+    return;
+  }
+  try {
+    const res = await fetch(`/api/attendance_summary.php?team_id=${teamId}`);
+    const data = await res.json();
+    if (!data.success) throw new Error('API error');
+
+    const renderPlayers = (arr) => {
+      if (!arr || !arr.length) return '<i>—</i>';
+      return arr.map(p => `${p.name} (${p.percent}%)`).join(', ');
+    };
+
+    const html = `
+      <div style="display:flex; flex-wrap:wrap; gap:20px;">
+        <div style="flex:1; min-width:250px;">
+          <b>Текущий месяц:</b> ${data.current_month}%<br>
+          <small>≥75%: ${renderPlayers(data.players.current_month)}</small>
+        </div>
+        <div style="flex:1; min-width:250px;">
+          <b>Прошлый месяц:</b> ${data.previous_month}%<br>
+          <small>≥75%: ${renderPlayers(data.players.previous_month)}</small>
+        </div>
+        <div style="flex:1; min-width:250px;">
+          <b>Год:</b> ${data.year}%<br>
+          <small>≥75%: ${renderPlayers(data.players.year)}</small>
+        </div>
+      </div>
+    `;
+    document.getElementById('attendance-summary').innerHTML = html;
+  } catch (e) {
+    console.error(e);
+    document.getElementById('attendance-summary').innerHTML = '<p>Ошибка загрузки</p>';
+  }
+}
+
+
 async function openRatingsModal(trainingId) {
   const modal = document.getElementById('ratings-modal');
   const body  = document.getElementById('ratings-modal-body');
@@ -804,6 +851,8 @@ document.getElementById('close-ratings-modal').addEventListener('click', () => {
 teamSelect.addEventListener('change', loadRatingsAnalytics);
 monthSelect.addEventListener('change', loadRatingsAnalytics);
 </script>
+
+
 
 </body>
 </html>

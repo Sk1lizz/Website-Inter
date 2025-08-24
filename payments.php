@@ -123,6 +123,7 @@ button:hover {
   <input type="number" id="mass-add-amount" placeholder="₽" style="width: 100px; padding: 5px;">
   <button onclick="applyAmountToAll()">Начислить всем</button>
   <button onclick="saveAllPayments()">Сохранить всех</button>
+ <button onclick="subtractTrainingAll()">Вычесть 1 тренировку</button>
 </div>
 
 <table class="styled-table" id="paymentsTable">
@@ -176,8 +177,9 @@ button:hover {
 
         const row = document.createElement('tr');
 row.setAttribute('data-id', player.id);
-row.setAttribute('data-attendance', calc.attendance_percent);
-row.setAttribute('data-base', calc.base_amount);
+row.setAttribute('data-attendance', calc?.attendance_percent ?? 0);
+row.setAttribute('data-base', parseFloat(calc?.base_amount ?? 0));
+row.setAttribute('data-position', player.position || '');
 row.innerHTML = `
     <td>${player.name} ${player.patronymic || ''}</td>
     <td class="calc-cell">${calcText}</td>
@@ -197,47 +199,39 @@ row.innerHTML = `
 });
 
 
-    function savePayment(playerId, btn) {
-        const amount = btn.closest('tr').querySelector('input').value;
-        fetch('api/save_payment.php', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ player_id: playerId, amount })
-        })
-        .then(res => res.json())
-        .then(resp => {
-            alert(resp.success ? 'Сохранено' : 'Ошибка при сохранении');
-        });
-    }
+  // 2) Сохранить одного
+function savePayment(playerId, btn) {
+  const row = btn.closest('tr');
+  const amount = row.querySelector('td:nth-child(4) input')?.value || 0; // <- сумма из 4-й колонки
+  fetch('api/save_payment.php', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ player_id: playerId, amount: parseFloat(amount) || 0 })
+  })
+  .then(r => r.json())
+  .then(resp => alert(resp.success ? 'Сохранено' : 'Ошибка при сохранении'));
+}
 
-    function markAsPaid(playerId, btn) {
-        const row = btn.closest('tr');
-        const amountInput = row.querySelector('input');
-        const amount = parseFloat(amountInput.value) || 0;
-        const teamId = document.getElementById('team-select').value;
+    // 3) Отметить "Оплачен"
+function markAsPaid(playerId, btn) {
+  const row = btn.closest('tr');
+  const amountInput = row.querySelector('td:nth-child(4) input'); // <- сумма
+  const amount = parseFloat(amountInput?.value) || 0;
+  const teamId = document.getElementById('team-select').value;
+  if (amount <= 0) { alert('Сумма взноса должна быть больше 0'); return; }
+  if (!confirm("Подтвердить оплату?")) return;
 
-        if (amount <= 0) {
-            alert('Сумма взноса должна быть больше 0');
-            return;
-        }
-
-        if (!confirm("Подтвердить оплату?")) return;
-
-        fetch('api/mark_as_paid.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ player_id: playerId, amount, team_id: teamId })
-        })
-        .then(res => res.json())
-        .then(resp => {
-            if (resp.success) {
-                alert("Отмечено как оплачено");
-                amountInput.value = 0;
-            } else {
-                alert("Ошибка при оплате: " + (resp.error || ''));
-            }
-        });
-    }
+  fetch('api/mark_as_paid.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ player_id: playerId, amount, team_id: teamId })
+  })
+  .then(r => r.json())
+  .then(resp => {
+    if (resp.success) { alert("Отмечено как оплачено"); amountInput.value = 0; }
+    else { alert("Ошибка при оплате: " + (resp.error || '')); }
+  });
+}
 
     function loadHistory() {
         const teamId = document.getElementById('history-team-select').value;
@@ -261,63 +255,55 @@ row.innerHTML = `
     }
 
     function saveAllPayments() {
-    const rows = document.querySelectorAll('#players-container tr');
-    const updates = [];
+  const rows = document.querySelectorAll('#players-container tr');
+  const updates = [];
+  rows.forEach(row => {
+    const amountInput = row.querySelector('td:nth-child(4) input[type="number"]'); // <- сумма
+    const amount = parseFloat(amountInput?.value) || 0;
+    const playerId = parseInt(row.dataset.id, 10); // надёжнее, чем парсить onclick
+    if (!isNaN(playerId)) updates.push({ player_id: playerId, amount });
+  });
+  if (!updates.length) { alert('Нет данных для сохранения'); return; }
 
-    rows.forEach(row => {
-        const input = row.querySelector('input[type="number"]');
-        const amount = parseFloat(input.value) || 0;
-        const playerId = row.querySelector('button').getAttribute('onclick').match(/savePayment\((\d+)/)?.[1];
-        if (playerId !== null) {
-            updates.push({ player_id: parseInt(playerId), amount });
-        }
-    });
+  fetch('api/save_payments_bulk.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ payments: updates })
+  })
+  .then(r => r.json())
+  .then(resp => alert(resp.success ? 'Все взносы сохранены!' : ('Ошибка при массовом сохранении: ' + (resp.error || ''))))
+  .catch(() => alert('Ошибка при сохранении'));
+}
 
-    if (updates.length === 0) {
-        alert('Нет данных для сохранения');
-        return;
-    }
+function subtractTrainingAll() {
+  const rows = document.querySelectorAll('#players-container tr');
+  rows.forEach(row => {
+    const amountInput = row.querySelector('td:nth-child(4) input[type="number"]');
+    if (!amountInput) return;
 
-    fetch('api/save_payments_bulk.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ payments: updates })
-    })
-    .then(res => res.json())
-    .then(resp => {
-        if (resp.success) {
-            alert('Все взносы сохранены!');
-        } else {
-            alert('Ошибка при массовом сохранении: ' + (resp.error || ''));
-        }
-    })
-    .catch(err => {
-        console.error('Ошибка при массовом сохранении:', err);
-        alert('Ошибка при сохранении');
-    });
+    const position = (row.getAttribute('data-position') || '').trim();
+    const step = (position === 'Вратарь') ? 350 : 400;
+
+    const current = parseFloat(amountInput.value) || 0;
+    amountInput.value = Math.max(0, current - step);
+  });
 }
 
 function applyAmountToAll() {
-    const rows = document.querySelectorAll('#players-container tr');
-
-    rows.forEach(row => {
-        // Находим колонку с рассчитанным взносом (2-я колонка)
-        const calcCell = row.querySelector('td:nth-child(2)');
-        if (!calcCell) return;
-
-        // Извлекаем число из строки "3950 ₽ (посещаемость 80%)"
-        const match = calcCell.textContent.match(/(\d+)\s*₽/);
-        if (match) {
-            const amount = parseFloat(match[1]) || 0;
-
-            // Берём текущее значение поля и прибавляем рассчитанную сумму
-            const input = row.querySelector('input[type="number"]');
-            if (input) {
-                const current = parseFloat(input.value) || 0;
-                input.value = current + amount;
-            }
-        }
-    });
+  const rows = document.querySelectorAll('#players-container tr');
+  rows.forEach(row => {
+    const calcCell = row.querySelector('td:nth-child(2)');
+    if (!calcCell) return;
+    const match = calcCell.textContent.match(/(\d+)\s*₽/);
+    if (match) {
+      const add = parseFloat(match[1]) || 0;
+      const amountInput = row.querySelector('td:nth-child(4) input[type="number"]'); // <- только сумма
+      if (amountInput) {
+        const current = parseFloat(amountInput.value) || 0;
+        amountInput.value = current + add;
+      }
+    }
+  });
 }
 
  function updateReturnsCount(playerId, value) {
