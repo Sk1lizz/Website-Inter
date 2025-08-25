@@ -141,10 +141,15 @@ if (isset($_POST['save_squad'])) {
                     total_points=VALUES(total_points),
                     last_week_points=VALUES(last_week_points)
                 ")) {
-                    $st->bind_param(
-                        'iiiiiiiiiidd',
-                        $userId, $SEASON, $gk_id, $df1_id, $df2_id, $mf1_id, $mf2_id, $fw_id, $bench_id, $captain, $left, 0.00, 0.00
-                    );
+
+                $totalPoints = 0.0;
+$lastWeekPoints = 0.0;
+
+                   $st->bind_param(
+  'iiiiiiiiiiddd',
+  $userId, $SEASON, $gk_id, $df1_id, $df2_id, $mf1_id, $mf2_id, $fw_id, $bench_id, $captain,
+  $left, $totalPoints, $lastWeekPoints
+);
                     $saveSuccess = $st->execute();
                     if (!$saveSuccess) {
                         $saveError = 'Ошибка сохранения: ' . $st->error;
@@ -160,8 +165,12 @@ if (isset($_POST['save_squad'])) {
                             'budget_left' => $left
                         );
                         $url = strtok($_SERVER['REQUEST_URI'], '?');
-                        header('Location: ' . $url . '?saved=1');
-                        exit;
+                        if (headers_sent($f, $l)) {
+    error_log("Headers already sent at $f:$l");
+} else {
+    header('Location: ' . $url . '?saved=1', true, 303); // See Other
+}
+exit;
                     }
                 } else {
                     $saveError = 'Ошибка подготовки запроса: ' . $db->error;
@@ -338,10 +347,6 @@ while ($r = $q->fetch_assoc()) {
         width: 90%;
         max-width: 400px;
         box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        position: relative;
-        transform: translate(-50%, -50%); /* Центрирование с учётом собственного размера */
-        top: 50%; /* Вертикальное центрирование */
-        left: 50%; /* Горизонтальное центрирование */
     }
 
     .modal-content h3 {
@@ -947,14 +952,19 @@ while ($r = $q->fetch_assoc()) {
     })();
 
         
-function confirmSave(confirm) {
-            var modal = document.querySelector('#confirmModal');
-            if (confirm) {
-                document.querySelector('#saveForm').submit();
-            } else {
-                modal.style.display = 'none';
-            }
-        }
+function confirmSave(ok) {
+  const form = document.querySelector('#saveForm');
+  if (!ok) { document.querySelector('#confirmModal').style.display = 'none'; return; }
+  if (form.requestSubmit) {
+    form.requestSubmit(document.getElementById('saveBtn')); // <-- ВАЖНО
+  } else {
+    // Фоллбэк: гарантируем наличие поля save_squad
+    let h = document.createElement('input');
+    h.type = 'hidden'; h.name = 'save_squad'; h.value = '1';
+    form.appendChild(h);
+    form.submit();
+  }
+}
 
 document.getElementById('saveBtn').addEventListener('click', function(e) {
             if (!this.disabled) {
