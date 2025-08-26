@@ -327,16 +327,19 @@ function createPlayerRow(player, isOnHoliday = false) {
   // Функция переключения UI под присутствие
   const setPresenceUI = (isPresent, selectedValue) => {
   if (isPresent) {
+    // присутствовал
     select.innerHTML = `
       <option value="1">Присутствовал</option>
       <option value="опоздание">Опоздание</option>
     `;
-    // ВАЖНО: сохраняем выбор, по умолчанию — «Присутствовал»
-    select.value = selectedValue === 'опоздание' ? 'опоздание' : '1';
+    // сохраняем "опоздание" если оно выбрано
+    select.value = (selectedValue === 'опоздание') ? 'опоздание' : '1';
+    checkbox.checked = true;                 // синхронизируем чекбокс
     ratingWrap.style.display = '';
     if (!ratingInput.value) ratingInput.value = '7.0';
     ratingValue.textContent = ratingInput.value;
   } else {
+    // не присутствовал (с сохранением выбранного статуса)
     select.innerHTML = `
       <option value="0">Не был</option>
       <option value="2">Отпуск</option>
@@ -345,26 +348,27 @@ function createPlayerRow(player, isOnHoliday = false) {
       <option value="late_notice">Не был, предупреждение < 3 ч.</option>
       <option value="absent">Неявка</option>
     `;
-    // Если ранее что-то было выбрано — оставим дефолт «Не был»
-    select.value = '0';
+    const allowed = ['0','2','3','4','late_notice','absent'];
+    select.value = allowed.includes(String(selectedValue)) ? String(selectedValue) : '0';
+    checkbox.checked = false;                // синхронизируем чекбокс
     ratingWrap.style.display = 'none';
     ratingInput.value = '';
     ratingValue.textContent = '';
   }
 };
 
-// Если меняется чекбокс — передаём текущий выбранный пункт, чтобы его не потерять:
+// обработчики — оставьте, но немного дополним синхронизацию
 checkbox.addEventListener('change', () => setPresenceUI(checkbox.checked, select.value));
 
-// Если меняется селект — явно прокидываем новое значение:
 select.addEventListener('change', () => {
   const val = select.value;
   if (val === '1' || val === 'опоздание') {
-    setPresenceUI(true, val);   // сохраняем «опоздание», если выбрано
+    setPresenceUI(true, val);
   } else {
     setPresenceUI(false, val);
   }
 });
+
 
   wrapper.appendChild(checkbox);
   wrapper.appendChild(label);

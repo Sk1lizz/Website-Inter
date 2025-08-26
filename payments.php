@@ -128,14 +128,15 @@ button:hover {
 
 <table class="styled-table" id="paymentsTable">
     <thead>
-        <tr>
-            <th>Игрок</th>
-            <th>Рассчитанный взнос</th>
-            <th>Возвраты</th>
-            <th>Сумма (₽)</th>
-            <th>Действия</th>
-        </tr>
-    </thead>
+  <tr>
+    <th>Игрок</th>
+    <th>Рассчитанный взнос</th>
+    <th>Штрафы</th> <!-- NEW -->
+    <th>Возвраты</th>
+    <th>Сумма (₽)</th>
+    <th>Действия</th>
+  </tr>
+</thead>
     <tbody id="players-container">
         <!-- JS заполнит -->
     </tbody>
@@ -181,20 +182,30 @@ row.setAttribute('data-attendance', calc?.attendance_percent ?? 0);
 row.setAttribute('data-base', parseFloat(calc?.base_amount ?? 0));
 row.setAttribute('data-position', player.position || '');
 row.innerHTML = `
-    <td>${player.name} ${player.patronymic || ''}</td>
-    <td class="calc-cell">${calcText}</td>
-    <td>
-        <input type="number" value="${returnsCount}" min="0" style="width:60px"
-               onchange="updateReturnsCount(${player.id}, this.value)">
-    </td>
-    <td><input type="number" value="${player.payment || ''}" placeholder="₽"></td>
-    <td>
-        <button onclick="savePayment(${player.id}, this)">Сохранить</button>
-        <button onclick="markAsPaid(${player.id}, this)">Оплачен</button>
-    </td>
+  <td>${player.name} ${player.patronymic || ''}</td>
+  <td class="calc-cell">${calcText}</td>
+  <td class="fines-cell">
+    <span class="fines-sum" data-sum="0">—</span>
+    <button class="fines-pay-btn"
+            style="margin-left:8px; display:none;"
+            onclick="payFines(${player.id}, this)">
+      Штрафы оплачены
+    </button>
+  </td>
+  <td>
+    <input type="number" value="${returnsCount}" min="0" style="width:60px"
+           onchange="updateReturnsCount(${player.id}, this.value)">
+  </td>
+  <td><input type="number" value="${player.payment || ''}" placeholder="₽"></td>
+  <td>
+    <button onclick="savePayment(${player.id}, this)">Сохранить</button>
+    <button onclick="markAsPaid(${player.id}, this)">Оплачен</button>
+  </td>
 `;
+container.appendChild(row);
 
-        container.appendChild(row);
+// подгрузим штрафы для игрока
+loadFinesForRow(player.id, row);
     });
 });
 
@@ -202,7 +213,7 @@ row.innerHTML = `
   // 2) Сохранить одного
 function savePayment(playerId, btn) {
   const row = btn.closest('tr');
-  const amount = row.querySelector('td:nth-child(4) input')?.value || 0; // <- сумма из 4-й колонки
+  const amount = row.querySelector('td:nth-child(5) input')?.value || 0; // <- сумма из 4-й колонки
   fetch('api/save_payment.php', {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
@@ -215,7 +226,7 @@ function savePayment(playerId, btn) {
     // 3) Отметить "Оплачен"
 function markAsPaid(playerId, btn) {
   const row = btn.closest('tr');
-  const amountInput = row.querySelector('td:nth-child(4) input'); // <- сумма
+  const amountInput = row.querySelector('td:nth-child(5) input'); // <- сумма
   const amount = parseFloat(amountInput?.value) || 0;
   const teamId = document.getElementById('team-select').value;
   if (amount <= 0) { alert('Сумма взноса должна быть больше 0'); return; }
@@ -258,7 +269,7 @@ function markAsPaid(playerId, btn) {
   const rows = document.querySelectorAll('#players-container tr');
   const updates = [];
   rows.forEach(row => {
-    const amountInput = row.querySelector('td:nth-child(4) input[type="number"]'); // <- сумма
+    const amountInput = row.querySelector('td:nth-child(5) input[type="number"]'); // <- сумма
     const amount = parseFloat(amountInput?.value) || 0;
     const playerId = parseInt(row.dataset.id, 10); // надёжнее, чем парсить onclick
     if (!isNaN(playerId)) updates.push({ player_id: playerId, amount });
@@ -278,7 +289,7 @@ function markAsPaid(playerId, btn) {
 function subtractTrainingAll() {
   const rows = document.querySelectorAll('#players-container tr');
   rows.forEach(row => {
-    const amountInput = row.querySelector('td:nth-child(4) input[type="number"]');
+    const amountInput = row.querySelector('td:nth-child(5) input[type="number"]');
     if (!amountInput) return;
 
     const position = (row.getAttribute('data-position') || '').trim();
@@ -297,7 +308,7 @@ function applyAmountToAll() {
     const match = calcCell.textContent.match(/(\d+)\s*₽/);
     if (match) {
       const add = parseFloat(match[1]) || 0;
-      const amountInput = row.querySelector('td:nth-child(4) input[type="number"]'); // <- только сумма
+      const amountInput = row.querySelector('td:nth-child(5) input[type="number"]'); // <- только сумма
       if (amountInput) {
         const current = parseFloat(amountInput.value) || 0;
         amountInput.value = current + add;
@@ -342,6 +353,81 @@ function applyAmountToAll() {
         })
         .catch(() => alert('Ошибка соединения с сервером'));
     }
+
+    async function loadFinesForRow(playerId, rowEl) {
+  try {
+    const res = await fetch(`api/get_fines.php?player_id=${playerId}`);
+    const fines = await res.json(); // [{id, amount, reason, date}, ...]
+
+    const sum = (fines || []).reduce((acc, f) => acc + Number(f.amount || 0), 0);
+    const finesCell = rowEl.querySelector('.fines-cell .fines-sum');
+    const payBtn     = rowEl.querySelector('.fines-cell .fines-pay-btn');
+
+    if (sum > 0) {
+      finesCell.textContent = `${sum} ₽`;
+      finesCell.dataset.sum = String(sum);
+      payBtn.style.display = '';
+      payBtn.disabled = false;
+      payBtn.title = 'Засчитать оплату штрафов и очистить';
+    } else {
+      finesCell.textContent = '—';
+      finesCell.dataset.sum = '0';
+      payBtn.style.display = 'none';
+    }
+  } catch (e) {
+    // на случай ошибки просто скрываем кнопку
+    const payBtn = rowEl.querySelector('.fines-cell .fines-pay-btn');
+    if (payBtn) payBtn.style.display = 'none';
+  }
+}
+
+function payFines(playerId, btn) {
+  const teamId = document.getElementById('team-select').value;
+  if (!teamId) { alert('Сначала выберите команду'); return; }
+  if (!confirm("Подтвердить оплату штрафов?")) return;
+
+  fetch("api/pay_fines.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ player_id: playerId })
+  })
+  .then(r => r.json())
+  .then(async resp => {
+    if (!resp.success) { alert("Ошибка: " + resp.error); return; }
+
+    const finesSum = Number(resp.paid_amount || 0);
+
+    // 1) Проводим оплату штатным API
+    const payResp = await fetch('api/mark_as_paid.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ player_id: playerId, amount: finesSum, team_id: Number(teamId) })
+    }).then(r => r.json());
+
+    if (!payResp.success) {
+      alert("Штрафы удалены, но платёж не зафиксирован: " + (payResp.error || ''));
+      return;
+    }
+
+    // 2) Обновляем UI
+    alert(`Штрафы оплачены на сумму ${finesSum} ₽`);
+    const row = btn.closest("tr");
+    const finesSumEl = row.querySelector('.fines-sum');
+    finesSumEl.textContent = '—';
+    finesSumEl.dataset.sum = '0';
+    btn.style.display = 'none';
+
+    // Прибавим к полю «Сумма (₽)» — это 5-я колонка
+    const amountInput = row.querySelector('td:nth-child(5) input');
+    if (amountInput) {
+      const current = parseFloat(amountInput.value) || 0;
+      amountInput.value = current + finesSum;
+    }
+  })
+  .catch(() => alert("Ошибка соединения с сервером"));
+}
+
+
 
 </script>
 

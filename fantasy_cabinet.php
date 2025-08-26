@@ -44,6 +44,7 @@ $squad = array(
     'budget_left' => $BUDGET
 );
 
+
 if ($stmt = $db->prepare("SELECT gk_id, df1_id, df2_id, mf1_id, mf2_id, fw_id, bench_id, captain_player_id, budget_left, total_points, last_week_points FROM fantasy_squads WHERE user_id=? LIMIT 1")) {
     $stmt->bind_param('i', $userId);
     $stmt->execute();
@@ -67,20 +68,20 @@ $saveSuccess = false;
 $saveError   = '';
 
 if (isset($_POST['save_squad'])) {
-    $gk_id   = isset($_POST['gk_id']) ? (int)$_POST['gk_id'] : 0;
-    $df1_id  = isset($_POST['df1_id']) ? (int)$_POST['df1_id'] : 0;
-    $df2_id  = isset($_POST['df2_id']) ? (int)$_POST['df2_id'] : 0;
-    $mf1_id  = isset($_POST['mf1_id']) ? (int)$_POST['mf1_id'] : 0;
-    $mf2_id  = isset($_POST['mf2_id']) ? (int)$_POST['mf2_id'] : 0;
-    $fw_id   = isset($_POST['fw_id']) ? (int)$_POST['fw_id'] : 0;
-    $bench_id= isset($_POST['bench_id']) ? (int)$_POST['bench_id'] : 0;
-    $captain = isset($_POST['captain_player_id']) ? (int)$_POST['captain_player_id'] : 0;
+    $gk_id    = isset($_POST['gk_id']) ? (int)$_POST['gk_id'] : 0;
+    $df1_id   = isset($_POST['df1_id']) ? (int)$_POST['df1_id'] : 0;
+    $df2_id   = isset($_POST['df2_id']) ? (int)$_POST['df2_id'] : 0;
+    $mf1_id   = isset($_POST['mf1_id']) ? (int)$_POST['mf1_id'] : 0;
+    $mf2_id   = isset($_POST['mf2_id']) ? (int)$_POST['mf2_id'] : 0;
+    $fw_id    = isset($_POST['fw_id']) ? (int)$_POST['fw_id'] : 0;
+    $bench_id = isset($_POST['bench_id']) ? (int)$_POST['bench_id'] : 0;
+    $captain  = isset($_POST['captain_player_id']) ? (int)$_POST['captain_player_id'] : 0;
 
-    $ids = array_filter(array($gk_id, $df1_id, $df2_id, $mf1_id, $mf2_id, $fw_id, $bench_id));
+    $ids = array_filter([$gk_id, $df1_id, $df2_id, $mf1_id, $mf2_id, $fw_id, $bench_id]);
     if (count($ids) !== 7 || count(array_unique($ids)) !== 7) {
         $saveError = 'Все слоты должны быть заполнены уникальными игроками.';
     } else {
-        // Проверка, что запасной не нападающий
+        // Запасной не может быть нападающим
         $benchPos = '';
         if ($st = $db->prepare("SELECT position FROM players WHERE id=?")) {
             $st->bind_param('i', $bench_id);
@@ -94,7 +95,7 @@ if (isset($_POST['save_squad'])) {
             $saveError = 'Запасной не может быть нападающим.';
         }
 
-        // Проверка ограничения на 4 игроков из одной команды
+        // Не более 4 игроков из одной команды
         if (!$saveError) {
             $in = implode(',', $ids);
             $teamCounts = [];
@@ -111,7 +112,63 @@ if (isset($_POST['save_squad'])) {
             }
         }
 
-        // Проверка бюджета
+        // --- Лимит трансферов: максимум 2/неделю (исключая замены ушедших игроков) ---
+        $oldRow = null;
+        if (!$saveError && ($stmt = $db->prepare("SELECT gk_id, df1_id, df2_id, mf1_id, mf2_id, fw_id, bench_id, transfers_made_week, transfers_week_start FROM fantasy_squads WHERE user_id=? LIMIT 1"))) {
+            $stmt->bind_param('i', $userId);
+            $stmt->execute();
+            $res = $stmt->get_result();
+            $oldRow = $res->fetch_assoc();
+            $stmt->close();
+        }
+
+        $deltaTransfers = 0;
+        $alreadyUsed = 0;
+        $currentWeekStartTs  = strtotime('monday this week');
+        $currentWeekStartStr = date('Y-m-d', $currentWeekStartTs);
+
+        if (!$saveError && $oldRow) {
+            $storedStart = !empty($oldRow['transfers_week_start']) ? date('Y-m-d', strtotime($oldRow['transfers_week_start'])) : null;
+            $alreadyUsed = ($storedStart === $currentWeekStartStr) ? (int)$oldRow['transfers_made_week'] : 0;
+
+            $oldIds = [
+                'gk_id'    => (int)$oldRow['gk_id'],
+                'df1_id'   => (int)$oldRow['df1_id'],
+                'df2_id'   => (int)$oldRow['df2_id'],
+                'mf1_id'   => (int)$oldRow['mf1_id'],
+                'mf2_id'   => (int)$oldRow['mf2_id'],
+                'fw_id'    => (int)$oldRow['fw_id'],
+                'bench_id' => (int)$oldRow['bench_id'],
+            ];
+            $newIds = [
+                'gk_id'    => $gk_id,
+                'df1_id'   => $df1_id,
+                'df2_id'   => $df2_id,
+                'mf1_id'   => $mf1_id,
+                'mf2_id'   => $mf2_id,
+                'fw_id'    => $fw_id,
+                'bench_id' => $bench_id,
+            ];
+
+            foreach ($oldIds as $slot => $oldId) {
+                $newId = $newIds[$slot];
+                if ($oldId && $newId && $oldId !== $newId) {
+                    // считаем как трансфер только если старый игрок ещё в одной из наших команд (1,2)
+                    $teamId = 0;
+                    $qr = $db->query("SELECT team_id FROM players WHERE id=".(int)$oldId." LIMIT 1");
+                    if ($qr && $rr = $qr->fetch_assoc()) $teamId = (int)$rr['team_id'];
+                    if (in_array($teamId, [1, 2], true)) {
+                        $deltaTransfers++;
+                    }
+                }
+            }
+
+            if ($alreadyUsed + $deltaTransfers > 2) {
+                $saveError = 'Лимит 2 трансферов в неделю исчерпан. Попробуйте на следующей неделе.';
+            }
+        }
+
+        // Бюджет
         if (!$saveError) {
             $in = implode(',', $ids);
             $sum = 0.0;
@@ -123,33 +180,38 @@ if (isset($_POST['save_squad'])) {
                 $saveError = 'Превышен бюджет.';
             } else {
                 $left = max(0, $BUDGET - $sum);
+
                 if ($st = $db->prepare("
                     INSERT INTO fantasy_squads
-                    (user_id, season, gk_id, df1_id, df2_id, mf1_id, mf2_id, fw_id, bench_id, captain_player_id, budget_left, total_points, last_week_points)
-                    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)
+                    (user_id, season, gk_id, df1_id, df2_id, mf1_id, mf2_id, fw_id, bench_id, captain_player_id, budget_left, total_points, last_week_points, transfers_made_week, transfers_week_start)
+                    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
                     ON DUPLICATE KEY UPDATE
-                    season=VALUES(season),
-                    gk_id=VALUES(gk_id),
-                    df1_id=VALUES(df1_id),
-                    df2_id=VALUES(df2_id),
-                    mf1_id=VALUES(mf1_id),
-                    mf2_id=VALUES(mf2_id),
-                    fw_id=VALUES(fw_id),
-                    bench_id=VALUES(bench_id),
-                    captain_player_id=VALUES(captain_player_id),
-                    budget_left=VALUES(budget_left),
-                    total_points=VALUES(total_points),
-                    last_week_points=VALUES(last_week_points)
+                      season=VALUES(season),
+                      gk_id=VALUES(gk_id),
+                      df1_id=VALUES(df1_id),
+                      df2_id=VALUES(df2_id),
+                      mf1_id=VALUES(mf1_id),
+                      mf2_id=VALUES(mf2_id),
+                      fw_id=VALUES(fw_id),
+                      bench_id=VALUES(bench_id),
+                      captain_player_id=VALUES(captain_player_id),
+                      budget_left=VALUES(budget_left),
+                      total_points=VALUES(total_points),
+                      last_week_points=VALUES(last_week_points),
+                      transfers_made_week=VALUES(transfers_made_week),
+                      transfers_week_start=VALUES(transfers_week_start)
                 ")) {
+                    $totalPoints = 0.0;
+                    $lastWeekPoints = 0.0;
+                    $newTransfersUsed = $oldRow ? $alreadyUsed + $deltaTransfers : 0;
 
-                $totalPoints = 0.0;
-$lastWeekPoints = 0.0;
+                    $st->bind_param(
+                        'iiiiiiiiiidddis',
+                        $userId, $SEASON, $gk_id, $df1_id, $df2_id, $mf1_id, $mf2_id, $fw_id, $bench_id, $captain,
+                        $left, $totalPoints, $lastWeekPoints,
+                        $newTransfersUsed, $currentWeekStartStr
+                    );
 
-                   $st->bind_param(
-  'iiiiiiiiiiddd',
-  $userId, $SEASON, $gk_id, $df1_id, $df2_id, $mf1_id, $mf2_id, $fw_id, $bench_id, $captain,
-  $left, $totalPoints, $lastWeekPoints
-);
                     $saveSuccess = $st->execute();
                     if (!$saveSuccess) {
                         $saveError = 'Ошибка сохранения: ' . $st->error;
@@ -158,19 +220,19 @@ $lastWeekPoints = 0.0;
                     $st->close();
 
                     if ($saveSuccess) {
-                        $squad = array(
+                        $squad = [
                             'gk_id' => $gk_id, 'df1_id' => $df1_id, 'df2_id' => $df2_id,
                             'mf1_id' => $mf1_id, 'mf2_id' => $mf2_id, 'fw_id' => $fw_id,
                             'bench_id' => $bench_id, 'captain_player_id' => $captain,
                             'budget_left' => $left
-                        );
+                        ];
                         $url = strtok($_SERVER['REQUEST_URI'], '?');
                         if (headers_sent($f, $l)) {
-    error_log("Headers already sent at $f:$l");
-} else {
-    header('Location: ' . $url . '?saved=1', true, 303); // See Other
-}
-exit;
+                            error_log("Headers already sent at $f:$l");
+                        } else {
+                            header('Location: ' . $url . '?saved=1', true, 303);
+                        }
+                        exit;
                     }
                 } else {
                     $saveError = 'Ошибка подготовки запроса: ' . $db->error;
@@ -553,37 +615,54 @@ while ($r = $q->fetch_assoc()) {
                     <th>Очки общие</th>
                 </tr>
             </thead>
-            <tbody>
-                <?php
-                $ranking = [];
-                $q = $db->query("SELECT user_id, season, total_points, last_week_points FROM fantasy_squads");
-                if ($q) {
-                    while ($row = $q->fetch_assoc()) {
-                        $teamName = isset($_SESSION['fantasy_team']) && $row['user_id'] == $userId ? $_SESSION['fantasy_team'] : 'Команда #' . $row['user_id'];
-                        $ranking[] = [
-                            'user_id' => $row['user_id'],
-                            'team_name' => $teamName,
-                            'last_week_points' => (float)($row['last_week_points'] ?? 0.00),
-                            'total_points' => (float)($row['total_points'] ?? 0.00)
-                        ];
-                    }
-                    usort($ranking, function($a, $b) {
-                        return $b['total_points'] <=> $a['total_points'];
-                    });
-                    $place = 1;
-                    foreach ($ranking as $rank) {
-                        echo '<tr>';
-                        echo '<td>' . $place++ . '</td>';
-                        echo '<td>' . htmlspecialchars($rank['team_name'], ENT_QUOTES, 'UTF-8') . '</td>';
-                        echo '<td>' . number_format($rank['last_week_points'], 2, '.', '') . '</td>';
-                        echo '<td>' . number_format($rank['total_points'], 2, '.', '') . '</td>';
-                        echo '</tr>';
-                    }
-                } else {
-                    error_log("Query failed: " . $db->error);
-                }
-                ?>
-            </tbody>
+          <tbody>
+<?php
+$ranking = [];
+
+$rankQ = $db->query("
+    SELECT 
+        fs.user_id,
+        fs.total_points,
+        fs.last_week_points,
+        COALESCE(NULLIF(fu.team_name, ''), CONCAT('Команда #', fs.user_id)) AS team_name
+    FROM fantasy_squads fs
+    LEFT JOIN fantasy_users fu ON fu.id = fs.user_id
+");
+
+if ($rankQ) {
+    while ($row = $rankQ->fetch_assoc()) {
+        // Для текущего пользователя можно показать имя из сессии, если оно есть,
+        // но не подменяем чужие команды.
+        $name = ($row['user_id'] == $userId && !empty($_SESSION['fantasy_team']))
+            ? $_SESSION['fantasy_team']
+            : $row['team_name'];
+
+        $ranking[] = [
+            'user_id'          => (int)$row['user_id'],
+            'team_name'        => $name,
+            'last_week_points' => (float)$row['last_week_points'],
+            'total_points'     => (float)$row['total_points'],
+        ];
+    }
+
+    usort($ranking, function ($a, $b) {
+        return $b['total_points'] <=> $a['total_points'];
+    });
+
+    $place = 1;
+    foreach ($ranking as $rank) {
+        echo '<tr>';
+        echo '<td>' . $place++ . '</td>';
+        echo '<td>' . htmlspecialchars($rank['team_name'], ENT_QUOTES, 'UTF-8') . '</td>';
+        echo '<td>' . number_format($rank['last_week_points'], 2, '.', '') . '</td>';
+        echo '<td>' . number_format($rank['total_points'], 2, '.', '') . '</td>';
+        echo '</tr>';
+    }
+} else {
+    error_log('Ranking query failed: ' . $db->error);
+}
+?>
+</tbody>
         </table>
     </div>
 </div>
