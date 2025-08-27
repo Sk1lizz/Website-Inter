@@ -11,7 +11,8 @@ if (!isset($_SESSION['admin_logged_in'])) {
 
 <head>
     <meta charset="UTF-8">
-
+ <link rel="icon" href="/img/yelowaicon.png" type="image/x-icon">
+ 
     <style>
     
     body {
@@ -105,39 +106,99 @@ if (!isset($_SESSION['admin_logged_in'])) {
  }
  
 .player-card {
-    margin: 10px 0;
-    padding: 15px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    background: #fff;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  margin: 8px 0;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  display: flex;
+  align-items: center;
 }
 
+/* 1-я строка — без "На 0" */
 .player-row {
-    display: grid;
-    grid-template-columns: 200px repeat(6, auto);
-    align-items: center;
-    gap: 10px;
+  display: grid;
+  grid-template-columns: 200px repeat(4, max-content); /* было repeat(5, ...) */
+  column-gap: 12px;
+  row-gap: 8px;
+  align-items: center;
+}
+
+/* 2-я строка — добавили "На 0:" сюда */
+.player-row-extra {
+  display: grid;
+  grid-template-columns: 200px repeat(5, max-content); /* было repeat(4, ...) */
+  column-gap: 12px;
+  row-gap: 8px;
+  align-items: center;
+  margin-top: 6px;
+}
+
+/* «пустая» ячейка слева во 2-й строке, чтобы сетка была ровной */
+.player-row-extra .player-name {
+  visibility: hidden; /* место сохраняем, текста не видно */
 }
 
 .player-name {
-    font-weight: bold;
-    color: #333;
-    white-space: nowrap;
+  flex: 0 0 180px; /* фикс. ширина для фамилии */
+  font-weight: bold;
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.player-row label {
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-    gap: 4px;
+.player-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  flex: 1;
 }
 
-.player-row input[type="number"] {
-    width: 50px;
-    padding: 4px;
+.player-stats label {
+  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  white-space: nowrap;
 }
 
+.player-stats input[type="number"] {
+  width: 32px; /* максимум два знака */
+  padding: 2px;
+  text-align: center;
+}
+
+.player-stats input[type="checkbox"] {
+  transform: scale(1.1);
+}
+
+.player-row label,
+.player-row-extra label {
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.player-row input[type="number"],
+.player-row-extra input[type="number"] {
+  width: 56px;
+  padding: 4px;
+}
+
+/* На узких экранах — перестраиваемся в две колонки, ничего не уезжает */
+@media (max-width: 900px) {
+  .player-row,
+  .player-row-extra {
+    grid-template-columns: 1fr 1fr;
+  }
+  .player-row .player-name,
+  .player-row-extra .player-name {
+    visibility: visible;
+  }
+}
 
      </style>
 
@@ -239,15 +300,18 @@ async function loadPlayersForSelectedTeam(teamId) {
 
 div.className = "player-card";
 div.innerHTML = `
-    <div class="player-row">
-        <div class="player-name">${p.name}</div>
-        <label><input type="checkbox" name="players[${p.id}][played]"> Играл</label>
-        <label><input type="checkbox" name="players[${p.id}][late]"> Опоздание</label>
-        <label>Голы: <input type="number" name="players[${p.id}][goals]" value="0" min="0"></label>
-        <label>Ассисты: <input type="number" name="players[${p.id}][assists]" value="0" min="0"></label>
-        <label>Пропущено: <input type="number" name="players[${p.id}][goals_conceded]" value="0" min="0"></label>
-        <label>На 0: <input type="checkbox" name="players[${p.id}][clean_sheet]"></label>
-    </div>
+  <div class="player-name">${p.name}</div>
+  <div class="player-stats">
+    <label><input type="checkbox" name="players[${p.id}][played]"> Играл</label>
+    <label><input type="checkbox" name="players[${p.id}][late]"> Опозд.</label>
+    <label>Г: <input type="number" name="players[${p.id}][goals]" value="0" min="0"></label>
+    <label>А: <input type="number" name="players[${p.id}][assists]" value="0" min="0"></label>
+    <label>Проп: <input type="number" name="players[${p.id}][goals_conceded]" value="0" min="0"></label>
+    <label>На0 <input type="checkbox" name="players[${p.id}][clean_sheet]"></label>
+    <label>ЖК <input type="checkbox" name="players[${p.id}][yellow_card]"></label>
+    <label>КК <input type="checkbox" name="players[${p.id}][red_card]"></label>
+    <label>Пен <input type="checkbox" name="players[${p.id}][missed_penalty]"></label>
+  </div>
 `;
 
 container.appendChild(div);
@@ -305,13 +369,16 @@ for (const div of playerDivs) {
     const playerId = match[1];
     if (!checkbox.checked) continue;
 
-    players[playerId] = {
-        played: checkbox.checked,
-        goals: +div.querySelector(`input[name="players[${playerId}][goals]"]`)?.value || 0,
-        assists: +div.querySelector(`input[name="players[${playerId}][assists]"]`)?.value || 0,
-        goals_conceded: +div.querySelector(`input[name="players[${playerId}][goals_conceded]"]`)?.value || 0,
-        clean_sheet: !!div.querySelector(`input[name="players[${playerId}][clean_sheet]"]`)?.checked
-    };
+players[playerId] = {
+  played: checkbox.checked,
+  goals: +div.querySelector(`input[name="players[${playerId}][goals]"]`)?.value || 0,
+  assists: +div.querySelector(`input[name="players[${playerId}][assists]"]`)?.value || 0,
+  goals_conceded: +div.querySelector(`input[name="players[${playerId}][goals_conceded]"]`)?.value || 0,
+  clean_sheet: !!div.querySelector(`input[name="players[${playerId}][clean_sheet]"]`)?.checked,
+  yellow_card: !!div.querySelector(`input[name="players[${playerId}][yellow_card]"]`)?.checked,
+  red_card: !!div.querySelector(`input[name="players[${playerId}][red_card]"]`)?.checked,
+  missed_penalty: !!div.querySelector(`input[name="players[${playerId}][missed_penalty]"]`)?.checked
+};
 
     const lateCheckbox = div.querySelector(`input[name="players[${playerId}][late]"]`);
     if (lateCheckbox?.checked) {

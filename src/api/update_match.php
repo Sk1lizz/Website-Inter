@@ -100,32 +100,41 @@ try {
 
     // Теперь вставим текущий список игроков (played = 1 для отмеченных)
     if (!empty($players)) {
-        $ins = $db->prepare("
-            INSERT INTO match_players (match_id, player_id, played, goals, assists, goals_conceded)
-            VALUES (?, ?, ?, ?, ?, ?)
-        ");
-        if (!$ins) {
-            throw new Exception('Prepare failed (insert match_players): ' . $db->error);
-        }
-
-        foreach ($players as $p) {
-            $pid      = (int)($p['id'] ?? 0);
-            if ($pid <= 0) continue;
-
-            $played   = 1; // По модалке — чекбокс означает, что игрок сыграл
-            $goals    = (int)($p['goals'] ?? 0);
-            $assists  = (int)($p['assists'] ?? 0);
-            $conceded = (int)($p['goals_conceded'] ?? 0);
-
-            if (!$ins->bind_param("iiiiii", $matchId, $pid, $played, $goals, $assists, $conceded)) {
-                throw new Exception("Bind failed (insert player_id=$pid): " . $ins->error);
-            }
-            if (!$ins->execute()) {
-                throw new Exception("Insert failed (player_id=$pid): " . $ins->error);
-            }
-        }
-        $ins->close();
+    $ins = $db->prepare("
+        INSERT INTO match_players 
+            (match_id, player_id, played, goals, assists, goals_conceded, yellow_cards, red_cards, missed_penalties)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ");
+    if (!$ins) {
+        throw new Exception('Prepare failed (insert match_players): ' . $db->error);
     }
+
+    foreach ($players as $p) {
+        $pid      = (int)($p['id'] ?? 0);
+        if ($pid <= 0) continue;
+
+        $played   = 1;
+        $goals    = (int)($p['goals'] ?? 0);
+        $assists  = (int)($p['assists'] ?? 0);
+        $conceded = (int)($p['goals_conceded'] ?? 0);
+
+        // фронт присылает как булево — приведём к 0/1
+        $yellow   = !empty($p['yellow_card']) ? 1 : 0;
+        $red      = !empty($p['red_card']) ? 1 : 0;
+        $missed   = !empty($p['missed_penalty']) ? 1 : 0;
+
+        if (!$ins->bind_param(
+            "iiiiiiiii",
+            $matchId, $pid, $played, $goals, $assists, $conceded, $yellow, $red, $missed
+        )) {
+            throw new Exception("Bind failed (player_id=$pid): " . $ins->error);
+        }
+        if (!$ins->execute()) {
+            throw new Exception("Insert failed (player_id=$pid): " . $ins->error);
+        }
+    }
+    $ins->close();
+}
 
     // Всё успешно — коммитим
     if (!$db->commit()) {

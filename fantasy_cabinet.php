@@ -12,6 +12,34 @@ require_once dirname(__FILE__) . '/db.php';
 $BUDGET = 50.0;
 $SEASON = 2025;
 
+// Проверка возможности редактирования
+date_default_timezone_set('Europe/Moscow');
+$currentDateTime = new DateTime();
+$currentDay = $currentDateTime->format('N'); // 1 (понедельник) - 7 (воскресенье)
+$currentHour = $currentDateTime->format('H');
+$currentMinute = $currentDateTime->format('i');
+$isEditingAllowed = true;
+$editingMessage = '';
+
+// Проверяем, существует ли состав
+$squadExists = false;
+if ($stmt = $db->prepare("SELECT 1 FROM fantasy_squads WHERE user_id=? LIMIT 1")) {
+    $stmt->bind_param('i', $userId);
+    $stmt->execute();
+    $squadExists = $stmt->get_result()->num_rows > 0;
+    $stmt->close();
+}
+
+// Если состав существует, проверяем день и время
+if ($squadExists) {
+    // Разрешено редактирование со вторника (2) по пятницу (5)
+    // Запрещено с субботы 00:01
+    if ($currentDay >= 6 || ($currentDay == 6 && $currentHour >= 0 && $currentMinute >= 1)) {
+        $isEditingAllowed = false;
+        $editingMessage = 'Редактирование состава возможно только со вторника по пятницу.';
+    }
+}
+
 /*
 CREATE TABLE IF NOT EXISTS fantasy_squads (
   user_id INT NOT NULL PRIMARY KEY,
@@ -304,126 +332,192 @@ while ($r = $q->fetch_assoc()) {
     <meta charset="utf-8">
     <title>Fantasy — кабинет</title>
     <link rel="stylesheet" href="/css/main.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
 <style>
-    .Fantasy { padding-top: 20svh; display: flex; justify-content: center; background: #fff; font-family: PLAY-REGULAR, Arial; }
-    .fantasy-card { width: 100%; max-width: 1100px; background: rgba(0,0,0,.03); border-radius: 12px; padding: 24px; box-shadow: 0 2px 5px rgba(0,0,0,.08); }
-    h1 { font-family: PLAY-BOLD, Arial; color: #00296B; font-size: 28px; margin-bottom: 8px; }
-    .muted { color: #666; }
-    .btn { background: #00296B; color: #FDC500; border: 2px solid #FDC500; border-radius: 10px; padding: 10px 16px; font-size: 16px; cursor: pointer; }
-    .btn:hover { background: #000; color: #fff; border-color: #fff; }
-    .grid { display: grid; grid-template-columns: 420px 1fr; gap: 24px; }
-    .field, .picker { position: relative; z-index: 1; }
-    .field { position: relative; width: 420px; height: 650px; background: url('/img/field.jpg') center/cover; border-radius: 12px; overflow: hidden; }
-    .slot { position: absolute; width: 90px; text-align: center; }
-    .slot .avatar { width: 74px; height: 74px; border-radius: 50%; overflow: hidden; margin: 0 auto 6px; border: 3px solid #fff; background: #e9eef5; box-shadow: 0 2px 4px rgba(0,0,0,.2); }
-    .slot img { width: 100%; height: 100%; object-fit: cover; }
-    .slot .name, .slot .pos {
-        color: #fff;
-        text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
-    }
-    .slot .name { font-size: 12px; font-weight: 700; }
-    .slot .pos {
-        color: #fff;
-        text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
-    }
-    .slot .pos.black-text {
-        color: #000;
-        text-shadow: none;
-    }
-    .slot .capt { display: none; font-size: 11px; color: #FDC500; text-shadow: none; }
-    .slot.captain .capt { display: block; }
-    .s-fw { top: 80px; left: 165px; }
-    .s-mf1 { top: 240px; left: 60px; }
-    .s-mf2 { top: 240px; left: 270px; }
-    .s-df1 { top: 405px; left: 60px; }
-    .s-df2 { top: 405px; left: 270px; }
-    .s-bench { top: 530px; left: 10px; width: 110px; }
-    .s-gk { top: 530px; left: 165px; }
-    .picker { background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 16px; }
-    .budget { margin-bottom: 10px; }
-    .budget-instruction { font-size: 14px; color: #666; margin-top: 5px; }
-    .tabs { display: flex; gap: 8px; margin-bottom: 10px; }
-    .tab { padding: 8px 12px; border: 1px solid #ddd; border-radius: 10px; background: #fff; cursor: pointer; color: #000; }
-    .tab.active { background: #00296B; color: #FDC500; border-color: #00296B; }
-    .list { display: none; max-height: 470px; overflow: auto; border: 1px solid #eee; border-radius: 10px; }
-    .list.active { display: block; }
-    .card { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-bottom: 1px solid #f1f5f9; }
-    .card:last-child { border-bottom: none; }
-    .card .ph { width: 46px; height: 46px; border-radius: 50%; overflow: hidden; background: #eef2ff; border: 2px solid #fff; box-shadow: 0 1px 2px rgba(0,0,0,.12); }
-    .card .ph img { width: 100%; height: 100%; object-fit: cover; }
-    .card .nm { font-weight: 600; }
-    .card .meta { font-size: 12px; color: #64748b; }
-    .card .price { margin-left: auto; font-weight: 700; }
-    .card .choose { margin-left: 8px; }
-    .disabled { opacity: .45; pointer-events: none; }
-    .row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-top: 10px; }
-    select { padding: 8px 10px; border: 1px solid #e5e7eb; border-radius: 8px; background: #fff; }
-    .warn { background: #fdeceb; color: #7d1c1a; border: 1px solid #f5c6cb; padding: 10px; border-radius: 8px; margin: 10px 0; }
-    .ok { background: #e7f6e7; color: #155724; border: 1px solid #c3e6cb; padding: 10px; border-radius: 8px; margin: 10px 0; }
-    .slot .capt { display: none !important; }
-    .slot.captain .avatar {
-        border-color: #FDC500;
-        box-shadow: 0 0 0 3px rgba(253,197,0,0.55), 0 0 12px rgba(253,197,0,0.75);
-    }
-    .team-counts { margin-top: 10px; display: flex; gap: 12px; margin-bottom: 10px; }
-    .team-count { padding: 6px 12px; border-radius: 8px; color: #fff; font-size: 14px; }
-    .team-count-1 { background: #000; }
-    .team-count-2 { background: #00509D; }
-    .team-label { padding: 2px 6px; border-radius: 4px; color: #fff; font-size: 12px; margin-left: 4px; display: inline-block; }
-    .team-label-1 { background: #000; }
-    .team-label-2 { background: #00509D; }
-    .muted strong {
-        color: #00296B;
-        font-weight: 700;
-    }
-    .rules-section { margin-top: 20px; }
-    .rules-section h3 { font-size: 18px; color: #00296B; margin-bottom: 10px; }
-    .rules-section ul { list-style-type: disc; padding-left: 20px; margin-bottom: 15px; }
-    .rules-section li { margin-bottom: 5px; }
-    .ranking-section { margin-top: 20px; }
-    .ranking-section h3 { font-size: 18px; color: #00296B; margin-bottom: 10px; }
-    .ranking-table-container { padding: 16px; }
-    .ranking-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-    .ranking-table th, .ranking-table td { padding: 8px; text-align: left; border-bottom: 1px solid #e5e7eb; }
-    .ranking-table th { background-color: #f1f5f9; font-weight: 600; }
-    .ranking-table td { color: #64748b; }
-    .ranking-table tr:last-child td { border-bottom: none; }
-    .modal {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw; /* Используем 100vw для полной ширины окна */
-        height: 100vh; /* Используем 100vh для полной высоты окна */
-        background: rgba(0,0,0,0.5);
-        display: flex;
-        justify-content: center !important; /* Усиливаем приоритет */
-        align-items: center !important; /* Усиливаем приоритет */
-        z-index: 1000;
-    }
+  .Fantasy { padding-top: 20svh; display: flex; justify-content: center; background: #fff; font-family: PLAY-REGULAR, Arial; }
+  .fantasy-card { width: 100%; max-width: 1100px; border-radius: 12px; padding: 24px; box-shadow: 0 2px 5px rgba(0,0,0,.08); }
+  h1 { font-family: PLAY-BOLD, Arial; color: #00296B; font-size: 28px; margin-bottom: 8px; }
+  .muted { color: #666; padding-bottom: 10px; }
+  .btn { background: #00296B; color: #FDC500; border: 2px solid #FDC500; border-radius: 10px; padding: 10px 16px; font-size: 16px; cursor: pointer; }
+  .btn:hover { background: #000; color: #fff; border-color: #fff; }
 
-    .modal-content {
-        background: #fff;
-        padding: 20px;
-        border-radius: 12px;
-        text-align: center;
-        width: 90%;
-        max-width: 400px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    }
+  /* Сетка */
+  .grid { display: grid; grid-template-columns: 420px 1fr; gap: 24px; align-items: start; }
+  .field, .picker { position: relative; z-index: 1; min-width: 0; }
 
-    .modal-content h3 {
-        color: #00296B;
-        margin-bottom: 10px;
-    }
+  /* Поле: пропорциональное + координаты в процентах */
+  .field {
+    position: relative;
+    width: 100%;
+    max-width: 420px;
+    aspect-ratio: 420 / 650;
+    height: auto;
+    background: url('/img/field.jpg') center/cover;
+    border-radius: 12px;
+    overflow: hidden;
+    margin: 0;
+  }
+  @supports not (aspect-ratio: 1) {
+    .field { height: 0; padding-bottom: 154.762%; }
+  }
 
-    .modal-buttons {
-        margin-top: 15px;
-    }
+  /* ширина слота: 90px от 420px -> 21.4286% */
+  .slot { position: absolute; width: 21.4286%; text-align: center; }
+  /* bench был 110px -> 26.190% */
+  .s-bench { width: 26.190%; }
 
-    .modal-buttons .btn {
-        margin: 0 5px;
-    }
+  .slot .avatar { width: clamp(54px, 17vw, 74px); height: clamp(54px, 17vw, 74px); border-radius: 50%; overflow: hidden; margin: 0 auto 6px; border: 3px solid #fff; background: #e9eef5; box-shadow: 0 2px 4px rgba(0,0,0,.2); }
+  .slot img { width: 100%; height: 100%; object-fit: cover; }
+  .slot .name, .slot .pos { color: #fff; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000; }
+  .slot .name { font-size: clamp(10px, 2.8vw, 12px); font-weight: 700; }
+  .slot .pos  { font-size: clamp(10px, 2.6vw, 12px); }
+  .slot .pos.black-text { color: #000; text-shadow: none; }
+  .slot .capt { display: none !important; font-size: clamp(10px, 2.6vw, 11px); color: #FDC500; text-shadow: none; }
+  .slot.captain .avatar { border-color: #FDC500; box-shadow: 0 0 0 3px rgba(253,197,0,0.55), 0 0 12px rgba(253,197,0,0.75); }
+  .slot.captain .capt { display: block !important; }
+
+  /* Координаты слотов: px -> % (top: px/650*100, left: px/420*100) */
+  .s-fw   { top: 12.3077%; left: 39.2857%; }
+  .s-mf1  { top: 36.9231%; left: 14.2857%; }
+  .s-mf2  { top: 36.9231%; left: 64.2857%; }
+  .s-df1  { top: 62.3077%; left: 14.2857%; }
+  .s-df2  { top: 62.3077%; left: 64.2857%; }
+  .s-bench{ top: 81.5385%; left: 2.3810%; }
+  .s-gk   { top: 81.5385%; left: 39.2857%; }
+
+  /* Подбор */
+  .picker { background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 16px; }
+  .budget { margin-bottom: 10px; }
+  .budget-instruction { font-size: 14px; color: #666; margin-top: 5px; }
+
+  /* Табы позиций */
+  .tabs { display: flex; gap: 8px; margin-bottom: 10px; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: thin; }
+  .tab { padding: 8px 12px; border: 1px solid #ddd; border-radius: 10px; background: #fff; cursor: pointer; color: #000; white-space: nowrap; }
+  .tab.active { background: #00296B; color: #FDC500; border-color: #00296B; }
+  .tab.disabled { opacity: 0.45; pointer-events: none; cursor: not-allowed; }
+
+  /* Списки игроков */
+  .list { display: none; max-height: 470px; overflow: auto; border: 1px solid #eee; border-radius: 10px; }
+  .list.active { display: block; }
+
+  /* Карточка игрока — GRID: [аватар][текст][цена][кнопка] */
+  .card {
+    display: grid;
+    grid-template-columns: 46px 1fr auto auto;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-bottom: 1px solid #f1f5f9;
+  }
+  .card:last-child { border-bottom: none; }
+  .card .ph { grid-column: 1; width: 46px; height: 46px; border-radius: 50%; overflow: hidden; background: #eef2ff; border: 2px solid #fff; box-shadow: 0 1px 2px rgba(0,0,0,.12); }
+  .card .ph img { width: 100%; height: 100%; object-fit: cover; }
+  .card .nm, .card .meta { grid-column: 2; }
+  .card .nm { font-weight: 600; line-height: 1.15; }
+  .card .meta { font-size: 12px; color: #64748b; }
+  .card .price { grid-column: 3; margin: 0; white-space: nowrap; font-weight: 700; }
+  .card .choose, .card .remove, .card .btn {
+    grid-column: 4;
+    justify-self: end;
+    align-self: center;
+    width: auto !important;
+    max-width: none !important;
+    white-space: nowrap;
+    font-size: 14px;
+    padding: 8px 12px;
+    border-radius: 8px;
+  }
+  .disabled { opacity: .45; pointer-events: none; }
+
+  .row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-top: 10px; }
+  select { padding: 8px 10px; border: 1px solid #e5e7eb; border-radius: 8px; background: #fff; }
+
+  .warn { background: #fdeceb; color: #7d1c1a; border: 1px solid #f5c6cb; padding: 10px; border-radius: 8px; margin: 10px 0; }
+  .ok   { background: #e7f6e7; color: #155724; border: 1px solid #c3e6cb; padding: 10px; border-radius: 8px; margin: 10px 0; }
+
+  .team-counts { margin-top: 10px; display: flex; gap: 12px; margin-bottom: 10px; flex-wrap: wrap; }
+  .team-count  { padding: 6px 12px; border-radius: 8px; color: #fff; font-size: 14px; }
+  .team-count-1 { background: #000; }
+  .team-count-2 { background: #00509D; }
+  .team-label { padding: 2px 6px; border-radius: 4px; color: #fff; font-size: 12px; margin-left: 4px; display: inline-block; }
+  .team-label-1 { background: #000; }
+  .team-label-2 { background: #00509D; }
+
+  .muted strong { color: #00296B; font-weight: 700; padding-bottom: 10px; }
+
+  .rules-section { margin-top: 20px; }
+  .rules-section h3 { font-size: 18px; color: #00296B; margin-bottom: 10px; }
+  .rules-section ul { list-style-type: disc; padding-left: 20px; margin-bottom: 15px; }
+  .rules-section li { margin-bottom: 5px; }
+
+  .ranking-section { margin-top: 20px; }
+  .ranking-section h3 { font-size: 18px; color: #00296B; margin-bottom: 10px; }
+
+  .ranking-table-container { padding: 16px; overflow-x: auto; }
+  .ranking-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+  .ranking-table th, .ranking-table td { padding: 8px; text-align: left; border-bottom: 1px solid #e5e7eb; }
+  .ranking-table th { background-color: #f1f5f9; font-weight: 600; }
+  .ranking-table td { color: #64748b; }
+  .ranking-table tr:last-child td { border-bottom: none; }
+
+  /* Модалка */
+  .modal {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(0,0,0,0.5); display: flex; justify-content: center !important; align-items: center !important; z-index: 1000;
+  }
+  .modal-content { background: #fff; padding: 20px; border-radius: 12px; text-align: center; width: 90%; max-width: 400px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+  .modal-content h3 { color: #00296B; margin-bottom: 10px; }
+  .modal-buttons { margin-top: 15px; }
+  .modal-buttons .btn { margin: 0 5px; }
+
+  /* ===== Адаптивные медиазапросы ===== */
+
+  /* Планшеты и узкие ноуты */
+  @media (max-width: 1024px) and (min-width: 769px) {
+    .Fantasy { padding-top: 26svh; }
+    .grid { grid-template-columns: 1fr; gap: 18px; }
+    .field { margin: 0 auto; }
+    .list { max-height: min(58vh, 520px); }
+    .picker { padding: 14px; }
+  }
+
+  /* Смартфоны */
+  @media (max-width: 768px) {
+    .Fantasy { padding-top: 10svh; } /* твоя правка */
+    .grid { grid-template-columns: 1fr; gap: 14px; }
+    .field { margin: 0 auto; }
+    .btn { width: 100%; text-align: center; font-size: 15px; padding: 10px 14px; }
+
+    .list { max-height: min(54vh, 480px); }
+    .slot .avatar { width: 60px; height: 60px; }
+
+    .card { grid-template-columns: 40px 1fr auto auto; gap: 8px; padding: 8px; }
+    .card .ph { width: 40px; height: 40px; }
+    .card .nm { font-size: 14px; }
+    .card .meta { font-size: 11px; }
+    .card .price { font-size: 13px; }
+    .card { grid-auto-rows: minmax(0, auto); }
+    .card .choose, .card .remove { font-size: 13px; padding: 6px 10px; border-radius: 6px; justify-self: end; }
+  }
+
+  /* Таблица/модалка на очень узких */
+  @media (max-width: 480px) {
+    .ranking-table th, .ranking-table td { padding: 6px 8px; font-size: 13px; }
+    .modal-content { width: 92%; padding: 16px; }
+  }
+
+  /* Адаптив табов позиций: перенос */
+  @media (max-width: 618px) {
+    .tabs { overflow: visible; flex-wrap: wrap; gap: 8px; }
+    .tab { flex: 1 1 calc(50% - 8px); text-align: center; padding: 8px 10px; font-size: 14px; }
+  }
+  @media (max-width: 340px) {
+    .tab { flex: 1 1 100%; font-size: 13px; padding: 7px 10px; }
+  }
 </style>
+
+
 
     <script>function imgFallback(i){i.onerror=null;i.src='/img/player/player_0.png';}</script>
 </head>
@@ -440,10 +534,11 @@ while ($r = $q->fetch_assoc()) {
 
 <div class="Fantasy">
     <div class="fantasy-card">
-        <h1>Fantasy team</h1>
+        <h1>Fantasy team (beta)</h1>
        <p class="muted">Команда: <strong><?php echo htmlspecialchars($teamName, ENT_QUOTES, 'UTF-8'); ?></strong></p>
-<p class="muted">Очки команды: <strong><?php echo number_format((float)($squad['total_points'] ?? 0.00), 2, '.', ''); ?></strong></p>
-<p class="muted">Очки на прошлой неделе: <strong><?php echo number_format((float)($squad['last_week_points'] ?? 0.00), 2, '.', ''); ?></strong></p>
+<p class="muted">Очки команды: <strong><?php echo (int)round((float)($squad['total_points'] ?? 0)); ?></strong></p>
+<p class="muted">Очки на прошлой неделе: <strong><?php echo (int)round((float)($squad['last_week_points'] ?? 0)); ?></strong></p>
+  <p class="muted">Редактирование состава возможно со вторника по пятницу.<strong></strong></p>
 
         <?php if (isset($_GET['saved'])): ?>
             <div class="ok">Состав сохранён!</div>
@@ -486,469 +581,685 @@ while ($r = $q->fetch_assoc()) {
                 </div>
             </div>
 
-            <!-- Подбор -->
-            <div class="picker" id="picker">
-                <div class="budget">
-                    Бюджет: <strong><span id="budgetLeft"><?php echo number_format((float)$squad['budget_left'], 2, '.', ''); ?></span></strong> из <?php echo number_format($BUDGET, 2, '.', ''); ?>
-                </div>
-                <div class="budget-instruction">
-                    Собери команду на предоставленный бюджет. Вы можете взять не более четырёх игроков из одной команды.
-                </div>
-                <div class="team-counts">
-    <div class="team-count team-count-1" id="teamCount1">FC Inter Moscow 8x8: <span>0</span></div>
-    <div class="team-count team-count-2" id="teamCount2">FC Inter Moscow 11x11: <span>0</span></div>
-</div>
-                <div class="tabs" id="tabs">
-                    <button class="tab active" data-tab="FW">Нападающие</button>
-                    <button class="tab" data-tab="MF">Полузащитники</button>
-                    <button class="tab" data-tab="DF">Защитники</button>
-                    <button class="tab" data-tab="GK">Вратари</button>
-                    <button class="tab" data-tab="BENCH">Запасной</button>
-                </div>
+         <!-- Подбор -->
+<div class="picker" id="picker">
+    <?php if (!$isEditingAllowed): ?>
+        <div class="warn"><?php echo htmlspecialchars($editingMessage, ENT_QUOTES, 'UTF-8'); ?></div>
+    <?php endif; ?>
+    <div class="budget">
+        Бюджет: <strong><span id="budgetLeft"><?php echo number_format((float)$squad['budget_left'], 2, '.', ''); ?></span></strong> из <?php echo number_format($BUDGET, 2, '.', ''); ?>
+    </div>
+    <div class="budget-instruction">
+        Собери команду на предоставленный бюджет. Вы можете взять не более четырёх игроков из одной команды.
+    </div>
+    <div class="team-counts">
+        <div class="team-count team-count-1" id="teamCount1">FC Inter Moscow 8x8: <span>0</span></div>
+        <div class="team-count team-count-2" id="teamCount2">FC Inter Moscow 11x11: <span>0</span></div>
+    </div>
+    <div class="tabs" id="tabs">
+        <button class="tab active" data-tab="FW">Нападающие</button>
+        <button class="tab" data-tab="MF">Полузащитники</button>
+        <button class="tab" data-tab="DF">Защитники</button>
+        <button class="tab" data-tab="GK">Вратари</button>
+        <button class="tab" data-tab="BENCH">Запасной</button>
+    </div>
 
-                <?php
-                function fmt_price_visible($raw) {
-                    $f = (float) str_replace(',', '.', (string)$raw);
-                    return rtrim(rtrim(number_format($f, 2, '.', ''), '0'), '.');
-                }
-                function fmt_price_attr($raw) {
-                    $f = (float) str_replace(',', '.', (string)$raw);
-                    return number_format($f, 2, '.', '');
-                }
-                if (!function_exists('price_text_1')) {
-                    function price_text_1($raw) {
-                        $f = (float)str_replace(',', '.', (string)$raw);
-                        return number_format($f, 1, '.', '');
-                    }
-                }
-                if (!function_exists('price_attr_1')) {
-                    function price_attr_1($raw) {
-                        $f = (float)str_replace(',', '.', (string)$raw);
-                        return number_format($f, 1, '.', '');
-                    }
-                }
-
-                function printList($key, $players, $label) {
-    $active = $key === 'FW' ? 'active' : '';
-    echo '<div class="list ' . $active . '" id="list_' . $key . '">';
-    foreach ($players as $pl) {
-        $name = htmlspecialchars($pl['name'], ENT_QUOTES, 'UTF-8');
-        $photo = htmlspecialchars($pl['photo'], ENT_QUOTES, 'UTF-8');
-        $priceText = price_text_1($pl['price']);
-        $priceAttr = price_attr_1($pl['price']);
-        $teamName = htmlspecialchars($pl['team_name'], ENT_QUOTES, 'UTF-8');
-        echo '<div class="card" data-id="' . $pl['id'] . '" data-pos="' . $key . '" data-price="' . $priceAttr . '" data-team-id="' . $pl['team_id'] . '">
-                <div class="ph"><img src="' . $photo . '" onerror="imgFallback(this)" alt=""></div>
-                <div>
-                    <div class="nm">' . $name . '</div>
-                    <div class="meta">' . $key . ', <span class="team-label team-label-' . $pl['team_id'] . '">' . $teamName . '</span></div>
-                </div>
-                <div class="price">' . $priceText . '</div>
-                <button class="choose btn" type="button">Выбрать</button>
-              </div>';
+    <?php
+    function fmt_price_visible($raw) {
+        $f = (float) str_replace(',', '.', (string)$raw);
+        return rtrim(rtrim(number_format($f, 2, '.', ''), '0'), '.');
     }
-    echo '</div>';
-}
-                printList('FW', $playersByPos['FW'], 'FW');
-                printList('MF', $playersByPos['MF'], 'MF');
-                printList('DF', $playersByPos['DF'], 'DF');
-                printList('GK', $playersByPos['GK'], 'GK');
+    function fmt_price_attr($raw) {
+        $f = (float) str_replace(',', '.', (string)$raw);
+        return number_format($f, 2, '.', '');
+    }
+    if (!function_exists('price_text_1')) {
+        function price_text_1($raw) {
+            $f = (float)str_replace(',', '.', (string)$raw);
+            return number_format($f, 1, '.', '');
+        }
+    }
+    if (!function_exists('price_attr_1')) {
+        function price_attr_1($raw) {
+            $f = (float)str_replace(',', '.', (string)$raw);
+            return number_format($f, 1, '.', '');
+        }
+    }
 
-                $bench = array_merge($playersByPos['MF'], $playersByPos['DF'], $playersByPos['GK']);
-                usort($bench, function($a, $b) {
-                    if ($a['price'] == $b['price']) {
-                        return strcmp($a['name'], $b['name']);
-                    }
-                    return $b['price'] > $a['price'] ? 1 : -1;
-                });
-                printList('BENCH', $bench, 'Запасной');
-                ?>
-
-                <form method="post" id="saveForm" class="row">
-                    <input type="hidden" name="gk_id"   id="inp_gk_id"   value="<?php echo (int)$squad['gk_id']; ?>">
-                    <input type="hidden" name="df1_id"  id="inp_df1_id"  value="<?php echo (int)$squad['df1_id']; ?>">
-                    <input type="hidden" name="df2_id"  id="inp_df2_id"  value="<?php echo (int)$squad['df2_id']; ?>">
-                    <input type="hidden" name="mf1_id"  id="inp_mf1_id"  value="<?php echo (int)$squad['mf1_id']; ?>">
-                    <input type="hidden" name="mf2_id"  id="inp_mf2_id"  value="<?php echo (int)$squad['mf2_id']; ?>">
-                    <input type="hidden" name="fw_id"   id="inp_fw_id"   value="<?php echo (int)$squad['fw_id']; ?>">
-                    <input type="hidden" name="bench_id"id="inp_bench_id" value="<?php echo (int)$squad['bench_id']; ?>">
-                    <div class="row" id="captainRow" style="display:none;">
-                        <label for="captain_player_id">Капитан:</label>
-                        <select name="captain_player_id" id="captainSelect"></select>
+    function printList($key, $players, $label) {
+        $active = $key === 'FW' ? 'active' : '';
+        echo '<div class="list ' . $active . '" id="list_' . $key . '">';
+        foreach ($players as $pl) {
+            $name = htmlspecialchars($pl['name'], ENT_QUOTES, 'UTF-8');
+            $photo = htmlspecialchars($pl['photo'], ENT_QUOTES, 'UTF-8');
+            $priceText = price_text_1($pl['price']);
+            $priceAttr = price_attr_1($pl['price']);
+            $teamName = htmlspecialchars($pl['team_name'], ENT_QUOTES, 'UTF-8');
+            echo '<div class="card" data-id="' . $pl['id'] . '" data-pos="' . $key . '" data-price="' . $priceAttr . '" data-team-id="' . $pl['team_id'] . '">
+                    <div class="ph"><img src="' . $photo . '" onerror="imgFallback(this)" alt=""></div>
+                    <div>
+                        <div class="nm">' . $name . '</div>
+                        <div class="meta">' . $key . ', <span class="team-label team-label-' . $pl['team_id'] . '">' . $teamName . '</span></div>
                     </div>
-                    <button class="btn" type="submit" name="save_squad" id="saveBtn" disabled>Сохранить состав</button>
-                    <span class="muted" id="hint"></span>
-                </form>
-            
-            </div>
-        </div>
-    
-    <div class="rules-section">
-    <h3 class="muted">Правила игры</h3>
-    <p class="muted">Фэнтези-футбол — игра, в которой участники формируют виртуальную команду футболистов, чьи прототипы принимают участие в реальных соревнованиях и, в зависимости от актуальной статистики своих выступлений, набирают зачетные баллы. Сформируйте свою команду и набирайте очки. Суммарная стоимость всех игроков не должна превышать 50 баллов. После формирования команды вы сможете делать не более 2-х трансферов в неделю. Так что выбирайте игроков с умом! Вы можете взять не более четырёх игроков из одной команды. Запасной игрок учитывается, только если кто-то из вашего состава не сыграл в матче. Мы будем учитывать в статистике только матчи, которые прошли на выходных, включая товарищеские матчи. Сезон длится весь календарный год. Очки можно получить следующим образом:</p>
-    <ul class="muted">
-        <li>Игрок сыграл в матче - 1 очко;</li>
-        <li>Гол, забитый вратарем или защитником команды 11х11 = 6 очков;</li>
-        <li>Гол, забитый вратарем или защитником команды 8х8 = 4 очка;</li>
-        <li>Гол, забитый полузащитником команды 11х11 = 5 очков;</li>
-        <li>Гол, забитый полузащитником команды 8х8 = 3 очка;</li>
-        <li>Гол, забитый нападающим команды 11х11 = 4 очка;</li>
-        <li>Гол, забитый нападающим команды 8х8 = 2 очка;</li>
-        <li>Голевая передача = 3 очка;</li>
-        <li>Сухой матч (для вратаря или защитника) = 4 очка;</li>
-        <li>Желтая карточка = -1 очко;</li>
-        <li>Красная карточка = -3 очка;</li>
-        <li>Вратарь пропустил более 5 мячей в матче = -3 очка;</li>
-        <li>У игрока, выбранного капитаном, очки удваиваются.</li>
-    </ul>
-</div>
+                    <div class="price">' . $priceText . '</div>
+                    <button class="choose btn" type="button">Выбрать</button>
+                  </div>';
+        }
+        echo '</div>';
+    }
+    printList('FW', $playersByPos['FW'], 'FW');
+    printList('MF', $playersByPos['MF'], 'MF');
+    printList('DF', $playersByPos['DF'], 'DF');
+    printList('GK', $playersByPos['GK'], 'GK');
 
-<div class="ranking-section">
-    <h3 class="muted">Рейтинг команд</h3>
+    $bench = array_merge($playersByPos['MF'], $playersByPos['DF'], $playersByPos['GK']);
+    usort($bench, function($a, $b) {
+        if ($a['price'] == $b['price']) {
+            return strcmp($a['name'], $b['name']);
+        }
+        return $b['price'] > $a['price'] ? 1 : -1;
+    });
+    printList('BENCH', $bench, 'Запасной');
+    ?>
+
+    <form method="post" id="saveForm" class="row">
+        <input type="hidden" name="gk_id"   id="inp_gk_id"   value="<?php echo (int)$squad['gk_id']; ?>" <?php echo $isEditingAllowed ? '' : 'disabled'; ?>>
+        <input type="hidden" name="df1_id"  id="inp_df1_id"  value="<?php echo (int)$squad['df1_id']; ?>" <?php echo $isEditingAllowed ? '' : 'disabled'; ?>>
+        <input type="hidden" name="df2_id"  id="inp_df2_id"  value="<?php echo (int)$squad['df2_id']; ?>" <?php echo $isEditingAllowed ? '' : 'disabled'; ?>>
+        <input type="hidden" name="mf1_id"  id="inp_mf1_id"  value="<?php echo (int)$squad['mf1_id']; ?>" <?php echo $isEditingAllowed ? '' : 'disabled'; ?>>
+        <input type="hidden" name="mf2_id"  id="inp_mf2_id"  value="<?php echo (int)$squad['mf2_id']; ?>" <?php echo $isEditingAllowed ? '' : 'disabled'; ?>>
+        <input type="hidden" name="fw_id"   id="inp_fw_id"   value="<?php echo (int)$squad['fw_id']; ?>" <?php echo $isEditingAllowed ? '' : 'disabled'; ?>>
+        <input type="hidden" name="bench_id"id="inp_bench_id" value="<?php echo (int)$squad['bench_id']; ?>" <?php echo $isEditingAllowed ? '' : 'disabled'; ?>>
+        <div class="row" id="captainRow" style="display:<?php echo $isEditingAllowed && $squad['gk_id'] ? '' : 'none'; ?>;">
+            <label for="captain_player_id">Капитан:</label>
+            <select name="captain_player_id" id="captainSelect" <?php echo $isEditingAllowed ? '' : 'disabled'; ?>></select>
+        </div>
+        <button class="btn" type="submit" name="save_squad" id="saveBtn" <?php echo $isEditingAllowed ? '' : 'disabled'; ?>>Сохранить состав</button>
+        <span class="muted" id="hint"></span>
+    </form>
+</div>
+            
+    </div> <!-- Закрытие .grid -->
+        
+        <div class="rules-section">
+            <h3 class="muted">Правила игры</h3>
+            <p class="muted">Фэнтези-футбол — игра, в которой участники формируют виртуальную команду футболистов, чьи прототипы принимают участие в реальных соревнованиях и, в зависимости от актуальной статистики своих выступлений, набирают зачетные баллы. Сформируйте свою команду и набирайте очки. Суммарная стоимость всех игроков не должна превышать 50 баллов. После формирования команды вы сможете делать не более 2-х трансферов в неделю. Так что выбирайте игроков с умом! Вы можете взять не более четырёх игроков из одной команды. Запасной игрок учитывается, только если кто-то из вашего состава не сыграл в матче и его позиция совпадает с этим игроком. Мы будем учитывать в статистике только матчи, которые прошли на выходных, включая товарищеские матчи. Сезон длится весь календарный год. Очки можно получить следующим образом:</p>
+            <ul class="muted">
+                <li>Игрок сыграл в матче - 1 очко;</li>
+                <li>Гол, забитый вратарем или защитником команды 11х11 = 6 очков;</li>
+                <li>Гол, забитый вратарем или защитником команды 8х8 = 4 очка;</li>
+                <li>Гол, забитый полузащитником команды 11х11 = 5 очков;</li>
+                <li>Гол, забитый полузащитником команды 8х8 = 3 очка;</li>
+                <li>Гол, забитый нападающим команды 11х11 = 4 очка;</li>
+                <li>Гол, забитый нападающим команды 8х8 = 2 очка;</li>
+                <li>Голевая передача = 3 очка;</li>
+                <li>Сухой матч (для вратаря или защитника) = 4 очка;</li>
+                <li>Желтая карточка = -1 очко;</li>
+                <li>Красная карточка = -3 очка;</li>
+                <li>Нереализованный пенальти = -2 очка;</li>
+                <li>Вратарь пропустил более 5 мячей в матче = -3 очка;</li>
+                <li>У игрока, выбранного капитаном, очки удваиваются.</li>
+            </ul>
+        </div>
+
+        <?php
+// ===== Расчёт очков выбранных игроков за прошедшие выходные для текущей команды =====
+
+// Получим текущий состав пользователя
+$my = [
+  'gk' => (int)($squad['gk_id'] ?? 0),
+  'df1'=> (int)($squad['df1_id'] ?? 0),
+  'df2'=> (int)($squad['df2_id'] ?? 0),
+  'mf1'=> (int)($squad['mf1_id'] ?? 0),
+  'mf2'=> (int)($squad['mf2_id'] ?? 0),
+  'fw' => (int)($squad['fw_id'] ?? 0),
+  'bench' => (int)($squad['bench_id'] ?? 0),
+  'captain' => (int)($squad['captain_player_id'] ?? 0),
+];
+
+// если состав не полный, таблицу не показываем
+$hasFullSquad = $my['gk'] && $my['df1'] && $my['df2'] && $my['mf1'] && $my['mf2'] && $my['fw'] && $my['bench'];
+
+$weekRows = [];       // строки: ['player_id','name','pos','points']
+$weekTeamTotal = 0;   // сумма для отображения
+if ($hasFullSquad) {
+
+    // --- функции такие же, как в API ---
+    function _normPos($pos) {
+        $p = mb_strtolower(trim((string)$pos),'UTF-8');
+        if (preg_match('/вратар/u',$p) || $p==='gk') return 'GK';
+        if (preg_match('/защит/u',$p) || $p==='df') return 'DF';
+        if (preg_match('/полузащит/u',$p) || $p==='mf') return 'MF';
+        if (preg_match('/напад/u',$p) || $p==='fw') return 'FW';
+        return strtoupper($pos);
+    }
+    function _goalPts($teamId,$pos) {
+        $pos = _normPos($pos);
+        $is11 = ((int)$teamId===2);
+        if ($is11) {
+            if ($pos==='GK'||$pos==='DF') return 6;
+            if ($pos==='MF') return 5;
+            return 4;
+        } else {
+            if ($pos==='GK'||$pos==='DF') return 4;
+            if ($pos==='MF') return 3;
+            return 2;
+        }
+    }
+    // --- окно прошедших выходных + граница понедельника (нужно, чтобы не считать если состав создан позже) ---
+    $now = new DateTime('now', new DateTimeZone('Europe/Moscow'));
+    $dow = (int)$now->format('N');
+    if ($dow >= 6) {
+        $sat = new DateTime('last week saturday');
+        $sun = new DateTime('last week sunday 23:59:59');
+    } else {
+        $sat = new DateTime('last saturday');
+        $sun = new DateTime('last sunday 23:59:59');
+    }
+    if ($sat > $sun) { $t=$sat; $sat=$sun; $sun=$t; }
+    $startStr = $sat->format('Y-m-d 00:00:00');
+    $endStr   = $sun->format('Y-m-d 23:59:59');
+    $nextMonday = new DateTime($sun->format('Y-m-d').' +1 day');
+
+    // если состав создан в эти выходные или уже на следующей неделе — не показываем таблицу
+    if (!empty($squad['created_at'])) {
+        $createdAt = new DateTime($squad['created_at']);
+        if (($createdAt >= $sat && $createdAt <= $sun) || $createdAt >= $nextMonday) {
+            $hasFullSquad = false; // таблица не нужна
+        }
+    }
+
+    if ($hasFullSquad) {
+        // матчи только этих выходных для наших команд
+        $rs = $db->query("
+            SELECT id, teams_id FROM result
+            WHERE teams_id IN (1,2) AND date >= '{$db->real_escape_string($startStr)}' AND date <= '{$db->real_escape_string($endStr)}'
+        ");
+        $matchIds = []; $teamByMatch = [];
+        while ($r = $rs->fetch_assoc()) { $matchIds[]=(int)$r['id']; $teamByMatch[(int)$r['id']] = (int)$r['teams_id']; }
+
+        if ($matchIds) {
+            $idsList = implode(',', $matchIds);
+
+            // подтянем имена/позиции всех задействованных игроков
+            $allIds = array_values(array_unique([$my['gk'],$my['df1'],$my['df2'],$my['mf1'],$my['mf2'],$my['fw'],$my['bench']]));
+            $mapName = []; $mapPos = [];
+            $rs = $db->query("SELECT id,name,position FROM players WHERE id IN (".implode(',',$allIds).")");
+            while ($r=$rs->fetch_assoc()) { $mapName[(int)$r['id']]=$r['name']; $mapPos[(int)$r['id']]=$r['position']; }
+
+            // события за уик-энд
+            $mp = $db->query("
+                SELECT mp.*, p.position, p.team_id AS player_team_id
+                FROM match_players mp
+                INNER JOIN players p ON p.id=mp.player_id
+                WHERE mp.match_id IN ($idsList) AND mp.player_id IN (".implode(',',$allIds).")
+            ");
+
+            $ptsByPlayer = [];   // raw очки (без капитана)
+            $playedFlag  = [];   // играл хотя бы раз
+            while ($row = $mp->fetch_assoc()) {
+                $pid = (int)$row['player_id'];
+                $mid = (int)$row['match_id'];
+                $pos = $row['position'];
+                $norm= _normPos($pos);
+                $teamIdForMatch = isset($teamByMatch[$mid]) ? $teamByMatch[$mid] : (int)$row['player_team_id'];
+
+                $pts = 0;
+                if ((int)$row['played']>0) { $pts += 1; $playedFlag[$pid] = true; }
+                $pts += ((int)$row['goals'])   * _goalPts($teamIdForMatch,$pos);
+                $pts += ((int)$row['assists']) * 3;
+                if ((int)$row['clean_sheet']>0 && ($norm==='GK'||$norm==='DF')) $pts += 4;
+                $pts -= ((int)$row['yellow_cards']) * 1;
+                $pts -= ((int)$row['red_cards']) * 3;
+                if ($norm==='GK' && (int)$row['goals_conceded'] > 5) $pts -= 3;
+                $pts -= ((int)$row['missed_penalties']) * 2;
+
+                if (!isset($ptsByPlayer[$pid])) $ptsByPlayer[$pid]=0;
+                $ptsByPlayer[$pid] += $pts;
+            }
+
+            // замена: если есть несыгравший в роли запасного — добавим очки бенча
+            $benchCounted = false;
+            $benchPos = _normPos($mapPos[$my['bench']] ?? '');
+            $roles = [
+                'GK' => [$my['gk']],
+                'DF' => [$my['df1'],$my['df2']],
+                'MF' => [$my['mf1'],$my['mf2']],
+                'FW' => [$my['fw']],
+            ];
+            if (isset($roles[$benchPos])) {
+                $someoneDidntPlay = false;
+                foreach ($roles[$benchPos] as $starter) {
+                    if ($starter && empty($playedFlag[$starter])) { $someoneDidntPlay = true; break; }
+                }
+                if ($someoneDidntPlay) $benchCounted = true;
+            }
+
+            // сформируем строки для таблицы
+            $order = [
+                $my['gk'],$my['df1'],$my['df2'],$my['mf1'],$my['mf2'],$my['fw']
+            ];
+            foreach ($order as $pid) {
+                $weekRows[] = [
+                    'player_id' => $pid,
+                    'name' => $mapName[$pid] ?? ('#'.$pid),
+                    'pos'  => _normPos($mapPos[$pid] ?? ''),
+                    'points' => (int)round($ptsByPlayer[$pid] ?? 0),
+                    'captain' => ($pid === $my['captain']),
+                    'bench'   => false
+                ];
+            }
+            if ($benchCounted) {
+                $weekRows[] = [
+                    'player_id' => $my['bench'],
+                    'name' => ($mapName[$my['bench']] ?? ('#'.$my['bench'])) . ' (замена)',
+                    'pos'  => $benchPos,
+                    'points' => (int)round($ptsByPlayer[$my['bench']] ?? 0),
+                    'captain' => false,
+                    'bench'   => true
+                ];
+            }
+
+            // итог с учётом капитана (удвоение добавляем отдельно; на бенча не переносится)
+            $weekTeamTotal = 0;
+            foreach ($weekRows as $r) { $weekTeamTotal += (int)$r['points']; }
+            // кап. бонус
+            $capPts = (int)round($ptsByPlayer[$my['captain']] ?? 0);
+            if ($capPts !== 0) $weekTeamTotal += $capPts;
+        }
+    }
+}
+?>
+
+<?php if ($hasFullSquad && !empty($weekRows)): ?>
+<div class="rules-section">
+    <h3 class="muted">Очки на прошлой неделе</h3>
     <div class="picker ranking-table-container">
         <table class="ranking-table">
             <thead>
                 <tr>
-                    <th>Место</th>
-                    <th>Название команды</th>
-                    <th>Очки за неделю</th>
-                    <th>Очки общие</th>
+                    <th>Игрок</th>
+                    <th>Позиция</th>
+                    <th>Очки</th>
                 </tr>
             </thead>
-          <tbody>
-<?php
-$ranking = [];
-
-$rankQ = $db->query("
-    SELECT 
-        fs.user_id,
-        fs.total_points,
-        fs.last_week_points,
-        COALESCE(NULLIF(fu.team_name, ''), CONCAT('Команда #', fs.user_id)) AS team_name
-    FROM fantasy_squads fs
-    LEFT JOIN fantasy_users fu ON fu.id = fs.user_id
-");
-
-if ($rankQ) {
-    while ($row = $rankQ->fetch_assoc()) {
-        // Для текущего пользователя можно показать имя из сессии, если оно есть,
-        // но не подменяем чужие команды.
-        $name = ($row['user_id'] == $userId && !empty($_SESSION['fantasy_team']))
-            ? $_SESSION['fantasy_team']
-            : $row['team_name'];
-
-        $ranking[] = [
-            'user_id'          => (int)$row['user_id'],
-            'team_name'        => $name,
-            'last_week_points' => (float)$row['last_week_points'],
-            'total_points'     => (float)$row['total_points'],
-        ];
-    }
-
-    usort($ranking, function ($a, $b) {
-        return $b['total_points'] <=> $a['total_points'];
-    });
-
-    $place = 1;
-    foreach ($ranking as $rank) {
-        echo '<tr>';
-        echo '<td>' . $place++ . '</td>';
-        echo '<td>' . htmlspecialchars($rank['team_name'], ENT_QUOTES, 'UTF-8') . '</td>';
-        echo '<td>' . number_format($rank['last_week_points'], 2, '.', '') . '</td>';
-        echo '<td>' . number_format($rank['total_points'], 2, '.', '') . '</td>';
-        echo '</tr>';
-    }
-} else {
-    error_log('Ranking query failed: ' . $db->error);
-}
-?>
-</tbody>
+            <tbody>
+                <?php foreach ($weekRows as $r): ?>
+                    <tr>
+                        <td>
+                            <?php
+                              $nm = htmlspecialchars($r['name'], ENT_QUOTES, 'UTF-8');
+                              if ($r['captain']) $nm .= ' <span class="team-label team-label-2">капитан</span>';
+                            echo $nm;
+                            ?>
+                        </td>
+                        <td><?php echo htmlspecialchars($r['pos'], ENT_QUOTES, 'UTF-8'); ?></td>
+                        <td><?php echo (int)$r['points']; ?></td>
+                    </tr>
+                <?php endforeach; ?>
+                <tr>
+                    <td><strong>Итого (с учётом капитана)</strong></td>
+                    <td></td>
+                    <td><strong><?php echo (int)$weekTeamTotal; ?></strong></td>
+                </tr>
+            </tbody>
         </table>
     </div>
 </div>
+<?php endif; ?>
 
-<div id="confirmModal" class="modal" style="display:none;">
-    <div class="modal-content">
-        <h3>Подтверждение</h3>
-        <p>Вас устраивает этот состав?</p>
-        <div class="modal-buttons">
-            <button class="btn" onclick="confirmSave(true)">Да</button>
-            <button class="btn" onclick="confirmSave(false)">Нет</button>
+
+        <div class="ranking-section">
+            <h3 class="muted">Рейтинг команд</h3>
+            <div class="picker ranking-table-container">
+                <table class="ranking-table">
+                    <thead>
+                        <tr>
+                            <th>Место</th>
+                            <th>Название команды</th>
+                            <th>Очки за неделю</th>
+                            <th>Очки общие</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <?php
+                    $ranking = [];
+
+                    $rankQ = $db->query("
+                        SELECT 
+                            fs.user_id,
+                            fs.total_points,
+                            fs.last_week_points,
+                            COALESCE(NULLIF(fu.team_name, ''), CONCAT('Команда #', fs.user_id)) AS team_name
+                        FROM fantasy_squads fs
+                        LEFT JOIN fantasy_users fu ON fu.id = fs.user_id
+                    ");
+
+                    if ($rankQ) {
+                        while ($row = $rankQ->fetch_assoc()) {
+                            $name = ($row['user_id'] == $userId && !empty($_SESSION['fantasy_team']))
+                                ? $_SESSION['fantasy_team']
+                                : $row['team_name'];
+
+                            $ranking[] = [
+                                'user_id'          => (int)$row['user_id'],
+                                'team_name'        => $name,
+                                'last_week_points' => (float)$row['last_week_points'],
+                                'total_points'     => (float)$row['total_points'],
+                            ];
+                        }
+
+                        usort($ranking, function ($a, $b) {
+                            return $b['total_points'] <=> $a['total_points'];
+                        });
+
+                        $place = 1;
+                        foreach ($ranking as $rank) {
+                            echo '<tr>';
+                            echo '<td>' . $place++ . '</td>';
+                            echo '<td>' . htmlspecialchars($rank['team_name'], ENT_QUOTES, 'UTF-8') . '</td>';
+                          echo '<td>' . (int)round($rank['last_week_points']) . '</td>';
+echo '<td>' . (int)round($rank['total_points']) . '</td>';
+                            echo '</tr>';
+                        }
+                    } else {
+                        error_log('Ranking query failed: ' . $db->error);
+                    }
+                    ?>
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
-</div>
 
-</div> <!-- Закрытие .fantasy-card -->
+        <div id="confirmModal" class="modal" style="display:none;">
+            <div class="modal-content">
+                <h3>Подтверждение</h3>
+                <p>Вас устраивает этот состав?</p>
+                <div class="modal-buttons">
+                    <button class="btn" onclick="confirmSave(true)">Да</button>
+                    <button class="btn" onclick="confirmSave(false)">Нет</button>
+                </div>
+            </div>
+        </div>
+
+    </div> <!-- Закрытие .fantasy-card -->
 </div> <!-- Закрытие .Fantasy -->
 
 <?php
-    $footer_files = array(dirname(__FILE__) . '/blocks/footer.php', dirname(__FILE__) . '/blocks/footer.html');
-    foreach ($footer_files as $file) {
-        if (file_exists($file)) {
-            include $file;
-            break;
-        }
+$footer_files = array(dirname(__FILE__) . '/blocks/footer.php', dirname(__FILE__) . '/blocks/footer.html');
+foreach ($footer_files as $file) {
+    if (file_exists($file)) {
+        include $file;
+        break;
     }
+}
 ?>
 
-       <script>
-    // Глобальные определения
-    var $ = function(sel) { return document.querySelector(sel); };
-    var $$ = function(sel) { return Array.prototype.slice.call(document.querySelectorAll(sel)); };
+<script>
+// Глобальные определения
+var $ = function(sel) { return document.querySelector(sel); };
+var $$ = function(sel) { return Array.prototype.slice.call(document.querySelectorAll(sel)); };
 
-    (function(){
-        var BUDGET = <?php echo json_encode($BUDGET); ?>;
-        var SERVER_CAPTAIN = <?php echo (int)($squad['captain_player_id'] ?? 0); ?>;
-        var PRICES = {};
-        var TEAM_IDS = {};
-        $$('.card').forEach(function(c) {
-            var id = parseInt(c.getAttribute('data-id'));
-            var price = parseFloat(c.getAttribute('data-price') || '0');
-            var teamId = parseInt(c.getAttribute('data-team-id') || '0');
-            if (!isNaN(id)) {
-                PRICES[id] = price;
-                TEAM_IDS[id] = teamId;
-            }
+(function(){
+    var BUDGET = <?php echo json_encode($BUDGET); ?>;
+    var SERVER_CAPTAIN = <?php echo (int)($squad['captain_player_id'] ?? 0); ?>;
+    var IS_EDITING_ALLOWED = <?php echo json_encode($isEditingAllowed); ?>;
+    var PRICES = {};
+    var TEAM_IDS = {};
+    $$('.card').forEach(function(c) {
+        var id = parseInt(c.getAttribute('data-id'));
+        var price = parseFloat(c.getAttribute('data-price') || '0');
+        var teamId = parseInt(c.getAttribute('data-team-id') || '0');
+        if (!isNaN(id)) {
+            PRICES[id] = price;
+            TEAM_IDS[id] = teamId;
+        }
+    });
+
+    // Отключаем вкладки, если редактирование запрещено
+    $$('#tabs .tab').forEach(function(tab) {
+        tab.classList.toggle('disabled', !IS_EDITING_ALLOWED);
+    });
+
+    var budgetEl = $('#budgetLeft');
+    var hintEl = $('#hint');
+    var saveBtn = $('#saveBtn');
+    var captainRow = $('#captainRow');
+    var captainSelect = $('#captainSelect');
+
+    function notify(msg) { hintEl.textContent = msg; }
+
+    function restrictTeamLimit(id) {
+        var picked = ['gk_id', 'df1_id', 'df2_id', 'mf1_id', 'mf2_id', 'fw_id', 'bench_id']
+            .map(function(k) { return parseInt(($('#inp_' + k).value) || '0'); })
+            .filter(function(x) { return x > 0; });
+        var teamCounts = {};
+        picked.forEach(function(pid) {
+            var teamId = TEAM_IDS[pid] || 0;
+            if (teamId) teamCounts[teamId] = (teamCounts[teamId] || 0) + 1;
         });
+        var newTeamId = TEAM_IDS[id] || 0;
+        return !newTeamId || (teamCounts[newTeamId] || 0) < 4;
+    }
 
-        var budgetEl = $('#budgetLeft');
-        var hintEl = $('#hint');
-        var saveBtn = $('#saveBtn');
-        var captainRow = $('#captainRow');
-        var captainSelect = $('#captainSelect');
+    $('#tabs').addEventListener('click', function(e) {
+        var btn = e.target.closest('.tab');
+        if (!btn || btn.classList.contains('disabled')) return;
+        $$('#tabs .tab').forEach(function(b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        var key = btn.getAttribute('data-tab');
+        $$('.list').forEach(function(l) { l.classList.remove('active'); });
+        $('#list_' + key).classList.add('active');
+    });
 
-        function notify(msg) { hintEl.textContent = msg; }
+    document.getElementById('picker').addEventListener('click', function(e) {
+        var btn = e.target.closest('.btn');
+        if (!btn || !IS_EDITING_ALLOWED) return;
+        var isPickBtn = btn.classList.contains('choose') || btn.classList.contains('remove');
+        if (!isPickBtn) return;
+        e.preventDefault();
 
-        function restrictTeamLimit(id) {
-            var picked = ['gk_id', 'df1_id', 'df2_id', 'mf1_id', 'mf2_id', 'fw_id', 'bench_id']
-                .map(function(k) { return parseInt(($('#inp_' + k).value) || '0'); })
-                .filter(function(x) { return x > 0; });
-            var teamCounts = {};
-            picked.forEach(function(pid) {
-                var teamId = TEAM_IDS[pid] || 0;
-                if (teamId) teamCounts[teamId] = (teamCounts[teamId] || 0) + 1;
-            });
-            var newTeamId = TEAM_IDS[id] || 0;
-            return !newTeamId || (teamCounts[newTeamId] || 0) < 4;
-        }
+        var card = btn.closest('.card');
+        var id = parseInt(card.getAttribute('data-id'));
+        var pos = card.getAttribute('data-pos');
+        var price = parseFloat(card.getAttribute('data-price'));
+        var name = card.querySelector('.nm').textContent.trim();
+        var photo = card.querySelector('img').getAttribute('src');
 
-        $('#tabs').addEventListener('click', function(e) {
-            var btn = e.target.closest('.tab');
-            if (!btn) return;
-            $$('#tabs .tab').forEach(function(b) { b.classList.remove('active'); });
-            btn.classList.add('active');
-            var key = btn.getAttribute('data-tab');
-            $$('.list').forEach(function(l) { l.classList.remove('active'); });
-            $('#list_' + key).classList.add('active');
-        });
-
-        document.getElementById('picker').addEventListener('click', function(e) {
-            var btn = e.target.closest('.btn');
-            if (!btn) return;
-            var isPickBtn = btn.classList.contains('choose') || btn.classList.contains('remove');
-            if (!isPickBtn) return;
-            e.preventDefault();
-
-            var card = btn.closest('.card');
-            var id = parseInt(card.getAttribute('data-id'));
-            var pos = card.getAttribute('data-pos');
-            var price = parseFloat(card.getAttribute('data-price'));
-            var name = card.querySelector('.nm').textContent.trim();
-            var photo = card.querySelector('img').getAttribute('src');
-
-            if (btn.classList.contains('choose')) {
-                var left = getLeft();
-                var slotKey = null;
-                if (pos === 'GK') slotKey = 'gk_id';
-                else if (pos === 'FW') slotKey = 'fw_id';
-                else if (pos === 'BENCH') slotKey = 'bench_id';
-                else if (pos === 'DF') {
-                    if (parseInt($('#inp_df1_id').value) === 0) slotKey = 'df1_id';
-                    else if (parseInt($('#inp_df2_id').value) === 0) slotKey = 'df2_id';
-                    else return notify('Оба слота защитников заняты');
-                } else if (pos === 'MF') {
-                    if (parseInt($('#inp_mf1_id').value) === 0) slotKey = 'mf1_id';
-                    else if (parseInt($('#inp_mf2_id').value) === 0) slotKey = 'mf2_id';
-                    else return notify('Оба слота полузащитников заняты');
-                }
-
-                if (!slotKey) return;
-                if (['gk_id', 'fw_id', 'bench_id'].indexOf(slotKey) !== -1 && parseInt($('#inp_' + slotKey).value) > 0)
-                    return notify('Слот уже занят');
-                if (slotKey === 'bench_id' && pos === 'FW')
-                    return notify('Запасной не может быть нападающим');
-                if (isAlreadyPicked(id))
-                    return notify('Этот игрок уже выбран');
-                if (price > left + 0.000000001)
-                    return notify('Недостаточно бюджета');
-                if (!restrictTeamLimit(id))
-                    return notify('Нельзя выбрать более 4 игроков из одной команды');
-
-                fillSlot(slotKey, { id: id, name: name, photo: photo });
-                recalcBudget();
-                updateUIState();
-            } else {
-                var slotKey = getSlotKeyForId(id);
-                if (slotKey) {
-                    handleRemove(id, slotKey);
-                    updateUIState();
-                }
-            }
-        });
-
-        bootFill();
-
-        function bootFill() {
-            var slots = ['gk_id', 'df1_id', 'df2_id', 'mf1_id', 'mf2_id', 'fw_id', 'bench_id'];
-            slots.forEach(function(k) {
-                var val = parseInt(($('#inp_' + k).value) || '0');
-                if (!val) return;
-                var card = document.querySelector('.card[data-id="' + val + '"]');
-                var name = card ? card.querySelector('.nm').textContent.trim() : 'Игрок';
-                var photo = card ? card.querySelector('img').getAttribute('src') : '/img/player/player_0.png';
-                fillSlot(k, { id: val, name: name, photo: photo }, true);
-            });
-            recalcBudget(true);
-            updateUIState();
-            updateTeamCounts();
-        }
-
-        function safeSrc(src) {
-            if (!src || src === '/') return '/img/player/player_0.png';
-            return src;
-        }
-
-        function setSlotImage(slotEl, src) {
-            var img = slotEl.querySelector('.avatar img');
-            img.onerror = function() { this.onerror = null; this.src = '/img/player/player_0.png'; };
-            img.src = safeSrc(src);
-        }
-
-        function fillSlot(slotKey, data, silent) {
-            document.getElementById('inp_' + slotKey).value = data.id;
-            $('#inp_' + slotKey).value = data.id;
-            var slot = document.querySelector('.slot[data-slot="' + slotKey + '"]');
-            setSlotImage(slot, data.photo);
-            slot.querySelector('.name').textContent = data.name;
-            slot.classList.remove('captain');
-            if (!silent) {
-                slot.style.transition = 'box-shadow .2s';
-                slot.style.boxShadow = '0 0 0 4px rgba(253,197,0,.6)';
-                setTimeout(function() { slot.style.boxShadow = ''; }, 220);
+        if (btn.classList.contains('choose')) {
+            var left = getLeft();
+            var slotKey = null;
+            if (pos === 'GK') slotKey = 'gk_id';
+            else if (pos === 'FW') slotKey = 'fw_id';
+            else if (pos === 'BENCH') slotKey = 'bench_id';
+            else if (pos === 'DF') {
+                if (parseInt($('#inp_df1_id').value) === 0) slotKey = 'df1_id';
+                else if (parseInt($('#inp_df2_id').value) === 0) slotKey = 'df2_id';
+                else return notify('Оба слота защитников заняты');
+            } else if (pos === 'MF') {
+                if (parseInt($('#inp_mf1_id').value) === 0) slotKey = 'mf1_id';
+                else if (parseInt($('#inp_mf2_id').value) === 0) slotKey = 'mf2_id';
+                else return notify('Оба слота полузащитников заняты');
             }
 
-            var card = document.querySelector('.card[data-id="' + data.id + '"]');
-            if (card) {
-                var btn = card.querySelector('.choose');
-                if (btn) {
-                    btn.textContent = 'Убрать';
-                    btn.classList.remove('choose');
-                    btn.classList.add('remove');
-                }
-            }
-        }
+            if (!slotKey) return;
+            if (['gk_id', 'fw_id', 'bench_id'].indexOf(slotKey) !== -1 && parseInt($('#inp_' + slotKey).value) > 0)
+                return notify('Слот уже занят');
+            if (slotKey === 'bench_id' && pos === 'FW')
+                return notify('Запасной не может быть нападающим');
+            if (isAlreadyPicked(id))
+                return notify('Этот игрок уже выбран');
+            if (price > left + 0.000000001)
+                return notify('Недостаточно бюджета');
+            if (!restrictTeamLimit(id))
+                return notify('Нельзя выбрать более 4 игроков из одной команды');
 
-        function handleRemove(id, slotKey) {
-            $('#inp_' + slotKey).value = '0';
-            var slot = document.querySelector('.slot[data-slot="' + slotKey + '"]');
-            setSlotImage(slot, '/img/player/player_0.png');
-            slot.querySelector('.name').textContent = {
-                'gk_id': 'Вратарь',
-                'fw_id': 'Нападающий',
-                'mf1_id': 'Полузащитник',
-                'mf2_id': 'Полузащитник',
-                'df1_id': 'Защитник',
-                'df2_id': 'Защитник',
-                'bench_id': 'Запасной'
-            }[slotKey];
-            slot.classList.remove('captain');
-
-            var card = document.querySelector('.card[data-id="' + id + '"]');
-            if (card) {
-                var btn = card.querySelector('.remove');
-                if (btn) {
-                    btn.textContent = 'Выбрать';
-                    btn.classList.remove('remove');
-                    btn.classList.add('choose');
-                }
-            }
-
+            fillSlot(slotKey, { id: id, name: name, photo: photo });
             recalcBudget();
             updateUIState();
+        } else {
+            var slotKey = getSlotKeyForId(id);
+            if (slotKey) {
+                handleRemove(id, slotKey);
+                updateUIState();
+            }
+        }
+    });
+
+    bootFill();
+
+    function bootFill() {
+        var slots = ['gk_id', 'df1_id', 'df2_id', 'mf1_id', 'mf2_id', 'fw_id', 'bench_id'];
+        slots.forEach(function(k) {
+            var val = parseInt(($('#inp_' + k).value) || '0');
+            if (!val) return;
+            var card = document.querySelector('.card[data-id="' + val + '"]');
+            var name = card ? card.querySelector('.nm').textContent.trim() : 'Игрок';
+            var photo = card ? card.querySelector('img').getAttribute('src') : '/img/player/player_0.png';
+            fillSlot(k, { id: val, name: name, photo: photo }, true);
+        });
+        recalcBudget(true);
+        updateUIState();
+        updateTeamCounts();
+    }
+
+    function safeSrc(src) {
+        if (!src || src === '/') return '/img/player/player_0.png';
+        return src;
+    }
+
+    function setSlotImage(slotEl, src) {
+        var img = slotEl.querySelector('.avatar img');
+        img.onerror = function() { this.onerror = null; this.src = '/img/player/player_0.png'; };
+        img.src = safeSrc(src);
+    }
+
+    function fillSlot(slotKey, data, silent) {
+        document.getElementById('inp_' + slotKey).value = data.id;
+        $('#inp_' + slotKey).value = data.id;
+        var slot = document.querySelector('.slot[data-slot="' + slotKey + '"]');
+        setSlotImage(slot, data.photo);
+        slot.querySelector('.name').textContent = data.name;
+        slot.classList.remove('captain');
+        if (!silent) {
+            slot.style.transition = 'box-shadow .2s';
+            slot.style.boxShadow = '0 0 0 4px rgba(253,197,0,.6)';
+            setTimeout(function() { slot.style.boxShadow = ''; }, 220);
         }
 
-        function isAlreadyPicked(id) {
-            var picked = ['gk_id', 'df1_id', 'df2_id', 'mf1_id', 'mf2_id', 'fw_id', 'bench_id']
-                .map(function(k) { return parseInt(($('#inp_' + k).value) || '0'); })
-                .filter(function(x) { return x; });
-            console.log('Picked IDs:', picked, 'Checking ID:', id);
-            return picked.indexOf(id) !== -1;
+        var card = document.querySelector('.card[data-id="' + data.id + '"]');
+        if (card) {
+            var btn = card.querySelector('.choose');
+            if (btn) {
+                btn.textContent = 'Убрать';
+                btn.classList.remove('choose');
+                btn.classList.add('remove');
+            }
+        }
+    }
+
+    function handleRemove(id, slotKey) {
+        $('#inp_' + slotKey).value = '0';
+        var slot = document.querySelector('.slot[data-slot="' + slotKey + '"]');
+        setSlotImage(slot, '/img/player/player_0.png');
+        slot.querySelector('.name').textContent = {
+            'gk_id': 'Вратарь',
+            'fw_id': 'Нападающий',
+            'mf1_id': 'Полузащитник',
+            'mf2_id': 'Полузащитник',
+            'df1_id': 'Защитник',
+            'df2_id': 'Защитник',
+            'bench_id': 'Запасной'
+        }[slotKey];
+        slot.classList.remove('captain');
+
+        var card = document.querySelector('.card[data-id="' + id + '"]');
+        if (card) {
+            var btn = card.querySelector('.remove');
+            if (btn) {
+                btn.textContent = 'Выбрать';
+                btn.classList.remove('remove');
+                btn.classList.add('choose');
+            }
         }
 
-        function getLeft() {
-            var left = parseFloat(budgetEl.textContent);
-            if (isNaN(left)) left = (typeof BUDGET === 'number' ? BUDGET : 50);
-            return left;
-        }
+        recalcBudget();
+        updateUIState();
+    }
 
-        function recalcBudget(initial) {
-            var slotKeys = ['gk_id', 'df1_id', 'df2_id', 'mf1_id', 'mf2_id', 'fw_id', 'bench_id'];
-            var sum = 0;
-            slotKeys.forEach(function(k) {
-                var id = parseInt(($('#inp_' + k).value) || '0');
-                if (id && (id in PRICES)) sum += PRICES[id];
-            });
+    function isAlreadyPicked(id) {
+        var picked = ['gk_id', 'df1_id', 'df2_id', 'mf1_id', 'mf2_id', 'fw_id', 'bench_id']
+            .map(function(k) { return parseInt(($('#inp_' + k).value) || '0'); })
+            .filter(function(x) { return x; });
+        console.log('Picked IDs:', picked, 'Checking ID:', id);
+        return picked.indexOf(id) !== -1;
+    }
 
-            var leftRaw = (typeof BUDGET === 'number' ? BUDGET : parseFloat(BUDGET)) - sum;
-            var left = isNaN(leftRaw) ? (typeof BUDGET === 'number' ? BUDGET : 50) : Math.max(0, leftRaw);
-            budgetEl.textContent = left.toFixed(2);
-            if (!initial) hintEl.textContent = '';
-        }
+    function getLeft() {
+        var left = parseFloat(budgetEl.textContent);
+        if (isNaN(left)) left = (typeof BUDGET === 'number' ? BUDGET : 50);
+        return left;
+    }
 
-        function updateTeamCounts() {
-            var picked = ['gk_id', 'df1_id', 'df2_id', 'mf1_id', 'mf2_id', 'fw_id', 'bench_id']
-                .map(function(k) { return parseInt(($('#inp_' + k).value) || '0'); })
-                .filter(function(x) { return x > 0; });
-            var teamCounts = { 1: 0, 2: 0 };
-            picked.forEach(function(pid) {
-                var teamId = TEAM_IDS[pid] || 0;
-                if (teamId) teamCounts[teamId]++;
-            });
-            $('#teamCount1').querySelector('span').textContent = teamCounts[1];
-            $('#teamCount2').querySelector('span').textContent = teamCounts[2];
-        }
+    function recalcBudget(initial) {
+        var slotKeys = ['gk_id', 'df1_id', 'df2_id', 'mf1_id', 'mf2_id', 'fw_id', 'bench_id'];
+        var sum = 0;
+        slotKeys.forEach(function(k) {
+            var id = parseInt(($('#inp_' + k).value) || '0');
+            if (id && (id in PRICES)) sum += PRICES[id];
+        });
 
-        function updateUIState() {
-            updateTeamCounts();
-            var left = getLeft();
-            console.log('Budget left:', left);
+        var leftRaw = (typeof BUDGET === 'number' ? BUDGET : parseFloat(BUDGET)) - sum;
+        var left = isNaN(leftRaw) ? (typeof BUDGET === 'number' ? BUDGET : 50) : Math.max(0, leftRaw);
+        budgetEl.textContent = left.toFixed(2);
+        if (!initial) hintEl.textContent = '';
+    }
 
-            var singleTaken = {
-                GK: parseInt($('#inp_gk_id').value) > 0,
-                FW: parseInt($('#inp_fw_id').value) > 0,
-                BENCH: parseInt($('#inp_bench_id').value) > 0
-            };
-            var dfTaken = (parseInt($('#inp_df1_id').value) > 0) && (parseInt($('#inp_df2_id').value) > 0);
-            var mfTaken = (parseInt($('#inp_mf1_id').value) > 0) && (parseInt($('#inp_mf2_id').value) > 0);
-            console.log('Input values:', {
-                gk_id: $('#inp_gk_id').value,
-                df1_id: $('#inp_df1_id').value,
-                df2_id: $('#inp_df2_id').value,
-                mf1_id: $('#inp_mf1_id').value,
-                mf2_id: $('#inp_mf2_id').value,
-                fw_id: $('#inp_fw_id').value,
-                bench_id: $('#inp_bench_id').value
-            });
-            console.log('Slots taken:', singleTaken, 'DF:', dfTaken, 'MF:', mfTaken);
+    function updateTeamCounts() {
+        var picked = ['gk_id', 'df1_id', 'df2_id', 'mf1_id', 'mf2_id', 'fw_id', 'bench_id']
+            .map(function(k) { return parseInt(($('#inp_' + k).value) || '0'); })
+            .filter(function(x) { return x > 0; });
+        var teamCounts = { 1: 0, 2: 0 };
+        picked.forEach(function(pid) {
+            var teamId = TEAM_IDS[pid] || 0;
+            if (teamId) teamCounts[teamId]++;
+        });
+        $('#teamCount1').querySelector('span').textContent = teamCounts[1];
+        $('#teamCount2').querySelector('span').textContent = teamCounts[2];
+    }
 
-            $$('.card').forEach(function(card) {
-                var id = parseInt(card.getAttribute('data-id'));
-                var pos = card.getAttribute('data-pos');
-                var price = parseFloat(card.getAttribute('data-price') || '0');
-                var btn = card.querySelector('.choose, .remove');
+    function updateUIState() {
+        updateTeamCounts();
+        var left = getLeft();
+        console.log('Budget left:', left);
 
-                var disabled = false;
+        var singleTaken = {
+            GK: parseInt($('#inp_gk_id').value) > 0,
+            FW: parseInt($('#inp_fw_id').value) > 0,
+            BENCH: parseInt($('#inp_bench_id').value) > 0
+        };
+        var dfTaken = (parseInt($('#inp_df1_id').value) > 0) && (parseInt($('#inp_df2_id').value) > 0);
+        var mfTaken = (parseInt($('#inp_mf1_id').value) > 0) && (parseInt($('#inp_mf2_id').value) > 0);
+        console.log('Input values:', {
+            gk_id: $('#inp_gk_id').value,
+            df1_id: $('#inp_df1_id').value,
+            df2_id: $('#inp_df2_id').value,
+            mf1_id: $('#inp_mf1_id').value,
+            mf2_id: $('#inp_mf2_id').value,
+            fw_id: $('#inp_fw_id').value,
+            bench_id: $('#inp_bench_id').value
+        });
+        console.log('Slots taken:', singleTaken, 'DF:', dfTaken, 'MF:', mfTaken);
 
+        $$('.card').forEach(function(card) {
+            var id = parseInt(card.getAttribute('data-id'));
+            var pos = card.getAttribute('data-pos');
+            var price = parseFloat(card.getAttribute('data-price') || '0');
+            var btn = card.querySelector('.choose, .remove');
+
+            var disabled = !IS_EDITING_ALLOWED; // Отключаем, если редактирование запрещено
+
+            if (!disabled) {
                 if (isAlreadyPicked(id)) {
                     if (btn && btn.classList.contains('choose')) {
                         btn.textContent = 'Убрать';
@@ -969,109 +1280,97 @@ if ($rankQ) {
                     if (pos === 'MF' && mfTaken) disabled = true;
                     if (price > left + 0.000000001) disabled = true;
                 }
-
-                card.classList.toggle('disabled', disabled);
-                if (btn) btn.disabled = disabled;
-            });
-
-            var slotsFilled = ['gk_id', 'df1_id', 'df2_id', 'mf1_id', 'mf2_id', 'fw_id', 'bench_id']
-                .every(function(k) { return parseInt($('#inp_' + k).value) > 0; });
-
-            $('#saveBtn').disabled = !slotsFilled || left < 0;
-            $('#hint').textContent = !slotsFilled ? 'Заполните все слоты' : (left < 0 ? 'Превышен бюджет' : '');
-
-            if (slotsFilled) {
-                var opts = [];
-                ['gk_id', 'df1_id', 'df2_id', 'mf1_id', 'mf2_id', 'fw_id', 'bench_id'].forEach(function(k) {
-                    var id = parseInt($('#inp_' + k).value);
-                    if (!id) return;
-                    var slot = document.querySelector('.slot[data-slot="' + k + '"]');
-                    var name = slot.querySelector('.name').textContent;
-                    opts.push({ id: id, name: name, slotKey: k });
-                });
-
-                var prev = captainSelect.value || (SERVER_CAPTAIN ? String(SERVER_CAPTAIN) : '');
-                captainSelect.innerHTML = opts.map(function(o) {
-                    return '<option value="' + o.id + '">' + o.name + '</option>';
-                }).join('');
-
-                var hasPrev = opts.some(function(o) { return String(o.id) === prev; });
-                var setTo = hasPrev ? prev : (opts[0] ? String(opts[0].id) : '');
-                if (setTo) captainSelect.value = setTo;
-
-                captainRow.style.display = '';
-                saveBtn.disabled = saveBtn.disabled || false;
-            } else {
-                captainRow.style.display = 'none';
-                saveBtn.disabled = true;
             }
 
-            captainSelect.removeEventListener('change', markCaptain);
-            captainSelect.addEventListener('change', markCaptain);
-            markCaptain();
-        }
+            card.classList.toggle('disabled', disabled);
+            if (btn) btn.disabled = disabled;
+        });
 
-        function getSlotKeyForId(id) {
-            var slots = ['gk_id', 'df1_id', 'df2_id', 'mf1_id', 'mf2_id', 'fw_id', 'bench_id'];
-            for (var i = 0; i < slots.length; i++) {
-                if (parseInt($('#inp_' + slots[i]).value) === id) return slots[i];
-            }
-            return null;
-        }
+        var slotsFilled = ['gk_id', 'df1_id', 'df2_id', 'mf1_id', 'mf2_id', 'fw_id', 'bench_id']
+            .every(function(k) { return parseInt($('#inp_' + k).value) > 0; });
 
-        function markCaptain() {
-            $$('.slot').forEach(function(s) { s.classList.remove('captain'); });
-            var id = parseInt(captainSelect.value || '0');
-            if (!id) return;
+        $('#saveBtn').disabled = !IS_EDITING_ALLOWED || !slotsFilled || left < 0;
+        $('#hint').textContent = !IS_EDITING_ALLOWED ? 'Редактирование состава возможно только со вторника по пятницу.' : (!slotsFilled ? 'Заполните все слоты' : (left < 0 ? 'Превышен бюджет' : ''));
+
+        if (slotsFilled && IS_EDITING_ALLOWED) {
+            var opts = [];
             ['gk_id', 'df1_id', 'df2_id', 'mf1_id', 'mf2_id', 'fw_id', 'bench_id'].forEach(function(k) {
-                var cur = parseInt(($('#inp_' + k).value) || '0');
-                if (cur === id) document.querySelector('.slot[data-slot="' + k + '"]').classList.add('captain');
+                var id = parseInt($('#inp_' + k).value);
+                if (!id) return;
+                var slot = document.querySelector('.slot[data-slot="' + k + '"]');
+                var name = slot.querySelector('.name').textContent;
+                opts.push({ id: id, name: name, slotKey: k });
             });
-        }
-    })();
 
-        
+            var prev = captainSelect.value || (SERVER_CAPTAIN ? String(SERVER_CAPTAIN) : '');
+            captainSelect.innerHTML = opts.map(function(o) {
+                return '<option value="' + o.id + '">' + o.name + '</option>';
+            }).join('');
+
+            var hasPrev = opts.some(function(o) { return String(o.id) === prev; });
+            var setTo = hasPrev ? prev : (opts[0] ? String(opts[0].id) : '');
+            if (setTo) captainSelect.value = setTo;
+
+            captainRow.style.display = '';
+            saveBtn.disabled = saveBtn.disabled || false;
+        } else {
+            captainRow.style.display = 'none';
+            saveBtn.disabled = true;
+        }
+
+        captainSelect.disabled = !IS_EDITING_ALLOWED;
+        captainSelect.removeEventListener('change', markCaptain);
+        if (IS_EDITING_ALLOWED) {
+            captainSelect.addEventListener('change', markCaptain);
+        }
+        markCaptain();
+    }
+
+    function getSlotKeyForId(id) {
+        var slots = ['gk_id', 'df1_id', 'df2_id', 'mf1_id', 'mf2_id', 'fw_id', 'bench_id'];
+        for (var i = 0; i < slots.length; i++) {
+            if (parseInt($('#inp_' + slots[i]).value) === id) return slots[i];
+        }
+        return null;
+    }
+
+    function markCaptain() {
+        $$('.slot').forEach(function(s) { s.classList.remove('captain'); });
+        var id = parseInt(captainSelect.value || '0');
+        if (!id) return;
+        ['gk_id', 'df1_id', 'df2_id', 'mf1_id', 'mf2_id', 'fw_id', 'bench_id'].forEach(function(k) {
+            var cur = parseInt(($('#inp_' + k).value) || '0');
+            if (cur === id) document.querySelector('.slot[data-slot="' + k + '"]').classList.add('captain');
+        });
+    }
+})();
+
 function confirmSave(ok) {
-  const form = document.querySelector('#saveForm');
-  if (!ok) { document.querySelector('#confirmModal').style.display = 'none'; return; }
-  if (form.requestSubmit) {
-    form.requestSubmit(document.getElementById('saveBtn')); // <-- ВАЖНО
-  } else {
-    // Фоллбэк: гарантируем наличие поля save_squad
-    let h = document.createElement('input');
-    h.type = 'hidden'; h.name = 'save_squad'; h.value = '1';
-    form.appendChild(h);
-    form.submit();
-  }
+    const form = document.querySelector('#saveForm');
+    if (!ok) { document.querySelector('#confirmModal').style.display = 'none'; return; }
+    if (form.requestSubmit) {
+        form.requestSubmit(document.getElementById('saveBtn'));
+    } else {
+        let h = document.createElement('input');
+        h.type = 'hidden'; h.name = 'save_squad'; h.value = '1';
+        form.appendChild(h);
+        form.submit();
+    }
 }
 
 document.getElementById('saveBtn').addEventListener('click', function(e) {
-            if (!this.disabled) {
-                e.preventDefault();
-                var modal = document.querySelector('#confirmModal');
-                modal.style.display = 'flex'; // Убедимся, что модалка отображается как flex
-                // Дополнительно сбрасываем позицию для перерисовки
-                setTimeout(() => {
-                    modal.style.display = 'flex';
-                }, 0);
-            }
-        });
-
-        </script>
-    </div>
-</div>
-
-<?php
-    $footer_files = array(dirname(__FILE__) . '/blocks/footer.php', dirname(__FILE__) . '/blocks/footer.html');
-    foreach ($footer_files as $file) {
-        if (file_exists($file)) {
-            include $file;
-            break;
-        }
+    if (!this.disabled && IS_EDITING_ALLOWED) {
+        e.preventDefault();
+        var modal = document.querySelector('#confirmModal');
+        modal.style.display = 'flex';
+        setTimeout(() => {
+            modal.style.display = 'flex';
+        }, 0);
     }
-?>
+});
+</script>
 
- <script src="./js/index.bundle.js"></script>
+<script src="./js/index.bundle.js"></script>
 
 </body>
 </html>

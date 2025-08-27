@@ -35,11 +35,15 @@ require_once __DIR__ . '/db.php';
 
   <?php include 'headeradmin.html'; ?>
 
+  
+
 <h1>Fantasy: управление игроками</h1>
 
 <div style="margin:10px 0;">
   <button id="save-all" class="save-btn">Сохранить всё</button>
   <span id="save-all-status" style="margin-left:10px;color:#555;"></span>
+  <button id="calc-week" class="save-btn" style="margin-left:20px;background:#00509D;">Рассчитать очки за неделю</button>
+  <span id="calc-week-status" style="margin-left:10px;color:#555;"></span>
 </div>
 
 <table class="styled-table">
@@ -166,6 +170,33 @@ saveAllBtn?.addEventListener('click', async () => {
   } finally {
     saveAllBtn.disabled = false;
     saveAllBtn.textContent = 'Сохранить всё';
+  }
+});
+
+const calcBtn = document.getElementById('calc-week');
+const calcStatus = document.getElementById('calc-week-status');
+
+calcBtn?.addEventListener('click', async () => {
+  calcBtn.disabled = true;
+  calcBtn.textContent = 'Считаю...';
+  calcStatus.textContent = '';
+  try {
+    const resp = await fetch('/api/calc_fantasy_points.php');
+    const data = await resp.json();
+    if (data.success) {
+      calcStatus.style.color = '#2e7d32';
+      calcStatus.textContent = `Готово: обновлены очки для ${data.updated} команд.`;
+      alert(`Готово: обновлены очки для ${data.updated} команд`);
+    } else {
+      throw new Error(data.message || 'Ошибка расчета');
+    }
+  } catch (err) {
+    calcStatus.style.color = '#d32f2f';
+    calcStatus.textContent = 'Ошибка: ' + err.message;
+    alert('Ошибка: ' + err.message);
+  } finally {
+    calcBtn.disabled = false;
+    calcBtn.textContent = 'Рассчитать очки за неделю';
   }
 });
 

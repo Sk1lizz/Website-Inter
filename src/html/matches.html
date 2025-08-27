@@ -293,15 +293,34 @@
   <div class="team-title">Заявка нашей команды</div>
   <table>
     <tbody>
-      ${players.map(p => `
-        <tr>
-          <td class="number">${p.number ?? ''}</td>
-          <td class="name">${p.name}</td>
-          <td class="icon">${p.goals > 0 ? `<img src="/img/icon/goal.svg" alt="G" title="Гол" />×${p.goals}` : ''}</td>
-          <td class="icon">${p.assists > 0 ? `<img src="/img/icon/assist.svg" alt="A" title="Ассист" />×${p.assists}` : ''}</td>
-          <td class="icon">${p.goals_conceded > 0 ? `<img src="/img/icon/form.svg" alt="A" title="Пропущены" />×${p.goals_conceded}` : ''}</td>
-        </tr>
-      `).join('')}
+      ${players.map(p => {
+                    // безопасные значения
+                    const goals = Number(p.goals || 0);
+                    const assists = Number(p.assists || 0);
+                    const conceded = Number(p.goals_conceded || 0);
+
+                    const yellow = Number(p.yellow_card || p.yellow_cards || 0);      // поддержка разных имён
+                    const red = Number(p.red_card || p.red_cards || 0);
+                    const missedPenalty = Number(p.missed_penalty || p.missed_penalties || 0);
+
+                    const icon = (src, alt, title, count) =>
+                        count > 0 ? `<img src="/img/icon/${src}" alt="${alt}" title="${title}" />${count > 1 ? `×${count}` : ''}` : '';
+
+                    return `
+          <tr>
+            <td class="number">${p.number ?? ''}</td>
+            <td class="name">${p.name}</td>
+
+            <td class="icon">${icon('goal.svg', 'G', 'Гол', goals)}</td>
+            <td class="icon">${icon('assist.svg', 'A', 'Ассист', assists)}</td>
+            <td class="icon">${icon('form.svg', 'GC', 'Пропущены', conceded)}</td>
+
+            <td class="icon">${icon('yellow_card.svg', 'YC', 'Жёлтая карточка', yellow)}</td>
+            <td class="icon">${icon('red_card.svg', 'RC', 'Красная карточка', red)}</td>
+            <td class="icon">${icon('penalty_lose.svg', 'MP', 'Нереализованный пенальти', missedPenalty)}</td>
+          </tr>
+        `;
+                }).join('')}
     </tbody>
   </table>
 `;

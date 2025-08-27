@@ -17,110 +17,196 @@ $years = range(date("Y"), 2023);
   <meta charset="UTF-8">
   <title>Редактор матчей</title>
   <link rel="stylesheet" href="/css/main.css">
-  <style>
-    :root {
-      --gold: #FDC500;
-      --dark-light: #1a1d24;
-      --dark-medium: #00296B;
-      --light: #f3f6fb;
-    }
 
-    body {
-      padding: 20px;
-      font-family: 'Play', sans-serif;
-      background: #0d1117;
-      color: var(--light);
-    }
+ <style>
+  :root {
+    --gold: #FDC500;
+    --dark-light: #1a1d24;
+    --dark-medium: #00296B;
+    --light: #f3f6fb;
+  }
 
-    .styled-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-    .styled-table th, .styled-table td {
-      padding: 10px 15px;
-      border: 1px solid #ddd;
-    }
-    .styled-table thead {
-      background-color: #00509D;
-      color: white;
-    }
+  body {
+    padding: 20px;
+    font-family: 'Play', sans-serif;
+    background: #0d1117;
+    color: var(--light);
+  }
 
-    .controls {
-      margin-bottom: 20px;
-    }
+  .styled-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+  .styled-table th, .styled-table td { padding: 10px 15px; border: 1px solid #2b2f36; }
+  .styled-table thead { background-color: #00509D; color: white; }
 
-    .highlight {
-      color: var(--gold);
-      font-weight: bold;
-    }
+  .controls { margin-bottom: 20px; }
+  .highlight { color: var(--gold); font-weight: bold; }
+  #top3Block h3 { color: var(--gold); margin-bottom: 10px; }
+  #top3List { color: var(--light); font-size: 16px; line-height: 1.6; }
 
-    #top3Block h3 {
-      color: var(--gold);
-      margin-bottom: 10px;
-    }
-    #top3List {
-      color: var(--light);
-      font-size: 16px;
-      line-height: 1.6;
-    }
+  /* ====== МОДАЛКА ====== */
+  #editModal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.7);
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+  }
+  #editModal .modal-content {
+    background: var(--dark-light);
+    padding: 30px;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 640px;
+    max-height: 85vh;
+    overflow: auto;
+    border: 1px solid var(--gold);
+  }
 
-    #editModal {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.7);
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-    }
+  /* ВЕРХ ФОРМЫ (общие поля) — широкие инпуты ок */
+  #editModal label { display: block; margin: 10px 0 5px; }
+  /* ВАЖНО: убираем глобальное правило ширины для всех input! */
+  #editModal input[type="text"],
+  #editModal input[type="date"],
+  #editModal select,
+  #editModal textarea {
+    width: 100%;
+    padding: 8px;
+    border-radius: 8px;
+    background: #0d1117;
+    color: var(--light);
+    border: 1px solid var(--gold);
+  }
+  #editModal button {
+    margin-top: 15px;
+    padding: 8px 16px;
+    border-radius: 10px;
+    background: var(--dark-medium);
+    color: var(--light);
+    border: 1px solid var(--gold);
+    cursor: pointer;
+  }
 
-    #editModal .modal-content {
-      background: var(--dark-light);
-      padding: 30px;
-      border-radius: 20px;
-      width: 100%;
-      max-width: 600px;
-      max-height: 85vh;
-      overflow-y: auto;
-      border: 1px solid var(--gold);
-    }
+  /* ====== СПИСОК ИГРОКОВ ====== */
+  #playersList {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 20px;
+  }
 
-    #editModal label {
-      display: block;
-      margin: 10px 0 5px;
-    }
+  /* <<< НОВОЕ: общий контейнер карточки игрока >>> */
+.player-card{
+  border: 1px solid var(--gold);
+  border-radius: 10px;
+  background: #0d1117;
+  padding: 8px 10px;
+}
 
-    #editModal input,
-    #editModal select {
-      width: 100%;
-      padding: 8px;
-      border-radius: 8px;
-      background: #0d1117;
-      color: var(--light);
-      border: 1px solid var(--gold);
-    }
+/* 1-я строка: имя + Г/А/Проп */
+.player-row{
+  display: grid;
+  grid-template-columns: 1fr repeat(3, max-content);
+  align-items: center;
+  gap: 8px 12px;
+}
 
-    #editModal button {
-      margin-top: 15px;
-      padding: 8px 16px;
-      border-radius: 10px;
-      background: var(--dark-medium);
-      color: var(--light);
-      border: 1px solid var(--gold);
-      cursor: pointer;
-    }
+.player-row .player-name{
+  min-width: 160px;
+  font-weight: 600;
+  color: var(--light);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
-    #playersList input[type="number"] {
-      width: 50px;
-      margin-left: 5px;
-    }
-  </style>
+.player-row label{
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  font-size: 14px;
+  color: var(--light);
+  margin: 0;
+}
+
+/* 2-я строка: ЖК/КК/Пен + рейтинг */
+.player-row-extra{
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 6px;
+}
+
+.player-row-extra label{
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  font-size: 14px;
+  color: var(--light);
+  margin: 0;
+}
+
+.player-row-extra .rating{
+  color: var(--gold);
+  margin-left: auto;
+}
+
+
+/* компактные number-поля (под 2 символа) */
+.player-card input[type="number"]{
+  width: 2.5em !important;
+  padding: 3px;
+  text-align: center;
+  border: 1px solid var(--gold);
+  border-radius: 6px;
+  background: #0d1117;
+  color: var(--light);
+  font-size: 13px;
+}
+
+/* <<< ЖЁСТКАЯ переопределялка чекбоксов >>> */
+.player-card input[type="checkbox"]{
+  appearance: auto !important;
+  -webkit-appearance: checkbox !important;
+  -moz-appearance: checkbox !important;
+  display: inline-block !important;
+  width: auto !important;
+  height: auto !important;
+  transform: scale(1.15);
+  accent-color: var(--gold);
+  cursor: pointer;
+}
+
+#editModal input[type="checkbox"],
+.player-card input[type="checkbox"] {
+  appearance: auto !important;
+  -webkit-appearance: checkbox !important;
+  -moz-appearance: checkbox !important;
+  display: inline-block !important;
+  width: auto !important;
+  height: auto !important;
+  transform: scale(1.15);
+  accent-color: var(--gold);
+  cursor: pointer;
+}
+
+/* адаптив */
+@media (max-width: 560px){
+  .player-row{ grid-template-columns: 1fr 1fr; }
+  .player-row-extra{ flex-wrap: wrap; }
+  .player-row-extra .rating{ margin-left: 0; width: 100%; }
+}
+
+</style>
+
+    <link rel="icon" href="/img/yelowaicon.png" type="image/x-icon">
 </head>
 <body>
+   <?php include 'headeradmin.html'; ?>
+   
   <h2>Редактирование матчей</h2>
-
   <div class="controls">
     <label for="teamSelect">Команда:</label>
     <select id="teamSelect">
@@ -216,26 +302,45 @@ async function openModal(match) {
   document.getElementById('goals').value = match.goals || '';
 document.getElementById('assists').value = match.assists || '';
 
- const res = await fetch(`/api/get_match_players_with_ratings.php?match_id=${match.id}`);
-  const players = await res.json();
+const res = await fetch(`/api/get_match_players_with_ratings.php?match_id=${match.id}`);
+if (!res.ok) {
+  const txt = await res.text();
+  console.error('get_match_players_with_ratings failed:', txt);
+  alert('Ошибка загрузки игроков матча: ' + txt);
+  return; // не продолжаем, чтобы не падать на res.json()
+}
+const players = await res.json();
 
   const container = document.getElementById('playersList');
   container.innerHTML = '';
   players.forEach(p => {
-  const div = document.createElement('div');
-  const formattedRating = (!isNaN(p.rating) && p.rating !== null)
-    ? parseFloat(p.rating).toFixed(2)
-    : '-';
 
-  div.innerHTML = `
-    <label><input type="checkbox" class="player-checkbox" value="${p.id}" checked> ${p.name}</label><br>
-    Голы: <input type="number" class="goals-input" data-player="${p.id}" value="${p.goals || 0}">
-    Ассисты: <input type="number" class="assists-input" data-player="${p.id}" value="${p.assists || 0}">
-    Пропущено: <input type="number" class="conceded-input" data-player="${p.id}" value="${p.goals_conceded || 0}">
-    Рейтинг: <span style="color: var(--gold); font-weight: bold">${formattedRating}</span>
-    <hr>
-  `;
-  container.appendChild(div);
+const card = document.createElement('div');
+card.className = 'player-card';
+
+const formattedRating = (!isNaN(p.rating) && p.rating !== null)
+  ? parseFloat(p.rating).toFixed(2)
+  : '-';
+
+card.innerHTML = `
+  <div class="player-row">
+    <div class="player-name">
+      <label><input type="checkbox" class="player-checkbox" value="${p.id}" checked> ${p.name}</label>
+    </div>
+    <label>Г: <input type="number" class="goals-input" data-player="${p.id}" value="${p.goals || 0}" min="0"></label>
+    <label>А: <input type="number" class="assists-input" data-player="${p.id}" value="${p.assists || 0}" min="0"></label>
+    <label>Проп: <input type="number" class="conceded-input" data-player="${p.id}" value="${p.goals_conceded || 0}" min="0"></label>
+  </div>
+
+  <div class="player-row-extra">
+    <label>ЖК <input type="checkbox" class="yc-input" data-player="${p.id}" ${(+p.yellow_card) ? 'checked' : ''}></label>
+    <label>КК <input type="checkbox" class="rc-input" data-player="${p.id}" ${(+p.red_card) ? 'checked' : ''}></label>
+    <label>Пен: <input type="number" class="mp-input" data-player="${p.id}" value="${p.missed_penalty || 0}" min="0"></label>
+    <div class="rating">Рейтинг: <strong>${formattedRating}</strong></div>
+  </div>
+`;
+
+container.appendChild(card);
 });
 }
 
@@ -290,12 +395,17 @@ document.getElementById('editForm').addEventListener('submit', async function(e)
   const matchId = document.getElementById('editMatchId').value;
   const players = [];
   document.querySelectorAll('.player-checkbox:checked').forEach(cb => {
-    const id = parseInt(cb.value);
-    const goals = parseInt(document.querySelector(`.goals-input[data-player="${id}"]`)?.value) || 0;
-    const assists = parseInt(document.querySelector(`.assists-input[data-player="${id}"]`)?.value) || 0;
-    const conceded = parseInt(document.querySelector(`.conceded-input[data-player="${id}"]`)?.value) || 0;
-    players.push({ id, goals, assists, goals_conceded: conceded });
-  });
+  const id = parseInt(cb.value);
+  const goals    = parseInt(document.querySelector(`.goals-input[data-player="${id}"]`)?.value) || 0;
+  const assists  = parseInt(document.querySelector(`.assists-input[data-player="${id}"]`)?.value) || 0;
+  const conceded = parseInt(document.querySelector(`.conceded-input[data-player="${id}"]`)?.value) || 0;
+
+  const yellow_card     = !!document.querySelector(`.yc-input[data-player="${id}"]`)?.checked;
+  const red_card        = !!document.querySelector(`.rc-input[data-player="${id}"]`)?.checked;
+  const missed_penalty = parseInt(document.querySelector(`.mp-input[data-player="${id}"]`)?.value) || 0;
+
+players.push({ id, goals, assists, goals_conceded: conceded, yellow_card, red_card, missed_penalty });
+});
 
   const payload = {
     id: matchId,
