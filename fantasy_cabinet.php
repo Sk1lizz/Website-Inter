@@ -209,36 +209,37 @@ if (isset($_POST['save_squad'])) {
             } else {
                 $left = max(0, $BUDGET - $sum);
 
-                if ($st = $db->prepare("
-                    INSERT INTO fantasy_squads
-                    (user_id, season, gk_id, df1_id, df2_id, mf1_id, mf2_id, fw_id, bench_id, captain_player_id, budget_left, total_points, last_week_points, transfers_made_week, transfers_week_start)
-                    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
-                    ON DUPLICATE KEY UPDATE
-                      season=VALUES(season),
-                      gk_id=VALUES(gk_id),
-                      df1_id=VALUES(df1_id),
-                      df2_id=VALUES(df2_id),
-                      mf1_id=VALUES(mf1_id),
-                      mf2_id=VALUES(mf2_id),
-                      fw_id=VALUES(fw_id),
-                      bench_id=VALUES(bench_id),
-                      captain_player_id=VALUES(captain_player_id),
-                      budget_left=VALUES(budget_left),
-                      total_points=VALUES(total_points),
-                      last_week_points=VALUES(last_week_points),
-                      transfers_made_week=VALUES(transfers_made_week),
-                      transfers_week_start=VALUES(transfers_week_start)
-                ")) {
-                    $totalPoints = 0.0;
-                    $lastWeekPoints = 0.0;
-                    $newTransfersUsed = $oldRow ? $alreadyUsed + $deltaTransfers : 0;
+               if ($st = $db->prepare("
+    INSERT INTO fantasy_squads
+    (user_id, season, gk_id, df1_id, df2_id, mf1_id, mf2_id, fw_id, bench_id,
+     captain_player_id, budget_left, total_points, last_week_points,
+     transfers_made_week, transfers_week_start)
+    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+    ON DUPLICATE KEY UPDATE
+      season               = VALUES(season),
+      gk_id                = VALUES(gk_id),
+      df1_id               = VALUES(df1_id),
+      df2_id               = VALUES(df2_id),
+      mf1_id               = VALUES(mf1_id),
+      mf2_id               = VALUES(mf2_id),
+      fw_id                = VALUES(fw_id),
+      bench_id             = VALUES(bench_id),
+      captain_player_id    = VALUES(captain_player_id),
+      budget_left          = VALUES(budget_left),
+      -- ВАЖНО: НЕ трогаем total_points и last_week_points при апдейте
+      transfers_made_week  = VALUES(transfers_made_week),
+      transfers_week_start = VALUES(transfers_week_start)
+")) {
+    $totalPoints = 0.0;      // новому пользователю выставятся 0
+    $lastWeekPoints = 0.0;   // новому пользователю выставятся 0
+    $newTransfersUsed = $oldRow ? $alreadyUsed + $deltaTransfers : 0;
 
-                    $st->bind_param(
-                        'iiiiiiiiiidddis',
-                        $userId, $SEASON, $gk_id, $df1_id, $df2_id, $mf1_id, $mf2_id, $fw_id, $bench_id, $captain,
-                        $left, $totalPoints, $lastWeekPoints,
-                        $newTransfersUsed, $currentWeekStartStr
-                    );
+    $st->bind_param(
+        'iiiiiiiiiidddis',
+        $userId, $SEASON, $gk_id, $df1_id, $df2_id, $mf1_id, $mf2_id, $fw_id, $bench_id, $captain,
+        $left, $totalPoints, $lastWeekPoints,
+        $newTransfersUsed, $currentWeekStartStr
+    );
 
                     $saveSuccess = $st->execute();
                     if (!$saveSuccess) {
@@ -335,8 +336,29 @@ while ($r = $q->fetch_assoc()) {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
 <style>
-  .Fantasy { padding-top: 20svh; display: flex; justify-content: center; background: #fff; font-family: PLAY-REGULAR, Arial; }
-  .fantasy-card { width: 100%; max-width: 1100px; border-radius: 12px; padding: 24px; box-shadow: 0 2px 5px rgba(0,0,0,.08); }
+  .Fantasy {
+    padding-top: 20svh;
+    display: flex;
+    justify-content: center;
+    background: #fff;
+    font-family: PLAY-REGULAR, Arial;
+    position: relative;
+    z-index: 0;
+    min-height: 100vh; /* Убедимся, что контейнер занимает всю высоту */
+    overflow-x: hidden; /* Предотвращаем горизонтальную прокрутку */
+}
+.fantasy-card {
+    width: 100%;
+    max-width: 1100px;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 2px 5px rgba(0,0,0,.08);
+    position: relative;
+    z-index: 1;
+    overflow-y: auto; /* Разрешаем только вертикальную прокрутку, если нужно */
+    max-height: 90vh; /* Ограничиваем высоту */
+}
+
   h1 { font-family: PLAY-BOLD, Arial; color: #00296B; font-size: 28px; margin-bottom: 8px; }
   .muted { color: #666; padding-bottom: 10px; }
   .btn { background: #00296B; color: #FDC500; border: 2px solid #FDC500; border-radius: 10px; padding: 10px 16px; font-size: 16px; cursor: pointer; }
@@ -355,9 +377,11 @@ while ($r = $q->fetch_assoc()) {
     height: auto;
     background: url('/img/field.jpg') center/cover;
     border-radius: 12px;
-    overflow: hidden;
+    /* overflow: hidden;  <-- Временно закомментируйте или удалите */
     margin: 0;
-  }
+    z-index: 1; /* Убедимся, что поле не перекрывает подсказку */
+}
+
   @supports not (aspect-ratio: 1) {
     .field { height: 0; padding-bottom: 154.762%; }
   }
@@ -367,7 +391,7 @@ while ($r = $q->fetch_assoc()) {
   /* bench был 110px -> 26.190% */
   .s-bench { width: 26.190%; }
 
-  .slot .avatar { width: clamp(54px, 17vw, 74px); height: clamp(54px, 17vw, 74px); border-radius: 50%; overflow: hidden; margin: 0 auto 6px; border: 3px solid #fff; background: #e9eef5; box-shadow: 0 2px 4px rgba(0,0,0,.2); }
+  .slot .avatar { width: clamp(54px, 17vw, 74px); height: clamp(54px, 17vw, 74px); border-radius: 50%; margin: 0 auto 6px; border: 3px solid #fff; background: #e9eef5; box-shadow: 0 2px 4px rgba(0,0,0,.2); }
   .slot img { width: 100%; height: 100%; object-fit: cover; }
   .slot .name, .slot .pos { color: #fff; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000; }
   .slot .name { font-size: clamp(10px, 2.8vw, 12px); font-weight: 700; }
@@ -411,7 +435,7 @@ while ($r = $q->fetch_assoc()) {
     border-bottom: 1px solid #f1f5f9;
   }
   .card:last-child { border-bottom: none; }
-  .card .ph { grid-column: 1; width: 46px; height: 46px; border-radius: 50%; overflow: hidden; background: #eef2ff; border: 2px solid #fff; box-shadow: 0 1px 2px rgba(0,0,0,.12); }
+  .card .ph { grid-column: 1; width: 46px; height: 46px; border-radius: 50%; background: #eef2ff; border: 2px solid #fff; box-shadow: 0 1px 2px rgba(0,0,0,.12); }
   .card .ph img { width: 100%; height: 100%; object-fit: cover; }
   .card .nm, .card .meta { grid-column: 2; }
   .card .nm { font-weight: 600; line-height: 1.15; }
@@ -484,7 +508,15 @@ while ($r = $q->fetch_assoc()) {
 
   /* Смартфоны */
   @media (max-width: 768px) {
-    .Fantasy { padding-top: 10svh; } /* твоя правка */
+    .Fantasy {
+    padding-top: 10svh;
+    display: flex;
+    justify-content: center;
+    background: #fff;
+    font-family: PLAY-REGULAR, Arial;
+    position: relative; /* Убедимся, что это контекст для z-index */
+    z-index: 0; /* Базовый уровень */
+}
     .grid { grid-template-columns: 1fr; gap: 14px; }
     .field { margin: 0 auto; }
     .btn { width: 100%; text-align: center; font-size: 15px; padding: 10px 14px; }
@@ -515,6 +547,67 @@ while ($r = $q->fetch_assoc()) {
   @media (max-width: 340px) {
     .tab { flex: 1 1 100%; font-size: 13px; padding: 7px 10px; }
   }
+
+/* аватарки становятся позиционированными контейнерами */
+.card .ph,
+.slot .avatar { position: relative; }
+
+/* сам бейдж; иконка из корня /img/holiday.svg */
+.holiday-badge {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    width: 22px;
+    height: 22px;
+    background: url('/img/icon/holiday.svg') center/contain no-repeat;
+    border: none;
+    z-index: 3;
+    cursor: pointer;
+    outline: none;
+}
+
+.holiday-badge .tip {
+    display: none;
+    white-space: nowrap;
+     background: #111 !important;
+    color: #fff !important;
+    font-size: 12px;
+    line-height: 1.2;
+    padding: 6px 8px;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .3);
+    position: absolute;
+    z-index: 1002;
+     pointer-events: none; /* важно: чтобы подсказка не ловила курсор */
+    transition: opacity 0.2s ease;
+    opacity: 0;
+}
+
+.holiday-badge.active .tip,
+.holiday-badge:focus .tip,
+.holiday-badge:hover .tip {
+    display: block;
+    opacity: 1;
+}
+
+.holiday-wrap {
+    position: relative; /* Убедимся, что это контейнер для абсолютного позиционирования */
+    z-index: 1; /* Базовый z-index для аватарок */
+}
+
+.img-wrap {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;  /* Обрезаем фото */
+    border-radius: 50%;  /* Круглая форма */
+}
+
+/* мягкая подсветка карточки после перехода */
+.card._jump-highlight {
+  outline: 2px solid #FDC500;
+  background: #fffbe6;
+  transition: outline .2s, background .2s;
+}
 </style>
 
 
@@ -1000,6 +1093,152 @@ foreach ($footer_files as $file) {
 var $ = function(sel) { return document.querySelector(sel); };
 var $$ = function(sel) { return Array.prototype.slice.call(document.querySelectorAll(sel)); };
 
+/* ===== HOLIDAYS ===== */
+var HOLIDAYS = new Set();
+var HOLIDAYS_URL = 'api/get_holidays.php'; // поправь путь если файл лежит не в корне
+
+function _holidayMonthYYYYMM() {
+  var d = new Date();
+  var y = d.getFullYear().toString();
+  var m = (d.getMonth()+1).toString().padStart(2,'0');
+  return y+m;
+}
+
+function _holidayBadgeHTML() {
+    return '<span class="holiday-badge" tabindex="0" role="button" aria-label="Отпуск">' +
+           '<span class="tip">Этот футболист находится в отпуске в этом месяце</span>' +
+           '</span>';
+}
+
+function markHolidaysInLists() {
+    $$('.card').forEach(function(card) {
+        var id = parseInt(card.getAttribute('data-id'));
+        if (!id) return;
+        var ph = card.querySelector('.ph');
+        if (!ph) return;
+        ph.classList.add('holiday-wrap');
+        var old = ph.querySelector('.holiday-badge');
+        if (old) old.remove();
+
+        // Создаем обертку для img, если её нет
+        var img = ph.querySelector('img');
+        if (img && !img.parentElement.classList.contains('img-wrap')) {
+            var wrap = document.createElement('div');
+            wrap.className = 'img-wrap';
+            ph.insertBefore(wrap, img);
+            wrap.appendChild(img);
+        }
+
+        if (HOLIDAYS.has(id)) {
+            ph.insertAdjacentHTML('beforeend', _holidayBadgeHTML());
+        }
+    });
+}
+
+function markHolidaysOnField() {
+    ['gk_id', 'df1_id', 'df2_id', 'mf1_id', 'mf2_id', 'fw_id', 'bench_id'].forEach(function(k) {
+        var id = parseInt((document.getElementById('inp_' + k)?.value) || '0');
+        var avatar = document.querySelector('.slot[data-slot="' + k + '"] .avatar');
+        if (!avatar) return;
+        avatar.classList.add('holiday-wrap');
+        var old = avatar.querySelector('.holiday-badge');
+        if (old) old.remove();
+
+        // Создаем обертку для img, если её нет
+        var img = avatar.querySelector('img');
+        if (img && !img.parentElement.classList.contains('img-wrap')) {
+            var wrap = document.createElement('div');
+            wrap.className = 'img-wrap';
+            avatar.insertBefore(wrap, img);
+            wrap.appendChild(img);
+        }
+
+        if (id && HOLIDAYS.has(id)) {
+            avatar.insertAdjacentHTML('beforeend', _holidayBadgeHTML());
+        }
+    });
+}
+
+// Тап по иконке и позиционирование подсказки
+document.addEventListener('click', function(e) {
+    var badge = e.target.closest('.holiday-badge');
+    if (badge) {
+        e.preventDefault();
+        badge.classList.toggle('active');
+        var tip = badge.querySelector('.tip');
+        if (tip) {
+            if (badge.classList.contains('active')) {
+                showTip(tip, badge);
+            } else {
+                hideTip(tip);
+            }
+        }
+    } else {
+        $$('.holiday-badge.active').forEach(b => {
+            b.classList.remove('active');
+            var tip = b.querySelector('.tip');
+            if (tip) hideTip(tip);
+        });
+    }
+});
+
+// Поддержка hover для десктопов
+document.addEventListener('mouseover', function(e) {
+    var badge = e.target.closest('.holiday-badge');
+    if (badge && !badge.classList.contains('active')) {
+        var tip = badge.querySelector('.tip');
+        if (tip) {
+            showTip(tip, badge);
+        }
+    }
+});
+
+document.addEventListener('mouseout', function(e) {
+    var badge = e.target.closest('.holiday-badge');
+    var tip = e.target.closest('.tip');
+    if (badge && !badge.classList.contains('active') && !tip) {
+        var relatedTip = badge.querySelector('.tip');
+        if (relatedTip) hideTip(relatedTip);
+    }
+});
+
+// Скрытие при клике вне
+document.addEventListener('click', function(e) {
+    var badge = e.target.closest('.holiday-badge');
+    var tip = e.target.closest('.tip');
+    if (!badge && !tip) {
+        $$('.holiday-badge.active').forEach(b => {
+            b.classList.remove('active');
+            var relatedTip = b.querySelector('.tip');
+            if (relatedTip) hideTip(relatedTip);
+        });
+    }
+});
+
+// Функции для показа/скрытия подсказки
+function showTip(tip, badge) {
+  tip.style.display = 'block';
+  tip.style.opacity = '1';
+}
+
+function hideTip(tip) {
+  tip.style.display = 'none';
+  tip.style.opacity = '0';
+}
+
+// загрузка отпусков
+(function(){
+  var month=_holidayMonthYYYYMM();
+  fetch(HOLIDAYS_URL+'?month='+encodeURIComponent(month))
+    .then(r=>r.json())
+    .then(ids=>{
+      HOLIDAYS=new Set((ids||[]).map(x=>parseInt(x)));
+      markHolidaysInLists();
+      markHolidaysOnField();
+    })
+    .catch(err=>console.error('Holidays fetch error',err));
+})();
+
 (function(){
     var BUDGET = <?php echo json_encode($BUDGET); ?>;
     var SERVER_CAPTAIN = <?php echo (int)($squad['captain_player_id'] ?? 0); ?>;
@@ -1156,6 +1395,7 @@ var $$ = function(sel) { return Array.prototype.slice.call(document.querySelecto
                 btn.classList.add('remove');
             }
         }
+        markHolidaysOnField();
     }
 
     function handleRemove(id, slotKey) {
@@ -1185,6 +1425,7 @@ var $$ = function(sel) { return Array.prototype.slice.call(document.querySelecto
 
         recalcBudget();
         updateUIState();
+        markHolidaysOnField();
     }
 
     function isAlreadyPicked(id) {
@@ -1232,6 +1473,7 @@ var $$ = function(sel) { return Array.prototype.slice.call(document.querySelecto
         updateTeamCounts();
         var left = getLeft();
         console.log('Budget left:', left);
+        markHolidaysInLists();
 
         var singleTaken = {
             GK: parseInt($('#inp_gk_id').value) > 0,
@@ -1368,6 +1610,65 @@ document.getElementById('saveBtn').addEventListener('click', function(e) {
         }, 0);
     }
 });
+
+function slotKeyToTabKey(slotKey) {
+  if (slotKey === 'gk_id') return 'GK';
+  if (slotKey === 'fw_id') return 'FW';
+  if (slotKey === 'bench_id') return 'BENCH';
+  if (slotKey === 'df1_id' || slotKey === 'df2_id') return 'DF';
+  if (slotKey === 'mf1_id' || slotKey === 'mf2_id') return 'MF';
+  return 'FW';
+}
+
+function switchToTab(key) {
+  // активируем кнопку таба
+  $$('#tabs .tab').forEach(function(b) {
+    b.classList.toggle('active', b.getAttribute('data-tab') === key);
+  });
+  // активируем сам список
+  $$('.list').forEach(function(l) { l.classList.remove('active'); });
+  var targetList = $('#list_' + key);
+  if (targetList) targetList.classList.add('active');
+}
+
+function scrollToCard(cardEl, listKey) {
+  // убедимся, что открыт правильный список
+  switchToTab(listKey);
+  var list = $('#list_' + listKey);
+  if (!cardEl || !list) return;
+
+  // прокрутим к карточке
+  cardEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+  // вспышка-подсветка
+  cardEl.classList.add('_jump-highlight');
+  setTimeout(function(){ cardEl.classList.remove('_jump-highlight'); }, 1200);
+}
+
+// ---- клик по аватарке на поле: открыть соответствующий список/игрока ----
+$$('.field .slot .avatar').forEach(function(avatarEl) {
+  avatarEl.style.cursor = 'pointer';
+  avatarEl.addEventListener('click', function() {
+    var slot = avatarEl.closest('.slot');
+    if (!slot) return;
+    var slotKey = slot.getAttribute('data-slot');            // например 'mf1_id'
+    var pickedId = parseInt(($('#inp_' + slotKey).value) || '0', 10);
+
+    if (pickedId > 0) {
+      // игрок выбран — открываем его карточку
+      var card = document.querySelector('.card[data-id="' + pickedId + '"]');
+      var listKey = card ? card.getAttribute('data-pos') : slotKeyToTabKey(slotKey);
+      scrollToCard(card, listKey);
+    } else {
+      // слот пуст — открываем список по позиции слота
+      var listKey = slotKeyToTabKey(slotKey);
+      switchToTab(listKey);
+      // можно дать маленький хинт
+      notify('Выберите игрока на эту позицию');
+    }
+  });
+});
+
 </script>
 
 <script src="./js/index.bundle.js"></script>

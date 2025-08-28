@@ -161,7 +161,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             INSERT INTO fantasy_users (email, password_plain, team_name, first_name, last_name, points_2025, consent_ip, consent_time)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         ")) {
-            $stmt->bind_param('ssssisss', $email, $password_plain, $team_name, $first_name, $last_name, $points_2025, $consent_ip, $consent_time);
+           $stmt->bind_param('sssssiss',
+    $email, $password_plain, $team_name, $first_name, $last_name,
+    $points_2025, $consent_ip, $consent_time
+);
             if ($stmt->execute()) {
                 $success = true;
                 generate_captcha();
