@@ -1,5 +1,5 @@
 <?php
-// fantasy.php — теперь СТРАНИЦА ВХОДА
+// fantasy.php — СТРАНИЦА ВХОДА
 ob_start();
 session_start();
 
@@ -10,10 +10,10 @@ function include_block($name) {
     $base = __DIR__ . '/blocks/';
     $php  = $base . $name . '.php';
     $html = $base . $name . '.html';
-    if (file_exists($php)) {
-        include $php;
-    } elseif (file_exists($html)) {
-        include $html;
+  if (file_exists($html)) {
+    include $html;
+} elseif (file_exists($php)) {
+    include $php;
     } else {
         if ($name === 'header') {
             echo '<header style="padding:10px 16px;background:#00296B;color:#FDC500;">Header placeholder — blocks/'.$name.'.php|.html не найден</header>';
@@ -65,55 +65,66 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
-    <link rel="icon" href="/img/favicon-32x32.png" sizes="32x32" type="image/png">
-    <link rel="icon" href="/img/favicon-16x16.png" sizes="16x16" type="image/png">
-    <link rel="apple-touch-icon" href="/img/apple-touch-icon.png" sizes="180x180">
-    <link rel="icon" sizes="192x192" href="/img/android-chrome-192x192.png">
-    <link rel="icon" sizes="512x512" href="/img/android-chrome-512x512.png">
+
+  <!-- FAVICONS -->
+  <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="/img/favicon-32x32.png" sizes="32x32" type="image/png">
+  <link rel="icon" href="/img/favicon-16x16.png" sizes="16x16" type="image/png">
+  <link rel="apple-touch-icon" href="/img/apple-touch-icon.png" sizes="180x180">
+  <link rel="icon" sizes="192x192" href="/img/android-chrome-192x192.png">
+  <link rel="icon" sizes="512x512" href="/img/android-chrome-512x512.png">
+
   <title>Fantasy лига</title>
   <link rel="stylesheet" href="/css/main.css" />
   <style>
     .Fantasy {
-      /* Фон страницы */
-      padding: 35svh 20px 40px;
+      padding: 19svh 20px 40px;
       background: url('/img/fantasy-backgound.jpg') center/cover no-repeat fixed;
       font-family: PLAY-REGULAR, Arial, sans-serif;
-      display: flex;
-      align-items: flex-start;
-      justify-content: center;
       min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
+
+    /* ЛОГО */
+    .fantasy-logo {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+    .fantasy-logo img {
+      max-width: 240px;
+      height: auto;
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,.5));
+    }
+
+    /* ОСНОВНОЙ КОНТЕНТ */
     .fantasy-wrap {
       width: 100%;
       max-width: 1100px;
       display: grid;
-      grid-template-columns: 1.2fr 0.8fr; /* слева превью, справа форма */
+      grid-template-columns: 1.2fr 0.8fr;
       gap: 24px;
     }
+
     .promo {
       background: rgba(0,0,0,0.45);
       color: #fff;
       border-radius: 16px;
-      padding: 24px 24px 28px;
+      padding: 24px;
       box-shadow: 0 6px 18px rgba(0,0,0,.25);
       backdrop-filter: blur(3px);
     }
     .promo h1 {
       font-family: PLAY-BOLD, Arial, sans-serif;
       font-size: 32px;
-      line-height: 1.15;
-      margin: 0 0 14px;
+      margin-bottom: 14px;
       color: #FDC500;
-      text-shadow: 0 1px 2px rgba(0,0,0,.3);
       text-align: center;
-      justify-content: center;
     }
-    .promo h2 {
-      margin: 18px 0 8px;
-      font-size: 20px;
-      color: #FDC500;
-    }
+    .promo h2 { margin: 18px 0 8px; font-size: 20px; color: #FDC500; }
     .promo p { margin: 0 0 8px; color: #f3f3f3; }
     .promo .muted { color: #e9e9e9; font-size: 13px; opacity: .9; }
 
@@ -144,73 +155,87 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     .alert.error { background: #fdeceb; color: #7d1c1a; border: 1px solid #f5c6cb; }
     .muted { color:#666; font-size:13px; }
 
-    @media (max-width: 980px) {
-      .fantasy-wrap { grid-template-columns: 1fr; }
-      .auth-card { order: 2; }
-      .promo { order: 1; }
-    }
+    /* МОБИЛЬНАЯ ВЕРСИЯ */
+ @media (max-width: 980px) {
+  .fantasy-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
 
-     @media (max-width: 1024px) {
-      .Fantasy {
-      padding: 20svh 20px 40px;
-    }
-    }
+  /* порядок на мобильных */
+  .auth-card {
+    order: 1; /* форма первой */
+  }
+  .promo {
+    order: 2; /* текст после формы */
+  }
 
-    @media (max-width: 768px) {
-      .Fantasy {
-      padding: 15svh 20px 40px;
-    }
-    }
+  .fantasy-logo img {
+    max-width: 160px;
+  }
+}
+
+      @media (max-width: 768px) {
+        .Fantasy {
+ padding: 10svh 20px 40px;
+        }
+      }
+    
+
   </style>
 </head>
 <body>
-
 <?php include_block('header'); ?>
 
 <div class="Fantasy">
+  <!-- ЛОГО ВСЕГДА СВЕРХУ -->
+  <div class="fantasy-logo">
+    <img src="/img/icon/fantasy_logo.png" alt="Fantasy Logo">
+  </div>
+
   <div class="fantasy-wrap">
-    <!-- ЛЕВОЕ ПРЕВЬЮ -->
+    <!-- ЛЕВО: ПРОМО -->
     <section class="promo">
       <h1>Фэнтези-футбол: Твой вызов!</h1>
-
       <h2>Сформируй состав</h2>
       <p>В твоём распоряжении бюджет в 50 миллионов. Выбери с умом: нападающие приносят очки за голы, защитники — за сухие матчи, а ассистенты — за голевые передачи. Собери сбалансированную команду из футболистов FC Inter Moscow!</p>
-
       <h2>Управляй и улучшай</h2>
       <p>Следи за формой игроков! Если кто-то травмирован или не в духе, не беда. Каждый тур делай до двух замен в составе, чтобы всегда выставлять на игру самых сильных и мотивированных.</p>
-
       <h2>Борись за первое место</h2>
       <p>Твоя главная цель — взойти на вершину общей лиги. Сравнивай свои очки с результатами других менеджеров и докажи, что именно ты — самый проницательный футбольный стратег.</p>
-
       <p class="muted" style="margin-top:10px;">Сезон: 2025</p>
     </section>
 
-    <!-- ПРАВАЯ ФОРМА ВХОДА -->
+    <!-- ПРАВО: ФОРМА -->
     <section class="auth-card">
-      <h1>Вход</h1>
-      <?php if ($error): ?>
-        <div class="alert error"><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></div>
-      <?php endif; ?>
-      <form method="post" action="fantasy.php" autocomplete="off" novalidate>
-        <div class="field">
-          <label for="email">Email</label>
-          <input type="email" id="email" name="email" required>
-        </div>
-        <div class="field">
-          <label for="password">Пароль</label>
-          <input type="password" id="password" name="password" required>
-        </div>
-        <button class="btn" type="submit">Войти</button>
-      </form>
-      <div class="muted" style="margin-top:12px;">
-        Нет аккаунта? <a href="fantasy_login.php">Зарегистрироваться</a>
-      </div>
-    </section>
+  <h1>Вход</h1>
+  <?php if ($error): ?>
+    <div class="alert error"><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></div>
+  <?php endif; ?>
+  <form method="post" action="fantasy.php" autocomplete="off" novalidate>
+    <div class="field">
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" required>
+    </div>
+    <div class="field">
+      <label for="password">Пароль</label>
+      <input type="password" id="password" name="password" required>
+    </div>
+    <button class="btn" type="submit">Войти</button>
+  </form>
+
+  <div class="muted" style="margin-top:12px;">
+    Нет аккаунта? <a href="fantasy_login.php">Зарегистрироваться</a>
+  </div>
+  <div class="muted" style="margin-top:8px;">
+    <a href="https://www.fcintermoscow.com/contacts.html">Забыли пароль? Напишите нам</a>
+  </div>
+</section>
   </div>
 </div>
 
 <?php include_block('footer'); ?>
-
 <script src="./js/index.bundle.js"></script>
 </body>
 </html>

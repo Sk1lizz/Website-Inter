@@ -20,6 +20,7 @@ $currentHour = $currentDateTime->format('H');
 $currentMinute = $currentDateTime->format('i');
 $isEditingAllowed = true;
 $editingMessage = '';
+$isViewSquadAllowed = $currentDay >= 6 || $currentDay == 1; // Суббота, воскресенье или понедельник
 
 // Проверяем, существует ли состав
 $squadExists = false;
@@ -32,9 +33,8 @@ if ($stmt = $db->prepare("SELECT 1 FROM fantasy_squads WHERE user_id=? LIMIT 1")
 
 // Если состав существует, проверяем день и время
 if ($squadExists) {
-    // Разрешено редактирование со вторника (2) по пятницу (5)
-    // Запрещено с субботы 00:01
-    if ($currentDay >= 6 || ($currentDay == 6 && $currentHour >= 0 && $currentMinute >= 1)) {
+    $isoDay = (int)$currentDateTime->format('N'); // 1..7 = пн..вс
+    if (!($isoDay >= 2 && $isoDay <= 5)) {
         $isEditingAllowed = false;
         $editingMessage = 'Редактирование состава возможно только со вторника по пятницу.';
     }
@@ -355,11 +355,9 @@ while ($r = $q->fetch_assoc()) {
     box-shadow: 0 2px 5px rgba(0,0,0,.08);
     position: relative;
     z-index: 1;
-    overflow-y: auto; /* Разрешаем только вертикальную прокрутку, если нужно */
-    max-height: 90vh; /* Ограничиваем высоту */
 }
 
-  h1 { font-family: PLAY-BOLD, Arial; color: #00296B; font-size: 28px; margin-bottom: 8px; }
+  h1 { font-family: PLAY-BOLD, Arial; color: #00296B; font-size: 28px; margin-bottom: 10px; }
   .muted { color: #666; padding-bottom: 10px; }
   .btn { background: #00296B; color: #FDC500; border: 2px solid #FDC500; border-radius: 10px; padding: 10px 16px; font-size: 16px; cursor: pointer; }
   .btn:hover { background: #000; color: #fff; border-color: #fff; }
@@ -397,7 +395,7 @@ while ($r = $q->fetch_assoc()) {
   .slot .name { font-size: clamp(10px, 2.8vw, 12px); font-weight: 700; }
   .slot .pos  { font-size: clamp(10px, 2.6vw, 12px); }
   .slot .pos.black-text { color: #000; text-shadow: none; }
-  .slot .capt { display: none !important; font-size: clamp(10px, 2.6vw, 11px); color: #FDC500; text-shadow: none; }
+  .slot .capt { display: none; font-size: clamp(10px, 2.6vw, 11px); color: #FDC500; text-shadow: none; }
   .slot.captain .avatar { border-color: #FDC500; box-shadow: 0 0 0 3px rgba(253,197,0,0.55), 0 0 12px rgba(253,197,0,0.75); }
   .slot.captain .capt { display: block !important; }
 
@@ -408,7 +406,7 @@ while ($r = $q->fetch_assoc()) {
   .s-df1  { top: 62.3077%; left: 14.2857%; }
   .s-df2  { top: 62.3077%; left: 64.2857%; }
   .s-bench{ top: 81.5385%; left: 2.3810%; }
-  .s-gk   { top: 81.5385%; left: 39.2857%; }
+  .s-gk { top: 78%; left: 39.2857%; }
 
   /* Подбор */
   .picker { background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 16px; }
@@ -494,6 +492,46 @@ while ($r = $q->fetch_assoc()) {
   .modal-content h3 { color: #00296B; margin-bottom: 10px; }
   .modal-buttons { margin-top: 15px; }
   .modal-buttons .btn { margin: 0 5px; }
+  .ranking-table .team-name {
+    cursor: pointer;
+    text-decoration: underline;
+}
+.ranking-table .team-name:hover {
+    color: #00296B;
+}
+
+.slot.captain .avatar,
+#squadModalField .slot.captain .avatar {
+  border-color: #FDC500;
+  box-shadow: 0 0 0 3px rgba(253,197,0,0.55), 0 0 12px rgba(253,197,0,0.75);
+}
+
+.slot .capt { display: none; font-size: 12px; color: #FDC500; text-shadow: none; margin-top: 2px; }
+
+.slot.captain .capt,
+#squadModalField .slot.captain .capt {
+  display: block;
+}
+
+/* ==== Капитан (рамка + подпись) ==== */
+.field .slot.captain .avatar,
+#squadModalField .slot.captain .avatar,
+.pro11x11_wrapper .slot.captain .avatar {
+  border: 3px solid #FDC500 !important; /* перебиваем белую рамку */
+  box-shadow: 0 0 0 3px rgba(253,197,0,0.55),
+              0 0 12px rgba(253,197,0,0.75) !important;
+}
+
+.field .slot.captain .capt,
+#squadModalField .slot.captain .capt,
+.pro11x11_wrapper .slot.captain .capt {
+  display: block !important;
+  color: #FDC500 !important;
+  font-weight: bold;
+  font-size: 12px;
+  text-shadow: none;
+  margin-top: 2px;
+}
 
   /* ===== Адаптивные медиазапросы ===== */
 
@@ -608,6 +646,42 @@ while ($r = $q->fetch_assoc()) {
   background: #fffbe6;
   transition: outline .2s, background .2s;
 }
+
+/* Чтобы и в модалке были круги */
+#squadModalField .slot .avatar {
+   width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin: 0 auto 6px;
+  border: 3px solid #fff;
+  background: #e9eef5;
+  box-shadow: 0 2px 4px rgba(0,0,0,.2);
+}
+#squadModalField .slot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+   border-radius: 50%;
+}
+
+.team-name.my-team {
+  color: #00509D;       /* фирменный синий */
+  font-weight: 700;
+  cursor: default;
+  text-decoration: none;
+}
+
+.slot.captain .avatar {
+  border-color: #FDC500;
+  box-shadow: 0 0 0 3px rgba(253,197,0,0.55), 0 0 12px rgba(253,197,0,0.75);
+}
+.slot.captain .capt {
+  display: block !important;
+  font-size: 12px;
+  color: #FDC500;   /* жёлтая подпись */
+  text-shadow: none;
+  margin-top: 2px;
+}
 </style>
 
 
@@ -627,7 +701,7 @@ while ($r = $q->fetch_assoc()) {
 
 <div class="Fantasy">
     <div class="fantasy-card">
-        <h1>Fantasy team (beta)</h1>
+        <h1>Fantasy league</h1>
        <p class="muted">Команда: <strong><?php echo htmlspecialchars($teamName, ENT_QUOTES, 'UTF-8'); ?></strong></p>
 <p class="muted">Очки команды: <strong><?php echo (int)round((float)($squad['total_points'] ?? 0)); ?></strong></p>
 <p class="muted">Очки на прошлой неделе: <strong><?php echo (int)round((float)($squad['last_week_points'] ?? 0)); ?></strong></p>
@@ -810,6 +884,12 @@ $my = [
   'captain' => (int)($squad['captain_player_id'] ?? 0),
 ];
 
+if (!$my['gk'] || !$my['df1'] || !$my['df2'] || !$my['mf1'] || !$my['mf2'] || !$my['fw'] || !$my['bench']) {
+    $my = [
+        'gk' => 87, 'df1' => 123, 'df2' => 90, 'mf1' => 314, 'mf2' => 127, 'fw' => 136, 'bench' => 99, 'captain' => 136
+    ];
+    error_log("Debug: $userId - Forced full squad for testing: " . print_r($my, true));
+}
 // если состав не полный, таблицу не показываем
 $hasFullSquad = $my['gk'] && $my['df1'] && $my['df2'] && $my['mf1'] && $my['mf2'] && $my['fw'] && $my['bench'];
 
@@ -818,14 +898,22 @@ $weekTeamTotal = 0;   // сумма для отображения
 if ($hasFullSquad) {
 
     // --- функции такие же, как в API ---
-    function _normPos($pos) {
-        $p = mb_strtolower(trim((string)$pos),'UTF-8');
-        if (preg_match('/вратар/u',$p) || $p==='gk') return 'GK';
-        if (preg_match('/защит/u',$p) || $p==='df') return 'DF';
-        if (preg_match('/полузащит/u',$p) || $p==='mf') return 'MF';
-        if (preg_match('/напад/u',$p) || $p==='fw') return 'FW';
-        return strtoupper($pos);
-    }
+   $debugLogs = []; // Массив для хранения логов
+
+// В функции _normPos
+function _normPos($pos) {
+    $p = mb_strtolower(trim((string)$pos), 'UTF-8');
+
+    if (preg_match('/вратар/u', $p) || $p === 'gk') return 'GK';
+
+    // ВАЖНО: сначала полузащитник, затем защитник
+    if (preg_match('/полузащит/u', $p) || $p === 'mf') return 'MF';
+    if (preg_match('/защит/u', $p) || $p === 'df') return 'DF';
+
+    if (preg_match('/напад/u', $p) || $p === 'fw') return 'FW';
+
+    return strtoupper($pos);
+}
     function _goalPts($teamId,$pos) {
         $pos = _normPos($pos);
         $is11 = ((int)$teamId===2);
@@ -877,92 +965,145 @@ if ($hasFullSquad) {
             // подтянем имена/позиции всех задействованных игроков
             $allIds = array_values(array_unique([$my['gk'],$my['df1'],$my['df2'],$my['mf1'],$my['mf2'],$my['fw'],$my['bench']]));
             $mapName = []; $mapPos = [];
-            $rs = $db->query("SELECT id,name,position FROM players WHERE id IN (".implode(',',$allIds).")");
-            while ($r=$rs->fetch_assoc()) { $mapName[(int)$r['id']]=$r['name']; $mapPos[(int)$r['id']]=$r['position']; }
+            $rs = $db->query("SELECT id, name, position FROM players WHERE id IN (".implode(',',$allIds).")");
+while ($r = $rs->fetch_assoc()) {
+    $mapName[(int)$r['id']] = $r['name'];
+    $mapPos[(int)$r['id']] = $r['position'];
+    $debugLogs[] = "Player {$r['id']}: name={$r['name']}, position={$r['position']}";
+}
 
             // события за уик-энд
             $mp = $db->query("
-                SELECT mp.*, p.position, p.team_id AS player_team_id
-                FROM match_players mp
-                INNER JOIN players p ON p.id=mp.player_id
-                WHERE mp.match_id IN ($idsList) AND mp.player_id IN (".implode(',',$allIds).")
-            ");
+    SELECT mp.*,
+           p.position AS player_position,
+           p.team_id  AS player_team_id
+    FROM match_players mp
+    INNER JOIN players p ON p.id = mp.player_id
+    WHERE mp.match_id IN ($idsList)
+      AND mp.player_id IN (".implode(',',$allIds).")
+");
 
-            $ptsByPlayer = [];   // raw очки (без капитана)
-            $playedFlag  = [];   // играл хотя бы раз
-            while ($row = $mp->fetch_assoc()) {
-                $pid = (int)$row['player_id'];
-                $mid = (int)$row['match_id'];
-                $pos = $row['position'];
-                $norm= _normPos($pos);
-                $teamIdForMatch = isset($teamByMatch[$mid]) ? $teamByMatch[$mid] : (int)$row['player_team_id'];
+           $ptsByPlayer = [];
+$playedFlag = []; // Флаг "сыграл в эти выходные"
+$playedOnce = []; // Флаг "уже начислили +1 за участие в эти выходные"
 
-                $pts = 0;
-                if ((int)$row['played']>0) { $pts += 1; $playedFlag[$pid] = true; }
-                $pts += ((int)$row['goals'])   * _goalPts($teamIdForMatch,$pos);
-                $pts += ((int)$row['assists']) * 3;
-                if ((int)$row['clean_sheet']>0 && ($norm==='GK'||$norm==='DF')) $pts += 4;
-                $pts -= ((int)$row['yellow_cards']) * 1;
-                $pts -= ((int)$row['red_cards']) * 3;
-                if ($norm==='GK' && (int)$row['goals_conceded'] > 5) $pts -= 3;
-                $pts -= ((int)$row['missed_penalties']) * 2;
+while ($row = $mp->fetch_assoc()) {
+    $pid = (int)$row['player_id'];
+    $mid = (int)$row['match_id'];
+    $rosterPos = _normPos($mapPos[$pid] ?? $row['position']);
+    if ($pid === $my['bench']) {
+        $debugLogs[] = "Bench player $pid (match $mid): played={$row['played']}, goals={$row['goals']}, assists={$row['assists']}, clean_sheet={$row['clean_sheet']}, yellow_cards={$row['yellow_cards']}, red_cards={$row['red_cards']}, goals_conceded={$row['goals_conceded']}, missed_penalties={$row['missed_penalties']}, position=$rosterPos, points_added=$pts";
+    }
 
-                if (!isset($ptsByPlayer[$pid])) $ptsByPlayer[$pid]=0;
-                $ptsByPlayer[$pid] += $pts;
-            }
+    $teamIdForMatch = isset($teamByMatch[$mid]) ? $teamByMatch[$mid] : (int)$row['player_team_id'];
+
+    $pts = 0;
+
+    // +1 за участие — только один раз за выходные на игрока (у вас это уже учтено)
+    if ((int)$row['played'] > 0 && empty($playedOnce[$pid])) {
+        $pts += 1;
+        $playedOnce[$pid] = true;
+        $playedFlag[$pid] = true;
+    }
+
+    // считаем по РОСТЕРНОЙ позиции
+    $pts += ((int)$row['goals'])   * _goalPts($teamIdForMatch, $rosterPos);
+    $pts += ((int)$row['assists']) * 3;
+
+    if ((int)$row['clean_sheet'] > 0 && ($rosterPos === 'GK' || $rosterPos === 'DF')) {
+        $pts += 4;
+    }
+
+    $pts -= ((int)$row['yellow_cards']) * 1;
+    $pts -= ((int)$row['red_cards']) * 3;
+
+    if ($rosterPos === 'GK' && (int)$row['goals_conceded'] > 5) $pts -= 3;
+    $pts -= ((int)$row['missed_penalties']) * 2;
+
+    if (!isset($ptsByPlayer[$pid])) $ptsByPlayer[$pid] = 0;
+    $ptsByPlayer[$pid] += $pts;
+}
+
+
 
             // замена: если есть несыгравший в роли запасного — добавим очки бенча
             $benchCounted = false;
-            $benchPos = _normPos($mapPos[$my['bench']] ?? '');
-            $roles = [
-                'GK' => [$my['gk']],
-                'DF' => [$my['df1'],$my['df2']],
-                'MF' => [$my['mf1'],$my['mf2']],
-                'FW' => [$my['fw']],
-            ];
-            if (isset($roles[$benchPos])) {
-                $someoneDidntPlay = false;
-                foreach ($roles[$benchPos] as $starter) {
-                    if ($starter && empty($playedFlag[$starter])) { $someoneDidntPlay = true; break; }
-                }
-                if ($someoneDidntPlay) $benchCounted = true;
-            }
+$benchPos = _normPos($mapPos[$my['bench']] ?? '');
+$debugLogs[] = "mapPos after query: " . json_encode($mapPos);
+$roles = [
+    'GK' => [$my['gk']],
+    'DF' => [$my['df1'], $my['df2']],
+    'MF' => [$my['mf1'], $my['mf2']],
+    'FW' => [$my['fw']],
+];
+if (isset($roles[$benchPos])) {
+    $someoneDidntPlay = false;
+    foreach ($roles[$benchPos] as $starter) {
+        if ($starter && empty($playedFlag[$starter])) {
+            $someoneDidntPlay = true;
+            break;
+        }
+    }
+    if ($someoneDidntPlay) $benchCounted = true;
+}
 
-            // сформируем строки для таблицы
-            $order = [
-                $my['gk'],$my['df1'],$my['df2'],$my['mf1'],$my['mf2'],$my['fw']
-            ];
-            foreach ($order as $pid) {
-                $weekRows[] = [
-                    'player_id' => $pid,
-                    'name' => $mapName[$pid] ?? ('#'.$pid),
-                    'pos'  => _normPos($mapPos[$pid] ?? ''),
-                    'points' => (int)round($ptsByPlayer[$pid] ?? 0),
-                    'captain' => ($pid === $my['captain']),
-                    'bench'   => false
-                ];
-            }
-            if ($benchCounted) {
-                $weekRows[] = [
-                    'player_id' => $my['bench'],
-                    'name' => ($mapName[$my['bench']] ?? ('#'.$my['bench'])) . ' (замена)',
-                    'pos'  => $benchPos,
-                    'points' => (int)round($ptsByPlayer[$my['bench']] ?? 0),
-                    'captain' => false,
-                    'bench'   => true
-                ];
-            }
+error_log("Bench player ID: {$my['bench']}, Position: $benchPos, MF1 played: " . (isset($playedFlag[$my['mf1']]) ? 'yes' : 'no') . ", MF2 played: " . (isset($playedFlag[$my['mf2']]) ? 'yes' : 'no') . ", benchCounted: " . ($benchCounted ? 'true' : 'false'));
 
-            // итог с учётом капитана (удвоение добавляем отдельно; на бенча не переносится)
-            $weekTeamTotal = 0;
-            foreach ($weekRows as $r) { $weekTeamTotal += (int)$r['points']; }
-            // кап. бонус
-            $capPts = (int)round($ptsByPlayer[$my['captain']] ?? 0);
-            if ($capPts !== 0) $weekTeamTotal += $capPts;
+$order = [$my['gk'], $my['df1'], $my['df2'], $my['mf1'], $my['mf2'], $my['fw']];
+
+$weekRows = []; // формируем строки для таблицы
+$benchPos = _normPos($mapPos[$my['bench']] ?? ''); // как и выше у вас
+
+foreach ($order as $pid) {
+    $pos = _normPos($mapPos[$pid] ?? '');
+    $points = (int)round($ptsByPlayer[$pid] ?? 0);
+
+    // если капитан → удваиваем
+    $isCaptain = ($pid === $my['captain']);
+    if ($isCaptain) {
+        $points *= 2;
+    }
+
+    $weekRows[] = [
+        'player_id' => $pid,
+        'name'      => $mapName[$pid] ?? ('#'.$pid),
+        'pos'       => $pos,
+        'points'    => $points,
+        'captain'   => $isCaptain,
+        'bench'     => false
+    ];
+}
+
+
+if ($benchCounted) {
+    $benchPid = $my['bench'];
+    $benchPoints = (int)round($ptsByPlayer[$benchPid] ?? 0);
+    $benchPos = _normPos($mapPos[$benchPid] ?? '');
+
+    foreach ($weekRows as &$row) {
+        if ($row['pos'] === $benchPos && $row['points'] === 0) {
+            // если капитан совпал с заменяемым → удвоить очки запасного
+            if ($row['captain']) {
+                $benchPoints *= 2;
+                $row['captain'] = true;
+            }
+            $row['player_id'] = $benchPid;
+            $row['name'] = $mapName[$benchPid] ?? ('#'.$benchPid);
+            $row['points'] = $benchPoints;
+            $row['bench'] = true;
+            break;
+        }
+    }
+    unset($row);
+}
+
+$weekTeamTotal = array_sum(array_column($weekRows, 'points'));
         }
     }
 }
 ?>
+
+
 
 <?php if ($hasFullSquad && !empty($weekRows)): ?>
 <div class="rules-section">
@@ -982,7 +1123,7 @@ if ($hasFullSquad) {
                         <td>
                             <?php
                               $nm = htmlspecialchars($r['name'], ENT_QUOTES, 'UTF-8');
-                              if ($r['captain']) $nm .= ' <span class="team-label team-label-2">капитан</span>';
+                            if ($r['captain']) $nm .= ' <span class="team-label team-label-2">капитан</span>';
                             echo $nm;
                             ?>
                         </td>
@@ -1042,19 +1183,36 @@ if ($hasFullSquad) {
                             ];
                         }
 
+                        if ($pid === $my['bench']) {
+    error_log("Bench player $pid (match $mid): played={$row['played']}, goals={$row['goals']}, assists={$row['assists']}, clean_sheet={$row['clean_sheet']}, yellow_cards={$row['yellow_cards']}, red_cards={$row['red_cards']}, goals_conceded={$row['goals_conceded']}, missed_penalties={$row['missed_penalties']}, points_added=$pts");
+}
+
                         usort($ranking, function ($a, $b) {
                             return $b['total_points'] <=> $a['total_points'];
                         });
 
                         $place = 1;
                         foreach ($ranking as $rank) {
-                            echo '<tr>';
-                            echo '<td>' . $place++ . '</td>';
-                            echo '<td>' . htmlspecialchars($rank['team_name'], ENT_QUOTES, 'UTF-8') . '</td>';
-                          echo '<td>' . (int)round($rank['last_week_points']) . '</td>';
-echo '<td>' . (int)round($rank['total_points']) . '</td>';
-                            echo '</tr>';
-                        }
+    $isMe = ($rank['user_id'] === $userId);
+    echo '<tr>';
+    echo '<td>' . $place++ . '</td>';
+
+    if ($isMe) {
+        // СВОЯ команда — не ссылка, просто подсветка
+        echo '<td><span class="team-name my-team">'
+           . htmlspecialchars($rank['team_name'], ENT_QUOTES, 'UTF-8')
+           . '</span></td>';
+    } else {
+        // Чужая команда — кликабельная
+        echo '<td><span class="team-name" data-user-id="' . (int)$rank['user_id'] . '">'
+           . htmlspecialchars($rank['team_name'], ENT_QUOTES, 'UTF-8')
+           . '</span></td>';
+    }
+
+    echo '<td>' . (int)round($rank['last_week_points']) . '</td>';
+    echo '<td>' . (int)round($rank['total_points']) . '</td>';
+    echo '</tr>';
+}
                     } else {
                         error_log('Ranking query failed: ' . $db->error);
                     }
@@ -1075,6 +1233,46 @@ echo '<td>' . (int)round($rank['total_points']) . '</td>';
             </div>
         </div>
 
+        <div id="squadModal" class="modal" style="display:none;">
+    <div class="modal-content">
+        <h3 id="squadModalTitle">Просмотр состава</h3>
+        <p id="squadModalMessage"></p>
+        <div class="field" id="squadModalField" style="display:none; margin:0 auto;">
+            <div class="slot s-bench" data-slot="bench">
+                <div class="avatar"><img src="/img/player/player_0.png" onerror="imgFallback(this)" alt=""></div>
+                <div class="name">Запасной</div><div class="pos"></div><div class="capt">Капитан</div>
+            </div>
+            <div class="slot s-fw" data-slot="fw">
+                <div class="avatar"><img src="/img/player/player_0.png" onerror="imgFallback(this)" alt=""></div>
+                <div class="name">Нападающий</div><div class="pos">FW</div><div class="capt">Капитан</div>
+            </div>
+            <div class="slot s-mf1" data-slot="mf1">
+                <div class="avatar"><img src="/img/player/player_0.png" onerror="imgFallback(this)" alt=""></div>
+                <div class="name">Полузащитник</div><div class="pos">MF</div><div class="capt">Капитан</div>
+            </div>
+            <div class="slot s-mf2" data-slot="mf2">
+                <div class="avatar"><img src="/img/player/player_0.png" onerror="imgFallback(this)" alt=""></div>
+                <div class="name">Полузащитник</div><div class="pos">MF</div><div class="capt">Капитан</div>
+            </div>
+            <div class="slot s-df1" data-slot="df1">
+                <div class="avatar"><img src="/img/player/player_0.png" onerror="imgFallback(this)" alt=""></div>
+                <div class="name">Защитник</div><div class="pos">DF</div><div class="capt">Капитан</div>
+            </div>
+            <div class="slot s-df2" data-slot="df2">
+                <div class="avatar"><img src="/img/player/player_0.png" onerror="imgFallback(this)" alt=""></div>
+                <div class="name">Защитник</div><div class="pos">DF</div><div class="capt">Капитан</div>
+            </div>
+            <div class="slot s-gk" data-slot="gk">
+                <div class="avatar"><img src="/img/player/player_0.png" onerror="imgFallback(this)" alt=""></div>
+                <div class="name">Вратарь</div><div class="pos">GK</div><div class="capt">Капитан</div>
+            </div>
+        </div>
+        <div class="modal-buttons">
+            <button class="btn" onclick="closeSquadModal()">Закрыть</button>
+        </div>
+    </div>
+</div>
+
     </div> <!-- Закрытие .fantasy-card -->
 </div> <!-- Закрытие .Fantasy -->
 
@@ -1092,6 +1290,16 @@ foreach ($footer_files as $file) {
 // Глобальные определения
 var $ = function(sel) { return document.querySelector(sel); };
 var $$ = function(sel) { return Array.prototype.slice.call(document.querySelectorAll(sel)); };
+
+function safeSrc(src) {
+    if (!src) return '/img/player/player_0.png';
+    src = String(src).trim();
+    if (!src || src === '/' || src === '0' || src.toUpperCase() === 'NULL') {
+        return '/img/player/player_0.png';
+    }
+    if (src[0] !== '/') src = '/' + src;
+    return src;
+}
 
 /* ===== HOLIDAYS ===== */
 var HOLIDAYS = new Set();
@@ -1239,6 +1447,7 @@ function hideTip(tip) {
     .catch(err=>console.error('Holidays fetch error',err));
 })();
 
+
 (function(){
     var BUDGET = <?php echo json_encode($BUDGET); ?>;
     var SERVER_CAPTAIN = <?php echo (int)($squad['captain_player_id'] ?? 0); ?>;
@@ -1361,17 +1570,15 @@ function hideTip(tip) {
         updateUIState();
         updateTeamCounts();
     }
-
-    function safeSrc(src) {
-        if (!src || src === '/') return '/img/player/player_0.png';
-        return src;
-    }
+    
 
     function setSlotImage(slotEl, src) {
         var img = slotEl.querySelector('.avatar img');
         img.onerror = function() { this.onerror = null; this.src = '/img/player/player_0.png'; };
         img.src = safeSrc(src);
     }
+
+    
 
     function fillSlot(slotKey, data, silent) {
         document.getElementById('inp_' + slotKey).value = data.id;
@@ -1669,9 +1876,99 @@ $$('.field .slot .avatar').forEach(function(avatarEl) {
   });
 });
 
+const squadModal = document.getElementById('squadModal');
+const squadModalTitle = document.getElementById('squadModalTitle');
+const squadModalMessage = document.getElementById('squadModalMessage');
+const squadModalField = document.getElementById('squadModalField');
+const currentUserId = <?php echo json_encode($userId); ?>;
+const isViewSquadAllowed = <?php echo json_encode($isViewSquadAllowed); ?>;
+
+function closeSquadModal() {
+    squadModal.style.display = 'none';
+    squadModalField.style.display = 'none';
+    squadModalMessage.textContent = '';
+}
+
+document.querySelectorAll('.ranking-table .team-name').forEach(team => {
+    team.addEventListener('click', () => {
+        const userIdAttr = team.getAttribute('data-user-id');
+        if (!userIdAttr) return; // если нет data-user-id (своя команда) — не кликаем
+
+        const userId = parseInt(userIdAttr, 10);
+        if (isNaN(userId) || userId === currentUserId) return;
+
+        fetch(`/api/get_squad.php?user_id=${userId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    squadModalTitle.textContent = 'Ошибка';
+                    squadModalMessage.textContent = data.error;
+                    squadModal.style.display = 'flex';
+                    return;
+                }
+
+                squadModalTitle.textContent = `Состав команды: ${data.team_name || 'Без названия'}`;
+                squadModalField.style.display = 'block';
+                const slots = ['gk', 'df1', 'df2', 'mf1', 'mf2', 'fw', 'bench'];
+                slots.forEach(slot => {
+    const slotEl = squadModalField.querySelector(`[data-slot="${slot}"]`);
+    const player = data.players[slot];
+    const img = slotEl.querySelector('img');
+    const nameEl = slotEl.querySelector('.name');
+    const posEl = slotEl.querySelector('.pos');
+
+
+    if (player && player.id) {
+    img.src = safeSrc(player.photo);
+    img.onerror = function() { this.onerror = null; this.src = '/img/player/player_0.png'; };
+
+    nameEl.textContent = player.name;
+    posEl.textContent = player.position;
+
+    if (player && player.is_captain) {
+    slotEl.classList.add('captain');
+} else {
+    slotEl.classList.remove('captain');
+}
+
+    if (player.is_captain) {
+        slotEl.classList.add('captain'); // включает стили и жёлтую подпись
+    } else {
+        slotEl.classList.remove('captain');
+    }
+} else {
+    img.src = '/img/player/player_0.png';
+    nameEl.textContent = slot === 'bench' ? 'Запасной'
+        : slot === 'fw' ? 'Нападающий'
+        : slot === 'gk' ? 'Вратарь'
+        : slot.includes('mf') ? 'Полузащитник'
+        : 'Защитник';
+    posEl.textContent = slot === 'bench' ? '' 
+        : slot === 'fw' ? 'FW' 
+        : slot === 'gk' ? 'GK' 
+        : slot.includes('mf') ? 'MF' 
+        : 'DF';
+    slotEl.classList.remove('captain');
+}
+});
+squadModal.style.display = 'flex';
+            })
+            .catch(error => {
+                squadModalTitle.textContent = 'Ошибка';
+                squadModalMessage.textContent = 'Не удалось загрузить состав команды.';
+                squadModal.style.display = 'flex';
+                console.error('Error fetching squad:', error);
+            });
+    });
+});
+
 </script>
 
 <script src="./js/index.bundle.js"></script>
+
+<script>
+    console.log(<?php echo json_encode($debugLogs); ?>);
+</script>
 
 </body>
 </html>

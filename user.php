@@ -195,156 +195,171 @@ $stmt->execute();
 $bg = $stmt->get_result()->fetch_assoc() ?? ['background_key' => '', 'can_change_background' => 0];
 $currentBgKey = $bg['background_key'];
 $canChangeBackground = (int)$bg['can_change_background'];
-
 ?>
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-   <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
-    <link rel="icon" href="/img/favicon-32x32.png" sizes="32x32" type="image/png">
-    <link rel="icon" href="/img/favicon-16x16.png" sizes="16x16" type="image/png">
-    <link rel="apple-touch-icon" href="/img/apple-touch-icon.png" sizes="180x180">
-    <link rel="icon" sizes="192x192" href="/img/android-chrome-192x192.png">
-    <link rel="icon" sizes="512x512" href="/img/android-chrome-512x512.png">
-
+  <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="/img/favicon-32x32.png" sizes="32x32" type="image/png">
+  <link rel="icon" href="/img/favicon-16x16.png" sizes="16x16" type="image/png">
+  <link rel="apple-touch-icon" href="/img/apple-touch-icon.png" sizes="180x180">
+  <link rel="icon" sizes="192x192" href="/img/android-chrome-192x192.png">
+  <link rel="icon" sizes="512x512" href="/img/android-chrome-512x512.png">
   <title>Кабинет игрока</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="css/main.css">
 </head>
 
- <?php include 'headerlk.html'; ?>
+<?php include 'headerlk.html'; ?>
 
 <body>
 <div class="user_page">
-  
-
   <h1 style="text-align:center">Добро пожаловать, <?= htmlspecialchars($_SESSION['player_name']) ?>!</h1>
 
   <div class="dashboard-grid">
-    <!-- Слева -->
+    <!-- Первая линия: Крупный блок слева - Продвинутая статистика, рядом - Месячный взнос -->
     <div class="left-column">
-
-    <div class="card" id="advStatsCard">
-  <h2>Продвинутая статистика</h2>
-  <div id="advStatsBody">Загрузка…</div>
-</div>
-
-      <div class="card">
-        <h2>Месячный взнос</h2>
-        <p><strong>Взнос за месяц:</strong> <?= number_format($amount, 2, '.', ' ') ?> ₽</p>
-        <p><strong>Штрафы за месяц:</strong> <?= $fineTotal ?> ₽</p>
-        <p><strong>Итого к оплате:</strong> <?= number_format($totalToPay, 2, '.', ' ') ?> ₽</p>
-        <p><strong>Дедлайн:</strong> <?= $deadlineStr ?></p>
-         <p><strong>Реквизиты Pro: 4276 4000 6388 7252</strong></p>
-          <p><strong>Реквизиты 8х8: 5536 9137 8962 1493</strong></p>
+      <div class="card large-card" id="advStatsCard">
+        <h2><img src="/img/icon/graph.png" alt="Статистика" class="icon-title">Продвинутая статистика</h2>
+        <div id="advStatsBody">Загрузка…</div>
       </div>
-      <div class="card">
-        <h2>Все штрафы</h2>
-        <?php if (count($fines) === 0): ?><p>Так держать — штрафов нет!</p>
-        <?php else: ?>
-          <table class="attendance-table"><thead><tr><th>Дата</th><th>Причина</th><th>Сумма</th></tr></thead><tbody>
-          <?php foreach ($fines as $fine): $highlight = ((int)$fine['amount'] >= 299) ? 'highlight-fine' : ''; ?>
-            <tr class="<?= $highlight ?>">
-              <td><?= date('d.m.Y', strtotime($fine['date'])) ?></td>
-              <td><?= htmlspecialchars($fine['reason']) ?></td>
-              <td><?= $fine['amount'] ?> ₽</td>
-            </tr>
-          <?php endforeach; ?>
-          </tbody></table>
-        <?php endif; ?>
-      </div>
-
-      <div class="card">
-  <h2>Моя форма</h2>
-  <p><strong>Индекс массы тела (BMI):</strong> <?= $bmi ?> (<?= $bmi_feedback ?>)</p>
-  <p><strong>Мой вес:</strong> <?= $weight_kg ?> кг</p>
-  <p><strong>Мой рост:</strong> <?= $height_cm ?> см</p>
-  <p><strong>Мой идеальный вес:</strong> <?= $ideal_weight ?> кг</p>
-
-  <?php
-    $weight_percent = $ideal_weight > 0 ? min(100, max(0, round(($weight_kg - $min_weight) / ($max_weight - $min_weight) * 100))) : 50;
-  ?>
- <div id="bmi-bar">
-  <div class="bmi-fill"></div>
-  <!-- Синяя зона идеального веса -->
-  <div class="bmi-range" style="left: <?= (float)$range_from_percent ?>%; width: <?= (float)($range_to_percent - $range_from_percent) ?>%;"></div>
-  <!-- Маркер текущего веса -->
-  <div class="bmi-marker" style="left: <?= (float)$weight_percent ?>%;"></div>
-  <!-- Подписи -->
-  <div class="bmi-label left"><?= $min_weight ?> кг</div>
-  <div class="bmi-label right"><?= $max_weight ?> кг</div>
-  <div class="bmi-label mid1" style="left: <?= (float)$range_from_percent ?>%;"><?= (float)$range_from ?> кг</div>
-  <div class="bmi-label mid2" style="left: <?= (float)$range_to_percent ?>%;"><?= (float)$range_to ?> кг</div>
-</div>
-  <button id="changeWeightButton" onclick="document.getElementById('modal_weight').style.display='flex'">Изменить вес</button>
-<button id="changeHeightButton" onclick="document.getElementById('modal_height').style.display='flex'">Изменить рост</button>
-
-</div>
-
-<div class="card">
-  <h2>Моё здоровье</h2>
-  <p><strong>Дата последнего ЭКГ:</strong> <span id="lastEkgDate">Данные не указаны</span></p>
-  <p><strong>Времени с последнего ЭКГ:</strong> <span id="ekgElapsed">—</span></p>
-  <p><strong>Рекомендация:</strong> <span id="ekgRecommendation">—</span></p>
-
-  <button id="editHealthButton" onclick="document.getElementById('editHealthModal').style.display='flex'">Редактировать</button>
-</div>
-
     </div>
 
-    <!-- Справа -->
-    <div class="right-column">
-      <div class="card">
-        <h2>Моя посещаемость</h2>
-        <script>
-  const PLAYER_ID = <?= (int)$_SESSION['player_id'] ?>;
-  const TEAM_ID = <?= (int)$_SESSION['team_id'] ?>;
+   <div class="right-column">
+  <div class="card">
+    <h2>
+      <img src="/img/icon/wallet-with-card-sticking-out.png" alt="Взносы" class="icon-title">
+      Месячный взнос
+    </h2>
 
-  document.addEventListener("DOMContentLoaded", () => {
-    loadHealth();           // ЗАГРУЗИТЬ ЗДОРОВЬЕ
-    loadVacationStatus();   // (если используется)
-  });
-</script>
-        <select id="monthSelect"></select>
-        <table class="attendance-table" id="attendanceTable">
-  <thead>
-    <tr><th>Дата</th><th>Статус</th><th>Рейтинг</th></tr>
-  </thead>
-  <tbody></tbody>
-</table>
-        <p><strong>Процент посещаемости:</strong> <span id="percent">0%</span></p>
-        <p id="feedback" style="font-weight:bold;"></p>
-        <p><strong>Средний тренировочный рейтинг за месяц:</strong> <span id="monthlyTrainAvg">—</span></p>
-        <div id="rateTrainingWrap" style="margin-top:10px;">
-  <button id="rateTrainingButton" onclick="openRateTrainingModal()">Оценить предыдущую тренировку</button>
-  <p id="rateTrainingHint" style="margin-top:6px; font-size:12px; color:#666;"></p>
-</div>
-      </div>
+    <p>
+      <span>Взнос за месяц:</span>
+      <span class="amount"><?= number_format($amount, 2, '.', ' ') ?> ₽</span>
+    </p>
 
-      <div class="card">
-  <h2>Матчи за месяц</h2>
-  <table class="attendance-table" id="matchStatsTable">
-    <thead>
-      <tr><th>Дата</th><th>Играл</th><th>Г</th><th>А</th><th>ПМ</th><th>Рейтинг</th><th>Оценка</th></tr>
-    </thead>
-    <tbody></tbody>
-  </table>
-  <p><strong>Процент участия:</strong> <span id="matchParticipation">0%</span></p>
-</div>
+    <p>
+      <span>Штрафы за месяц:</span>
+      <span class="amount fine <?= ($fineTotal >= 300 ? 'high' : '') ?>">
+        <?= number_format($fineTotal, 2, '.', ' ') ?> ₽
+      </span>
+    </p>
 
-      <div class="card">
-  <h2>Мой отпуск</h2>
-  <p id="vacationInfo">Загрузка информации об отпуске...</p>
-  <button id="openVacationModal">Запланировать отпуск</button>
-</div>
+    <p>
+      <span>Итого к оплате:</span>
+      <span class="amount total"><?= number_format($totalToPay, 2, '.', ' ') ?> ₽</span>
+    </p>
+
+    <div class="deadline">Дедлайн: <?= $deadlineStr ?></div>
+
+    <div class="bank-info">
+      <span>Реквизиты Pro:</span>
+      <span>4276 4000 6388 7252</span>
+    </div>
+    <div class="bank-info">
+      <span>Реквизиты 8х8:</span>
+      <span>5536 9137 8962 1493</span>
     </div>
   </div>
 </div>
 
+    <!-- Вторая линия: Матчи за месяц, Моя посещаемость, Все штрафы -->
+    <div class="middle-row">
+      <div class="card">
+        <h2><img src="/img/icon/calendar.png" alt="Матчи" class="icon-title">Матчи за месяц</h2>
+        <table class="attendance-table" id="matchStatsTable">
+          <thead>
+            <tr><th>Дата</th><th>Играл</th><th>Г</th><th>А</th><th>ПМ</th><th>Рейтинг</th><th>Оценка</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <p><strong>Процент участия:</strong> <span id="matchParticipation">0%</span></p>
+      </div>
+      <div class="card">
+        <h2><img src="/img/icon/to-do-list.png" alt="Посещаемость" class="icon-title">Моя посещаемость</h2>
+        <select id="monthSelect"></select>
+        <table class="attendance-table" id="attendanceTable">
+          <thead>
+            <tr><th>Дата</th><th>Статус</th><th>Рейтинг</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <p><strong>Процент посещаемости:</strong> <span id="percent">0%</span></p>
+        <p id="feedback" style="font-weight:bold;"></p>
+        <p><strong>Средний тренировочный рейтинг за месяц:</strong> <span id="monthlyTrainAvg">—</span></p>
+        <div id="rateTrainingWrap" style="margin-top:10px;">
+          <button id="rateTrainingButton" onclick="openRateTrainingModal()">Оценить предыдущую тренировку</button>
+          <p id="rateTrainingHint" style="margin-top:6px; font-size:12px; color:#666;"></p>
+        </div>
+      </div>
+      <div class="card">
+        <h2><img src="/img/icon/penalties.png" alt="Штрафы" class="icon-title">Все штрафы</h2>
+        <?php if (count($fines) === 0): ?>
+          <p>Так держать — штрафов нет!</p>
+        <?php else: ?>
+          <table class="attendance-table">
+            <thead><tr><th>Дата</th><th>Причина</th><th>Сумма</th></tr></thead>
+            <tbody>
+              <?php foreach ($fines as $fine): $highlight = ((int)$fine['amount'] >= 299) ? 'highlight-fine' : ''; ?>
+                <tr class="<?= $highlight ?>">
+                  <td><?= date('d.m.Y', strtotime($fine['date'])) ?></td>
+                  <td><?= htmlspecialchars($fine['reason']) ?></td>
+                  <td><?= $fine['amount'] ?> ₽</td>
+                </tr>
+              <?php endforeach; ?>
+            </tbody>
+          </table>
+        <?php endif; ?>
+      </div>
+    </div>
 
+    <!-- Третья линия: Моя форма, Моё здоровье, Мой отпуск -->
+    <div class="bottom-row">
+      <div class="card">
+        <h2><img src="/img/icon/heart.png" alt="Моя форма" class="icon-title">Моя форма</h2>
+        <p><strong>Индекс массы тела (BMI):</strong> <?= $bmi ?> (<?= $bmi_feedback ?>)</p>
+        <p><strong>Мой вес:</strong> <?= $weight_kg ?> кг</p>
+        <p><strong>Мой рост:</strong> <?= $height_cm ?> см</p>
+        <p><strong>Мой идеальный вес:</strong> <?= $ideal_weight ?> кг</p>
+        <?php
+          $weight_percent = $ideal_weight > 0 ? min(100, max(0, round(($weight_kg - $min_weight) / ($max_weight - $min_weight) * 100))) : 50;
+        ?>
+        <div id="bmi-bar">
+          <div class="bmi-fill"></div>
+          <div class="bmi-range" style="left: <?= (float)$range_from_percent ?>%; width: <?= (float)($range_to_percent - $range_from_percent) ?>%;"></div>
+          <div class="bmi-marker" style="left: <?= (float)$weight_percent ?>%;"></div>
+          <div class="bmi-label left"><?= $min_weight ?> кг</div>
+          <div class="bmi-label right"><?= $max_weight ?> кг</div>
+          <div class="bmi-label mid1" style="left: <?= (float)$range_from_percent ?>%;"><?= (float)$range_from ?> кг</div>
+          <div class="bmi-label mid2" style="left: <?= (float)$range_to_percent ?>%;"><?= (float)$range_to ?> кг</div>
+        </div>
+        <button id="changeWeightButton" onclick="document.getElementById('modal_weight').style.display='flex'">Изменить вес</button>
+        <button id="changeHeightButton" onclick="document.getElementById('modal_height').style.display='flex'">Изменить рост</button>
+      </div>
+      <div class="card">
+        <h2><img src="/img/icon/pharmacy.png" alt="Моё здоровье" class="icon-title">Моё здоровье</h2>
+        <p><strong>Дата последнего ЭКГ:</strong> <span id="lastEkgDate">Данные не указаны</span></p>
+        <p><strong>Времени с последнего ЭКГ:</strong> <span id="ekgElapsed">—</span></p>
+        <p><strong>Рекомендация:</strong> <span id="ekgRecommendation">—</span></p>
+        <button id="editHealthButton" onclick="document.getElementById('editHealthModal').style.display='flex'">Редактировать</button>
+      </div>
+      <div class="card">
+        <h2><img src="/img/icon/airplane.png" alt="Отпуск" class="icon-title">Мой отпуск</h2>
+        <p id="vacationInfo">Загрузка информации об отпуске...</p>
+        <button id="openVacationModal">Запланировать отпуск</button>
+      </div>
+    </div>
+  </div>
+</div>
 
+<!-- Глобальные переменные -->
+<script>
+  window.PLAYER_ID = <?= (int)$_SESSION['player_id'] ?>;
+  window.TEAM_ID = <?= (int)$_SESSION['team_id'] ?>;
+</script>
 
+<!-- Скрипты -->
 <script>
 const STATUS_MAP = {
     0: '– Не был',
@@ -355,7 +370,7 @@ const STATUS_MAP = {
 };
 
 async function fetchAttendance() {
-    const res = await fetch(`/api/get_attendance.php?player_id=${PLAYER_ID}`);
+    const res = await fetch(`/api/get_attendance.php?player_id=${window.PLAYER_ID}`);
     return await res.json();
 }
 
@@ -433,8 +448,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         renderAttendance(data, e.target.value);
     });
 });
-
-
 </script>
 
 <?php if ($canChangeBackground === 1): ?>
@@ -473,7 +486,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 </div>
 <?php endif; ?>
 
-
 <script>
 function setBackground(key) {
   fetch('/api/player_set_background.php', {
@@ -507,7 +519,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 async function loadVacationStatus() {
-  const res = await fetch(`/api/player_vacation_status.php?player_id=${PLAYER_ID}`);
+  const res = await fetch(`/api/player_vacation_status.php?player_id=${window.PLAYER_ID}`);
   const data = await res.json();
 
   const info = document.getElementById('vacationInfo');
@@ -527,30 +539,30 @@ async function loadVacationStatus() {
   const slotsInfo = document.getElementById('vacationSlotsInfo');
   monthSelect.innerHTML = '';
   
-const today = new Date();
-today.setHours(0, 0, 0, 0); // убираем время, чтобы сравнение шло только по датам
+  const today = new Date();
+  today.setHours(0, 0, 0, 0); // убираем время, чтобы сравнение шло только по датам
 
-const now = new Date();
-let monthsAdded = 0;
-let i = 0;
+  const now = new Date();
+  let monthsAdded = 0;
+  let i = 0;
 
-while (monthsAdded < 2 && i < 6) {
-  const d = new Date(now.getFullYear(), now.getMonth() + i, 1);
-  const daysBefore = (d - now) / (1000 * 60 * 60 * 24);
+  while (monthsAdded < 2 && i < 6) {
+    const d = new Date(now.getFullYear(), now.getMonth() + i, 1);
+    const daysBefore = (d - now) / (1000 * 60 * 60 * 24);
 
-  if (daysBefore >= 10) {
-    const yyyyMM = `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}`;
-    const label = d.toLocaleString('ru-RU', { month: 'long', year: 'numeric' });
+    if (daysBefore >= 10) {
+      const yyyyMM = `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}`;
+      const label = d.toLocaleString('ru-RU', { month: 'long', year: 'numeric' });
 
-    const option = document.createElement('option');
-    option.value = yyyyMM;
-    option.textContent = label;
-    monthSelect.appendChild(option);
-    monthsAdded++;
+      const option = document.createElement('option');
+      option.value = yyyyMM;
+      option.textContent = label;
+      monthSelect.appendChild(option);
+      monthsAdded++;
+    }
+
+    i++;
   }
-
-  i++;
-}
 
   if (monthSelect.options.length === 0) {
     monthSelect.innerHTML = '<option>Нет доступных месяцев</option>';
@@ -563,7 +575,7 @@ while (monthsAdded < 2 && i < 6) {
 
   async function updateSlots() {
     const month = monthSelect.value;
-    const res = await fetch(`/api/get_holiday_slots.php?team_id=${TEAM_ID}&month=${month}`);
+    const res = await fetch(`/api/get_holiday_slots.php?team_id=${window.TEAM_ID}&month=${month}`);
     const data = await res.json();
     const used = data.count ?? 0;
 
@@ -584,7 +596,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const res = await fetch('/api/set_holiday.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ player_id: PLAYER_ID, month })
+        body: JSON.stringify({ player_id: window.PLAYER_ID, month })
       });
 
       const result = await res.json();
@@ -596,17 +608,14 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
-});
 
-document.addEventListener("DOMContentLoaded", () => {
-  window.TEAM_ID = <?= (int)$_SESSION['team_id'] ?>;
   loadVacationStatus();
 });
 </script>
 
 <script>
-  async function fetchMatchStats() {
-    const res = await fetch(`/api/get_match_stats.php?player_id=${PLAYER_ID}&team_id=${TEAM_ID}`);
+async function fetchMatchStats() {
+    const res = await fetch(`/api/get_match_stats.php?player_id=${window.PLAYER_ID}&team_id=${window.TEAM_ID}`);
     return await res.json();
 }
 
@@ -625,15 +634,15 @@ function renderMatchStats(data) {
   });
 
   // Последний день предыдущего месяца
-const lastDayPrevMonth = new Date(thisYear, thisMonth, 0);
-const lastSaturday = new Date(lastDayPrevMonth.getTime());
-while (lastSaturday.getDay() !== 6) {
-  lastSaturday.setDate(lastSaturday.getDate() - 1);
-}
-let lastSaturdayStr = lastSaturday.toISOString().slice(0, 10);
+  const lastDayPrevMonth = new Date(thisYear, thisMonth, 0);
+  const lastSaturday = new Date(lastDayPrevMonth.getTime());
+  while (lastSaturday.getDay() !== 6) {
+    lastSaturday.setDate(lastSaturday.getDate() - 1);
+  }
+  let lastSaturdayStr = lastSaturday.toISOString().slice(0, 10);
 
-console.log('lastSaturday:', lastSaturday.toDateString());      // должно быть: Sat Jul 26 2025
-console.log('lastSaturdayStr:', lastSaturdayStr);               // должно быть: 2025-07-26
+  console.log('lastSaturday:', lastSaturday.toDateString());      // должно быть: Sat Jul 26 2025
+  console.log('lastSaturdayStr:', lastSaturdayStr);               // должно быть: 2025-07-26
 
   // Находим матч, состоявшийся в эту дату или позже (в прошлом месяце)
   let lastPrevMonthMatch = null;
@@ -644,9 +653,9 @@ console.log('lastSaturdayStr:', lastSaturdayStr);               // должно 
 
     console.log('Проверка матча:', match.date.slice(0, 10), '>=', lastSaturdayStr, '?');
     if (match.date.slice(0, 10) >= lastSaturdayStr && match.date.slice(0, 7) < now.toISOString().slice(0, 7)) {
-  lastPrevMonthMatch = match;
-  break;
-}
+      lastPrevMonthMatch = match;
+      break;
+    }
   }
 
   const finalMatches = lastPrevMonthMatch
@@ -657,22 +666,21 @@ console.log('lastSaturdayStr:', lastSaturdayStr);               // должно 
   for (const match of finalMatches) {
     if (match.played) playedCount++;
 
-   tbody.innerHTML += `
-  <tr>
-    <td>${new Date(match.date).toLocaleDateString('ru-RU')}</td>
-    <td>${match.played ? 'Да' : 'Нет'}</td>
-    <td class="match-icon">${match.goals > 0 ? `<img src="/img/icon/goal.svg" title="Гол">×${match.goals}` : ''}</td>
-    <td class="match-icon">${match.assists > 0 ? `<img src="/img/icon/assist.svg" title="Ассист">×${match.assists}` : ''}</td>
-    <td class="match-icon">${match.goals_conceded > 0 ? `<img src="/img/icon/form.svg" title="Пропущено">×${match.goals_conceded}` : ''}</td>
-    <td>${match.average_rating !== null ? match.average_rating.toFixed(1) : '-'}</td>
-    <td>
-  ${match.played && match.can_rate 
-    ? `<button class="match-rate-btn" data-match-id="${match.id}" onclick="openRatingModal(${match.id})">Оценка</button>` 
-    : ''}
-</td>
-  </tr>`;
+    tbody.innerHTML += `
+      <tr>
+        <td>${new Date(match.date).toLocaleDateString('ru-RU')}</td>
+        <td>${match.played ? 'Да' : 'Нет'}</td>
+        <td class="match-icon">${match.goals > 0 ? `<img src="/img/icon/goal.svg" title="Гол">×${match.goals}` : ''}</td>
+        <td class="match-icon">${match.assists > 0 ? `<img src="/img/icon/assist.svg" title="Ассист">×${match.assists}` : ''}</td>
+        <td class="match-icon">${match.goals_conceded > 0 ? `<img src="/img/icon/form.svg" title="Пропущено">×${match.goals_conceded}` : ''}</td>
+        <td>${match.average_rating !== null ? match.average_rating.toFixed(1) : '-'}</td>
+        <td>
+          ${match.played && match.can_rate 
+            ? `<button class="match-rate-btn" data-match-id="${match.id}" onclick="openRatingModal(${match.id})">Оценка</button>` 
+            : ''}
+        </td>
+      </tr>`;
   }
-  
 
   const percent = finalMatches.length
     ? Math.round((playedCount / finalMatches.length) * 100)
@@ -685,12 +693,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     const matchStats = await fetchMatchStats();
     renderMatchStats(matchStats);
 });
-
 </script>
 
 <script>
-  async function loadHealth() {
-  const res = await fetch(`/api/get_health.php?player_id=${PLAYER_ID}`);
+async function loadHealth() {
+  const res = await fetch(`/api/get_health.php?player_id=${window.PLAYER_ID}`);
   const data = await res.json();
 
   const lastEkg = new Date(data.last_ekg_date);
@@ -719,10 +726,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 }
 
+document.addEventListener("DOMContentLoaded", loadHealth);
 </script>
 
 <script>
-  async function openRatingModal(matchId) {
+async function openRatingModal(matchId) {
   const res = await fetch(`/api/get_match_players.php?match_id=${matchId}`);
   const players = await res.json();
 
@@ -730,19 +738,19 @@ document.addEventListener("DOMContentLoaded", async () => {
   list.innerHTML = '';
 
   players.forEach(player => {
-  if (player.id === PLAYER_ID) return;
-  if (player.position === 'Тренер') return;
+    if (player.id === window.PLAYER_ID) return;
+    if (player.position === 'Тренер') return;
 
-  const wrapper = document.createElement('div');
-  wrapper.classList.add('player-rating-item');
-  wrapper.innerHTML = `
-    <label>${player.name}:</label>
-    <input type="range" min="3.0" max="10.0" step="0.1" value="7.0" 
-           name="rating_${player.id}" oninput="this.nextElementSibling.textContent = this.value">
-    <span class="rating-value">7.0</span>
-  `;
-  list.appendChild(wrapper);
-});
+    const wrapper = document.createElement('div');
+    wrapper.classList.add('player-rating-item');
+    wrapper.innerHTML = `
+      <label>${player.name}:</label>
+      <input type="range" min="3.0" max="10.0" step="0.1" value="7.0" 
+             name="rating_${player.id}" oninput="this.nextElementSibling.textContent = this.value">
+      <span class="rating-value">7.0</span>
+    `;
+    list.appendChild(wrapper);
+  });
 
   document.getElementById('rateMatchModal').style.display = 'flex';
 
@@ -758,7 +766,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     players.forEach(player => {
       const input = form.querySelector(`[name="rating_${player.id}"]`);
-      if (input && player.id !== PLAYER_ID && player.position !== 'Тренер') {
+      if (input && player.id !== window.PLAYER_ID && player.position !== 'Тренер') {
         data.ratings.push({
           target_player_id: player.id,
           rating: parseFloat(input.value)
@@ -774,23 +782,22 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const result = await saveRes.json();
 
-if (result.success) {
-  alert('Оценки сохранены!');
-  document.getElementById('rateMatchModal').style.display = 'none';
+    if (result.success) {
+      alert('Оценки сохранены!');
+      document.getElementById('rateMatchModal').style.display = 'none';
 
-  // Делаем кнопку неактивной после голосования
-  const rateBtn = document.querySelector(`.match-rate-btn[data-match-id="${matchId}"]`);
-  if (rateBtn) {
-    rateBtn.disabled = true;
-    rateBtn.textContent = 'Оценено';
-    rateBtn.classList.add('disabled-rating-btn');
-  }
-} else {
-  alert('Ошибка сохранения');
-}
+      // Делаем кнопку неактивной после голосования
+      const rateBtn = document.querySelector(`.match-rate-btn[data-match-id="${matchId}"]`);
+      if (rateBtn) {
+        rateBtn.disabled = true;
+        rateBtn.textContent = 'Оценено';
+        rateBtn.classList.add('disabled-rating-btn');
+      }
+    } else {
+      alert('Ошибка сохранения');
+    }
   };
 }
-
 </script>
 
 <div id="changePasswordModal" class="user_password-modal">
@@ -860,12 +867,12 @@ if (result.success) {
       <label>Дата последнего ЭКГ:</label>
       <input type="date" name="last_ekg_date" required>
 
-     <div class="checkbox-wrapper">
-  <label>
-    <input type="checkbox" name="has_heart_condition">
-    У меня есть сердечно-сосудистые заболевания
-  </label>
-</div>
+      <div class="checkbox-wrapper">
+        <label>
+          <input type="checkbox" name="has_heart_condition">
+          У меня есть сердечно-сосудистые заболевания
+        </label>
+      </div>
 
       <div class="modal-buttons">
         <button type="submit">Сохранить</button>
@@ -930,7 +937,7 @@ document.addEventListener('DOMContentLoaded', () => {
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       const data = {
-        player_id: PLAYER_ID,
+        player_id: window.PLAYER_ID,
         last_ekg_date: form.last_ekg_date.value,
         has_heart_condition: form.has_heart_condition.checked ? 1 : 0
       };
@@ -958,7 +965,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 </script>
-
 
 <script>
 async function loadAdvancedStats() {
@@ -1002,16 +1008,24 @@ async function loadAdvancedStats() {
       ${isGK && (t.avg_conceded_per_match === null || t.matches < 15)
         ? '<p style="margin-top:8px;font-size:12px;color:#666;">* «Средне пропущено/матч» и ранги показываются для вратарей с ≥ 15 матчей.</p>'
         : ''}
-      <div id="adv-extra-ratings" style="margin-top:10px;">
-        <p><strong>Мой тренировочный рейтинг (средний):</strong> <span id="advTrainAvg">—</span></p>
-        <p><strong>Мой игровой рейтинг:</strong> <span id="advMatchAvg">—</span></p>
+    <div id="adv-extra-ratings" style="margin-top:10px;">
+      <div class="rating-container">
+        <div class="rating-card">
+          <h2><img src="/img/icon/rating.png" alt="Тренировочный рейтинг" class="icon-title">Мой тренировочный рейтинг</h2>
+          <div class="rating-value" id="advTrainAvg">—</div>
+        </div>
+        <div class="rating-card">
+          <h2><img src="/img/icon/award33.png" alt="Игровой рейтинг" class="icon-title">Мой игровой рейтинг</h2>
+          <div class="rating-value" id="advMatchAvg">—</div>
+        </div>
       </div>
+    </div>
     `;
 
     // Догружаем два средних параллельно
     const [trainRes, matchRes] = await Promise.all([
-      fetch(`/api/get_training_rating_avg.php?player_id=${PLAYER_ID}`, { credentials: 'same-origin' }),
-      fetch(`/api/get_match_rating_avg.php?player_id=${PLAYER_ID}`, { credentials: 'same-origin' })
+      fetch(`/api/get_training_rating_avg.php?player_id=${window.PLAYER_ID}`, { credentials: 'same-origin' }),
+      fetch(`/api/get_match_rating_avg.php?player_id=${window.PLAYER_ID}`, { credentials: 'same-origin' })
     ]);
 
     let trainJson = null, matchJson = null;
@@ -1022,24 +1036,21 @@ async function loadAdvancedStats() {
     const matchAvgEl = document.getElementById('advMatchAvg');
 
     if (trainAvgEl) {
-  // сначала пробуем avg_all_time (как отдаёт ваш API без month),
-  // если его нет — используем avg
-  const v =
-    (trainJson && trainJson.success && trainJson.avg_all_time != null)
-      ? Number(trainJson.avg_all_time)
-      : (trainJson && trainJson.success && trainJson.avg != null)
-       ? Number(trainJson.avg)
-        : null;
-   trainAvgEl.textContent = (v != null && !isNaN(v)) ? v.toFixed(2) : '—';
- }
+      const v =
+        (trainJson && trainJson.success && trainJson.avg_all_time != null)
+          ? Number(trainJson.avg_all_time)
+          : (trainJson && trainJson.success && trainJson.avg != null)
+            ? Number(trainJson.avg)
+            : null;
+      trainAvgEl.textContent = (v != null && !isNaN(v)) ? v.toFixed(2) : '—';
+    }
 
     if (matchAvgEl) {
-  const v = (matchJson && matchJson.success && matchJson.avg != null)
-     ? Number(matchJson.avg)   // сервер уже присылает округлённое значение
-     : null;
-   matchAvgEl.textContent = (v != null && !isNaN(v)) ? v.toFixed(2) : '—';
-}
-
+      const v = (matchJson && matchJson.success && matchJson.avg != null)
+        ? Number(matchJson.avg)
+        : null;
+      matchAvgEl.textContent = (v != null && !isNaN(v)) ? v.toFixed(2) : '—';
+    }
   } catch (e) {
     console.error(e);
     const box = document.getElementById('advStatsBody');
@@ -1056,9 +1067,7 @@ async function fetchPreviousTrainForRating() {
   try {
     const res = await fetch('/api/get_previous_training.php', { credentials:'same-origin' });
     const text = await res.text();
-    try {
-      return JSON.parse(text);
-    } catch(e) {
+    try { return JSON.parse(text); } catch(e) {
       console.error('API non-JSON:', text.slice(0,500));
       return { success:false };
     }
@@ -1143,9 +1152,7 @@ function setupRateTraining() {
 document.addEventListener('DOMContentLoaded', setupRateTraining);
 </script>
 
-
 <div id="some-missing-id" style="display:none"></div>
 <script src="./js/index.bundle.js"></script>
-
 </body>
 </html>
