@@ -29,13 +29,38 @@ require_once __DIR__ . '/db.php';
         padding:5px 10px; background:#009879; color:#fff; border:none; border-radius:4px; cursor:pointer;
     }
     .save-btn:hover { background:#007f65; }
+
+    input[type="checkbox"] {
+  -webkit-appearance: checkbox !important;
+  appearance: checkbox !important;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
   </style>
 </head>
 <body>
 
   <?php include 'headeradmin.html'; ?>
 
-  
+ <?php
+// проверим соединение и запрос
+$resChange = $db->query("SELECT text FROM fantasy_changes ORDER BY id DESC LIMIT 1");
+if ($resChange === false) {
+    die("Ошибка SQL: " . $db->error);
+}
+$lastChange = '';
+if ($rowChange = $resChange->fetch_assoc()) {
+    $lastChange = $rowChange['text'];
+}
+?>
+<div style="margin-bottom:20px;">
+  <label for="last-change"><b>Последние изменения:</b></label><br>
+  <textarea id="last-change" rows="3" style="width:100%;max-width:600px;"><?= htmlspecialchars($lastChange) ?></textarea>
+  <br>
+  <button id="save-change" class="save-btn" style="margin-top:10px;">Сохранить изменения</button>
+  <span id="save-change-status" style="margin-left:10px;color:#555;"></span>
+</div>
 
 <h1>Fantasy: управление игроками</h1>
 
@@ -54,33 +79,40 @@ require_once __DIR__ . '/db.php';
       <th>Команда</th>
       <th>Стоимость</th>
       <th>Очки</th>
+      <th>Болеет/травма</th>
       <th>Сохранить</th>
     </tr>
   </thead>
   <tbody>
     <?php
-    $sql = "SELECT p.id, p.name, p.team_id, f.cost, f.points
-            FROM players p
-            LEFT JOIN fantasy_players f ON p.id = f.player_id
-            WHERE p.team_id IN (1,2)
-            ORDER BY p.team_id, p.name";
+   $sql = "SELECT p.id, p.name, p.team_id, f.cost, f.points, COALESCE(f.sick, 0) AS sick
+        FROM players p
+        LEFT JOIN fantasy_players f ON p.id = f.player_id
+        WHERE p.team_id IN (1,2)
+        ORDER BY p.team_id, p.name";
     $res = $db->query($sql);
     while ($row = $res->fetch_assoc()):
     ?>
-    <tr>
-      <td><?= $row['id'] ?></td>
-      <td><?= htmlspecialchars($row['name']) ?></td>
-      <td><?= $row['team_id'] ?></td>
-      <td>
-        <input type="number" step="0.1" value="<?= number_format((float)($row['cost'] ?? 0), 1, '.', '') ?>"
-       data-field="cost" data-player-id="<?= $row['id'] ?>">
-      </td>
-      <td>
-        <input type="number" value="<?= (int)($row['points'] ?? 0) ?>"
-               data-field="points" data-player-id="<?= $row['id'] ?>">
-      </td>
-      <td><button class="save-btn" data-player-id="<?= $row['id'] ?>">Сохранить</button></td>
-    </tr>
+   <tr <?= ($row['sick'] ?? 0) ? 'style="background-color:#ffdddd;"' : '' ?>>
+  <td><?= $row['id'] ?></td>
+  <td><?= htmlspecialchars($row['name']) ?></td>
+  <td><?= $row['team_id'] ?></td>
+  <td>
+    <input type="number" step="0.1" value="<?= number_format((float)($row['cost'] ?? 0), 1, '.', '') ?>"
+           data-field="cost" data-player-id="<?= $row['id'] ?>">
+  </td>
+  <td>
+    <input type="number" value="<?= (int)($row['points'] ?? 0) ?>"
+           data-field="points" data-player-id="<?= $row['id'] ?>">
+  </td>
+ <td>
+  <input type="checkbox"
+         data-field="sick"
+         data-player-id="<?= $row['id'] ?>"
+         <?= ($row['sick'] == 1) ? 'checked' : '' ?>>
+</td>
+  <td><button class="save-btn" data-player-id="<?= $row['id'] ?>">Сохранить</button></td>
+</tr>
     <?php endwhile; ?>
   </tbody>
 </table>
@@ -121,12 +153,14 @@ document.addEventListener('click', async (e) => {
 
   const costEl = document.querySelector(`input[data-field="cost"][data-player-id="${playerId}"]`);
   const pointsEl = document.querySelector(`input[data-field="points"][data-player-id="${playerId}"]`);
+  const sickEl = document.querySelector(`input[data-field="sick"][data-player-id="${playerId}"]`);
 
-  const item = {
-    player_id: Number(playerId),
-    cost: toNumber(costEl?.value, true),
-    points: toNumber(pointsEl?.value, false)
-  };
+const item = {
+  player_id: Number(playerId),
+  cost: toNumber(costEl?.value, true),
+  points: toNumber(pointsEl?.value, false),
+  sick: sickEl?.checked ? 1 : 0
+};
 
   try {
     await saveItems([item]);
@@ -146,17 +180,21 @@ saveAllBtn?.addEventListener('click', async () => {
   saveAllBtn.textContent = 'Сохраняю...';
   saveAllStatus.textContent = '';
 
-  const rows = Array.from(document.querySelectorAll('table.styled-table tbody tr'));
-  const items = rows.map(tr => {
-    const playerId = tr.querySelector('.save-btn')?.getAttribute('data-player-id');
-    const costEl = tr.querySelector('input[data-field="cost"]');
-    const pointsEl = tr.querySelector('input[data-field="points"]');
-    return {
-      player_id: Number(playerId),
-      cost: toNumber(costEl?.value, true),
-      points: toNumber(pointsEl?.value, false)
-    };
-  }).filter(x => Number.isFinite(x.player_id) && x.player_id > 0);
+ const rows = Array.from(document.querySelectorAll('table.styled-table tbody tr'));
+const items = rows.map(tr => {
+  const playerId = tr.querySelector('.save-btn')?.getAttribute('data-player-id');
+  const costEl = tr.querySelector('input[data-field="cost"]');
+  const pointsEl = tr.querySelector('input[data-field="points"]');
+  const sickEl = tr.querySelector('input[data-field="sick"]'); // ✅ добавляем
+
+  return {
+    player_id: Number(playerId),
+    cost: toNumber(costEl?.value, true),
+    points: toNumber(pointsEl?.value, false),
+    sick: sickEl?.checked ? 1 : 0   // ✅ теперь работает
+  };
+
+}).filter(x => Number.isFinite(x.player_id) && x.player_id > 0);
 
   try {
     const res = await saveItems(items);
@@ -208,6 +246,39 @@ document.querySelectorAll('input[data-field="cost"]').forEach(input => {
       e.target.value = value.replace(',', '.');
     }
   });
+});
+
+const saveChangeBtn = document.getElementById('save-change');
+const saveChangeStatus = document.getElementById('save-change-status');
+
+saveChangeBtn?.addEventListener('click', async () => {
+  const text = document.getElementById('last-change').value.trim();
+  saveChangeBtn.disabled = true;
+  saveChangeBtn.textContent = 'Сохраняю...';
+  saveChangeStatus.textContent = '';
+
+  try {
+    const resp = await fetch('/api/save_fantasy_change.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text })
+    });
+    const data = await resp.json();
+    if (data.success) {
+      saveChangeStatus.style.color = '#2e7d32';
+      saveChangeStatus.textContent = 'Изменения сохранены';
+      alert('Изменения сохранены');
+    } else {
+      throw new Error(data.message || 'Ошибка сохранения');
+    }
+  } catch (err) {
+    saveChangeStatus.style.color = '#d32f2f';
+    saveChangeStatus.textContent = 'Ошибка: ' + err.message;
+    alert('Ошибка: ' + err.message);
+  } finally {
+    saveChangeBtn.disabled = false;
+    saveChangeBtn.textContent = 'Сохранить изменения';
+  }
 });
 
 </script>

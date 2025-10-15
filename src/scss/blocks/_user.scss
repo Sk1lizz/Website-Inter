@@ -1138,6 +1138,84 @@ button.match-rate-btn:hover {
     margin-bottom: 10px;
 }
 
+/* --- Advanced Stats: Donut Charts (вместо таблицы) --- */
+.adv-charts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin-top: 14px;
+}
+
+.adv-donut {
+    background: $gray_light_25;
+    border-radius: 12px;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
+}
+
+.adv-donut svg {
+    width: 84px;
+    height: 84px;
+}
+
+.adv-donut .ring-bg {
+    stroke: rgba(255, 255, 255, .15);
+}
+
+.adv-donut .ring-val {
+    stroke: $blue_medium;
+    /* основной синий */
+    transition: stroke-dashoffset .4s ease;
+}
+
+.adv-donut .center-text {
+    font-size: 16px;
+    font-weight: 700;
+    fill: $gold;
+    text-anchor: middle;
+    dominant-baseline: middle;
+}
+
+.adv-donut .meta {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.adv-donut .meta .title {
+    font-weight: 700;
+    color: $gold;
+}
+
+.adv-donut .meta .sub {
+    color: $gray_light;
+    font-size: 12px;
+}
+
+.adv-donut .ring-val.green {
+    stroke: #2ecc71;
+}
+
+/* зелёный */
+.adv-donut .ring-val.gold {
+    stroke: #FDC500;
+}
+
+/* золотой */
+.adv-donut .ring-val.blue {
+    stroke: #1e90ff;
+}
+
+/* синий */
+.adv-donut .ring-val.red {
+    stroke: #e74c3c;
+}
+
+/* красный */
+
 /* Медиа-запрос для перехода в две строки при минимальной ширине */
 @media (max-width: 600px) {
     .rating-container {
@@ -1148,4 +1226,210 @@ button.match-rate-btn:hover {
         width: 100%;
         /* Полная ширина на мобильных устройствах */
     }
+}
+
+/* на экранах до 600px — одна колонка */
+@media (max-width: 600px) {
+    #advChartsWrap {
+        grid-template-columns: 1fr !important;
+    }
+
+    #adv-extra-ratings {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+.lk-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 20px;
+    margin-bottom: 20px;
+    /* фикс растяжки */
+    width: 100%;
+    box-sizing: border-box;
+    max-width: 1200px;
+}
+
+.lk-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: #ffcc00;
+    /* как заголовки карточек */
+}
+
+.lk-user {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.lk-greet {
+    font-size: 16px;
+    color: #fff;
+}
+
+.lk-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #444;
+    background: #222;
+}
+
+@media (max-width: 1000px) {
+    .lk-header card {
+        .lk-user {
+            text-align: right;
+        }
+    }
+}
+
+@media (max-width: 600px) {
+    .lk-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 15px;
+    }
+
+    .lk-user {
+        order: -1;
+        /* 👈 переносим приветствие наверх */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        margin-bottom: 10px;
+    }
+
+    .lk-user .lk-greet {
+        font-size: 15px;
+        font-weight: 500;
+    }
+
+    .lk-user .lk-avatar {
+        width: 48px;
+        height: 48px;
+    }
+
+    .xp-header-block {
+        width: 100%;
+        max-width: 300px;
+    }
+
+    .xp-header-title {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 6px;
+    }
+
+    .xp-bar {
+        width: 100%;
+        height: 10px;
+        border-radius: 6px;
+        margin: 6px 0;
+    }
+
+    .xp-progress-text,
+    .xp-spent-text {
+        font-size: 13px;
+        color: #bbb;
+        text-align: center;
+    }
+
+    .xp-spent-text {
+        margin-top: 2px;
+    }
+}
+
+.attendance-charts {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.donut-wrap {
+    text-align: center;
+}
+
+.donut-label {
+    margin-top: 6px;
+    font-size: 14px;
+    color: #ccc;
+}
+
+.attendance-actions {
+    margin-top: 15px;
+}
+
+.attendance-actions .action-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 10px;
+    background: #2a2a2a;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.attendance-actions button {
+    padding: 4px 10px;
+    font-size: 13px;
+    border-radius: 5px;
+    background: #083c7e;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+/* ==== XP Bar (Личный кабинет) ==== */
+.xp-header-block {
+    text-align: center;
+    margin-top: 8px;
+    border-radius: 8px;
+    padding: 10px 15px;
+}
+
+.xp-header-title {
+    color: #ffcc33;
+    font-weight: 600;
+    margin-bottom: 6px;
+    font-size: 15px;
+    letter-spacing: 0.3px;
+}
+
+.xp-level-name {
+    color: #fff;
+}
+
+.xp-bar {
+    height: 10px;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 5px;
+    overflow: hidden;
+    margin-bottom: 5px;
+}
+
+.xp-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #00bfff, #0077ff);
+    border-radius: 5px;
+    transition: width 0.4s ease-in-out;
+}
+
+.xp-progress-text {
+    font-size: 13px;
+    color: #bbb;
+}
+
+.xp-spent-text {
+    margin-top: 4px;
+    font-size: 14px;
+    color: #6b7280;
+    /* серо-стальной */
+    text-align: center;
 }

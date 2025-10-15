@@ -6,8 +6,24 @@ error_reporting(E_ALL);
 session_start();
 require_once 'db.php';
 
+// === Выход из аккаунта ===
+if (isset($_POST['logout'])) {
+    session_destroy();
+    header("Location: user.php");
+    exit;
+}
+
+$stmt = $db->prepare("SELECT name, photo FROM players WHERE id = ?");
+$stmt->bind_param("i", $_SESSION['player_id']);
+$stmt->execute();
+$playerRow = $stmt->get_result()->fetch_assoc();
+
+$playerName = htmlspecialchars($playerRow['name'] ?? 'Игрок');
+$playerPhoto = !empty($playerRow['photo']) ? $playerRow['photo'] : '/img/player/player_0.png';
+
 // === ФУНКЦИИ ===
 function getPaymentAmount($db, $playerId) {
+    // тут берём именно сумму платежа
     $stmt = $db->prepare("SELECT amount FROM payments WHERE player_id = ?");
     $stmt->bind_param("i", $playerId);
     $stmt->execute();
@@ -68,83 +84,78 @@ function getTotalFineAmount($fines) {
 // === АВТОРИЗАЦИЯ ===
 if (!isset($_SESSION['player_id'])) {
     $error = '';
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'], $_POST['pass'])) {
-        $login = $_POST['login'];
-        $pass = $_POST['pass'];
 
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'], $_POST['pass'])) {
+        $login = trim($_POST['login']);
+        $pass  = trim($_POST['pass']);
+
+        // Получаем данные игрока
         $stmt = $db->prepare("SELECT id, name, team_id, password FROM players WHERE login = ?");
         $stmt->bind_param("s", $login);
         $stmt->execute();
         $res = $stmt->get_result()->fetch_assoc();
 
         if ($res && $pass === $res['password']) {
-            if (in_array($res['team_id'], [1, 2])) {
-                $_SESSION['player_id'] = $res['id'];
+            // Проверка: активен ли профиль
+            if (in_array((int)$res['team_id'], [1, 2])) {
+
+                // Устанавливаем сессию
+                $_SESSION['player_id'] = (int)$res['id'];
                 $_SESSION['player_name'] = $res['name'];
-                $_SESSION['team_id'] = $res['team_id'];
+                $_SESSION['team_id'] = (int)$res['team_id'];
+
+                // === 🔄 Пересчёт опыта игрока перед переходом ===
+                $recalcUrl = $_SERVER['DOCUMENT_ROOT'] . "/api/recalc_xp.php?player_id=" . (int)$res['id'];
+                if (file_exists($_SERVER['DOCUMENT_ROOT'] . "/api/recalc_xp.php")) {
+                    // подавляем вывод, чтобы не мешал редиректу
+                    @file_get_contents("http://" . $_SERVER['HTTP_HOST'] . "/api/recalc_xp.php?player_id=" . (int)$res['id']);
+                }
+
+                // Переход в личный кабинет
                 header("Location: user.php");
                 exit;
+
             } else {
-                $error = 'Профиль отключён';
+                $error = 'Профиль отключён.';
             }
         } else {
-            $error = 'Неверный логин или пароль';
+            $error = 'Неверный логин или пароль.';
         }
     }
 
-    echo '<!DOCTYPE html><html lang="ru"><head><meta charset="UTF-8">  <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
-    <link rel="icon" href="/img/favicon-32x32.png" sizes="32x32" type="image/png">
-    <link rel="icon" href="/img/favicon-16x16.png" sizes="16x16" type="image/png">
-    <link rel="apple-touch-icon" href="/img/apple-touch-icon.png" sizes="180x180">
-    <link rel="icon" sizes="192x192" href="/img/android-chrome-192x192.png">
-    <link rel="icon" sizes="512x512" href="/img/android-chrome-512x512.png"> <title>Вход</title>
+    // если игрок не вошёл — показываем форму логина
+    echo '<!DOCTYPE html><html lang="ru"><head><meta charset="UTF-8">
+    <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
+    <title>Вход</title>
     <style>
-    body { background: #f3f6fb; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
-    .login-box {
-        background: #fff;
-        padding: 30px;
-        border-radius: 10px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-        max-width: 320px;
-        width: 90%;
-        text-align: center;
-    }
-    .login-box h2 { margin-bottom: 20px; color: #1c3d7d; }
-    .login-box input {
-        width: 100%;
-        padding: 10px;
-        margin-bottom: 12px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-    }
-    .login-box button {
-        width: 100%;
-        background: #083c7e;
-        color: white;
-        border: none;
-        padding: 10px;
-        border-radius: 5px;
-        font-weight: bold;
-        cursor: pointer;
-    }
-    .login-box .error { color: red; margin-bottom: 10px; }
+      body { background:#f3f6fb; display:flex; align-items:center; justify-content:center; height:100vh; margin:0; }
+      .login-box {
+        background:#fff; padding:30px; border-radius:10px;
+        box-shadow:0 4px 20px rgba(0,0,0,0.1);
+        max-width:320px; width:90%; text-align:center;
+      }
+      .login-box h2 { margin-bottom:20px; color:#1c3d7d; }
+      .login-box input {
+        width:100%; padding:10px; margin-bottom:12px;
+        border:1px solid #ccc; border-radius:5px;
+      }
+      .login-box button {
+        width:100%; background:#083c7e; color:white;
+        border:none; padding:10px; border-radius:5px;
+        font-weight:bold; cursor:pointer;
+      }
+      .login-box .error { color:red; margin-bottom:10px; }
     </style>
-     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     </head><body>
     <div class="login-box">
-        <h2>Личный кабинет</h2>';
-    if (!empty($error)) echo '<div class="error">' . $error . '</div>';
+      <h2>Личный кабинет</h2>';
+    if (!empty($error)) echo '<div class="error">' . htmlspecialchars($error) . '</div>';
     echo '<form method="post">
         <input type="text" name="login" placeholder="Логин" required>
         <input type="password" name="pass" placeholder="Пароль" required>
         <button type="submit">Войти</button>
     </form></div></body></html>';
-    exit;
-}
-
-if (isset($_POST['logout'])) {
-    session_destroy();
-    header("Location: user.php");
     exit;
 }
 
@@ -216,7 +227,139 @@ $canChangeBackground = (int)$bg['can_change_background'];
 
 <body>
 <div class="user_page">
-  <h1 style="text-align:center">Добро пожаловать, <?= htmlspecialchars($_SESSION['player_name']) ?>!</h1>
+
+
+<?php
+// === XP и уровни ===
+$stmt = $db->prepare("SELECT xp_total, xp_spent FROM players WHERE id = ?");
+$stmt->bind_param("i", $_SESSION['player_id']);
+$stmt->execute();
+$xpData = $stmt->get_result()->fetch_assoc();
+
+$xp = (int)($xpData['xp_total'] ?? 0);
+$xpSpent = (int)($xpData['xp_spent'] ?? 0);
+
+$levels = [
+    ['limit' => 500, 'name' => 'Новичок (1 lvl)'],
+    ['limit' => 1000, 'name' => 'Перспективный (2 lvl)'],
+    ['limit' => 2500, 'name' => 'Футболист (3 lvl)'],
+    ['limit' => 5000, 'name' => 'Опытный (4 lvl)'],
+    ['limit' => 7500, 'name' => 'Старожил (5 lvl)'],
+    ['limit' => 10000, 'name' => 'Мастер (6 lvl)'],
+    ['limit' => 12500, 'name' => 'Герой (7 lvl)'],
+    ['limit' => 15000, 'name' => 'Магистр (8 lvl)'],
+    ['limit' => 20000, 'name' => 'Посвященный (9 lvl)'],
+    ['limit' => 25000, 'name' => 'Ветеран (10 lvl)'],
+    ['limit' => 30000, 'name' => 'Виртуоз (11 lvl)'],
+    ['limit' => 35000, 'name' => 'Элита (12 lvl)'],
+    ['limit' => 45000, 'name' => 'Чемпион (13 lvl)'],
+    ['limit' => 60000, 'name' => 'Хранитель (14 lvl)'],
+    ['limit' => 75000, 'name' => 'Вершитель (15 lvl)'],
+    ['limit' => 100000, 'name' => 'Избранный (16 lvl)'],
+    ['limit' => 125000, 'name' => 'Мудрец (17 lvl)'],
+    ['limit' => 150000, 'name' => 'Наставник (18 lvl)'],
+    ['limit' => 175000, 'name' => 'Архонт (19 lvl)'],
+    ['limit' => 200000, 'name' => 'Маэстро (20 lvl)'],
+    ['limit' => 225000, 'name' => 'Хранитель огня (21 lvl)'],
+    ['limit' => 250000, 'name' => 'Лидер эпохи (22 lvl)'],
+    ['limit' => 275000, 'name' => 'Идеал (23 lvl)'],
+    ['limit' => 300000, 'name' => 'Миф (24 lvl)'],
+    ['limit' => 350000, 'name' => 'Символ клуба (25 lvl)'],
+    ['limit' => 400000, 'name' => 'Бессмертный (26 lvl)'],
+    ['limit' => 450000, 'name' => 'Наследие (27 lvl)'],
+    ['limit' => 500000, 'name' => 'Полубог (28 lvl)'],
+    ['limit' => PHP_INT_MAX, 'name' => 'Легенда (29 lvl)']
+];
+
+$currentName = 'Новичок';
+$nextName = '—';
+$prevLimit = 0;
+$nextLimit = $levels[0]['limit'];
+
+foreach ($levels as $i => $lvl) {
+    if ($xp < $lvl['limit']) {
+        $currentName = $i > 0 ? $levels[$i - 1]['name'] : 'Новичок';
+        $prevLimit = $i > 0 ? $levels[$i - 1]['limit'] : 0;
+        $nextName = $lvl['name'];
+        $nextLimit = $lvl['limit'];
+        break;
+    }
+}
+
+$progressPercent = ($xp - $prevLimit) / ($nextLimit - $prevLimit) * 100;
+$progressPercent = max(0, min(100, round($progressPercent)));
+?>
+
+<?php
+// === Ачивки игрока ===
+$playerId = (int)$_SESSION['player_id'];
+
+// все ачивки игрока с датой
+$sqlAllSuccess = $db->prepare("
+  SELECT s.id, s.title, s.description, s.points, ps.awarded_at
+  FROM player_success ps
+  JOIN Success s ON s.id = ps.success_id
+  WHERE ps.player_id = ?
+  ORDER BY ps.awarded_at DESC
+");
+$sqlAllSuccess->bind_param("i", $playerId);
+$sqlAllSuccess->execute();
+$allSuccess = $sqlAllSuccess->get_result()->fetch_all(MYSQLI_ASSOC);
+
+// последние 5
+$sqlLast5 = $db->prepare("
+  SELECT s.id, s.title, s.description, s.points, ps.awarded_at
+  FROM player_success ps
+  JOIN Success s ON s.id = ps.success_id
+  WHERE ps.player_id = ?
+  ORDER BY ps.awarded_at DESC
+  LIMIT 5
+");
+$sqlLast5->bind_param("i", $playerId);
+$sqlLast5->execute();
+$lastSuccess = $sqlLast5->get_result()->fetch_all(MYSQLI_ASSOC);
+
+// счётчики (всего доступных ачивок и сумма очков игрока)
+$totalSuccessRes = $db->query("SELECT COUNT(*) AS cnt FROM Success");
+$totalSuccess = (int)($totalSuccessRes->fetch_assoc()['cnt'] ?? 0);
+
+$mySuccessCount = count($allSuccess);
+$mySuccessPoints = 0;
+foreach ($allSuccess as $s) { $mySuccessPoints += (int)$s['points']; }
+
+// формат даты
+function formatSuccessDate($dt) {
+  if (!$dt) return '';
+  $ts = strtotime($dt);
+  return date('d.m.Y', $ts);
+}
+?>
+
+<div class="lk-header card">
+  <div class="lk-title">Личный кабинет</div>
+
+  <div class="xp-header-block">
+    <div class="xp-header-title">
+      Титул: <span class="xp-level-name"><?= htmlspecialchars($currentName) ?></span>
+    </div>
+    <div class="xp-bar">
+      <div class="xp-fill" style="width: <?= $progressPercent ?>%;"></div>
+    </div>
+    <div class="xp-progress-text">
+      <?= number_format($xp, 0, '.', ' ') ?> XP / <?= number_format($nextLimit, 0, '.', ' ') ?> до <?= htmlspecialchars($nextName) ?>
+    </div>
+    <div class="xp-spent-text">
+  Потрачено: <?= number_format($xpSpent, 0, '.', ' ') ?> XP
+</div>
+
+  </div>
+
+   <div class="lk-user">
+    <span class="lk-greet">Привет, <?= $playerName ?>!</span>
+    <img src="<?= $playerPhoto ?>" alt="avatar" class="lk-avatar">
+  </div>
+</div>
+
 
   <div class="dashboard-grid">
     <!-- Первая линия: Крупный блок слева - Продвинутая статистика, рядом - Месячный взнос -->
@@ -351,6 +494,70 @@ $canChangeBackground = (int)$bg['can_change_background'];
       </div>
     </div>
   </div>
+
+  <!-- Четвёртая линия: Ачивки -->
+<div class="bottom-row">
+  <!-- Последние полученные ачивки -->
+  <div class="card success">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <h2>Последние полученные ачивки</h2>
+      <a href="/success.html" style="font-size:14px; color:#007BFF; text-decoration:underline;">Посмотреть все</a>
+    </div>
+
+    <?php if (empty($lastSuccess)): ?>
+      <p>Пока нет полученных ачивок.</p>
+    <?php else: ?>
+      <div class="success-list">
+        <?php foreach ($lastSuccess as $s): ?>
+          <?php
+            $img = "/img/success/success-" . (int)$s['id'] . ".png";
+            $date = formatSuccessDate($s['awarded_at']);
+          ?>
+          <div class="success-item" style="margin-bottom:14px; padding-top:10px;">
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
+              <img src="<?= $img ?>" onerror="this.src='/img/success/success-0.png'" width="50" height="50" style="border-radius:6px; flex-shrink:0;">
+              <div style="flex:1;">
+                <div style="font-weight:bold;"><?= htmlspecialchars($s['title']) ?></div>
+                <div style="color:#c5c2c2; font-size:14px;"><?= htmlspecialchars($s['description']) ?></div>
+                <div style="color:#8c8c8c; font-size:12px; margin-top:3px;">Получено: <?= $date ?></div>
+              </div>
+              <div style="color:#2D62B5; font-weight:bold; font-size:14px; white-space:nowrap;"><?= (int)$s['points'] ?> очков</div>
+            </div>
+          </div>
+        <?php endforeach; ?>
+      </div>
+    <?php endif; ?>
+  </div>
+
+  <!-- Мои ачивки (все полученные) -->
+  <div class="card success">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <h2>Мои ачивки <span style="font-size:16px; font-weight:normal; color:#9aa3b2;">(<?= $mySuccessCount ?> / <?= $totalSuccess ?> • <?= $mySuccessPoints ?> очков)</span></h2>
+      <a href="/success.html" style="font-size:14px; color:#007BFF; text-decoration:underline;">Посмотреть все</a>
+    </div>
+
+    <?php if (empty($allSuccess)): ?>
+      <p>Пока нет полученных ачивок.</p>
+    <?php else: ?>
+      <div class="success-list">
+        <?php foreach ($allSuccess as $s): ?>
+          <?php $img = "/img/success/success-" . (int)$s['id'] . ".png"; ?>
+          <div class="success-item" style="margin-bottom:14px; padding-top:10px;">
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
+              <img src="<?= $img ?>" onerror="this.src='/img/success/success-0.png'" width="50" height="50" style="border-radius:6px; flex-shrink:0;">
+              <div style="flex:1;">
+                <div style="font-weight:bold;"><?= htmlspecialchars($s['title']) ?></div>
+                <div style="color:#c5c2c2; font-size:14px;"><?= htmlspecialchars($s['description']) ?></div>
+              </div>
+              <div style="color:#2D62B5; font-weight:bold; font-size:14px; white-space:nowrap;"><?= (int)$s['points'] ?> очков</div>
+            </div>
+          </div>
+        <?php endforeach; ?>
+      </div>
+    <?php endif; ?>
+  </div>
+</div>
+
 </div>
 
 <!-- Глобальные переменные -->
@@ -986,6 +1193,7 @@ async function loadAdvancedStats() {
 
     const d = json.data, t = d.totals, r = d.ranks, isGK = !!d.is_gk;
 
+
     const rows = [
       `<tr><td>Матчи</td><td>${t.matches}</td><td>${t.avg_goals_per_match !== null ? t.avg_goals_per_match : '—'}</td><td>${r.team.matches}</td><td>${r.all_time.matches}</td></tr>`,
       `<tr><td>Голы</td><td>${t.goals}</td><td>${t.avg_goals_per_match}</td><td>${r.team.goals}</td><td>${r.all_time.goals}</td></tr>`,
@@ -998,29 +1206,161 @@ async function loadAdvancedStats() {
       );
     }
 
-    box.innerHTML = `
-      <table class="attendance-table">
-        <thead><tr>
-          <th>Показатель</th><th>Количество</th><th>В среднем за матч</th><th>Место в команде</th><th>Место за всё время</th>
-        </tr></thead>
-        <tbody>${rows.join('')}</tbody>
-      </table>
-      ${isGK && (t.avg_conceded_per_match === null || t.matches < 15)
-        ? '<p style="margin-top:8px;font-size:12px;color:#666;">* «Средне пропущено/матч» и ранги показываются для вратарей с ≥ 15 матчей.</p>'
+box.innerHTML = `
+  <div class="adv-charts" id="advChartsWrap"></div>
+
+  <!-- два пончика рейтингов -->
+  <div class="adv-charts" id="adv-extra-ratings">
+    <div id="trainDonutWrap"></div>
+    <div id="matchDonutWrap"></div>
+  </div>
+`;
+
+const chartsWrap = document.getElementById('advChartsWrap');
+renderAdvCharts(chartsWrap, d.totals, d.is_gk, d.ranks);
+
+function renderAdvCharts(container, t, isGK, r = {team:{}, all_time:{}, gk:{}}) {
+  const parseNum = v => v != null && v !== '-' ? parseFloat(v) : null;
+
+  const items = [
+    {
+      title: 'Матчи',
+      val: t.matches ?? 0,
+      avg: null,               // без среднего
+      teamRank: r.team.matches,
+      allRank: r.all_time.matches,
+      forceFullGold: true      // всегда золотой круг
+    },
+    {
+      title: 'Голы',
+      val: t.goals ?? 0,
+      avg: parseNum(t.avg_goals_per_match),
+      teamRank: r.team.goals,
+      allRank: r.all_time.goals,
+      max: 1.0
+    },
+    {
+      title: 'Ассисты',
+      val: t.assists ?? 0,
+      avg: parseNum(t.avg_assists_per_match),
+      teamRank: r.team.assists,
+      allRank: r.all_time.assists,
+      max: 1.0
+    },
+
+   { 
+  title: 'Гол + Пас', 
+  val: t.goal_assist ?? 0, 
+  avg: t.avg_goal_assist_per_match != null ? parseFloat(t.avg_goal_assist_per_match) : null, 
+  teamRank: r.team.goal_assist, 
+  allRank: r.all_time.goal_assist, 
+  max: 1.0 
+}
+
+
+  ];
+
+  if (isGK) {
+    items.push(
+      {
+        title: 'Матчи на ноль',
+        val: t.zeromatch ?? 0,
+        avg: parseNum(t.avg_zeromatch_per_match),
+        teamRank: r.team.zeromatch,
+        allRank: r.all_time.zeromatch,
+        max: 1.0
+      },
+      {
+        title: 'Пропущено',
+        val: t.lostgoals ?? 0,
+        avg: parseNum(t.avg_conceded_per_match),
+        teamRank: r.team.lostgoals,
+        allRank: r.all_time.lostgoals,
+        max: 3.0
+      }
+    );
+  }
+
+  container.innerHTML = items.map(it => createDonut(it)).join('');
+  const cols = (items.length === 4) ? 2 : (items.length === 6) ? 3 : Math.min(items.length, 3);
+container.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+}
+
+function createDonut(it) {
+  const R = 34;
+  const C = 2 * Math.PI * R;
+const showAvg = it.displayAvg !== false;          // по умолчанию показываем, но рейтинги его отключают
+const singleColorClass = it.forceSingleColor || null; // 'rating-blue' для рейтингов
+
+ let ratio = 0;
+if (it.forceFullGold) {
+  ratio = 100;
+} else if (it.avg != null && it.max != null && it.max > 0) {
+  ratio = (it.avg / it.max) * 100;
+}
+ratio = Math.max(0, Math.min(100, ratio));
+
+// Если просили один цвет — рисуем одним сегментом
+let segments = [];
+if (it.forceFullGold) {
+  segments.push({ color: 'gold', percent: 100 });
+} else if (singleColorClass && ratio > 0) {
+  segments = [{ color: singleColorClass, percent: ratio }];
+} else {
+  // старая многоцветная логика
+  if (ratio > 300) {
+    segments = [
+      { color: 'green', percent: 100 },
+      { color: 'gold',  percent: 100 },
+      { color: 'blue',  percent: 100 },
+      { color: 'red',   percent: Math.min(100, ratio - 300) }
+    ];
+  } else if (ratio > 200) {
+    segments = [
+      { color: 'green', percent: 100 },
+      { color: 'gold',  percent: 100 },
+      { color: 'blue',  percent: ratio - 200 }
+    ];
+  } else if (ratio > 100) {
+    segments = [
+      { color: 'green', percent: 100 },
+      { color: 'gold',  percent: ratio - 100 }
+    ];
+  } else if (ratio > 0) {
+    segments = [{ color: 'green', percent: ratio }];
+  }
+}
+
+  // Рисуем сегменты, сдвигая каждый следующий
+  let offset = 0;
+  const circles = segments.map(seg => {
+    const len = (C * seg.percent) / 100;
+    const dasharray = `${len} ${C - len}`;
+    const dashoffset = -offset;
+    offset += len;
+    return `<circle class="ring-val ${seg.color}" cx="50" cy="50" r="${R}" fill="none"
+              stroke-width="10" stroke-dasharray="${dasharray}" stroke-dashoffset="${dashoffset}"
+              stroke-linecap="butt"></circle>`;
+  }).join('');
+
+ return `
+  <div class="adv-donut">
+    <svg viewBox="0 0 100 100" aria-label="${it.title}">
+      <circle class="ring-bg" cx="50" cy="50" r="${R}" fill="none" stroke-width="10"></circle>
+      ${circles}
+      <text class="center-text" x="50" y="50">${it.val != null ? it.val : '—'}</text>
+    </svg>
+    <div class="meta">
+      <div class="title">${it.title}</div>
+      ${(it.displayAvg !== false && it.avg != null) 
+        ? `<div class="sub">среднее: ${(+it.avg).toFixed(2)}</div>` 
         : ''}
-    <div id="adv-extra-ratings" style="margin-top:10px;">
-      <div class="rating-container">
-        <div class="rating-card">
-          <h2><img src="/img/icon/rating.png" alt="Тренировочный рейтинг" class="icon-title">Мой тренировочный рейтинг</h2>
-          <div class="rating-value" id="advTrainAvg">—</div>
-        </div>
-        <div class="rating-card">
-          <h2><img src="/img/icon/award33.png" alt="Игровой рейтинг" class="icon-title">Мой игровой рейтинг</h2>
-          <div class="rating-value" id="advMatchAvg">—</div>
-        </div>
-      </div>
+      <div class="sub">Место в команде: ${it.teamRank ?? '—'}</div>
+      <div class="sub">Место общее: ${it.allRank ?? '—'}</div>
     </div>
-    `;
+  </div>
+`;
+}
 
     // Догружаем два средних параллельно
     const [trainRes, matchRes] = await Promise.all([
@@ -1034,6 +1374,45 @@ async function loadAdvancedStats() {
 
     const trainAvgEl = document.getElementById('advTrainAvg');
     const matchAvgEl = document.getElementById('advMatchAvg');
+
+    // считаем средние значения
+let trainV = null;
+if (trainJson && trainJson.success) {
+  trainV = (trainJson.avg_all_time ?? trainJson.avg ?? null);
+  if (trainV != null) trainV = Number(trainV);
+}
+
+let matchV = null;
+if (matchJson && matchJson.success) {
+  matchV = (matchJson.avg ?? null);
+  if (matchV != null) matchV = Number(matchV);
+}
+
+// --- рендер двух пончиков без подписи "среднее", синим цветом ---
+const trainWrap = document.getElementById('trainDonutWrap');
+const matchWrap = document.getElementById('matchDonutWrap');
+
+if (trainWrap) {
+  trainWrap.innerHTML = createDonut({
+    title: 'Мой тренировочный рейтинг',
+    val: (trainV != null && !isNaN(trainV)) ? trainV.toFixed(2) : '—',
+    avg: (trainV != null && !isNaN(trainV)) ? trainV : null, // используем для заливки
+    max: 10,
+    displayAvg: false,                 // НЕ показывать "среднее"
+    forceSingleColor: 'rating-blue'    // заливаем одним синим цветом
+  });
+}
+
+if (matchWrap) {
+  matchWrap.innerHTML = createDonut({
+    title: 'Мой игровой рейтинг',
+    val: (matchV != null && !isNaN(matchV)) ? matchV.toFixed(2) : '—',
+    avg: (matchV != null && !isNaN(matchV)) ? matchV : null,
+    max: 10,
+    displayAvg: false,
+    forceSingleColor: 'rating-blue'
+  });
+}
 
     if (trainAvgEl) {
       const v =

@@ -18,20 +18,24 @@ if (empty($items)) {
 }
 
 $saved = 0;
+
 $stmt = $db->prepare("
-  INSERT INTO fantasy_players (player_id, cost, points)
-  VALUES (?, ?, ?)
-  ON DUPLICATE KEY UPDATE cost = VALUES(cost), points = VALUES(points)
+  INSERT INTO fantasy_players (player_id, cost, points, sick)
+  VALUES (?, ?, ?, ?)
+  ON DUPLICATE KEY UPDATE 
+    cost = VALUES(cost), 
+    points = VALUES(points),
+    sick = VALUES(sick)
 ");
 
 foreach ($items as $it) {
   $pid = (int)($it['player_id'] ?? 0);
   $cost = (float)($it['cost'] ?? 0);
   $points = (int)($it['points'] ?? 0);
+  $sick = isset($it['sick']) ? (int)$it['sick'] : 0;
 
-  // Проверка корректности данных
   if ($pid > 0 && is_numeric($cost) && is_numeric($points)) {
-    $stmt->bind_param('idi', $pid, $cost, $points);
+    $stmt->bind_param('idii', $pid, $cost, $points, $sick);
     if ($stmt->execute()) {
       $saved++;
     }

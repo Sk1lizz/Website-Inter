@@ -2,7 +2,7 @@
 session_start();
 
 $valid_user = 'coach';
-$valid_pass = '!coach_Inter';
+$valid_pass = 'Inter_Moscow1';
 
 if (!isset($_SESSION['auth'])) {
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'], $_POST['pass'])) {

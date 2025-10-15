@@ -887,10 +887,6 @@ while ($r = $q->fetch_assoc()) {
             </ul>
         </div>
 
-        <div class="rules-section">
-    <button class="btn" id="openChangesBtn">Последние изменения</button>
-</div>
-
         <?php
 // ===== Расчёт очков выбранных игроков за прошедшие выходные для текущей команды =====
 
@@ -1291,16 +1287,6 @@ $weekTeamTotal = array_sum(array_column($weekRows, 'points'));
         </div>
         <div class="modal-buttons">
             <button class="btn" onclick="closeSquadModal()">Закрыть</button>
-        </div>
-    </div>
-</div>
-
-<div id="changesModal" class="modal" style="display:none;">
-    <div class="modal-content">
-        <h3>Последние изменения</h3>
-        <div id="changesContent" style="text-align:left; max-height:300px; overflow:auto; white-space:pre-wrap;"></div>
-        <div class="modal-buttons">
-            <button class="btn" onclick="closeChangesModal()">Закрыть</button>
         </div>
     </div>
 </div>
@@ -2048,33 +2034,6 @@ squadModal.style.display = 'flex';
 
 <script>
     console.log(<?php echo json_encode($debugLogs); ?>);
-</script>
-
-<script>
-    // Открыть модалку изменений
-document.getElementById('openChangesBtn').addEventListener('click', function() {
-    fetch('/api/get_fantasy_changes.php')
-        .then(r => r.json())
-        .then(data => {
-            const cont = document.getElementById('changesContent');
-            if (data.success) {
-                cont.textContent = data.text + "\n\nОбновлено: " + data.updated_at;
-            } else {
-                cont.textContent = data.message || "Изменений пока нет.";
-            }
-            document.getElementById('changesModal').style.display = 'flex';
-        })
-        .catch(err => {
-            console.error(err);
-            document.getElementById('changesContent').textContent = "Ошибка загрузки изменений.";
-            document.getElementById('changesModal').style.display = 'flex';
-        });
-});
-
-function closeChangesModal() {
-    document.getElementById('changesModal').style.display = 'none';
-}
-
 </script>
 
 </body>

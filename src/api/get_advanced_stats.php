@@ -106,8 +106,11 @@ try {
     $meZero    = (int)($meSum['zeromatch'] ?? 0);
     $meLost    = (int)($meSum['lostgoals'] ?? 0);
 
+    // Новый показатель: Гол+Пас
+    $meGA = $meGoals + $meAssists;
     $avgGoalsPerMatch     = $meMatches > 0 ? round($meGoals / $meMatches, 2) : 0.00;
     $avgAssistsPerMatch   = $meMatches > 0 ? round($meAssists / $meMatches, 2) : 0.00;
+    $avgGAPerMatch        = $meMatches > 0 ? round($meGA / $meMatches, 2) : 0.00;
     $avgZeroPerMatch      = $meMatches > 0 ? round($meZero / $meMatches, 2) : 0.00;
     $avgConcededPerMatch  = ($isGK && $meMatches >= 15) ? round($meLost / $meMatches, 2) : null;
 
@@ -174,6 +177,13 @@ try {
     $teamPlaceMatches = $rankDesc($vals('matches', $teamRows), $meMatches);
     $teamPlaceGoals   = $rankDesc($vals('goals', $teamRows), $meGoals);
     $teamPlaceAssists = $rankDesc($vals('assists', $teamRows), $meAssists);
+
+    // Новый: место по Гол+Пас в команде
+    $valsGA = array_map(function($row) {
+        return (int)$row['goals'] + (int)$row['assists'];
+    }, $teamRows);
+    $teamPlaceGA = $rankDesc($valsGA, $meGA);
+
     $teamPlaceZero    = $t25HasZero && $allHasZero && $isGK && $meMatches >= 15 ? $rankDesc($vals('zeromatch', $teamRowsFiltered), $meZero) : '-';
     $teamPlaceLost    = $t25HasLost && $allHasLost && $isGK && $meMatches >= 15 ? $rankAsc($vals('lostgoals', $teamRowsFiltered), $meLost) : '-';
 
@@ -208,6 +218,13 @@ try {
     $allPlaceMatches = $rankDesc($vals('matches', $allRows), $meMatches);
     $allPlaceGoals   = $rankDesc($vals('goals', $allRows), $meGoals);
     $allPlaceAssists = $rankDesc($vals('assists', $allRows), $meAssists);
+
+    // Новый: место по Гол+Пас за всё время
+    $allValsGA = array_map(function($row) {
+        return (int)$row['goals'] + (int)$row['assists'];
+    }, $allRows);
+    $allPlaceGA = $rankDesc($allValsGA, $meGA);
+
     $allPlaceZero    = $t25HasZero && $allHasZero && $isGK && $meMatches >= 15 ? $rankDesc($vals('zeromatch', $allRowsFiltered), $meZero) : '-';
     $allPlaceLost    = $t25HasLost && $allHasLost && $isGK && $meMatches >= 15 ? $rankAsc($vals('lostgoals', $allRowsFiltered), $meLost) : '-';
 
@@ -266,27 +283,31 @@ try {
                 'matches'                  => $meMatches,
                 'goals'                    => $meGoals,
                 'assists'                  => $meAssists,
+                'goal_assist'              => $meGA,
                 'zeromatch'                => $meZero,
                 'lostgoals'                => $meLost,
                 'avg_goals_per_match'      => number_format($avgGoalsPerMatch, 2, '.', ''),
                 'avg_assists_per_match'    => number_format($avgAssistsPerMatch, 2, '.', ''),
+                'avg_goal_assist_per_match'=> number_format($avgGAPerMatch, 2, '.', ''),
                 'avg_zeromatch_per_match'  => number_format($avgZeroPerMatch, 2, '.', ''),
                 'avg_conceded_per_match'   => ($avgConcededPerMatch !== null ? number_format($avgConcededPerMatch, 2, '.', '') : null)
             ],
             'ranks' => [
                 'team'     => [
-                    'matches' => $teamPlaceMatches,
-                    'goals'   => $teamPlaceGoals,
-                    'assists' => $teamPlaceAssists,
-                    'zeromatch' => $teamPlaceZero,
-                    'lostgoals' => $teamPlaceLost
+                    'matches'     => $teamPlaceMatches,
+                    'goals'       => $teamPlaceGoals,
+                    'assists'     => $teamPlaceAssists,
+                    'goal_assist' => $teamPlaceGA,
+                    'zeromatch'   => $teamPlaceZero,
+                    'lostgoals'   => $teamPlaceLost
                 ],
                 'all_time' => [
-                    'matches' => $allPlaceMatches,
-                    'goals'   => $allPlaceGoals,
-                    'assists' => $allPlaceAssists,
-                    'zeromatch' => $allPlaceZero,
-                    'lostgoals' => $allPlaceLost
+                    'matches'     => $allPlaceMatches,
+                    'goals'       => $allPlaceGoals,
+                    'assists'     => $allPlaceAssists,
+                    'goal_assist' => $allPlaceGA,
+                    'zeromatch'   => $allPlaceZero,
+                    'lostgoals'   => $allPlaceLost
                 ],
                 'gk'       => ['avg_conceded_rank' => $gkRank]
             ]

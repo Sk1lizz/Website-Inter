@@ -370,14 +370,14 @@ for (const div of playerDivs) {
     if (!checkbox.checked) continue;
 
 players[playerId] = {
-  played: checkbox.checked,
+   played: checkbox.checked ? 1 : 0,
   goals: +div.querySelector(`input[name="players[${playerId}][goals]"]`)?.value || 0,
   assists: +div.querySelector(`input[name="players[${playerId}][assists]"]`)?.value || 0,
   goals_conceded: +div.querySelector(`input[name="players[${playerId}][goals_conceded]"]`)?.value || 0,
-  clean_sheet: !!div.querySelector(`input[name="players[${playerId}][clean_sheet]"]`)?.checked,
-  yellow_card: !!div.querySelector(`input[name="players[${playerId}][yellow_card]"]`)?.checked,
-  red_card: !!div.querySelector(`input[name="players[${playerId}][red_card]"]`)?.checked,
-  missed_penalty: !!div.querySelector(`input[name="players[${playerId}][missed_penalty]"]`)?.checked
+  clean_sheet: div.querySelector(`input[name="players[${playerId}][clean_sheet]"]`)?.checked ? 1 : 0,
+  yellow_cards: div.querySelector(`input[name="players[${playerId}][yellow_card]"]`)?.checked ? 1 : 0,
+  red_cards: div.querySelector(`input[name="players[${playerId}][red_card]"]`)?.checked ? 1 : 0,
+  missed_penalties: div.querySelector(`input[name="players[${playerId}][missed_penalty]"]`)?.checked ? 1 : 0
 };
 
     const lateCheckbox = div.querySelector(`input[name="players[${playerId}][late]"]`);
@@ -396,11 +396,11 @@ players[playerId] = {
 }
 
         // === 3. Отправляем игроков ===
-        const playerRes = await fetch("/api/match_players.php", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ match_id: matchId, year, players })
-        });
+       const playerRes = await fetch("/api/match_players.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ match_id: matchId, players })
+});
 
         if (!playerRes.ok) {
             const err = await playerRes.json();
