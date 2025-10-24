@@ -428,6 +428,23 @@
         }
     }
 
+    .philosophy {
+        display: flex;
+        font-size: 18px;
+        background-color: $gray_black;
+
+        .text {
+            color: $light;
+            font-family: PLAY-REGULAR;
+            padding: 10px;
+
+
+            p {
+                padding-top: 10px;
+            }
+        }
+    }
+
 }
 
 @import "media/_peshekhonov.scss";

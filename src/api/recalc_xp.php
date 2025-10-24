@@ -126,6 +126,25 @@ $xpTotal += $totalZeromatch * 250;       // матчи на ноль
 $xpTotal += $successPoints;              // сумма points из success_list
 $xpTotal += $awardsPoints;               // награды * 1000
 
+// 7.1) ➕ XP за посещаемость тренировок (zanetti_priz * 25)
+$trainingXP = 0;
+
+// player_statistics_2025
+$stmt = $db->prepare("SELECT COALESCE(SUM(zanetti_priz), 0) AS total FROM player_statistics_2025 WHERE player_id = ?");
+$stmt->bind_param("i", $playerId);
+$stmt->execute();
+$res1 = $stmt->get_result()->fetch_assoc();
+$trainingXP += ((int)($res1['total'] ?? 0)) * 25;
+
+// player_statistics_all
+$stmt = $db->prepare("SELECT COALESCE(SUM(zanetti_priz), 0) AS total FROM player_statistics_all WHERE player_id = ?");
+$stmt->bind_param("i", $playerId);
+$stmt->execute();
+$res2 = $stmt->get_result()->fetch_assoc();
+$trainingXP += ((int)($res2['total'] ?? 0)) * 25;
+
+$xpTotal += $trainingXP;
+
 // 8) апдейт игрока
 $stmt = $db->prepare("UPDATE players SET xp_total = ?, xp_last_recalc = NOW() WHERE id = ?");
 if (!$stmt) {
@@ -151,6 +170,7 @@ echo json_encode([
         'zeromatch'      => $totalZeromatch,
         'success_points' => $successPoints,
         'awards_count'   => $awardsCount,
-        'awards_points'  => $awardsPoints
+        'awards_points'  => $awardsPoints,
+        'training_xp'    => $trainingXP       // 👈 добавили
     ]
 ], JSON_UNESCAPED_UNICODE);

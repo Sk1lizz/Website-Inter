@@ -118,11 +118,12 @@ async function loadOrders(){
       <td>${o.variant_size || '-'}</td>
       <td>${o.price} XP</td>
       <td>
-        <select class="status" onchange="updateStatus(${o.id}, this.value)">
-          <option value="ожидает" ${o.status==='ожидает'?'selected':''}>ожидает</option>
-          <option value="принят" ${o.status==='принят'?'selected':''}>принят</option>
-          <option value="выполнен" ${o.status==='выполнен'?'selected':''}>выполнен</option>
-        </select>
+       <select class="status" onchange="updateStatus(${o.id}, this.value)">
+  <option value="ожидает" ${o.status==='ожидает'?'selected':''}>ожидает</option>
+  <option value="в обработке" ${o.status==='в обработке'?'selected':''}>в обработке</option>
+  <option value="выдано" ${o.status==='выдано'?'selected':''}>выдано</option>
+  <option value="отменено" ${o.status==='отменено'?'selected':''}>отменено</option>
+</select>
       </td>
       <td>${o.purchased_at}</td>
     </tr>

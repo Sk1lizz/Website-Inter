@@ -342,7 +342,42 @@ if (!isset($_SESSION['admin_logged_in'])):
         </form>
       </section>
     </div>
+
+    <section class="card">
+  <h2>Новички команды (≤20 тренировок)</h2>
+  <div class="table-wrap">
+    <table id="tbl-rookies">
+      <thead>
+        <tr>
+          <th>Игрок</th>
+          <th>Посещено тренировок</th>
+        </tr>
+      </thead>
+      <tbody><tr><td colspan="2">Загрузка…</td></tr></tbody>
+    </table>
   </div>
+</section>
+
+      <!-- Игроки, давно не игравшие -->
+<section class="card">
+  <h2>Игроки, давно не играли</h2>
+  <div class="table-wrap">
+    <table id="tbl-inactive">
+      <thead>
+        <tr>
+          <th>Игрок</th>
+          <th>Последний матч</th>
+          <th>Дней назад</th>
+        </tr>
+      </thead>
+      <tbody><tr><td colspan="3">Загрузка…</td></tr></tbody>
+    </table>
+  </div>
+</section>
+
+  </div>
+
+
 </div>
 
 <script>
@@ -570,28 +605,43 @@ if (!isset($_SESSION['admin_logged_in'])):
       const poolM = [], poolG = [], poolA = [];
       let hasToday = false;
 
-      for (const s of clean){
-        // МАТЧИ
-        const nextM = nextHundred(s.matches);
-        const leftM = Math.max(0, nextM - s.matches);
-        poolM.push({ player:s.name, team:s.team, current:s.matches, next:nextM, left:leftM });
-        if (leftM > 0 && leftM <= near) rowsM.push(poolM.at(-1));
-        if (leftM === 0) { addTodayChip('matches', s.name, s.team, nextM); hasToday = true; }
+      for (const s of clean) {
+  // === МАТЧИ ===
+  const nextM = nextHundred(s.matches);
+  const leftM = Math.max(0, nextM - s.matches);
+  poolM.push({ player: s.name, team: s.team, current: s.matches, next: nextM, left: leftM });
+  if (leftM > 0 && leftM <= near) rowsM.push(poolM.at(-1));
 
-        // ГОЛЫ
-        const nextG = nextHundred(s.goals);
-        const leftG = Math.max(0, nextG - s.goals);
-        poolG.push({ player:s.name, team:s.team, current:s.goals, next:nextG, left:leftG });
-        if (leftM > 0 && leftM <= near) rowsG.push(poolG.at(-1));
-        if (leftG === 0) { addTodayChip('goals', s.name, s.team, nextG); hasToday = true; }
+  const isRecentM = s.matches >= 100 && s.matches % 100 <= 10;
+  if (leftM === 0 || isRecentM) {
+    addTodayChip('matches', s.name, s.team, Math.floor(s.matches / 100) * 100);
+    hasToday = true;
+  }
 
-        // АССИСТЫ
-        const nextA = nextHundred(s.assists);
-        const leftA = Math.max(0, nextA - s.assists);
-        poolA.push({ player:s.name, team:s.team, current:s.assists, next:nextA, left:leftA });
-        if (leftM > 0 && leftM <= near) rowsA.push(poolA.at(-1));
-        if (leftA === 0) { addTodayChip('assists', s.name, s.team, nextA); hasToday = true; }
-      }
+  // === ГОЛЫ ===
+  const nextG = nextHundred(s.goals);
+  const leftG = Math.max(0, nextG - s.goals);
+  poolG.push({ player: s.name, team: s.team, current: s.goals, next: nextG, left: leftG });
+  if (leftG > 0 && leftG <= near) rowsG.push(poolG.at(-1));
+
+  const isRecentG = s.goals >= 100 && s.goals % 100 <= 10;
+  if (leftG === 0 || isRecentG) {
+    addTodayChip('goals', s.name, s.team, Math.floor(s.goals / 100) * 100);
+    hasToday = true;
+  }
+
+  // === АССИСТЫ ===
+  const nextA = nextHundred(s.assists);
+  const leftA = Math.max(0, nextA - s.assists);
+  poolA.push({ player: s.name, team: s.team, current: s.assists, next: nextA, left: leftA });
+  if (leftA > 0 && leftA <= near) rowsA.push(poolA.at(-1));
+
+  const isRecentA = s.assists >= 100 && s.assists % 100 <= 10;
+  if (leftA === 0 || isRecentA) {
+    addTodayChip('assists', s.name, s.team, Math.floor(s.assists / 100) * 100);
+    hasToday = true;
+  }
+}
 
       // Если никто не попал в порог — показываем топ‑5 ближайших
       const note = `попробуйте увеличить порог`;
@@ -770,7 +820,71 @@ if (!isset($_SESSION['admin_logged_in'])):
   document.addEventListener('DOMContentLoaded', loadBirthdaysThisMonth);
 </script>
 
+<script>
+async function loadRookies() {
+  const tbody = document.querySelector('#tbl-rookies tbody');
+  if (!tbody) return;
+  tbody.innerHTML = '<tr><td colspan="2">Загрузка…</td></tr>';
 
+  try {
+    const res = await fetch('api/get_rookies.php');
+    if (!res.ok) throw new Error();
+    const data = await res.json();
 
+    if (!data.length) {
+      tbody.innerHTML = '<tr><td colspan="2">Нет новичков с ≤20 тренировками</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = data.map(p => {
+      const color = p.trainings >= 15 ? 'style="color:green; font-weight:bold;"' : '';
+      return `<tr>
+        <td>${p.name}</td>
+        <td ${color}>${p.trainings}</td>
+      </tr>`;
+    }).join('');
+  } catch (e) {
+    console.error(e);
+    tbody.innerHTML = '<tr><td colspan="2">Ошибка загрузки</td></tr>';
+  }
+}
+
+document.addEventListener('DOMContentLoaded', loadRookies);
+</script>
+
+<script>
+async function loadInactivePlayers() {
+  const tbody = document.querySelector('#tbl-inactive tbody');
+  if (!tbody) return;
+  tbody.innerHTML = '<tr><td colspan="3">Загрузка…</td></tr>';
+
+  try {
+    const res = await fetch('api/get_inactive_players.php');
+    if (!res.ok) throw new Error();
+    const data = await res.json();
+
+    if (!data.length) {
+      tbody.innerHTML = '<tr><td colspan="3">Все игроки недавно играли</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = data.map(p => {
+      const color = p.days_since >= 60 ? 'style="color:red; font-weight:bold;"' :
+                    p.days_since >= 40 ? 'style="color:orange;"' : '';
+      const dateStr = new Date(p.last_match_date).toLocaleDateString('ru-RU');
+      return `<tr>
+        <td>${p.name}</td>
+        <td>${dateStr}</td>
+        <td ${color}>${p.days_since}</td>
+      </tr>`;
+    }).join('');
+  } catch (e) {
+    console.error(e);
+    tbody.innerHTML = '<tr><td colspan="3">Ошибка загрузки</td></tr>';
+  }
+}
+
+document.addEventListener('DOMContentLoaded', loadInactivePlayers);
+</script>
 </body>
 </html>

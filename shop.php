@@ -65,6 +65,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['buy_product_id'])) {
     } else {
       $price = (int)$product['price'];
 
+       if ($product['id'] == 7 && $canChangeBackground == 1) {
+    $flash = ['type' => 'error', 'msg' => 'Вы уже активировали возможность менять фон.'];
+    goto SKIP_PURCHASE;
+  }
+
       // --- проверка вариантов для футболок ---
       $variant_size = null;
       $variant_height = null;
@@ -79,6 +84,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['buy_product_id'])) {
         }
       }
 
+      $purchaseKey = $_SESSION['last_purchase_key'] ?? '';
+$newPurchaseKey = md5($playerId . '-' . $productId . '-' . microtime(true));
+
+if ($purchaseKey === $newPurchaseKey) {
+    $flash = ['type' => 'error', 'msg' => 'Покупка уже выполняется, попробуйте позже.'];
+    goto SKIP_PURCHASE;
+}
+
+$_SESSION['last_purchase_key'] = $newPurchaseKey;
+
+    // === 🔒 Дополнительная проверка на покупку "Изменение фона" ===
+      $checkBg = $db->prepare("SELECT can_change_background FROM player_backgrounds WHERE player_id = ?");
+      $checkBg->bind_param("i", $playerId);
+      $checkBg->execute();
+      $bgState = $checkBg->get_result()->fetch_assoc();
+
+      if ($productId === 7 && ($bgState && (int)$bgState['can_change_background'] === 1)) {
+          $flash = ['type' => 'error', 'msg' => 'Вы уже активировали возможность менять фон.'];
+          goto SKIP_PURCHASE;
+      }
+      
       // --- транзакция ---
       $db->begin_transaction();
       try {
@@ -86,6 +112,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['buy_product_id'])) {
         $stmt->bind_param("i", $playerId);
         $stmt->execute();
         $row = $stmt->get_result()->fetch_assoc();
+
+        $check = $db->prepare("SELECT id FROM shop_purchases 
+                       WHERE player_id = ? AND product_id = ? 
+                       AND purchased_at >= NOW() - INTERVAL 5 SECOND");
+$check->bind_param("ii", $playerId, $productId);
+$check->execute();
+if ($check->get_result()->num_rows > 0) {
+    throw new Exception('Покупка уже зарегистрирована, подождите несколько секунд.');
+}
 
         if (!$row) throw new Exception('Профиль не найден.');
 
@@ -107,6 +142,81 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['buy_product_id'])) {
         ");
         $stmt->bind_param("iiiss", $playerId, $productId, $price, $variant_size, $variant_height);
         if (!$stmt->execute()) throw new Exception('Не удалось записать покупку.');
+
+        // === Если куплен лот "Изменение фона" (id = 7) ===
+if ($productId === 7) {
+    // Проверяем, есть ли уже запись в player_backgrounds
+    $check = $db->prepare("SELECT id FROM player_backgrounds WHERE player_id = ?");
+    $check->bind_param("i", $playerId);
+    $check->execute();
+    $exists = $check->get_result()->fetch_assoc();
+
+    if ($exists) {
+        // Просто обновляем возможность изменения фона
+        $upd = $db->prepare("UPDATE player_backgrounds SET can_change_background = 1 WHERE player_id = ?");
+        $upd->bind_param("i", $playerId);
+        $upd->execute();
+    } else {
+        // Создаём новую запись для игрока
+        $ins = $db->prepare("
+          INSERT INTO player_backgrounds (player_id, background_key, background_name, can_change_background, assigned_at)
+          VALUES (?, '', '— Без фона —', 1, NOW())
+        ");
+        $ins->bind_param("i", $playerId);
+        $ins->execute();
+    }
+}
+
+// === Если куплен эксклюзивный фон ===
+if ($product['category'] === 'Фоны') {
+    // Убираем " (фон)" из названия, чтобы совпадало с title в backgrounds
+    $bgName = trim(str_replace(['(фон)', '(Фон)'], '', $product['name']));
+
+    // Ищем фон по названию
+    $bgStmt = $db->prepare("SELECT key_name, title FROM backgrounds WHERE title LIKE CONCAT('%', ?, '%') LIMIT 1");
+    $bgStmt->bind_param("s", $bgName);
+    $bgStmt->execute();
+    $bgRow = $bgStmt->get_result()->fetch_assoc();
+
+    if ($bgRow) {
+        $bgKey = $bgRow['key_name'];
+
+        // Добавляем фон игроку
+        $ins = $db->prepare("
+            INSERT INTO player_unlocked_backgrounds (player_id, background_key)
+            VALUES (?, ?)
+            ON DUPLICATE KEY UPDATE background_key = background_key
+        ");
+        $ins->bind_param("is", $playerId, $bgKey);
+        $ins->execute();
+
+        // Гарантируем возможность менять фон
+        $check = $db->prepare("SELECT id FROM player_backgrounds WHERE player_id = ?");
+        $check->bind_param("i", $playerId);
+        $check->execute();
+        $exists = $check->get_result()->fetch_assoc();
+
+        if ($exists) {
+            $upd = $db->prepare("UPDATE player_backgrounds SET can_change_background = 1 WHERE player_id = ?");
+            $upd->bind_param("i", $playerId);
+            $upd->execute();
+        } else {
+            $ins2 = $db->prepare("
+                INSERT INTO player_backgrounds (player_id, background_key, background_name, can_change_background, assigned_at)
+                VALUES (?, '', '', 1, NOW())
+            ");
+            $ins2->bind_param("i", $playerId);
+            $ins2->execute();
+        }
+
+        // Меняем статус покупки на "выполнен"
+        $updPurchase = $db->prepare("
+            UPDATE shop_purchases SET status = 'выполнен' WHERE player_id = ? AND product_id = ?
+        ");
+        $updPurchase->bind_param("ii", $playerId, $productId);
+        $updPurchase->execute();
+    }
+}
 
         $db->commit();
         $flash = ['type' => 'ok', 'msg' => 'Покупка успешна: ' . htmlspecialchars($product['name']) . ' — ' . $price . ' XP'];
@@ -171,6 +281,7 @@ $canChangeBackground = (int)$bg['can_change_background'];
 </head>
 
 <?php include 'headerlk.html'; ?>
+<?php include 'modalslk.html'; ?>
 
 <body>
 <div class="user_page">
@@ -197,57 +308,89 @@ $canChangeBackground = (int)$bg['can_change_background'];
       </div>
 
       <?php if (empty($products)): ?>
-        <p>Нет доступных товаров.</p>
-      <?php else: ?>
-        <div class="grid">
-          <?php foreach ($products as $p):
-            $pid = (int)$p['id'];
-            $pname = htmlspecialchars($p['name']);
-            $pcat = htmlspecialchars($p['category']);
-            $pprice = (int)$p['price'];
-            $pdesc = htmlspecialchars($p['description']);
-            $img = "/img/shop/{$pid}.jpg";
-            $canBuy = ($xp_available >= $pprice);
-          ?>
-            <div class="product-card">
-              <img class="product-thumb" src="<?= $img ?>" alt="<?= $pname ?>" onerror="this.src='/img/shop/placeholder.jpg'">
-              <div class="product-body">
-                <div class="product-title"><?= $pname ?></div>
-                <div class="product-cat"><?= $pcat ?></div>
-                <div class="product-desc"><?= $pdesc ?></div>
-                <div class="product-price"><?= $pprice ?> XP</div>
-                <div class="product-actions">
-                 <form method="POST" class="buy-form" data-product="<?= $pname ?>" data-price="<?= $pprice ?>">
-  <input type="hidden" name="csrf" value="<?= $CSRF ?>">
-  <input type="hidden" name="buy_product_id" value="<?= $pid ?>">
+  <p>Нет доступных товаров.</p>
+<?php else: ?>
+  <div class="grid">
+    <?php foreach ($products as $p):
+      $pid   = (int)$p['id'];
+      $pname = htmlspecialchars($p['name']);
+      $pcat  = htmlspecialchars($p['category']);
+      $pprice = (int)$p['price'];
+      $pdesc = htmlspecialchars($p['description']);
+      $img   = "/img/shop/{$pid}.jpg";
 
-  <?php if ($pcat === 'Футболки'): ?>
-    <div class="variant-select">
-      <select name="variant_height" required>
-        <option value="" disabled selected>Рост</option>
-        <?php foreach ($TSHIRT_HEIGHT as $h): ?>
-          <option value="<?= $h ?>"><?= $h ?></option>
-        <?php endforeach; ?>
-      </select>
-      <select name="variant_size" required>
-        <option value="" disabled selected>Размер</option>
-        <?php foreach ($TSHIRT_SIZES as $s): ?>
-          <option value="<?= $s ?>"><?= $s ?></option>
-        <?php endforeach; ?>
-      </select>
-    </div>
-  <?php endif; ?>
+      // может ли игрок позволить себе покупку
+      $canBuy = ($xp_available >= $pprice);
 
+      // если это лот "Изменение фона", и он уже куплен
+      $alreadyHasBackgroundAccess = ($pid === 7 && $canChangeBackground == 1);
+
+      $alreadyHasExclusiveBg = false;
+if ($pcat === 'Фоны') {
+    $bgName = trim(str_replace(['(фон)', '(Фон)'], '', $pname));
+    $check = $db->prepare("
+        SELECT 1 FROM player_unlocked_backgrounds ub
+        JOIN backgrounds b ON b.key_name = ub.background_key
+        WHERE ub.player_id = ? AND b.title LIKE CONCAT('%', ?, '%')
+    ");
+    $check->bind_param("is", $playerId, $bgName);
+    $check->execute();
+    $alreadyHasExclusiveBg = $check->get_result()->num_rows > 0;
+}
+    ?>
+      <div class="product-card">
+        <img class="product-thumb"
+             src="<?= $img ?>"
+             alt="<?= $pname ?>"
+             onerror="this.src='/img/shop/placeholder.jpg'">
+
+        <div class="product-body">
+          <div class="product-title"><?= $pname ?></div>
+          <div class="product-cat"><?= $pcat ?></div>
+          <div class="product-desc"><?= $pdesc ?></div>
+          <div class="product-price"><?= $pprice ?> XP</div>
+
+          <div class="product-actions">
+            <form method="POST"
+                  class="buy-form"
+                  data-product="<?= $pname ?>"
+                  data-price="<?= $pprice ?>">
+              <input type="hidden" name="csrf" value="<?= $CSRF ?>">
+              <input type="hidden" name="buy_product_id" value="<?= $pid ?>">
+
+              <?php if ($pcat === 'Футболки'): ?>
+                <div class="variant-select">
+                  <select name="variant_height" required>
+                    <option value="" disabled selected>Рост</option>
+                    <?php foreach ($TSHIRT_HEIGHT as $h): ?>
+                      <option value="<?= $h ?>"><?= $h ?></option>
+                    <?php endforeach; ?>
+                  </select>
+                  <select name="variant_size" required>
+                    <option value="" disabled selected>Размер</option>
+                    <?php foreach ($TSHIRT_SIZES as $s): ?>
+                      <option value="<?= $s ?>"><?= $s ?></option>
+                    <?php endforeach; ?>
+                  </select>
+                </div>
+              <?php endif; ?>
+
+              <?php if ($alreadyHasBackgroundAccess || $alreadyHasExclusiveBg): ?>
+  <button type="button" class="btn-buy" disabled style="background:#555; cursor:not-allowed;">
+    Уже активировано
+  </button>
+<?php else: ?>
   <button type="button" class="btn-buy" <?= $canBuy ? '' : 'disabled' ?>>
     <?= $canBuy ? 'Купить' : 'Недостаточно XP' ?>
   </button>
-</form>
-                </div>
-              </div>
-            </div>
-          <?php endforeach; ?>
+<?php endif; ?>
+            </form>
+          </div>
         </div>
-      <?php endif; ?>
+      </div>
+    <?php endforeach; ?>
+  </div>
+<?php endif; ?>
     </div>
 
     <div class="card" style="width:100%;max-width:1200px; margin-top:16px;">
@@ -346,6 +489,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
   document.querySelectorAll('.buy-form .btn-buy').forEach(function(btn) {
     btn.addEventListener('click', function() {
+      if (btn.disabled) return; // предотвращаем двойной клик
+      btn.disabled = true;
+
       var form = btn.closest('form');
       if (!form) return;
 
@@ -356,6 +502,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
       if (form.querySelector('[name="variant_height"]') && (!height || !size)) {
         alert("Пожалуйста, выберите рост и размер перед покупкой.");
+        btn.disabled = false;
         return;
       }
 
@@ -366,21 +513,43 @@ document.addEventListener('DOMContentLoaded', function() {
       `;
       modal.style.display = 'flex';
       currentForm = form;
+      btn.disabled = false;
     });
   });
 
   confirmBtn.addEventListener('click', function() {
-    if (currentForm) currentForm.submit();
-    modal.style.display = 'none';
+    if (currentForm) {
+      confirmBtn.disabled = true;
+      currentForm.submit();
+    }
   });
 
   cancelBtn.addEventListener('click', function() {
     modal.style.display = 'none';
   });
-
-  window.addEventListener('click', function(e) {
-    if (e.target === modal) modal.style.display = 'none';
-  });
 });
 </script>
+
+
+<script>
+    const backgrounds = <?php echo json_encode($freeBackgrounds); ?>;
+    function loadBackgrounds() {
+        const optionsContainer = document.querySelector('.background-options');
+        optionsContainer.innerHTML = ''; // Очищаем контейнер
+        backgrounds.forEach(bg => {
+            const option = document.createElement('div');
+            option.className = 'bg-option';
+            option.onclick = () => setBackground(bg.key_name);
+            option.innerHTML = `
+                ${bg.image_path ? `<img src="${bg.image_path}" alt="${bg.title}">` : '<div class="no-image"></div>'}
+                <small>${bg.title}</small>
+            `;
+            optionsContainer.appendChild(option);
+        });
+    }
+    // Вызываем при загрузке страницы
+    document.addEventListener('DOMContentLoaded', loadBackgrounds);
+</script>
+
+<script src="./js/index.bundle.js"></script>
 </html>

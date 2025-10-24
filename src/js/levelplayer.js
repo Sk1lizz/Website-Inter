@@ -31,20 +31,20 @@ document.addEventListener("DOMContentLoaded", async () => {
         const player = await playerRes.json();
 
         const bg = document.querySelector('.bg-fixed');
-        if (bg && player.background_key && player.background_key.trim() !== "") {
-            bg.style.backgroundImage = `url('/img/background_player/${player.background_key}.png')`;
+        if (bg && player.full_image_path) {
+            bg.style.backgroundImage = `url('${player.full_image_path}')`;
         }
 
-        if (player.background_key && player.background_key.trim() !== "") {
+        if (player.full_image_path) {
             const page = document.querySelector('.player_page');
             if (page) {
-                page.style.backgroundImage = `url('/img/background_player/${player.background_key}.png')`;
+                page.style.backgroundImage = `url('${player.full_image_path}')`;
                 page.style.backgroundSize = 'cover';
                 page.style.backgroundRepeat = 'no-repeat';
                 page.style.backgroundPosition = 'center';
-                page.style.backgroundAttachment = 'fixed'; // <- это фиксирует фон
+                page.style.backgroundAttachment = 'fixed';
                 page.style.backgroundColor = 'transparent';
-                page.style.minHeight = '100vh'; // гарантирует полную высоту экрана
+                page.style.minHeight = '100vh';
             }
         }
 
@@ -94,7 +94,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             goals: Number(stats.goals) || 0,
             assists: Number(stats.assists) || 0,
             zeromatch: Number(stats.zeromatch) || 0,
-            lostgoals: Number(stats.lostgoals) || 0
+            lostgoals: Number(stats.lostgoals) || 0,
+            zanetti_priz: Number(stats.zanetti_priz) || 0
         });
 
         // Подсчет месяцев в команде в текущем году
@@ -148,7 +149,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             goals: season.goals + all.goals,
             assists: season.assists + all.assists,
             zeromatch: season.zeromatch + all.zeromatch,
-            lostgoals: season.lostgoals + all.lostgoals
+            lostgoals: season.lostgoals + all.lostgoals,
+            zanetti_priz: season.zanetti_priz + all.zanetti_priz
         };
 
         document.querySelector(".season-stats").innerHTML = `
@@ -170,10 +172,16 @@ document.addEventListener("DOMContentLoaded", async () => {
         `;
 
         function calculateExperience(achievementPoints = 0) {
-            const { matches, goals, assists, zeromatch } = totalStats;
+            const { matches, goals, assists, zeromatch, zanetti_priz } = totalStats;
             const totalMonths = years * 12 + months;
-            return totalMonths * 100 + matches * 50 + goals * 100 + assists * 100 + zeromatch * 250 + achievementPoints;
-
+            const trainingXP = zanetti_priz * 25;
+            return totalMonths * 100 +
+                matches * 50 +
+                goals * 100 +
+                assists * 100 +
+                zeromatch * 250 +
+                trainingXP +
+                achievementPoints;
         }
 
         function updateExperienceBar(exp) {
@@ -261,29 +269,6 @@ document.addEventListener("DOMContentLoaded", async () => {
                 "В разработке"
             ];
 
-
-            // ПРИЗЫ
-            const currentPrizeEl = document.getElementById("current-prize");
-            const currentPrizeImg = document.getElementById("current-prize-img");
-            const currentPrizeDesc = document.getElementById("current-prize-desc");
-
-            const nextPrizeImg = document.getElementById("next-prize-img");
-            const nextPrizeDesc = document.getElementById("next-prize-desc");
-
-            const currentIndex = levels.indexOf(current);
-            const next = levels[currentIndex + 1] || null;
-
-            // текущий
-            if (currentPrizeImg && currentPrizeDesc) {
-                currentPrizeImg.src = `/img/prize/prize-${currentIndex + 1}.png`;
-                currentPrizeDesc.textContent = levelPrizes[currentIndex] || "Без приза";
-            }
-
-            // следующий
-            if (nextPrizeImg && nextPrizeDesc) {
-                nextPrizeImg.src = `/img/prize/prize-${currentIndex + 2}.png`;
-                nextPrizeDesc.textContent = levelPrizes[currentIndex + 1] || "–";
-            }
         }
 
         // Загружаем АЧИВКИ

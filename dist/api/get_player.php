@@ -13,12 +13,11 @@ if (!$id) {
 
 // получаем игрока и фон
 $stmt = $db->prepare("
-    SELECT 
-        p.*, 
-        b.background_key 
-    FROM players p
-    LEFT JOIN player_backgrounds b ON p.id = b.player_id
-    WHERE p.id = ?
+   SELECT p.*, b.key_name AS background_key, b.full_image_path
+FROM players p
+LEFT JOIN player_backgrounds pb ON pb.player_id = p.id
+LEFT JOIN backgrounds b ON b.key_name = pb.background_key
+WHERE p.id = ?
 ");
 $stmt->bind_param("i", $id);
 $stmt->execute();

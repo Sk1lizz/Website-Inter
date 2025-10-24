@@ -1,0 +1,6 @@
+{
+    "name": "fcintermoscow/site",
+    "require": {
+        "yoomoney/yookassa-sdk-php": "3.10"
+    }
+}

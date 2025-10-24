@@ -414,115 +414,115 @@ players[playerId] = {
 
     for (const playerId in players) {
     try {
-        const id = parseInt(playerId);
+  const id = parseInt(playerId, 10);
 
-        // Получаем текущие ачивки
-        const successRes = await fetch(`/api/get_player_success.php?player_id=${id}`);
-        const currentSuccesses = await successRes.json(); // [1, 18, 23, ...]
+  // 1) Текущие ачивки -> Set<number>
+  const successRes = await fetch(`/api/get_player_success.php?player_id=${id}`);
+  let currentSuccessesRaw = await successRes.json();
 
-        // Получаем статистику
-        const statsRes = await fetch(`/api/player_statistics_all.php?id=${id}`);
-        const stats = await statsRes.json();
-        const totalGoals = (parseInt(stats.goals) || 0) + (parseInt(stats?.season?.goals) || 0);
-        const totalAssists = (parseInt(stats.assists) || 0) + (parseInt(stats?.season?.assists) || 0);
-        const totalMatches = (parseInt(stats.matches) || 0) + (parseInt(stats?.season?.matches) || 0);
-        const totalCleanSheets = (parseInt(stats.zeromatch) || 0) + (parseInt(stats?.season?.zeromatch) || 0);
-
-        // Получаем награды
-        const awardsRes = await fetch(`/api/achievements.php?player_id=${id}`);
-        const awards = await awardsRes.json();
-        const awardCount = Array.isArray(awards) ? awards.length : 0;
-
-        // Получаем инфу о игроке (позиция, фото, дата присоединения)
-        const playerMetaRes = await fetch(`/api/get_player.php?id=${id}`);
-        const playerMeta = await playerMetaRes.json();
-        const joinDate = new Date(playerMeta?.join_date);
-        const position = playerMeta?.position?.toLowerCase() || '';
-        const photo = playerMeta?.photo;
-        const today = new Date();
-        const diffMonths = (today.getFullYear() - joinDate.getFullYear()) * 12 + (today.getMonth() - joinDate.getMonth());
-
-        const newAchievements = [];
-
-        // === Ачивки по одному действию ===
-        if (totalGoals >= 1 && !currentSuccesses.includes(23)) newAchievements.push(23); // Первый гол
-        if (totalMatches >= 1 && !currentSuccesses.includes(1)) newAchievements.push(1); // Первый матч
-        if (awardCount >= 1 && !currentSuccesses.includes(18)) newAchievements.push(18); // 1 награда
-        if (awardCount >= 5 && !currentSuccesses.includes(19)) newAchievements.push(19); // 5 наград
-        if (awardCount >= 10 && !currentSuccesses.includes(20)) newAchievements.push(20); // 10 наград
-        if (totalAssists >= 1 && !currentSuccesses.includes(24)) newAchievements.push(24); // Первый ассист
-
-        // === Кол-во матчей ===
-        if (totalMatches >= 25 && !currentSuccesses.includes(27)) newAchievements.push(27);
-        if (totalMatches >= 50 && !currentSuccesses.includes(28)) newAchievements.push(28);
-        if (totalMatches >= 100 && !currentSuccesses.includes(29)) newAchievements.push(29);
-        if (totalMatches >= 250 && !currentSuccesses.includes(30)) newAchievements.push(30);
-        if (totalMatches >= 500 && !currentSuccesses.includes(31)) newAchievements.push(31);
-
-        // === Голы ===
-        if (totalGoals >= 10 && !currentSuccesses.includes(32)) newAchievements.push(32);
-        if (totalGoals >= 50 && !currentSuccesses.includes(34)) newAchievements.push(34);
-        if (totalGoals >= 100 && !currentSuccesses.includes(36)) newAchievements.push(36);
-        if (totalGoals >= 250 && !currentSuccesses.includes(38)) newAchievements.push(38);
-        if (totalGoals >= 500 && !currentSuccesses.includes(40)) newAchievements.push(40);
-
-        // === Ассисты ===
-        if (totalAssists >= 10 && !currentSuccesses.includes(33)) newAchievements.push(33);
-        if (totalAssists >= 50 && !currentSuccesses.includes(35)) newAchievements.push(35);
-        if (totalAssists >= 100 && !currentSuccesses.includes(37)) newAchievements.push(37);
-        if (totalAssists >= 250 && !currentSuccesses.includes(39)) newAchievements.push(39);
-        if (totalAssists >= 500 && !currentSuccesses.includes(41)) newAchievements.push(41);
-
-        // === Голы в текущем матче ===
-        const goalsInThisMatch = players[playerId]?.goals || 0;
-        if (goalsInThisMatch === 2 && !currentSuccesses.includes(42)) newAchievements.push(42);
-        if (goalsInThisMatch === 3 && !currentSuccesses.includes(43)) newAchievements.push(43);
-        if (goalsInThisMatch === 4 && !currentSuccesses.includes(44)) newAchievements.push(44);
-        if (goalsInThisMatch >= 5 && !currentSuccesses.includes(45)) newAchievements.push(45);
-
-        // === Фото есть
-        if (photo && !currentSuccesses.includes(55)) newAchievements.push(55);
-
-        // === Время в команде
-        if (diffMonths >= 6 && !currentSuccesses.includes(60)) newAchievements.push(60);
-        if (diffMonths >= 12 && !currentSuccesses.includes(61)) newAchievements.push(61);
-        if (diffMonths >= 36 && !currentSuccesses.includes(62)) newAchievements.push(62);
-        if (diffMonths >= 60 && !currentSuccesses.includes(63)) newAchievements.push(63);
-        if (diffMonths >= 120 && !currentSuccesses.includes(64)) newAchievements.push(64);
-
-        // === Вратарь сыграл на 0 в этом матче
-        const playedThisMatch = players[playerId]?.played;
-        const cleanSheetThisMatch = players[playerId]?.clean_sheet;
-        if (playedThisMatch && cleanSheetThisMatch && position.includes('вратарь') && !currentSuccesses.includes(70)) {
-            newAchievements.push(70);
+  // нормализуем всё к числам
+  const currentSet = new Set(
+    (Array.isArray(currentSuccessesRaw) ? currentSuccessesRaw : [])
+      .map(item => {
+        // поддержка разных форматов ответа:
+        // [23, "18", { success_id: 55 }, {id: 61}, {successId: "33"}]
+        if (typeof item === 'number') return item;
+        if (typeof item === 'string') return parseInt(item, 10);
+        if (item && typeof item === 'object') {
+          const v = item.success_id ?? item.id ?? item.successId ?? item.sId;
+          return v != null ? parseInt(v, 10) : NaN;
         }
+        return NaN;
+      })
+      .filter(n => Number.isFinite(n))
+  );
 
-        // === Сухие матчи для вратаря или защитника
-        if (position.includes('вратарь') || position.includes('защитник')) {
-            if (totalCleanSheets >= 5 && !currentSuccesses.includes(83)) newAchievements.push(83);
-            if (totalCleanSheets >= 15 && !currentSuccesses.includes(84)) newAchievements.push(84);
-            if (totalCleanSheets >= 25 && !currentSuccesses.includes(85)) newAchievements.push(85);
-        }
+  // 2) Собираем новые ачивки с проверкой по currentSet
+  const newAchievements = [];
 
-        // === Отправляем, если есть что присваивать
-        if (newAchievements.length > 0) {
-            const combined = [...new Set([...currentSuccesses, ...newAchievements])];
+  const addIf = (cond, id) => { if (cond && !currentSet.has(id)) newAchievements.push(id); };
 
-            await fetch('/api/set_player_success.php', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    player_id: id,
-                    success_ids: combined
-                })
-            });
+  // ==== одноразовые ====
+  addIf(totalGoals >= 1, 23);     // первый гол
+  addIf(totalMatches >= 1, 1);    // первый матч
+  addIf(awardCount >= 1, 18);
+  addIf(awardCount >= 5, 19);
+  addIf(awardCount >= 10, 20);
+  addIf(totalAssists >= 1, 24);
 
-            console.log(`🎖 Ачивки выданы игроку ${id}: ${newAchievements.join(", ")}`);
-        }
+  // ==== матчи ====
+  addIf(totalMatches >= 25, 27);
+  addIf(totalMatches >= 50, 28);
+  addIf(totalMatches >= 100, 29);
+  addIf(totalMatches >= 250, 30);
+  addIf(totalMatches >= 500, 31);
 
-    } catch (err) {
-        console.error(`❌ Ошибка присвоения ачивок игроку ${playerId}:`, err);
-    }
+  // ==== голы ====
+  addIf(totalGoals >= 10, 32);
+  addIf(totalGoals >= 50, 34);
+  addIf(totalGoals >= 100, 36);
+  addIf(totalGoals >= 250, 38);
+  addIf(totalGoals >= 500, 40);
+
+  // ==== ассисты ====
+  addIf(totalAssists >= 10, 33);
+  addIf(totalAssists >= 50, 35);
+  addIf(totalAssists >= 100, 37);
+  addIf(totalAssists >= 250, 39);
+  addIf(totalAssists >= 500, 41);
+
+  // ==== голы в этом матче ====
+  addIf(goalsInThisMatch === 2, 42);
+  addIf(goalsInThisMatch === 3, 43);
+  addIf(goalsInThisMatch === 4, 44);
+  addIf(goalsInThisMatch >= 5, 45);
+
+  // ==== фото ====
+  addIf(!!photo, 55);
+
+  // ==== стаж в месяцах ====
+  addIf(diffMonths >= 6, 60);
+  addIf(diffMonths >= 12, 61);
+  addIf(diffMonths >= 36, 62);
+  addIf(diffMonths >= 60, 63);
+  addIf(diffMonths >= 120, 64);
+
+  // ==== чистый матч вратаря сегодня ====
+  addIf(playedThisMatch && cleanSheetThisMatch && position.includes('вратар'), 70);
+
+  // ==== суммарные "на 0" для GK/DEF ====
+  if (position.includes('вратар') || position.includes('защит')) {
+    addIf(totalCleanSheets >= 5, 83);
+    addIf(totalCleanSheets >= 15, 84);
+    addIf(totalCleanSheets >= 25, 85);
+  }
+
+  if (newAchievements.length > 0) {
+    // либо отправляем только дельту в add-ручку (если есть):
+    // await fetch('/api/add_player_success.php', {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify({ player_id: id, success_ids: newAchievements })
+    // });
+
+    // либо (если есть только set-ручка, которая ЗАМЕНЯЕТ список) —
+    // объединяем ТЕКУЩИЕ + НОВЫЕ строго как числа:
+    const merged = [...new Set([...currentSet, ...newAchievements])];
+
+   await fetch('/api/add_player_success.php', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+      player_id: id,
+      success_ids: newAchievements
+  })
+});
+
+    console.log(`🎖 Выданы новые ачивки игроку ${id}: ${newAchievements.join(', ')}`);
+  }
+} catch (err) {
+  console.error(`❌ Ошибка присвоения ачивок игроку ${playerId}:`, err);
+}
 }
 
     } catch (err) {

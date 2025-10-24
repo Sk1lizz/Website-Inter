@@ -1433,3 +1433,196 @@ button.match-rate-btn:hover {
     /* серо-стальной */
     text-align: center;
 }
+
+.bottom-row {
+    max-width: 1200px;
+}
+
+/* === Ачивки и футболка (новый стиль) === */
+.achievements-section {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    align-items: stretch;
+
+    .card {
+        flex: 1;
+        min-width: 340px;
+    }
+
+    .latest-achievements .success-list.compact .success-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 10px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .latest-achievements .success-item img {
+        border-radius: 6px;
+        width: 50px;
+        height: 50px;
+        flex-shrink: 0;
+    }
+
+    .latest-achievements .success-text {
+        flex: 1;
+    }
+
+    .latest-achievements .desc {
+        font-size: 13px;
+        color: #ccc;
+    }
+
+    .latest-achievements .date {
+        font-size: 12px;
+        color: #888;
+    }
+
+    .latest-achievements .points {
+        font-weight: bold;
+        color: #2d62b5;
+        white-space: nowrap;
+    }
+
+    .shirt-progress .shirt-wrap {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+    .shirt-progress img {
+        width: 120px;
+        border-radius: 8px;
+    }
+
+    .shirt-progress .progress-info {
+        flex: 1;
+    }
+
+    .shirt-progress .progress-bar {
+        background: #e0e0e0;
+        border-radius: 10px;
+        height: 18px;
+        overflow: hidden;
+        margin: 6px 0;
+    }
+
+    .shirt-progress .progress-fill {
+        background: linear-gradient(90deg, #2d62b5, #4aa3ff);
+        height: 100%;
+        border-radius: 10px;
+        transition: width 0.3s;
+    }
+
+    .shirt-progress .remaining {
+        font-size: 13px;
+        color: #aaa;
+    }
+
+    .shirt-progress .complete {
+        font-weight: bold;
+        color: #1c7c1c;
+    }
+}
+
+/* ==== Финальный фикс: ачивки сеткой ==== */
+.all-achievements {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.all-achievements .success-list.row-layout {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 14px 20px;
+    align-items: start;
+}
+
+.all-achievements .success-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(255, 255, 255, 0.07);
+    border-radius: 10px;
+    padding: 12px 16px;
+    transition: background 0.25s ease;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
+}
+
+.all-achievements .success-item:hover {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.all-achievements .success-item img {
+    width: 48px;
+    height: 48px;
+    border-radius: 6px;
+    margin-right: 12px;
+    flex-shrink: 0;
+}
+
+.all-achievements .success-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.all-achievements .success-info strong {
+    font-size: 15px;
+    color: #fff;
+}
+
+.all-achievements .success-info .desc {
+    font-size: 13px;
+    color: #bbb;
+}
+
+.all-achievements .points {
+    font-weight: bold;
+    color: #2D62B5;
+    white-space: nowrap;
+    margin-left: 10px;
+}
+
+/* --- адаптив --- */
+@media (max-width: 900px) {
+    .all-achievements .success-list.row-layout {
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    }
+}
+
+@media (max-width: 650px) {
+    .all-achievements .success-list.row-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+.success-item.locked {
+    opacity: 0.3;
+    filter: grayscale(100%);
+    pointer-events: none;
+}
+
+.pay-btn {
+    font-size: 14px;
+    padding: 10px 18px;
+    border-radius: 20px;
+    border: 1px solid #FDC500;
+    background: #00296B;
+    color: #f3f6fb;
+    font-family: 'Play', sans-serif;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    margin-top: 12px;
+    width: 100%;
+}
+
+.pay-btn:hover {
+    background: #083c7e;
+    color: #FDC500;
+    border-color: #f3f6fb;
+}

@@ -1,0 +1,26 @@
+<!-- Модалка смены пароля -->
+<div id="changePasswordModal" class="user_password-modal">
+    <div class="modal-content">
+        <h3>Смена пароля</h3>
+        <form method="POST" action="/change_password.php">
+            <label>Старый пароль:</label>
+            <input type="password" name="old_password" required>
+            <label>Новый пароль:</label>
+            <input type="password" name="new_password" required>
+            <div class="modal-buttons">
+                <button type="submit">Сменить</button>
+                <button type="button"
+                    onclick="document.getElementById('changePasswordModal').style.display='none'">Отмена</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Модалка смены фона -->
+<div id="user_bg-modal_background" class="user_bg-modal_background">
+    <div class="modal-content">
+        <h3>Выберите фон</h3>
+        <div class="background-options"></div>
+        <button onclick="document.getElementById('user_bg-modal_background').style.display='none'">Отмена</button>
+    </div>
+</div>

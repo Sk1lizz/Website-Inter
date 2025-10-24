@@ -206,7 +206,10 @@ $stmt->execute();
 $bg = $stmt->get_result()->fetch_assoc() ?? ['background_key' => '', 'can_change_background' => 0];
 $currentBgKey = $bg['background_key'];
 $canChangeBackground = (int)$bg['can_change_background'];
+
+
 ?>
+
 
 <!DOCTYPE html>
 <html lang="ru">
@@ -223,9 +226,8 @@ $canChangeBackground = (int)$bg['can_change_background'];
   <link rel="stylesheet" href="css/main.css">
 </head>
 
-<?php include 'headerlk.html'; ?>
-
 <body>
+  <?php include 'headerlk.html'; ?>
 <div class="user_page">
 
 
@@ -294,19 +296,7 @@ $progressPercent = max(0, min(100, round($progressPercent)));
 // === Ачивки игрока ===
 $playerId = (int)$_SESSION['player_id'];
 
-// все ачивки игрока с датой
-$sqlAllSuccess = $db->prepare("
-  SELECT s.id, s.title, s.description, s.points, ps.awarded_at
-  FROM player_success ps
-  JOIN Success s ON s.id = ps.success_id
-  WHERE ps.player_id = ?
-  ORDER BY ps.awarded_at DESC
-");
-$sqlAllSuccess->bind_param("i", $playerId);
-$sqlAllSuccess->execute();
-$allSuccess = $sqlAllSuccess->get_result()->fetch_all(MYSQLI_ASSOC);
-
-// последние 5
+// последние 5 ачивок (оставляем как раньше)
 $sqlLast5 = $db->prepare("
   SELECT s.id, s.title, s.description, s.points, ps.awarded_at
   FROM player_success ps
@@ -319,13 +309,31 @@ $sqlLast5->bind_param("i", $playerId);
 $sqlLast5->execute();
 $lastSuccess = $sqlLast5->get_result()->fetch_all(MYSQLI_ASSOC);
 
-// счётчики (всего доступных ачивок и сумма очков игрока)
-$totalSuccessRes = $db->query("SELECT COUNT(*) AS cnt FROM Success");
-$totalSuccess = (int)($totalSuccessRes->fetch_assoc()['cnt'] ?? 0);
+// Все ачивки в системе
+$sqlAll = $db->query("SELECT id, title, description, points FROM Success ORDER BY id ASC");
+$allAchievements = $sqlAll ? $sqlAll->fetch_all(MYSQLI_ASSOC) : [];
 
-$mySuccessCount = count($allSuccess);
+// Ачивки, которые получил игрок
+$sqlPlayer = $db->prepare("SELECT success_id, awarded_at FROM player_success WHERE player_id = ?");
+$sqlPlayer->bind_param("i", $playerId);
+$sqlPlayer->execute();
+$playerAchRes = $sqlPlayer->get_result()->fetch_all(MYSQLI_ASSOC);
+
+// Переводим в массив [success_id => awarded_at]
+$playerAchievements = [];
+foreach ($playerAchRes as $row) {
+    $playerAchievements[(int)$row['success_id']] = $row['awarded_at'];
+}
+
+// Счётчики
+$mySuccessCount = count($playerAchievements);
 $mySuccessPoints = 0;
-foreach ($allSuccess as $s) { $mySuccessPoints += (int)$s['points']; }
+foreach ($allAchievements as $ach) {
+    if (isset($playerAchievements[(int)$ach['id']])) {
+        $mySuccessPoints += (int)$ach['points'];
+    }
+}
+$totalSuccess = count($allAchievements);
 
 // формат даты
 function formatSuccessDate($dt) {
@@ -333,7 +341,29 @@ function formatSuccessDate($dt) {
   $ts = strtotime($dt);
   return date('d.m.Y', $ts);
 }
+
+// === Прогресс до футболки Zanetti ===
+$zanettiGoal = 15;
+$zanettiPriz = 0;
+
+// суммируем из обеих таблиц
+$stmt = $db->prepare("SELECT COALESCE(SUM(zanetti_priz), 0) AS total FROM player_statistics_2025 WHERE player_id = ?");
+$stmt->bind_param("i", $_SESSION['player_id']);
+$stmt->execute();
+$res1 = $stmt->get_result()->fetch_assoc();
+$zanettiPriz += (int)($res1['total'] ?? 0);
+
+$stmt = $db->prepare("SELECT COALESCE(SUM(zanetti_priz), 0) AS total FROM player_statistics_all WHERE player_id = ?");
+$stmt->bind_param("i", $_SESSION['player_id']);
+$stmt->execute();
+$res2 = $stmt->get_result()->fetch_assoc();
+$zanettiPriz += (int)($res2['total'] ?? 0);
+
+$zanettiProgress = min(100, round(($zanettiPriz / $zanettiGoal) * 100));
+$zanettiRemaining = max(0, $zanettiGoal - $zanettiPriz);
 ?>
+
+
 
 <div class="lk-header card">
   <div class="lk-title">Личный кабинет</div>
@@ -404,6 +434,7 @@ function formatSuccessDate($dt) {
       <span>Реквизиты 8х8:</span>
       <span>5536 9137 8962 1493</span>
     </div>
+    <button id="payYooKassaBtn" class="pay-btn">Оплатить онлайн</button>
   </div>
 </div>
 
@@ -495,69 +526,122 @@ function formatSuccessDate($dt) {
     </div>
   </div>
 
-  <!-- Четвёртая линия: Ачивки -->
-<div class="bottom-row">
-  <!-- Последние полученные ачивки -->
-  <div class="card success">
-    <div style="display:flex; justify-content:space-between; align-items:center;">
-      <h2>Последние полученные ачивки</h2>
-      <a href="/success.html" style="font-size:14px; color:#007BFF; text-decoration:underline;">Посмотреть все</a>
+   <!-- Четвёртая линия: Ачивки -->
+<div class="bottom-row achievements-section">
+
+  <!-- Левая часть: последние ачивки -->
+  <div class="card success latest-achievements">
+    <div class="card-header">
+      <h2>Последние ачивки</h2>
+      <a href="/success.html" class="see-all">Все</a>
     </div>
 
     <?php if (empty($lastSuccess)): ?>
       <p>Пока нет полученных ачивок.</p>
     <?php else: ?>
-      <div class="success-list">
+      <div class="success-list compact">
         <?php foreach ($lastSuccess as $s): ?>
           <?php
             $img = "/img/success/success-" . (int)$s['id'] . ".png";
             $date = formatSuccessDate($s['awarded_at']);
           ?>
-          <div class="success-item" style="margin-bottom:14px; padding-top:10px;">
-            <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
-              <img src="<?= $img ?>" onerror="this.src='/img/success/success-0.png'" width="50" height="50" style="border-radius:6px; flex-shrink:0;">
-              <div style="flex:1;">
-                <div style="font-weight:bold;"><?= htmlspecialchars($s['title']) ?></div>
-                <div style="color:#c5c2c2; font-size:14px;"><?= htmlspecialchars($s['description']) ?></div>
-                <div style="color:#8c8c8c; font-size:12px; margin-top:3px;">Получено: <?= $date ?></div>
-              </div>
-              <div style="color:#2D62B5; font-weight:bold; font-size:14px; white-space:nowrap;"><?= (int)$s['points'] ?> очков</div>
+          <div class="success-item">
+            <img src="<?= $img ?>" onerror="this.src='/img/success/success-0.png'" width="50" height="50">
+            <div class="success-text">
+              <strong><?= htmlspecialchars($s['title']) ?></strong>
+              <div class="desc"><?= htmlspecialchars($s['description']) ?></div>
+              <div class="date"><?= $date ?></div>
             </div>
+            <div class="points">+<?= (int)$s['points'] ?></div>
           </div>
         <?php endforeach; ?>
       </div>
     <?php endif; ?>
   </div>
 
-  <!-- Мои ачивки (все полученные) -->
-  <div class="card success">
-    <div style="display:flex; justify-content:space-between; align-items:center;">
-      <h2>Мои ачивки <span style="font-size:16px; font-weight:normal; color:#9aa3b2;">(<?= $mySuccessCount ?> / <?= $totalSuccess ?> • <?= $mySuccessPoints ?> очков)</span></h2>
-      <a href="/success.html" style="font-size:14px; color:#007BFF; text-decoration:underline;">Посмотреть все</a>
-    </div>
+  <!-- Правая часть: футболка -->
+  <div class="card success shirt-progress">
+    <h2>Футболка команды</h2>
+    <div class="shirt-wrap">
+      <img src="/img/shop/4.jpg" alt="Футболка Zanetti">
+      <div class="progress-info">
+        <?php if ($zanettiPriz >= $zanettiGoal): ?>
+          <p class="complete">🎉 Футболка получена!</p>
+        <?php else: ?>
+          <p>Тренировок: <strong><?= $zanettiPriz ?></strong> / <?= $zanettiGoal ?></p>
+        <?php endif; ?>
 
-    <?php if (empty($allSuccess)): ?>
-      <p>Пока нет полученных ачивок.</p>
-    <?php else: ?>
-      <div class="success-list">
-        <?php foreach ($allSuccess as $s): ?>
-          <?php $img = "/img/success/success-" . (int)$s['id'] . ".png"; ?>
-          <div class="success-item" style="margin-bottom:14px; padding-top:10px;">
-            <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
-              <img src="<?= $img ?>" onerror="this.src='/img/success/success-0.png'" width="50" height="50" style="border-radius:6px; flex-shrink:0;">
-              <div style="flex:1;">
-                <div style="font-weight:bold;"><?= htmlspecialchars($s['title']) ?></div>
-                <div style="color:#c5c2c2; font-size:14px;"><?= htmlspecialchars($s['description']) ?></div>
-              </div>
-              <div style="color:#2D62B5; font-weight:bold; font-size:14px; white-space:nowrap;"><?= (int)$s['points'] ?> очков</div>
-            </div>
-          </div>
-        <?php endforeach; ?>
+        <div class="progress-bar">
+          <div class="progress-fill" style="width: <?= $zanettiProgress ?>%;"></div>
+        </div>
+        <p class="remaining"><?= $zanettiRemaining > 0 ? "Осталось $zanettiRemaining тренировок" : "Цель достигнута!" ?></p>
       </div>
-    <?php endif; ?>
+    </div>
   </div>
 </div>
 
+<!-- Все ачивки — ниже -->
+<div class="card success all-achievements">
+  <div class="card-header">
+    <h2>
+      Мои ачивки&nbsp;
+      <span style="font-size:16px; font-weight:normal; color:#9aa3b2;">
+        (<?= $mySuccessCount ?> / <?= $totalSuccess ?> • <?= $mySuccessPoints ?> XP)
+      </span>
+    </h2>
+  </div>
+  
+<?php
+// Сортируем: полученные → по дате ↓, затем неполученные → по id ↑
+usort($allAchievements, function($a, $b) use ($playerAchievements) {
+    $aId = (int)$a['id'];
+    $bId = (int)$b['id'];
+
+    $aGot = isset($playerAchievements[$aId]);
+    $bGot = isset($playerAchievements[$bId]);
+
+    // Если один получил, другой нет → полученные вперёд
+    if ($aGot && !$bGot) return -1;
+    if (!$aGot && $bGot) return 1;
+
+    // Если оба получили → сортируем по дате получения (новые первыми)
+    if ($aGot && $bGot) {
+        $aDate = strtotime($playerAchievements[$aId]);
+        $bDate = strtotime($playerAchievements[$bId]);
+        return $bDate <=> $aDate; // от новых к старым
+    }
+
+    // Если оба не получили → сортируем по ID
+    return $aId <=> $bId;
+});
+?>
+
+  <?php if (empty($allAchievements)): ?>
+    <p>Ачивок пока нет.</p>
+  <?php else: ?>
+    <div class="success-list row-layout">
+      <?php foreach ($allAchievements as $ach): 
+        $achId = (int)$ach['id'];
+        $received = isset($playerAchievements[$achId]);
+        $img = "/img/success/success-{$achId}.png";
+        $date = $received ? date('d.m.Y', strtotime($playerAchievements[$achId])) : null;
+      ?>
+        <div class="success-item <?= $received ? '' : 'locked' ?>">
+          <img src="<?= $img ?>" onerror="this.src='/img/success/success-0.png'" alt="<?= htmlspecialchars($ach['title']) ?>">
+          <div class="success-info">
+            <strong><?= htmlspecialchars($ach['title']) ?></strong>
+            <div class="desc"><?= htmlspecialchars($ach['description']) ?></div>
+            <?php if ($received): ?>
+              <div class="date"><?= $date ?></div>
+            <?php endif; ?>
+          </div>
+          <div class="points">
+            <?= $received ? '+' . (int)$ach['points'] . ' XP' : '' ?>
+          </div>
+        </div>
+      <?php endforeach; ?>
+    </div>
+  <?php endif; ?>
 </div>
 
 <!-- Глобальные переменные -->
@@ -658,39 +742,45 @@ document.addEventListener("DOMContentLoaded", async () => {
 </script>
 
 <?php if ($canChangeBackground === 1): ?>
-<div id="user_bg-modal_background" class="user_bg-modal_background">
-  <div class="modal-content">
-    <h3>Выберите фон</h3>
-    <div class="background-options">
-      <div class="bg-option" onclick="setBackground('')">
-        <div class="no-image"></div>
-        <small>Без фона</small>
-      </div>
-      <?php
-      $backgrounds = [
-          '1' => 'Полосы рваные',
-          '2' => 'Стена',
-          '3' => 'Соты',
-          '4' => 'Золото',
-          '5' => 'Дракон',
-          '6' => 'Кремль',
-          '7' => 'Инь и Янь',
-          '8' => 'Самурай',
-          '9' => 'Город, дождь',
-          '10' => 'Волна',
-          '11' => 'Джунгли',
-          '12' => 'Переулок',
-      ];
-      foreach ($backgrounds as $key => $label): ?>
-        <div class="bg-option" onclick="setBackground('<?= $key ?>')">
-          <img src="/img/background_player/mini<?= $key ?>.PNG" alt="фон <?= $key ?>">
-          <small><?= $label ?></small>
+  <?php
+    // Загружаем все бесплатные фоны
+    $playerId = (int)$_SESSION['player_id'];
+$bgQuery = $db->query("
+    SELECT b.key_name, b.title, b.image_path
+    FROM backgrounds b
+    LEFT JOIN player_unlocked_backgrounds ub 
+        ON ub.background_key = b.key_name AND ub.player_id = {$playerId}
+    WHERE b.is_free = 1 OR ub.player_id IS NOT NULL
+    ORDER BY b.id
+");
+    $freeBackgrounds = $bgQuery ? $bgQuery->fetch_all(MYSQLI_ASSOC) : [];
+  ?>
+
+  <div id="user_bg-modal_background" class="user_bg-modal_background">
+    <div class="modal-content">
+      <h3>Выберите фон</h3>
+      <div class="background-options">
+        <div class="bg-option" onclick="setBackground('')">
+          <div class="no-image"></div>
+          <small>Без фона</small>
         </div>
-      <?php endforeach; ?>
+
+        <?php if (!empty($freeBackgrounds)): ?>
+          <?php foreach ($freeBackgrounds as $bg): ?>
+            <div class="bg-option" onclick="setBackground('<?= htmlspecialchars($bg['key_name']) ?>')">
+              <img src="<?= htmlspecialchars($bg['image_path']) ?>"
+                   alt="<?= htmlspecialchars($bg['title']) ?>"
+                   onerror="this.style.opacity='0.3'">
+              <small><?= htmlspecialchars($bg['title']) ?></small>
+            </div>
+          <?php endforeach; ?>
+        <?php else: ?>
+          <p style="text-align:center; color:white;">Нет доступных фонов</p>
+        <?php endif; ?>
+      </div>
+      <button onclick="document.getElementById('user_bg-modal_background').style.display='none'">Отмена</button>
     </div>
-    <button onclick="document.getElementById('user_bg-modal_background').style.display='none'">Отмена</button>
   </div>
-</div>
 <?php endif; ?>
 
 <script>
@@ -1529,6 +1619,34 @@ function setupRateTraining() {
 }
 
 document.addEventListener('DOMContentLoaded', setupRateTraining);
+</script>
+
+<script>
+document.getElementById('payYooKassaBtn').addEventListener('click', async () => {
+  const res = await fetch('/api/create_payment.php');
+  const data = await res.json();
+
+  if (data.need_email) {
+    const email = prompt("Введите ваш email для получения чека:");
+    if (email && email.includes('@')) {
+      await fetch('/api/save_email.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+      alert("Email сохранён! Нажмите кнопку оплаты снова.");
+    } else {
+      alert("Некорректный email.");
+    }
+    return;
+  }
+
+  if (data.success) {
+    window.location.href = data.url;
+  } else {
+    alert('Ошибка: ' + (data.error || 'неизвестно'));
+  }
+});
 </script>
 
 <div id="some-missing-id" style="display:none"></div>
