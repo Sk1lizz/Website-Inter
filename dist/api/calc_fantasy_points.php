@@ -330,6 +330,23 @@ if ($benchId && isset($playerBasePos[$benchId])) {
         $upd->execute();
         if ($upd->affected_rows > 0) {
             $updated++;
+
+              // --- начисляем очки в fantasy_users.point ---
+        $upPoints = $db->prepare("
+            UPDATE fantasy_users 
+               SET point = point + ? 
+             WHERE id = ? 
+             LIMIT 1
+        ");
+        if ($upPoints) {
+            $upPoints->bind_param('ii', $sumInt, $userId);
+            $upPoints->execute();
+            $upPoints->close();
+            debugLog("User $userId: +$sumInt points added to fantasy_users.point");
+        } else {
+            debugLog("ERROR: cannot prepare update fantasy_users.point for user $userId: " . $db->error);
+        }
+        
             $details[] = [
                 'user_id' => $userId,
                 'last_week_points' => $sumInt,

@@ -278,6 +278,81 @@ foreach ($added as $pid) {
     }
 }
 
+// ====== FANTASY<->ЛК: состояние и обработчик ======
+$bindMsg = '';
+$boundPlayerId = null;
+$boundPlayerLogin = '';
+
+/** текущее состояние привязки */
+if ($st = $db->prepare("SELECT player_id, COALESCE(player_login,'') AS player_login FROM fantasy_users WHERE id=? LIMIT 1")) {
+    $st->bind_param('i', $userId);
+    $st->execute();
+    $r = $st->get_result()->fetch_assoc();
+    if ($r) { $boundPlayerId = (int)$r['player_id']; $boundPlayerLogin = (string)$r['player_login']; }
+    $st->close();
+}
+
+/** обработка: привязать одним кликом (если уже залогинен в ЛК) */
+if ($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['fantasy_bind_click'])) {
+    if (!empty($_SESSION['player_id'])) {
+        $pid = (int)$_SESSION['player_id'];
+        // подтянем login для кеша
+        $st = $db->prepare("SELECT login FROM players WHERE id=? LIMIT 1");
+        $st->bind_param('i',$pid); $st->execute();
+        $row = $st->get_result()->fetch_assoc(); $st->close();
+
+        if ($row) {
+            $loginLC = (string)$row['login'];
+            $up = $db->prepare("UPDATE fantasy_users SET player_id=?, player_login=? WHERE id=? LIMIT 1");
+            $up->bind_param('isi', $pid, $loginLC, $userId);
+            $ok = $up->execute(); $up->close();
+            if ($ok) { $boundPlayerId = $pid; $boundPlayerLogin = $loginLC; $bindMsg = 'Готово! Аккаунт привязан к текущему профилю ЛК.'; }
+            else     { $bindMsg = 'Не удалось выполнить привязку.'; }
+        } else {
+            $bindMsg = 'Профиль ЛК не найден.';
+        }
+    } else {
+        $bindMsg = 'Сначала войдите в личный кабинет в шапке сайта.';
+    }
+}
+
+/** обработка: привязать по логину/паролю ЛК */
+if ($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['fantasy_bind_manual'])) {
+    $loginLC = trim($_POST['player_login'] ?? '');
+    $passLC  = (string)($_POST['player_password'] ?? '');
+    if ($loginLC==='' || $passLC==='') {
+        $bindMsg = 'Введите логин и пароль от личного кабинета.'; 
+    } else {
+        // пароли в players.password без шифрования
+        $st = $db->prepare("SELECT id, password FROM players WHERE login=? LIMIT 1");
+        $st->bind_param('s',$loginLC); $st->execute();
+        $row = $st->get_result()->fetch_assoc(); $st->close();
+
+        if (!$row) {
+            $bindMsg = 'Пользователь ЛК с таким логином не найден.';
+        } elseif ($passLC !== (string)$row['password']) {
+            $bindMsg = 'Неверный пароль ЛК.';
+        } else {
+            $pid = (int)$row['id'];
+            $up = $db->prepare("UPDATE fantasy_users SET player_id=?, player_login=? WHERE id=? LIMIT 1");
+            $up->bind_param('isi', $pid, $loginLC, $userId);
+            $ok = $up->execute(); $up->close();
+            if ($ok) { $boundPlayerId = $pid; $boundPlayerLogin = $loginLC; $bindMsg = 'Готово! Аккаунт привязан к указанному профилю ЛК.'; }
+            else     { $bindMsg = 'Не удалось выполнить привязку.'; }
+        }
+    }
+}
+
+/** обработка: отвязать (по желанию) */
+if ($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['fantasy_unbind'])) {
+    $up = $db->prepare("UPDATE fantasy_users SET player_id=NULL, player_login=NULL WHERE id=? LIMIT 1");
+    $up->bind_param('i',$userId);
+    $ok = $up->execute(); $up->close();
+    if ($ok) { $boundPlayerId = null; $boundPlayerLogin = ''; $bindMsg = 'Привязка удалена.'; }
+    else     { $bindMsg = 'Не удалось удалить привязку.'; }
+}
+
+
 // Списки игроков
 $playersByPos = array('GK' => array(), 'DF' => array(), 'MF' => array(), 'FW' => array());
 $q = $db->query("
@@ -724,6 +799,7 @@ while ($r = $q->fetch_assoc()) {
 <p class="muted">Очки команды: <strong><?php echo (int)round((float)($squad['total_points'] ?? 0)); ?></strong></p>
 <p class="muted">Очки на прошлой неделе: <strong><?php echo (int)round((float)($squad['last_week_points'] ?? 0)); ?></strong></p>
   <p class="muted">Редактирование состава возможно со вторника по пятницу.<strong></strong></p>
+  
 
         <?php if (isset($_GET['saved'])): ?>
             <div class="ok">Состав сохранён!</div>
@@ -1243,6 +1319,39 @@ $weekTeamTotal = array_sum(array_column($weekRows, 'points'));
                 </table>
             </div>
         </div>
+
+        <!-- === Привязка Fantasy -> ЛК === -->
+<div class="picker" style="margin:14px 0;">
+  <h3 style="margin:0 0 8px; color:#00296B;">Привязка к личному кабинету</h3>
+
+  <?php if ($bindMsg): ?>
+    <div class="ok" style="margin-top:8px;"><?= htmlspecialchars($bindMsg, ENT_QUOTES, 'UTF-8') ?></div>
+  <?php endif; ?>
+
+  <?php if ($boundPlayerId): ?>
+    <div class="muted">Привязано к ЛК: <strong><?= htmlspecialchars($boundPlayerLogin ?: ('ID '.$boundPlayerId), ENT_QUOTES, 'UTF-8') ?></strong></div>
+    <form method="post" class="row" style="margin-top:8px;">
+      <button class="btn" type="submit" name="fantasy_unbind" value="1">Отвязать</button>
+    </form>
+  <?php else: ?>
+    <?php if (!empty($_SESSION['player_id'])): ?>
+      <form method="post" class="row">
+        <button class="btn" type="submit" name="fantasy_bind_click" value="1">Привязать к текущему профилю ЛК</button>
+        <span class="muted">Вы уже авторизованы в ЛК — можно в один клик.</span>
+      </form>
+      <div class="muted" style="margin-top:6px;">Или привяжите вручную по логину ЛК:</div>
+    <?php else: ?>
+      <div class="muted" style="margin-bottom:6px;">Не авторизованы в ЛК? Привяжите вручную по логину/паролю:</div>
+    <?php endif; ?>
+
+    <form method="post" class="row">
+      <input type="hidden" name="fantasy_bind_manual" value="1">
+      <input type="text" name="player_login" placeholder="Логин ЛК" required style="padding:8px 10px; border:1px solid #e5e7eb; border-radius:8px;">
+      <input type="password" name="player_password" placeholder="Пароль ЛК" required style="padding:8px 10px; border:1px solid #e5e7eb; border-radius:8px;">
+      <button class="btn" type="submit">Привязать</button>
+    </form>
+  <?php endif; ?>
+</div>
 
         <div id="confirmModal" class="modal" style="display:none;">
             <div class="modal-content">

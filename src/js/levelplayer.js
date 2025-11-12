@@ -30,6 +30,20 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (!playerRes.ok) throw new Error("Игрок не найден");
         const player = await playerRes.json();
 
+        // === Подтягиваем очки Fantasy и прибавляем их к опыту ===
+        try {
+            const fantasyRes = await fetch(`/api/get_fantasy_points.php?player_id=${player.id}`);
+            if (fantasyRes.ok) {
+                const data = await fantasyRes.json();
+                if (data && data.success && typeof data.points === "number") {
+                    player.fantasy_points = data.points; // сохраняем отдельно
+                    console.log(`Fantasy XP добавлено: +${data.points}`);
+                }
+            }
+        } catch (e) {
+            console.warn("Ошибка загрузки fantasy points:", e);
+        }
+
         const bg = document.querySelector('.bg-fixed');
         if (bg && player.full_image_path) {
             bg.style.backgroundImage = `url('${player.full_image_path}')`;
@@ -327,7 +341,24 @@ document.addEventListener("DOMContentLoaded", async () => {
         const ownedSuccess = allSuccess.filter(s => ownedIds.includes(s.id));
         const achievementPoints = ownedSuccess.reduce((sum, s) => sum + (s.points || 0), 0);
         totalAchievementPoints = achievementPoints;
-        updateExperienceBar(calculateExperience(totalAchievementPoints));
+
+        // Добавляем очки из Fantasy к общему опыту перед отрисовкой
+        const fantasyXP = player.fantasy_points || 0;
+        const totalExp = calculateExperience(totalAchievementPoints) + fantasyXP;
+        updateExperienceBar(totalExp);
+
+        if (fantasyXP > 0) {
+            const bar = document.querySelector("#experience-bar-text");
+            if (bar && !document.querySelector(".xp-fantasy")) {
+                bar.insertAdjacentHTML(
+                    "afterend",
+                    `<div class="xp-fantasy" style="font-size:14px;color:#FDC500;margin-top:4px;">
+        +${fantasyXP} XP (Fantasy)
+      </div>`
+                );
+            }
+        }
+
 
         successWrapper.style.display = ownedSuccess.length > 0 ? 'block' : 'none';
         successCountEl.textContent = `${ownedSuccess.length} / ${allSuccess.length} • ${achievementPoints} очков`;
@@ -355,7 +386,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             successList.appendChild(wrapper);
         });
 
-        updateExperienceBar(calculateExperience(achievementPoints));
 
         // Загружаем ДОСТИЖЕНИЯ (награды)
         const achievementsCard = document.querySelector(".achievements-card");
@@ -367,7 +397,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             const achievements = JSON.parse(text);
             const achievementsPoints = (achievements?.length || 0) * 1000;
             totalAchievementPoints += achievementsPoints;
-            updateExperienceBar(calculateExperience(totalAchievementPoints));
 
             achievementsCard.style.display = 'block';
             listEl.innerHTML = '';

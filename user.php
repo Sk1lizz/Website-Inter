@@ -241,6 +241,16 @@ $xpData = $stmt->get_result()->fetch_assoc();
 $xp = (int)($xpData['xp_total'] ?? 0);
 $xpSpent = (int)($xpData['xp_spent'] ?? 0);
 
+// === Добавляем очки из Fantasy ===
+$stmt = $db->prepare("SELECT point FROM fantasy_users WHERE player_id = ? LIMIT 1");
+$stmt->bind_param("i", $_SESSION['player_id']);
+$stmt->execute();
+$fantasyRow = $stmt->get_result()->fetch_assoc();
+$stmt->close();
+
+$fantasyPoints = (int)($fantasyRow['point'] ?? 0);
+$xp += $fantasyPoints; // добавляем к общему опыту
+
 $levels = [
     ['limit' => 500, 'name' => 'Новичок (1 lvl)'],
     ['limit' => 1000, 'name' => 'Перспективный (2 lvl)'],
@@ -378,6 +388,8 @@ $zanettiRemaining = max(0, $zanettiGoal - $zanettiPriz);
     <div class="xp-progress-text">
       <?= number_format($xp, 0, '.', ' ') ?> XP / <?= number_format($nextLimit, 0, '.', ' ') ?> до <?= htmlspecialchars($nextName) ?>
     </div>
+    <p class="fantasy-xp" style="font-size: 13px;
+    color: #bbb;">+<?= number_format($fantasyPoints, 0, '.', ' ') ?> XP (Fantasy)</p>
     <div class="xp-spent-text">
   Потрачено: <?= number_format($xpSpent, 0, '.', ' ') ?> XP
 </div>
