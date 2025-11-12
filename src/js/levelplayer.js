@@ -54,6 +54,54 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.title = `${player.name} ${player.patronymic || ''} | FC Inter Moscow`.trim();
 
         const img = document.querySelector(".player-card img");
+
+        try {
+            const frRes = await fetch(`/api/get_player_frame.php?player_id=${player.id}`);
+            const fr = await frRes.json();
+            const key = (fr && fr.frame_key) ? fr.frame_key : '';
+
+            // удаляем все возможные рамки, чтобы не было наложений
+            img.classList.remove(
+                'frame-gold', 'frame-gold-glow',
+                'frame-green', 'frame-green-glow',
+                'frame-blue', 'frame-blue-glow',
+                'frame-purple', 'frame-purple-glow'
+            );
+
+            // добавляем новую рамку по ключу
+            switch (key) {
+                case 'gold':
+                    img.classList.add('frame-gold');
+                    break;
+                case 'gold_glow':
+                    img.classList.add('frame-gold-glow');
+                    break;
+                case 'green':
+                    img.classList.add('frame-green');
+                    break;
+                case 'green_glow':
+                    img.classList.add('frame-green-glow');
+                    break;
+                case 'blue':
+                    img.classList.add('frame-blue');
+                    break;
+                case 'blue_glow':
+                    img.classList.add('frame-blue-glow');
+                    break;
+                case 'purple':
+                    img.classList.add('frame-purple');
+                    break;
+                case 'purple_glow':
+                    img.classList.add('frame-purple-glow');
+                    break;
+                default:
+                    // без рамки
+                    break;
+            }
+        } catch (e) {
+            console.warn('frame fetch fail', e);
+        }
+
         img.src = `/img/player/player_${player.id}.png`;
         img.alt = `${player.name} ${player.patronymic || ''}`.trim();
         img.onerror = () => { img.src = "/img/player/player_0.png"; };
@@ -227,13 +275,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             document.getElementById("title").textContent = current.name;
 
             const imgEl = document.querySelector(".player-card img");
-
-            // Если "Опытный" и выше → добавляем класс .gold-frame
-            if (current.limit >= 5000) {
-                imgEl.classList.add('gold-frame');
-            } else {
-                imgEl.classList.remove('gold-frame');
-            }
 
             const playerStarEl = document.querySelector(".player-star");
             const playerNameEl = document.querySelector(".player-name");

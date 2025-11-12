@@ -132,8 +132,22 @@ foreach ($players as $player) {
         continue;
     }
 
-    $playedCount = getPlayerPlayedMatches($db, $matchIds, $player['id']);
-    $attendancePercent = $totalMatches > 0 ? round(($playedCount / $totalMatches) * 100) : 0;
+    // === 1. Матчи, где игрок реально играл
+$playedCount = getPlayerPlayedMatches($db, $matchIds, $player['id']);
+
+// === 2. Матчи, где игрок не был заявлен (считаем как присутствие)
+if (!empty($matchIds)) {
+    $idsStr = implode(',', array_map('intval', $matchIds));
+    $unlistedSql = "SELECT COUNT(*) AS cnt FROM unlisted_players WHERE match_id IN ($idsStr) AND player_id = " . (int)$player['id'];
+    $unlistedRes = $db->query($unlistedSql);
+    $unlistedCount = (int)($unlistedRes->fetch_assoc()['cnt'] ?? 0);
+} else {
+    $unlistedCount = 0;
+}
+
+// === 3. Итог: посещения = играл + незаявлен
+$totalAttended = $playedCount + $unlistedCount;
+$attendancePercent = $totalMatches > 0 ? round(($totalAttended / $totalMatches) * 100) : 0;
 
     // Базовая сумма
     $baseAmount = 0;

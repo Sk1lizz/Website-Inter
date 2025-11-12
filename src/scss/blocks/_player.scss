@@ -5,6 +5,8 @@
     min-height: 100dvh;
     overflow-x: hidden;
 
+
+
     .player {
         display: flex;
         width: 100%;
@@ -505,5 +507,8 @@
         }
     }
 }
+
+
+
 
 @import "media/_player.scss";

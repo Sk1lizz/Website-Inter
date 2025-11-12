@@ -218,6 +218,43 @@ if ($product['category'] === 'Фоны') {
     }
 }
 
+// === Если куплена РАМКА профиля ===
+if ($product['category'] === 'Рамки') {
+    $nameLower = mb_strtolower(trim($product['name']));
+    // нормализуем ё -> е
+    $nameLower = str_replace('ё', 'е', $nameLower);
+
+    $frameKey = '';
+
+    // сияющие сначала
+    if (mb_strpos($nameLower, 'сияющая золотая рамка профиля') !== false)       $frameKey = 'gold_glow';
+    elseif (mb_strpos($nameLower, 'сияющая зеленая рамка профиля') !== false)    $frameKey = 'green_glow';
+    elseif (mb_strpos($nameLower, 'сияющая синяя рамка профиля') !== false)      $frameKey = 'blue_glow';
+    elseif (mb_strpos($nameLower, 'сияющая фиолетовая рамка профиля') !== false) $frameKey = 'purple_glow';
+    // обычные
+    elseif (mb_strpos($nameLower, 'золотая рамка профиля') !== false)            $frameKey = 'gold';
+    elseif (mb_strpos($nameLower, 'зеленая рамка профиля') !== false)            $frameKey = 'green';
+    elseif (mb_strpos($nameLower, 'синяя рамка профиля') !== false)              $frameKey = 'blue';
+    elseif (mb_strpos($nameLower, 'фиолетовая рамка профиля') !== false)         $frameKey = 'purple';
+
+    if ($frameKey !== '') {
+        $ins = $db->prepare("
+            INSERT INTO player_unlocked_frames (player_id, frame_key)
+            VALUES (?, ?)
+            ON DUPLICATE KEY UPDATE frame_key = frame_key
+        ");
+        $ins->bind_param("is", $playerId, $frameKey);
+        $ins->execute();
+
+        $updPurchase = $db->prepare("
+            UPDATE shop_purchases SET status = 'выполнен'
+            WHERE player_id = ? AND product_id = ?
+        ");
+        $updPurchase->bind_param("ii", $playerId, $productId);
+        $updPurchase->execute();
+    }
+}
+
         $db->commit();
         $flash = ['type' => 'ok', 'msg' => 'Покупка успешна: ' . htmlspecialchars($product['name']) . ' — ' . $price . ' XP'];
         $xp_spent += $price;
@@ -312,83 +349,112 @@ $canChangeBackground = (int)$bg['can_change_background'];
 <?php else: ?>
   <div class="grid">
     <?php foreach ($products as $p):
-      $pid   = (int)$p['id'];
-      $pname = htmlspecialchars($p['name']);
-      $pcat  = htmlspecialchars($p['category']);
-      $pprice = (int)$p['price'];
-      $pdesc = htmlspecialchars($p['description']);
-      $img   = "/img/shop/{$pid}.jpg";
+  $pid   = (int)$p['id'];
+  $pname = htmlspecialchars($p['name']);
+  $pcat  = htmlspecialchars($p['category']);
+  $pprice = (int)$p['price'];
+  $pdesc = htmlspecialchars($p['description']);
+  $img   = "/img/shop/{$pid}.jpg";
 
-      // может ли игрок позволить себе покупку
-      $canBuy = ($xp_available >= $pprice);
+  // может ли игрок позволить себе покупку
+  $canBuy = ($xp_available >= $pprice);
 
-      // если это лот "Изменение фона", и он уже куплен
-      $alreadyHasBackgroundAccess = ($pid === 7 && $canChangeBackground == 1);
+  // === Проверки на уже купленные вещи ===
+  $alreadyHasBackgroundAccess = ($pid === 7 && $canChangeBackground == 1);
+  $alreadyHasExclusiveBg = false;
+  $alreadyHasFrame = false;
 
-      $alreadyHasExclusiveBg = false;
-if ($pcat === 'Фоны') {
-    $bgName = trim(str_replace(['(фон)', '(Фон)'], '', $pname));
-    $check = $db->prepare("
-        SELECT 1 FROM player_unlocked_backgrounds ub
-        JOIN backgrounds b ON b.key_name = ub.background_key
-        WHERE ub.player_id = ? AND b.title LIKE CONCAT('%', ?, '%')
-    ");
-    $check->bind_param("is", $playerId, $bgName);
-    $check->execute();
-    $alreadyHasExclusiveBg = $check->get_result()->num_rows > 0;
+  // --- эксклюзивные фоны ---
+  if ($pcat === 'Фоны') {
+      $bgName = trim(str_replace(['(фон)', '(Фон)'], '', $pname));
+      $check = $db->prepare("
+          SELECT 1 FROM player_unlocked_backgrounds ub
+          JOIN backgrounds b ON b.key_name = ub.background_key
+          WHERE ub.player_id = ? AND b.title LIKE CONCAT('%', ?, '%')
+      ");
+      $check->bind_param("is", $playerId, $bgName);
+      $check->execute();
+      $alreadyHasExclusiveBg = $check->get_result()->num_rows > 0;
+  }
+
+  // --- рамки профиля ---
+  if ($pcat === 'Рамки') {
+    $nameLower = mb_strtolower($pname);
+    $nameLower = str_replace('ё', 'е', $nameLower);
+
+    $frameKey = '';
+    if (mb_strpos($nameLower, 'неоновая золотая рамка профиля') !== false)       $frameKey = 'gold_glow';
+    elseif (mb_strpos($nameLower, 'неоновая зеленая рамка профиля') !== false)    $frameKey = 'green_glow';
+    elseif (mb_strpos($nameLower, 'неоновая синяя рамка профиля') !== false)      $frameKey = 'blue_glow';
+    elseif (mb_strpos($nameLower, 'неоновая фиолетовая рамка профиля') !== false) $frameKey = 'purple_glow';
+    elseif (mb_strpos($nameLower, 'золотая рамка профиля') !== false)            $frameKey = 'gold';
+    elseif (mb_strpos($nameLower, 'зеленая рамка профиля') !== false)            $frameKey = 'green';
+    elseif (mb_strpos($nameLower, 'синяя рамка профиля') !== false)              $frameKey = 'blue';
+    elseif (mb_strpos($nameLower, 'фиолетовая рамка профиля') !== false)         $frameKey = 'purple';
+
+    if ($frameKey !== '') {
+        $check = $db->prepare("
+            SELECT 1 FROM player_unlocked_frames
+            WHERE player_id = ? AND frame_key = ?
+        ");
+        $check->bind_param("is", $playerId, $frameKey);
+        $check->execute();
+        $alreadyHasFrame = $check->get_result()->num_rows > 0;
+    }
 }
-    ?>
-      <div class="product-card">
-        <img class="product-thumb"
-             src="<?= $img ?>"
-             alt="<?= $pname ?>"
-             onerror="this.src='/img/shop/placeholder.jpg'">
 
-        <div class="product-body">
-          <div class="product-title"><?= $pname ?></div>
-          <div class="product-cat"><?= $pcat ?></div>
-          <div class="product-desc"><?= $pdesc ?></div>
-          <div class="product-price"><?= $pprice ?> XP</div>
+?>
+  <div class="product-card">
+    <img class="product-thumb"
+         src="<?= $img ?>"
+         alt="<?= $pname ?>"
+         onerror="this.src='/img/shop/placeholder.jpg'">
 
-          <div class="product-actions">
-            <form method="POST"
-                  class="buy-form"
-                  data-product="<?= $pname ?>"
-                  data-price="<?= $pprice ?>">
-              <input type="hidden" name="csrf" value="<?= $CSRF ?>">
-              <input type="hidden" name="buy_product_id" value="<?= $pid ?>">
+    <div class="product-body">
+      <div class="product-title"><?= $pname ?></div>
+      <div class="product-cat"><?= $pcat ?></div>
+      <div class="product-desc"><?= $pdesc ?></div>
+      <div class="product-price"><?= $pprice ?> XP</div>
 
-              <?php if ($pcat === 'Футболки'): ?>
-                <div class="variant-select">
-                  <select name="variant_height" required>
-                    <option value="" disabled selected>Рост</option>
-                    <?php foreach ($TSHIRT_HEIGHT as $h): ?>
-                      <option value="<?= $h ?>"><?= $h ?></option>
-                    <?php endforeach; ?>
-                  </select>
-                  <select name="variant_size" required>
-                    <option value="" disabled selected>Размер</option>
-                    <?php foreach ($TSHIRT_SIZES as $s): ?>
-                      <option value="<?= $s ?>"><?= $s ?></option>
-                    <?php endforeach; ?>
-                  </select>
-                </div>
-              <?php endif; ?>
+      <div class="product-actions">
+        <form method="POST"
+              class="buy-form"
+              data-product="<?= $pname ?>"
+              data-price="<?= $pprice ?>">
+          <input type="hidden" name="csrf" value="<?= $CSRF ?>">
+          <input type="hidden" name="buy_product_id" value="<?= $pid ?>">
 
-              <?php if ($alreadyHasBackgroundAccess || $alreadyHasExclusiveBg): ?>
-  <button type="button" class="btn-buy" disabled style="background:#555; cursor:not-allowed;">
-    Уже активировано
-  </button>
-<?php else: ?>
-  <button type="button" class="btn-buy" <?= $canBuy ? '' : 'disabled' ?>>
-    <?= $canBuy ? 'Купить' : 'Недостаточно XP' ?>
-  </button>
-<?php endif; ?>
-            </form>
-          </div>
-        </div>
+          <?php if ($pcat === 'Футболки'): ?>
+            <div class="variant-select">
+              <select name="variant_height" required>
+                <option value="" disabled selected>Рост</option>
+                <?php foreach ($TSHIRT_HEIGHT as $h): ?>
+                  <option value="<?= $h ?>"><?= $h ?></option>
+                <?php endforeach; ?>
+              </select>
+              <select name="variant_size" required>
+                <option value="" disabled selected>Размер</option>
+                <?php foreach ($TSHIRT_SIZES as $s): ?>
+                  <option value="<?= $s ?>"><?= $s ?></option>
+                <?php endforeach; ?>
+              </select>
+            </div>
+          <?php endif; ?>
+
+          <?php if ($alreadyHasBackgroundAccess || $alreadyHasExclusiveBg || $alreadyHasFrame): ?>
+            <button type="button" class="btn-buy" disabled style="background:#555; cursor:not-allowed;">
+              Уже куплено
+            </button>
+          <?php else: ?>
+            <button type="button" class="btn-buy" <?= $canBuy ? '' : 'disabled' ?>>
+              <?= $canBuy ? 'Купить' : 'Недостаточно XP' ?>
+            </button>
+          <?php endif; ?>
+        </form>
       </div>
-    <?php endforeach; ?>
+    </div>
+  </div>
+<?php endforeach; ?>
   </div>
 <?php endif; ?>
     </div>

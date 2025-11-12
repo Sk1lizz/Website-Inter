@@ -311,6 +311,7 @@ div.innerHTML = `
     <label>ЖК <input type="checkbox" name="players[${p.id}][yellow_card]"></label>
     <label>КК <input type="checkbox" name="players[${p.id}][red_card]"></label>
     <label>Пен <input type="checkbox" name="players[${p.id}][missed_penalty]"></label>
+    <label>Не заявлен <input type="checkbox" class="unlisted-chb" name="players[${p.id}][unlisted]"></label>
   </div>
 `;
 
@@ -321,6 +322,20 @@ container.appendChild(div);
         container.innerHTML = "<p style='color:red;'>Ошибка загрузки игроков</p>";
     }
 }
+
+// Если "Не заявлен" — снимаем "Играл", и наоборот
+document.addEventListener('change', (e) => {
+  if (e.target.matches('.unlisted-chb')) {
+    const wrap = e.target.closest('.player-card');
+    const played = wrap.querySelector(`input[name*='[played]']`);
+    if (e.target.checked) played.checked = false;
+  }
+  if (e.target.name.includes('[played]') && e.target.checked) {
+    const wrap = e.target.closest('.player-card');
+    const unlisted = wrap.querySelector('.unlisted-chb');
+    if (unlisted) unlisted.checked = false;
+  }
+});
 
 document.getElementById("matchTeamSelect").addEventListener("change", function () {
     const teamId = this.value;
@@ -356,12 +371,20 @@ document.getElementById("addMatchForm").addEventListener("submit", async (e) => 
 
         const matchId = result.match_id;
         const year = data.year;
+        const unlisted = [];
 
         // === 2. Собираем данные по игрокам ===
         const players = {};
 const playerDivs = document.querySelectorAll("#playerStatsContainer > div");
 
 for (const div of playerDivs) {
+    const unlistedChb = div.querySelector(`input[name*='[unlisted]']`);
+if (unlistedChb && unlistedChb.checked) {
+    const match = unlistedChb.name.match(/players\[(\d+)\]/);
+    if (match) unlisted.push({ player_id: parseInt(match[1]) });
+    continue; // если не заявлен — пропускаем игрока (не добавляем в статистику)
+}
+
     const checkbox = div.querySelector("input[type='checkbox'][name*='played']");
     const match = checkbox?.name.match(/players\[(\d+)\]/);
     if (!match) continue;
@@ -406,6 +429,19 @@ players[playerId] = {
             const err = await playerRes.json();
             throw new Error("Матч добавлен, но ошибка при сохранении игроков: " + (err.error || "неизвестная"));
         }
+
+// === 4. Сохраняем незаявленных игроков ===
+if (unlisted.length > 0) {
+    const resUnlisted = await fetch("/api/unlisted_players.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ match_id: matchId, players: unlisted })
+    });
+    const unlistedResult = await resUnlisted.json();
+    if (!resUnlisted.ok || !unlistedResult.success) {
+        throw new Error("Ошибка при добавлении незаявленных игроков");
+    }
+}
 
         messageDiv.className = "success-message";
         messageDiv.textContent = `✅ Матч и игроки добавлены! ID: ${matchId}`;
